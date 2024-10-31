@@ -1,0 +1,13 @@
+.bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex; /* Or your desired layout */
+  justify-content: center; /* Or your desired alignment */
+  z-index: 1000; /* Ensure toolbar stays on top of content */
+}
+
+button {
+  margin: 0
+}

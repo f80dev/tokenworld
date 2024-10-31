@@ -1,0 +1,6 @@
+<div class="mainform">
+  <h4>{{message}}</h4>
+  <app-authent *ngIf="user.address==''" [network]="user.network"
+               (authent)="user.authent($event)" [connexion]="connexion"></app-authent>
+
+</div>

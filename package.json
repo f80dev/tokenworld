@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "deploy": "npm version patch && ng build --aot --output-hashing=none --source-map=false --optimization=true --configuration production && gh-pages -d ./dist/front-end --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages -m \"update from gh-pages\"",
+    "deploy": "npm version patch && ng build --aot --output-hashing=none --source-map=false --optimization=true --configuration production && gh-pages -d ./dist/tokemonworld --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages -m \"update from gh-pages\"",
     "test": "ng test"
   },
   "private": true,

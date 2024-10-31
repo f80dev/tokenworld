@@ -1,0 +1,99 @@
+<app-hourglass style="text-align: center"
+               [message]="message"
+               [modal]="modal" ></app-hourglass>
+
+<div *ngIf="message=='' && buy_method=='crypto' && money && wallet_provider">
+    <div *ngIf="money" style="margin: 15px;">
+        <div style="margin: 15px;" class="mat-subheading-1">
+            Coût de l'opération: {{price}} {{money!.unity}} + Frais de service
+        </div>
+        <div *ngIf="balance.balance>0" style="font-size: small">
+            Vous avez {{balance.balance | number:"1.0-1"}} {{money!.unity}}
+            <br>
+            <span *ngIf="money.id!='egld' && balance.egld==0">Vous n'avez pas assez d'eGld pour la transaction</span>
+        </div>
+    </div>
+
+
+
+    <div *ngIf="(balance.balance<price || balance.egld<0.001) && merchant && merchant.wallet" style="margin-top: 20px;">
+
+        <p *ngIf="!bank">
+            Votre solde est insufisant. Vous devez récupérer des
+            <span *ngIf="balance.balance<price">{{money!.unity}}</span>
+            <span *ngIf="balance.egld<0.001">des eGold</span>
+            pour accèder au contenu
+        </p>
+
+        <button mat-raised-button color="primary"
+                style="margin: 20px;" *ngIf="bank"
+                (click)="open_bank()">
+            Acquérir des {{money!.unity}}
+        </button>
+
+
+    </div>
+
+    <button type="button" mat-raised-button color="primary"
+            *ngIf="qrcode_buy_token.length==0"
+            style="margin: 20px;"
+            (click)="start_payment(price)">
+        Payer {{price}} {{money!.unity}}
+    </button>
+
+
+</div>
+
+<button mat-raised-button
+        *ngIf="device.modele!='desktop' && show_url_to_xportal"
+        (click)="open_xportal()">
+    Basculer sur xPortal
+</button>
+
+<div *ngIf="message=='' && buy_method=='fiat' && merchant">
+    <div style="margin: 15px;" class="mat-subheading-1">
+        {{fiat_price}} {{merchant!.currency}}
+    </div>
+
+    <google-pay-button
+            environment="TEST"
+            buttonType="buy"
+            buttonColor="black"
+            [existingPaymentMethodRequired]="false"
+            [paymentRequest]="payment_request"
+            [clickCallback]="onClickPreventDefault"
+            [loadPaymentDataCallback]="onLoadPaymentData"
+            [readyToPayChangeCallback]="onReadyToPayChange"
+            (cancel)="cancel_fiat_payment()"
+            (error)="error_fiat_event($event)"
+    >
+    </google-pay-button>
+</div>
+
+<div *ngIf="qrcode_buy_token.length==0">
+    <div *ngIf="billing_to.length>0">
+        <table style="width:100%;">
+            <tr>
+                <td>Facture envoyée à<br>{{billing_to}}</td>
+                <td style="width: 30px;" class="color-accent">
+                    <mat-icon style="font-size: x-small" (click)="change_billing_address()">edit</mat-icon>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <button type="button" mat-raised-button
+            style="margin-top: 20px;min-width:120px;"
+            *ngIf="billing_to.length==0"
+            (click)="change_billing_address()">
+        Recevoir<br>une facture
+    </button>
+
+    <button type="button" mat-raised-button
+            style="margin-top: 20px;min-width:120px;"
+            (click)="change_payment_mode()">
+        Autre mode<br>de paiement
+    </button>
+</div>
+
+
+

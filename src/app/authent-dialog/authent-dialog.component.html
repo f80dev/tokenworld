@@ -1,0 +1,27 @@
+<div class="app-prompt">
+  <div mat-dialog-title>{{data.title}}</div>
+  <div style="font-size: small;width:100%;text-align: center;"
+       *ngIf="data.subtitle.length>0" [innerHTML]="data.subtitle"></div>
+
+  <mat-dialog-content style="text-align: center;margin: 0;" >
+
+    <app-authent
+      size="300px"
+      [use_cookie]="false"
+      [connexion]="data.connexion"
+      [network]="data.network"
+      (authent)="init_provider($event)"
+      (disconnect)="cancel()"
+      (invalid)="cancel()"
+      style="margin-top: 10px;">
+    </app-authent>
+  </mat-dialog-content>
+
+  <mat-dialog-actions style="display: flex;justify-items: center;width: 100%;">
+    <button class="app-button" id="cmdCancel" style="display: inline-block;"
+            mat-raised-button [mat-dialog-close]="">Annuler</button>
+  </mat-dialog-actions>
+
+
+
+</div>

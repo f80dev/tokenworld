@@ -1,0 +1,62 @@
+<div class="app-prompt modal-popup background-component" style="padding: 5px;;width: 90vw;max-width: 500px;">
+    <div mat-dialog-title style="!important;width:100%;text-align: center;">{{data.title}}</div>
+    <div style="font-size: small;width:100%;text-align: center;color: darkgray"
+         *ngIf="data.subtitle.length>0" [innerHTML]="data.subtitle"></div>
+
+    <div mat-dialog-content style="width: 100%;margin-top: 10px;" *ngIf="buy_method.length==0">
+        <table style="width: 100%;text-align: center;">
+<!--            Affichage des frais et devises-->
+            <tr style="font-size:large">
+                <td style="width: 50%;" *ngIf="data.merchant.id">{{data.to_paid_in_fiat}} {{data.merchant.currency}}</td>
+                <td *ngIf="data.merchant.wallet.token">{{data.to_paid}} {{data.merchant.wallet.unity}}</td>
+            </tr>
+<!--            Affichage des boutons de paiement-->
+            <tr>
+                <td style="width: 50%;" *ngIf="data.merchant.id"><button mat-raised-button color="primary" (click)="buy_method='fiat'">Payer</button></td>
+                <td *ngIf="data.merchant.wallet.token"><button mat-raised-button color="primary" (click)="set_payment_in_crypto()">Payer</button></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td *ngIf="data.merchant.id">Paiement depuis une carte de crédit</td>
+                <td *ngIf="data.merchant.wallet.token">Paiement en crypto</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div mat-dialog-content style="text-align: center;margin: 5px;" *ngIf="buy_method.length>0 && data?.merchant?.wallet">
+        <app-authent
+                *ngIf="!data.provider && buy_method=='crypto'"
+                size="350px"
+                [use_cookie]="false"
+                [connexion]="connexion"
+                [network]="data.merchant.wallet.network"
+                (authent)="init_provider($event)"
+                (disconnect)="cancel()"
+                (invalid)="cancel()"
+                style="margin-top: 10px;">
+        </app-authent>
+
+        <div class="mat-body-1" *ngIf="data.intro_payment.length>0">{{data.intro_payment}}</div><br>
+        <app-payment [merchant]="data.merchant"
+                     [user]="data.addr"
+                     [buy_method]="buy_method"
+                     [billing_to]="data.billing_to"
+                     [bank]="data.bank"
+                     [wallet_provider]="data.provider"
+                     [price]="data.to_paid"
+                     [title]="data.intro_payment"
+                     [url_direct_to_xportal]="data.url_direct_xportal_connect"
+                     [fiat_price]="data.to_paid_in_fiat"
+                     (cancel)="cancel()"
+                     (paid)="onpaid($event)">
+        </app-payment>
+    </div>
+
+    <div mat-dialog-actions style="display: flex;justify-items: center;width: 100%;">
+        <button class="app-button" id="cmdCancel" style="display: inline-block;"
+                mat-raised-button [mat-dialog-close]="">Annuler</button>
+    </div>
+
+</div>
+

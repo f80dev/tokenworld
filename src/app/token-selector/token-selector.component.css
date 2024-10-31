@@ -1,0 +1,13 @@
+td {
+    vertical-align: middle;
+}
+
+mat-form-field {
+    height: 70px;
+    width:70%;
+    max-width:300px;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex{
+    background: none !important;
+}

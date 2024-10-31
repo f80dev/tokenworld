@@ -1,0 +1,45 @@
+mat-form-field {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 5px;
+  padding: 0;
+}
+
+button {
+  margin: 5px;
+}
+
+
+mat-form-field:not(.mat-focused) .mat-hint {
+  display: none;
+}
+
+
+
+.input-elements {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: stretch;
+}
+
+.help-input {
+  opacity: 0.8;
+  font-size: x-small;
+  line-height: 80%;
+  margin-top: -5px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.matStartDate {
+  border-color: #0A246A;
+}

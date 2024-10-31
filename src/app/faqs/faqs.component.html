@@ -1,0 +1,39 @@
+<div class="mainform background-form" >
+
+  <div class="mat-headline-5 color-primary" *ngIf="faqs.length>0">{{title}}</div>
+  <mat-expansion-panel [expanded]="faq.visible" togglePosition="before"
+                       class="app-panel" style="margin:5px"
+                       *ngFor="let faq of faqs">
+
+    <mat-expansion-panel-header collapsedHeight="60px" expandedHeight="60px" style="text-align: left;">
+      <span *ngIf="!faq.visible" class="faq-title mat-body-2 color-primary">
+        {{faq.title}}
+      </span>
+      <span *ngIf="faq.visible">
+        {{faq.title}}
+      </span>
+    </mat-expansion-panel-header>
+
+    <div style="height:auto;">
+      <div class="faq-content mat-body-1"
+           *ngIf="!faq.content.endsWith('html') && faq.format!='html'">
+        {{faq.content}}
+      </div>
+
+      <iframe style="border:none;width:100%;text-align: left;"
+              *ngIf="faq.content.endsWith('html')"
+              [src]="faq.content">
+      </iframe>
+
+      <div [innerHTML]="faq.content"
+           class="faq-content"
+           *ngIf="faq.format=='html'">
+      </div>
+    </div>
+
+
+  </mat-expansion-panel>
+
+
+
+</div>

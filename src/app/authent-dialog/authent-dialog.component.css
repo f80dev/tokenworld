@@ -1,0 +1,26 @@
+
+.app-prompt {
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.app-prompt :host {
+  filter: blur(2px);
+}
+
+.modal-popup {
+  display:block;
+  position:fixed;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  max-width: 500px;
+  transform: translate(-50%, -50%);
+  font-size: 0.5em;
+  z-index:100001;
+  text-align: center;
+  padding:50px;
+  border: darkgrey solid 1px;
+  opacity: 1 !important;
+}

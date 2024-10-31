@@ -1,0 +1,211 @@
+//lire https://blog.thoughtram.io/angular/2017/05/23/custom-themes-with-angular-material.html
+//version 0.4 - mise a jour pour Angular 15 - 25/01/2023
+@use '@angular/material' as mat;
+@include mat.core();
+
+@font-face {
+  font-family: Helvetica;
+  src: url("assets/webFonts/HelveticaInseratLT.ttf") format("ttf");
+}
+
+html {
+  font-size: 1vw;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {width: 0;}
+
+@media(max-width: 1500px) { html {font-size: 1.3vw;} }
+@media(max-width: 1000px) { html {font-size: 1.7vw;} }
+@media(max-width: 800px) { html {font-size: 2vw;} }
+@media(max-width: 500px) { html {font-size: 3vw;} }
+
+
+$nfluent-typography: mat.m2-define-typography-config(
+        $headline-1: mat.m2-define-typography-level(4.2rem, 4.2rem, 600, mediasans-bold),
+        $headline-2: mat.m2-define-typography-level(3.8rem, 3.8rem, 500, mediasans-bold),        //H2
+        $headline-3: mat.m2-define-typography-level(2.5rem, 2.5rem, 500, mediasans-regular,$letter-spacing: 0.03em),     //H3
+        $headline-4: mat.m2-define-typography-level(2rem, 2rem, 500,mediasans-regular,$letter-spacing: 0.03em),
+        $headline-5:  mat.m2-define-typography-level(1.3rem, 1.3rem, 300, $font-family: mediasans-regular,$letter-spacing: 0.03em),
+        $headline-6:  mat.m2-define-typography-level(1.1rem, 1.1rem, 300, $font-family: GilroyRegular,$letter-spacing: 0.03em),
+        $subtitle-1: mat.m2-define-typography-level(18px, 18px, 500, GilroyRegular),
+        $subtitle-2: mat.m2-define-typography-level(16px, 16px, 400, GilroyRegular),
+        $body-2: mat.m2-define-typography-level(14px, 14px, 500, $font-family: GilroyRegular,$letter-spacing: -0.03em),
+        $body-1: mat.m2-define-typography-level(13px, 13px, 400, $font-family: GilroyRegular,$letter-spacing: -0.03em),
+        $button: mat.m2-define-typography-level(16px, 16px, 500, GilroyRegular, $letter-spacing: -0.03em),
+        $caption: mat.m2-define-typography-level(14px, 14px, 500, GilroyRegular, $letter-spacing: -0.03em)
+);
+
+
+//voir https://material.angular.io/guide/theming#palettes
+$nfluent-indigo-palette :(
+        50: #EFE5F8,
+        100: #D4BFED,
+        200: #B894E2,
+        300: #9D67D7,
+        400: #8743CE,
+        500: #7016C5,
+        600: #670FBF,
+        700: #5800B7,
+        800: #4B00B1,
+        900: #3200A7,
+        contrast: (
+                50: rgba(black,0.87),
+                100: rgba(black,0.87),
+                200: rgba(black,0.87),
+                300: rgba(black,0.87),
+                400: rgba(black,0.87),
+                500: white,
+                600: white,
+                700: white,
+                800: white,
+                900: white
+        )
+);
+
+
+$nfluent-green-palette :(
+        50: #EBFDE8,
+        100: #CEFAC7,
+        200: #AAF6A1,
+        300: #81F177,
+        400: #56EC52,
+        500: #00E726,
+        600: #00D51D,
+        700: #00C00F,
+        800: #00AB00,
+        900: #008800,
+        contrast: (
+                50: rgba(black,0.87),
+                100: rgba(black,0.87),
+                200: rgba(black,0.87),
+                300: rgba(black,0.87),
+                400: rgba(black,0.87),
+                500: rgba(black,0.87),
+                600: rgba(black,0.87),
+                700: white,
+                800: white,
+                900: white
+        )
+);
+
+
+$nfluent-primary-color: mat.m2-define-palette($nfluent-indigo-palette, 100);
+$nfluent-secondary-color: mat.m2-define-palette($nfluent-green-palette,100);
+$nfluent-accent-color:mat.m2-define-palette($nfluent-green-palette, 100);
+$nfluent-warn-color:mat.m2-define-palette(mat.$red-palette,80);
+
+
+$nfluent-theme: mat.m2-define-light-theme((
+        color: (
+                primary:$nfluent-primary-color,
+                secondary:$nfluent-secondary-color,
+                accent: $nfluent-accent-color,
+                warn: $nfluent-warn-color,
+        ),
+        typography: $nfluent-typography
+));
+
+
+$nfluent-dark-theme: mat.m2-define-dark-theme((
+        color: (
+                primary:$nfluent-primary-color,
+                secondary:$nfluent-secondary-color,
+                accent: $nfluent-accent-color,
+                warn: $nfluent-warn-color
+        ),
+        typography: $nfluent-typography
+));
+
+
+// Emit styles for MatButton based on `$my-theme`. Because the configuration
+// passed to `define-light-theme` omits typography, `button-theme` will not
+// emit any typography styles.
+@include mat.all-component-themes($nfluent-theme);
+@include mat.all-component-typographies($nfluent-typography);
+//:root {
+//  @include mat.all-component-themes($nfluent-theme);
+//}
+
+
+//voir https://material.angular.io/guide/theming#application-background-color
+body,html {
+  margin: 0;
+  padding: 0;
+  color: mat.m2-get-color-from-palette($nfluent-primary-color, 700);
+  background-color: white;
+}
+
+.color-accent {
+  color: mat.m2-get-color-from-palette($nfluent-green-palette, 500);
+}
+
+.color-warm {
+  color: mat.m2-get-color-from-palette(mat.$red-palette, 500);
+}
+
+.color-primary {
+  color: mat.m2-get-color-from-palette($nfluent-indigo-palette, 500);
+}
+
+.colorize-accent {
+  filter: url('#teal-lightgreen');
+}
+
+p {
+  @extend .mat-body-2;
+  opacity: 0.9;
+  font-weight: lighter;
+}
+
+.mat-label {
+  font-size: x-large !important;
+}
+
+.sidemenu {
+  background-color: mat.m2-get-color-from-palette($nfluent-primary-color, 400);
+  color: mat.m2-get-color-from-palette($nfluent-primary-color, A400);
+}
+
+.colorize-primary {
+  filter: url('#purple-sepioa');
+}
+
+.blackform {
+  color: white;
+  background-color: mat.m2-get-color-from-palette(mat.$gray-palette,900);
+}
+
+.titleform {
+  @extend .mat-headline-6;
+  margin: 8px;
+  margin-bottom: 15px;
+}
+
+.subtitleform {
+  @extend .mat-subtitle-1, .color-primary;
+  margin-bottom: 10px;
+}
+
+.background-component {
+  background-color: mat.m2-get-color-from-palette(mat.$grey-palette, 300) !important;
+}
+
+mat-vertical-stepper {
+  background: none !important;
+}
+
+
+mat-expansion-panel-header {
+  @extend .mat-body-2, .color-primary;
+  font-weight: bold !important;
+}
+
+
+
+mat-card-title {
+  @extend .mat-body-1, .color-primary;
+  font-size: medium !important;
+  padding: 10px;
+}
+

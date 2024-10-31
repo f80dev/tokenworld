@@ -22,6 +22,7 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@angular/service-worker": "^18.2.0",
     "@multiversx/sdk-core": "^13.13.1",
     "@multiversx/sdk-extension-provider": "^4.0.0",
     "@multiversx/sdk-native-auth-client": "^1.0.9",
@@ -32,6 +33,7 @@
     "@octokit/rest": "^21.0.0",
     "@types/leaflet": "^1.9.14",
     "jsqr": "^1.4.0",
+    "leaflet": "^1.9.4",
     "ng-navigator-share": "^1.0.4",
     "ng-qrcode": "^18.0.0",
     "ngx-socket-io": "^4.7.0",
@@ -39,8 +41,7 @@
     "protobufjs": "^7.4.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.10",
-    "leaflet": "^1.9.4"
+    "zone.js": "~0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.11",

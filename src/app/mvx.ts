@@ -13,7 +13,8 @@ import {UserService} from "./user.service";
 import {Octokit} from "@octokit/rest";
 import {now} from "../tools";
 
-const DEVNET="https://devnet-api.multiversx.com"
+export const DEVNET="https://devnet-api.multiversx.com"
+export const MAINNET="https://api.multiversx.com"
 
 export async function mvx_api(url:string,params:string,api:any,network="devnet"): Promise<any[]> {
   //voir

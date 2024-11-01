@@ -50,15 +50,24 @@ export class AppComponent implements OnInit {
     }
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
 
-    try{
-      let position=await this.geolocService.getCurrentPosition()
-      this.location = position.coords
-      showMessage(this,'Your position is ' + this.location.latitude+","+this.location.longitude)
-    }catch (err:any){
-      showMessage(this,'Error getting location: ' + err.message)
-    }
+
 
   }
 
   protected readonly environment = environment;
+
+  test() {
+   this.router.navigate(["test"])
+  }
+
+  open_map() {
+    this.router.navigate(["test"])
+  }
+
+  open_drop() {
+    if(!this.user.isConnected()){
+      this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
+    }
+    this.router.navigate(["drop"])
+  }
 }

@@ -2,7 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {catchError, retry, throwError, timeout} from "rxjs";
 import {$$, hashCode} from "../tools";
 import {environment} from "../environments/environment";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'

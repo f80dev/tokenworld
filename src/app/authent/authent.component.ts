@@ -436,8 +436,7 @@ export class AuthentComponent implements OnInit,OnChanges {
         text => {
           this.onflash({data:text});
         }
-    )
-        .catch(error => {
+    ).catch(error => {
               showMessage(this,'Impossible de lire le presse-papier');
             }
         );
@@ -489,7 +488,7 @@ export class AuthentComponent implements OnInit,OnChanges {
     this.provider=await ExtensionProvider.getInstance();
     try{
       await this.provider.init();
-      let wallet=await this.provider.login() //{ token: await this.createNativeAuthInitialPart() }
+      let wallet=await this.provider.login()  //{ token: await this.createNativeAuthInitialPart() }
       if(wallet.address.length>0){
         this.strong=true;
         this.validate(wallet.address);

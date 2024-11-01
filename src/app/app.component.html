@@ -1,7 +1,10 @@
-
-<app-map [lat]="location.latitude" [long]="location.longitude"></app-map>
-
+<router-outlet></router-outlet>
 <mat-toolbar color="primary" class="bottom-toolbar">
+  <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
+  <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
+
   <button *ngIf="user.isConnected()" mat-icon-button (click)="logout()" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
   <button *ngIf="!user.isConnected()" mat-icon-button (click)="login()" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
+
+  <button *ngIf="!user.isConnected()" mat-icon-button (click)="test()"><mat-icon>build</mat-icon></button>
 </mat-toolbar>

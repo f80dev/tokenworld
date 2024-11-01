@@ -3,7 +3,7 @@ import {AuthentComponent} from "../authent/authent.component";
 import {Location, NgIf} from "@angular/common";
 import {UserService} from "../user.service";
 import {get_default_connexion} from "../../operation";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {getParams} from "../../tools";
 
 @Component({
@@ -19,16 +19,32 @@ import {getParams} from "../../tools";
 export class LoginComponent implements OnInit {
 
   user=inject(UserService)
-  connexion=get_default_connexion("wallet_connect,extension_wallet,web_wallet,xAlias")
+  connexion=get_default_connexion("wallet_connect,extension_wallet")
   _location=inject(Location)
   routes=inject(ActivatedRoute)
   message: string=""
+  router=inject(Router)
+  private params: any;
 
 
   async ngOnInit() {
-    this.connexion.web_wallet=true
-    let params:any=await getParams(this.routes)
-    this.message=params.message || ""
+    this.params=await getParams(this.routes)
     this.user.addr_change.subscribe(()=>{this._location.back()})
+  }
+
+  async authent($event: {
+    strong: boolean;
+    address: string;
+    provider: any;
+    encrypted: string;
+    url_direct_xportal_connect: string
+  }) {
+    let result=await this.user.authent($event)
+    if(this.user.isConnected()){
+      if(this.params && this.params.redirectTo)
+        this.router.navigate([this.params.redirectTo])
+      else
+        this._location.back()
+    }
   }
 }

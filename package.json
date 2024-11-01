@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --ssl true",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "deploy": "npm version patch && ng build --aot --output-hashing=none --source-map=false --optimization=true --configuration production && gh-pages -d ./dist/tokemonworld --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages -m \"update from gh-pages\"",
@@ -29,7 +29,7 @@
     "@multiversx/sdk-network-providers": "^2.9.1",
     "@multiversx/sdk-wallet": "^4.6.0",
     "@multiversx/sdk-wallet-connect-provider": "^5.0.0",
-    "@multiversx/sdk-web-wallet-provider": "^4.0.0",
+    "@multiversx/sdk-web-wallet-provider": "4.0.0",
     "@octokit/rest": "^21.0.0",
     "@types/leaflet": "^1.9.14",
     "jsqr": "^1.4.0",

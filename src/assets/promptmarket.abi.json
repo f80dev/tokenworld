@@ -1,0 +1,235 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.78.0",
+            "commitHash": "9b00956e56009bab2aa15d7bff10916599e3d6d6",
+            "commitDate": "2024-04-29",
+            "channel": "Stable",
+            "short": "rustc 1.78.0 (9b00956e5 2024-04-29)"
+        },
+        "contractCrate": {
+            "name": "promptmarket",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.50.4"
+        }
+    },
+    "docs": [
+        "An empty contract. To be used as a template when starting a new contract from scratch."
+    ],
+    "name": "PromptMarket",
+    "constructor": {
+        "inputs": [
+            {
+                "name": "fee",
+                "type": "u64"
+            },
+            {
+                "name": "maxprompt",
+                "type": "u8"
+            }
+        ],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "users",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<Address>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "prompts",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<Prompt>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "renders",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "variadic<Render>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "fee",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "maxprompt",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "update_fee",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "fee",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "get_fees",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "add_prompt",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "text",
+                    "type": "bytes"
+                },
+                {
+                    "name": "model",
+                    "type": "u8"
+                },
+                {
+                    "name": "inference",
+                    "type": "u16"
+                },
+                {
+                    "name": "scale",
+                    "type": "u16"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u32"
+                }
+            ]
+        },
+        {
+            "name": "get_render",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "render_id",
+                    "type": "u32"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "add_render",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "prompt_id",
+                    "type": "u32"
+                },
+                {
+                    "name": "url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "price",
+                    "type": "BigUint"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u32"
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {
+        "Prompt": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "text",
+                    "type": "bytes"
+                },
+                {
+                    "name": "offer",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "model",
+                    "type": "u8"
+                },
+                {
+                    "name": "inference",
+                    "type": "u16"
+                },
+                {
+                    "name": "scale",
+                    "type": "u16"
+                },
+                {
+                    "name": "owner",
+                    "type": "u32"
+                }
+            ]
+        },
+        "Render": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "prompt_id",
+                    "type": "u32"
+                },
+                {
+                    "name": "url",
+                    "type": "bytes"
+                },
+                {
+                    "name": "creator",
+                    "type": "u32"
+                },
+                {
+                    "name": "price",
+                    "type": "BigUint"
+                }
+            ]
+        }
+    }
+}

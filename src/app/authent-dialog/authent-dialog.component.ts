@@ -26,7 +26,7 @@ export function _ask_for_authent(vm:any,title="Authentification",subtitle="",
   return new Promise((resolve, reject) => {
     if(!vm.dialog){$$("!La fenetre n'integre pas MatDialog") }
     vm.dialog.open(AuthentDialogComponent,{
-      width: '640px',height:"400px",
+      width: '640px',height:"400px",top:0,left:0,
       data:{
         title:title,
         subtitle:subtitle,
@@ -37,7 +37,9 @@ export function _ask_for_authent(vm:any,title="Authentification",subtitle="",
       next:(resp:any) => {
         if(resp) {resolve(resp);} else {resolve(null)}
       },
-      error:(err:any)=>{reject(err)}
+      error:(err:any)=>{
+        reject(err)
+      }
     })
   });
 }

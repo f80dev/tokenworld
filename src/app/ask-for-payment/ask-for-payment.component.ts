@@ -139,8 +139,8 @@ export class AskForPaymentComponent implements OnInit {
         this.data.provider=$event.provider;
         this.data.addr=$event.address
         this.data.url_direct_xportal_connect=$event.url_direct_xportal_connect
-        if(this.data.merchant.wallet){
-            this.user.init($event.address,this.data.merchant.wallet.network,false,true,this.user.profil.email)
-        }
+        // if(this.data.merchant.wallet){
+        //     this.user.init($event.address,this.data.merchant.wallet.network,false,true,this.user.profil.email)
+        // }
     }
 }

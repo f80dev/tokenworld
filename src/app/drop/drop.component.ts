@@ -17,6 +17,8 @@ import {NgForOf} from '@angular/common';
 export class DropComponent implements AfterViewInit {
 
   nfts:any[]=[]
+  user=inject(UserService)
+  router=inject(Router)
 
   async ngAfterViewInit() {
     if(!this.user.isConnected()){
@@ -32,12 +34,10 @@ export class DropComponent implements AfterViewInit {
         let image="https://ipfs.io/ipfs/"+prop.split("metadata:")[1].replace(".json",".png")
         this.nfts.push({name:nft.name,collection:nft.collection,id:nft.identifier,metadata:metadata,visual:image})
       }
-      debugger
     }
   }
 
-  user=inject(UserService)
-  router=inject(Router)
+
 
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer

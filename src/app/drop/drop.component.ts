@@ -1,16 +1,23 @@
 import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
-import {Account, Address, ApiNetworkProvider, NonFungibleTokenOfAccountOnNetwork} from '@multiversx/sdk-core/out';
+import {Address, ApiNetworkProvider} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
-import {DEVNET, MAINNET} from '../mvx';
-import {NgForOf} from '@angular/common';
+import {DEVNET, MAINNET, send_transaction} from '../mvx';
+import {NgForOf, NgIf} from '@angular/common';
+import {MatIcon} from "@angular/material/icon";
+import {MatIconButton} from "@angular/material/button";
+import {environment} from '../../environments/environment';
+import {abi} from '../../environments/abi';
 
 @Component({
   selector: 'app-drop',
   standalone: true,
-  imports: [
-    NgForOf
-  ],
+    imports: [
+        NgForOf,
+        MatIcon,
+        MatIconButton,
+        NgIf
+    ],
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
 })
@@ -43,4 +50,14 @@ export class DropComponent implements AfterViewInit {
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
 
 
+  async drop(nft: any) {
+    let args:any[]=[]
+    let contract:string=environment.contract_addr["elrond-devnet"];
+    let tx=await send_transaction(this.user.provider,
+      "add_tokemon",
+      this.user.address,
+      args,
+      contract,
+      nft.id,1,abi);
+  }
 }

@@ -1,4 +1,5 @@
-<div *ngFor="let nft of nfts">
+<div *ngFor="let nft of nfts" class="vignette">
   {{nft.name}}<br>
   <img [src]="nft.visual">
+  <button mat-icon-button (click)="drop(nft)" title="Drop here"><mat-icon>download</mat-icon></button>
 </div>

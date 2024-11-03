@@ -2,3 +2,10 @@ img {
   width:150px;
   height:150px;
 }
+
+.vignette {
+  display: inline-block;
+  text-align: center;
+  width:150px;
+  height:150px;
+}

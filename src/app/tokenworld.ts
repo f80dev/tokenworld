@@ -10,5 +10,14 @@ export function latLonToCartesian(lat:number, lon:number, radius:number = 6371):
   const y = radius * Math.cos(latRad) * Math.sin(lonRad);
   const z = radius * Math.sin(latRad);
 
-  return { x, y, z };
+  return { x:x, y:y, z:z };
+}
+
+
+export function cartesianToPolar(x:number, y:number,z:number) {
+  const r = Math.sqrt(x * x + y * y + z * z);
+  const theta = Math.acos(z / r);
+  const phi = Math.atan2(y, x);
+
+  return { long:r, lat:theta, radius:phi };
 }

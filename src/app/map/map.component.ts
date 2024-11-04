@@ -3,6 +3,12 @@ import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
+import {environment} from '../../environments/environment';
+import {query} from '../mvx';
+import {abi} from '../../environments/abi';
+import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
+import {UserService} from '../user.service';
+
 
 const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -16,19 +22,16 @@ const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 export class MapComponent implements OnChanges,AfterViewInit  {
 
   geolocService=inject(GeolocService)
+  user=inject(UserService)
   private map!: L.Map;
-  markers: L.Marker[] = [
-    L.marker([31.9539, 35.9106]), // Amman
-    L.marker([32.5568, 35.8469]) // Irbid
-  ];
-  private location: GeolocationPosition | undefined;
 
 
   async ngAfterViewInit() {
     try{
-      this.location =await this.geolocService.getCurrentPosition()
+      this.user.loc=await this.geolocService.getCurrentPosition()
       this.initializeMap()
       this.setMap()
+      this.show()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
     }
@@ -37,7 +40,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   private addMarkers() {
     // Add your markers to the map
-    this.markers.forEach(marker => marker.addTo(this.map));
+
   }
 
   ngOnChanges(changes: any): void {
@@ -52,8 +55,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   setMap(): void {
     // Fit the map view to the bounds
-    if(this.location){
-      this.map.setView(new LatLng(this.location?.coords.latitude,this.location?.coords.longitude),17);
+    if(this.user.loc){
+      this.map.setView(new LatLng(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude),17);
 
       L.tileLayer(baseMapURl, {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -62,4 +65,25 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     }
 
   }
+
+  async show() {
+    let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude)
+    let args=["LesBG",pos.x,pos.y,pos.z]
+    let contract:string=environment.contract_addr["elrond-devnet"];
+
+    if(this.user.address){
+      let nfts=await query("show_nfts",      this.user.address, args, contract, abi);
+
+      let markers:L.Marker[]=[]
+      for(let nft of nfts){
+        let coords=cartesianToPolar(nft.x,nft.y,nft.z)
+        markers.push(
+          L.marker([coords.lat, coords.long]), // Amman
+        )
+      }
+      markers.forEach(marker => marker.addTo(this.map));
+    }
+
+  }
+
 }

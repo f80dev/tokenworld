@@ -9,18 +9,18 @@ export const abi=
         "short": "rustc 1.78.0 (9b00956e5 2024-04-29)"
       },
       "contractCrate": {
-        "name": "promptmarket",
+        "name": "tokemonworld",
         "version": "0.0.0"
       },
       "framework": {
         "name": "multiversx-sc",
-        "version": "0.50.4"
+        "version": "0.53.2"
       }
     },
     "docs": [
       "An empty contract. To be used as a template when starting a new contract from scratch."
     ],
-    "name": "PromptMarket",
+    "name": "TokemonWorld",
     "constructor": {
       "inputs": [
         {
@@ -43,77 +43,12 @@ export const abi=
         ]
       },
       {
-        "name": "prompts",
+        "name": "tokemons",
         "mutability": "readonly",
         "inputs": [],
         "outputs": [
           {
-            "type": "variadic<Prompt>",
-            "multi_result": true
-          }
-        ]
-      },
-      {
-        "name": "servers",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "variadic<Server>",
-            "multi_result": true
-          }
-        ]
-      },
-      {
-        "name": "renders",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "variadic<Render>",
-            "multi_result": true
-          }
-        ]
-      },
-      {
-        "name": "dt_start_market",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "u64"
-          }
-        ]
-      },
-      {
-        "name": "closed_prompt",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "variadic<u32>",
-            "multi_result": true
-          }
-        ]
-      },
-      {
-        "name": "closed_servers",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "variadic<u32>",
-            "multi_result": true
-          }
-        ]
-      },
-      {
-        "name": "evals",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "variadic<Eval>",
+            "type": "variadic<Tokemon>",
             "multi_result": true
           }
         ]
@@ -129,19 +64,84 @@ export const abi=
         ]
       },
       {
-        "name": "add_prompt",
+        "name": "add_user",
+        "mutability": "readonly",
+        "inputs": [
+          {
+            "name": "addr",
+            "type": "Address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "u32"
+          }
+        ]
+      },
+      {
+        "name": "move_tokemon",
+        "mutability": "mutable",
+        "inputs": [
+          {
+            "name": "tokemon_id",
+            "type": "u32"
+          },
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "name": "set_mode",
+        "mutability": "mutable",
+        "inputs": [
+          {
+            "name": "tokemon_id",
+            "type": "u32"
+          },
+          {
+            "name": "new_mode",
+            "type": "u8"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "name": "drop_nft",
         "mutability": "mutable",
         "payableInTokens": [
           "*"
         ],
         "inputs": [
           {
-            "name": "text",
+            "name": "clan",
             "type": "bytes"
           },
           {
-            "name": "server_id",
-            "type": "u32"
+            "name": "visibility",
+            "type": "u16"
+          },
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
           }
         ],
         "outputs": [
@@ -151,55 +151,31 @@ export const abi=
         ]
       },
       {
-        "name": "cancel_prompt",
+        "name": "add_tokemon",
         "mutability": "mutable",
-        "inputs": [
-          {
-            "name": "prompt_id",
-            "type": "u32"
-          }
+        "payableInTokens": [
+          "*"
         ],
-        "outputs": [
-          {
-            "type": "bool"
-          }
-        ]
-      },
-      {
-        "name": "add_server",
-        "mutability": "mutable",
         "inputs": [
           {
-            "name": "type_server",
-            "type": "u8"
-          },
-          {
-            "name": "title",
+            "name": "clan",
             "type": "bytes"
           },
           {
-            "name": "description",
-            "type": "bytes"
-          },
-          {
-            "name": "visual",
-            "type": "bytes"
-          },
-          {
-            "name": "domain",
-            "type": "bytes"
-          },
-          {
-            "name": "params",
-            "type": "bytes"
-          },
-          {
-            "name": "price",
-            "type": "BigUint"
-          },
-          {
-            "name": "token",
+            "name": "nft",
             "type": "TokenIdentifier"
+          },
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
           }
         ],
         "outputs": [
@@ -209,67 +185,29 @@ export const abi=
         ]
       },
       {
-        "name": "cancel_server",
-        "mutability": "mutable",
+        "name": "show_nfts",
+        "mutability": "readonly",
         "inputs": [
           {
-            "name": "server_id",
-            "type": "u32"
-          },
-          {
-            "name": "autoclose_prompt",
-            "type": "bool"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "bool"
-          }
-        ]
-      },
-      {
-        "name": "eval_render",
-        "mutability": "mutable",
-        "inputs": [
-          {
-            "name": "render_id",
-            "type": "u32"
-          },
-          {
-            "name": "note",
-            "type": "u8"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "bool"
-          }
-        ]
-      },
-      {
-        "name": "add_render",
-        "mutability": "mutable",
-        "inputs": [
-          {
-            "name": "prompt_id",
-            "type": "u32"
-          },
-          {
-            "name": "url",
+            "name": "clan",
             "type": "bytes"
           },
           {
-            "name": "render_duration",
-            "type": "u16"
+            "name": "x",
+            "type": "u64"
           },
           {
-            "name": "start_delay",
-            "type": "u16"
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
           }
         ],
         "outputs": [
           {
-            "type": "u32"
+            "type": "List<Tokemon>"
           }
         ]
       },
@@ -296,24 +234,11 @@ export const abi=
     "esdtAttributes": [],
     "hasCallback": false,
     "types": {
-      "Eval": {
+      "Tokemon": {
         "type": "struct",
         "fields": [
           {
-            "name": "render",
-            "type": "u32"
-          },
-          {
-            "name": "note",
-            "type": "u8"
-          }
-        ]
-      },
-      "Prompt": {
-        "type": "struct",
-        "fields": [
-          {
-            "name": "text",
+            "name": "clan",
             "type": "bytes"
           },
           {
@@ -321,81 +246,34 @@ export const abi=
             "type": "u32"
           },
           {
-            "name": "server",
-            "type": "u32"
-          }
-        ]
-      },
-      "Render": {
-        "type": "struct",
-        "fields": [
-          {
-            "name": "prompt_id",
-            "type": "u32"
-          },
-          {
-            "name": "url",
-            "type": "bytes"
-          },
-          {
-            "name": "creator",
-            "type": "u32"
-          },
-          {
-            "name": "start_delay",
-            "type": "u16"
-          },
-          {
-            "name": "render_duration",
-            "type": "u16"
-          }
-        ]
-      },
-      "Server": {
-        "type": "struct",
-        "fields": [
-          {
-            "name": "id",
-            "type": "u32"
-          },
-          {
-            "name": "type_server",
-            "type": "u8"
-          },
-          {
-            "name": "title",
-            "type": "bytes"
-          },
-          {
-            "name": "description",
-            "type": "bytes"
-          },
-          {
-            "name": "visual",
-            "type": "bytes"
-          },
-          {
-            "name": "domain",
-            "type": "bytes"
-          },
-          {
-            "name": "price",
-            "type": "BigUint"
-          },
-          {
-            "name": "token",
+            "name": "nft",
             "type": "TokenIdentifier"
           },
           {
-            "name": "parameters",
-            "type": "bytes"
+            "name": "pv",
+            "type": "u64"
           },
           {
-            "name": "owner",
-            "type": "u32"
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
+          },
+          {
+            "name": "mode",
+            "type": "u8"
+          },
+          {
+            "name": "visibility",
+            "type": "u16"
           }
         ]
       }
     }
   }
-

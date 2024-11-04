@@ -27,7 +27,6 @@ xcopy /f /y ..\NFTCalvi\src\app\translate.pipe.ts src\app\
 
 xcopy /f /y ..\NFTCalvi\src\app\device.service.ts src\app\
 xcopy /f /y ..\NFTCalvi\src\app\file-drag-ndrop.directive.ts src\app\
-#xcopy /f /y ..\NFTCalvi\src\app\user.service.ts src\app\
 xcopy /f /y ..\NFTCalvi\src\app\style-manager.service.ts src\app\
 xcopy /f /y ..\NFTCalvi\src\app\screencutter.pipe.ts src\app\
 xcopy /f /y ..\NFTCalvi\src\app\hourglass\*.*  src\app\hourglass\

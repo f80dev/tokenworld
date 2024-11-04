@@ -12,6 +12,7 @@ import {GeolocService} from './geoloc.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,10 +26,7 @@ export class AppComponent implements OnInit {
   dialog=inject(MatDialog)
   user=inject(UserService)
   routes=inject(ActivatedRoute)
-  geolocService=inject(GeolocService)
   toast=inject(MatSnackBar)
-
-  location: { latitude: number; longitude: number }={latitude:0,longitude:0}
 
   go(route: string) {
     this.router.navigate([route])
@@ -39,7 +37,8 @@ export class AppComponent implements OnInit {
   }
 
   async login() {
-    this.user.login(this)
+    await this.user.login(this)
+    localStorage.setItem("address",this.user.address)
   }
 
   async ngOnInit() {
@@ -49,9 +48,7 @@ export class AppComponent implements OnInit {
       this.user.address=params.address
     }
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-
-
-
+    this.user.address=localStorage.getItem("address") || ""
   }
 
   protected readonly environment = environment;
@@ -61,7 +58,7 @@ export class AppComponent implements OnInit {
   }
 
   open_map() {
-    this.router.navigate(["test"])
+    this.router.navigate(["map"])
   }
 
   open_drop() {

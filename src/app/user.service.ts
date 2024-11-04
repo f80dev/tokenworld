@@ -17,6 +17,15 @@ export class UserService {
   network:string="elrond-devnet"
   balance=0
   params:any
+  loc:GeolocationPosition={coords: {
+      latitude: 0, longitude: 0,
+      accuracy: 0,
+      altitude: 0,
+      altitudeAccuracy: 0,
+      heading: 0,
+      speed: 0
+    }, timestamp: 0}
+
   expert_mode:boolean=false
 
   constructor() { }

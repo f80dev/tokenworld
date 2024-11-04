@@ -258,7 +258,7 @@ export async function send_transaction(provider:any,function_name:string,sender_
       const parsedOutcome = parser.parseDeploy({ transactionOutcome });
 
       resolve(parsedOutcome)
-    }catch (e) {
+    } catch (e) {
       console.log(e)
       reject(e)
     }
@@ -281,7 +281,6 @@ export async function send_transaction(provider:any,function_name:string,sender_
 
 export async function query(function_name:string,sender_addr:string,args:any[],contract_addr:string,abi:any,network="devnet") : Promise<any[]> {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#contract-queries
-  debugger
   return new Promise(async (resolve, reject) => {
     const apiNetworkProvider = new ApiNetworkProvider(network=="devnet" ? "https://devnet-api.multiversx.com" : "https://api.multiversx.com")
     const queryRunner = new QueryRunnerAdapter({networkProvider: apiNetworkProvider});

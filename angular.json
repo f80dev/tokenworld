@@ -29,8 +29,8 @@
                 "glob": "**/*",
                 "input": "public"
               },
+              "src/assets",
               "src/CNAME",
-              "assets/icons/*.png",
               "src/index.html",
               "src/404.html",
               "src/manifest.webmanifest"

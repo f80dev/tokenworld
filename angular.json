@@ -30,7 +30,7 @@
                 "input": "public"
               },
               "src/CNAME",
-              "assets/icons",
+              "assets/icons/*.png",
               "src/index.html",
               "src/404.html",
               "src/manifest.webmanifest"

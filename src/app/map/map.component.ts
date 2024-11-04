@@ -89,6 +89,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
   private initMarkers() {
+    debugger
     var myIcon = L.icon({
       iconUrl: 'https://tokemon.f80.fr/assets/person_24dp_5F6368.png',
       iconSize: [38, 95], // size of the icon

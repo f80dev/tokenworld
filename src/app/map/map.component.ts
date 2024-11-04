@@ -33,6 +33,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       this.initializeMap()
       this.initMarkers()
       this.setMap()
+      this.initMenu()
       //this.show()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
@@ -88,18 +89,30 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   }
 
+
+
   private initMarkers() {
-    debugger
     var myIcon = L.icon({
-      iconUrl: 'https://tokemon.f80.fr/assets/person_24dp_5F6368.png',
-      iconSize: [38, 95], // size of the icon
+      iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
+      iconSize: [38, 38], // size of the icon
       iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
       popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor  
     });
 
     this.markers.push(
-      L.marker([this.user.loc.coords.latitude, this.user.loc.coords.latitude],{icon:myIcon, alt:"me"}), // Amman
+      L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:myIcon, alt:"me"}), // Amman
     )
     this.markers.forEach(marker => marker.addTo(this.map));
+  }
+
+
+
+  private initMenu() {
+
+  }
+
+
+  private call_drop() {
+    debugger
   }
 }

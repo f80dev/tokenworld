@@ -27,6 +27,7 @@ export class UserService {
     }, timestamp: 0}
 
   expert_mode:boolean=false
+  center_map: any;
 
   constructor() { }
 
@@ -44,7 +45,7 @@ export class UserService {
   }
 
   isConnected() : boolean {
-    return this.address!=""
+    return this.address!="" && this.provider
   }
 
 

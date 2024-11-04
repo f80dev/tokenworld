@@ -5,6 +5,7 @@ img {
 
 .vignette {
   display: inline-block;
+  margin: 10px;
   text-align: center;
   width:150px;
   height:150px;

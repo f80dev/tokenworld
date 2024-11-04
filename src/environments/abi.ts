@@ -250,6 +250,10 @@ export const abi=
             "type": "TokenIdentifier"
           },
           {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
             "name": "pv",
             "type": "u64"
           },

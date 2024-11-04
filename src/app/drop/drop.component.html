@@ -1,7 +1,11 @@
-<app-hourglass [message]="message"></app-hourglass>
+<div class="mainform" style="text-align: center;padding: 5px;">
+  <app-hourglass [message]="message"></app-hourglass><br>
 
-<div *ngFor="let nft of nfts" class="vignette">
-  {{nft.name}}<br>
-  <img [src]="nft.visual">
-  <button mat-icon-button (click)="drop(nft)" title="Drop here"><mat-icon>download</mat-icon></button>
+  <div *ngFor="let nft of nfts" class="vignette">
+    {{nft.name}}<br>
+    <img [src]="nft.visual" style="cursor: pointer;" (click)="drop(nft)">
+
+    <button mat-icon-button (click)="drop(nft)" title="Drop here"><mat-icon>download</mat-icon></button>
+  </div>
+
 </div>

@@ -62,9 +62,15 @@ export class AppComponent implements OnInit {
   }
 
   open_drop() {
-    if(!this.user.isConnected()){
+    if(this.user.address){
+      this.router.navigate(["drop"])
+    } else {
       this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
     }
-    this.router.navigate(["drop"])
+
+  }
+
+  go_settings() {
+    this.router.navigate(["settings"])
   }
 }

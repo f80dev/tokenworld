@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
 import * as L from 'leaflet';
-import {LatLng} from 'leaflet';
+
+import {control, LatLng} from 'leaflet';
 import {showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
@@ -8,7 +9,6 @@ import {query} from '../mvx';
 import {abi} from '../../environments/abi';
 import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
-
 
 const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -25,6 +25,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   user=inject(UserService)
   private map!: L.Map;
   private markers:L.Marker[]=[]
+  center: any;
 
 
   async ngAfterViewInit() {
@@ -33,7 +34,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       this.initializeMap()
       this.initMarkers()
       this.setMap()
-      this.initMenu()
       //this.show()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
@@ -53,6 +53,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private initializeMap() {
     this.map = L.map('map');
     L.tileLayer(baseMapURl).addTo(this.map);
+    this.map.on("moveend",(event)=>{
+      this.user.center_map = event.target.getCenter();
+
+    })
   }
 
 
@@ -64,10 +68,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       L.tileLayer(baseMapURl, {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map).redraw();
-
     }
-
   }
+
 
   async show() {
     let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude)
@@ -75,7 +78,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     let contract:string=environment.contract_addr["elrond-devnet"];
 
     if(this.user.address){
-      let nfts=await query("show_nfts",      this.user.address, args, contract, abi);
+      let nfts=await query("show_nfts",this.user.address, args, contract, abi);
 
       this.markers=[]
       for(let nft of nfts){
@@ -92,27 +95,28 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   private initMarkers() {
-    var myIcon = L.icon({
+    var meIcon = L.icon({
       iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
       iconSize: [38, 38], // size of the icon
       iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
       popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor  
     });
 
+    var center=L.icon({
+      iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
+      iconSize: [38, 38], // size of the icon
+      iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+      popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor  
+    });
+
     this.markers.push(
-      L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:myIcon, alt:"me"}), // Amman
+      L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"}), // Amman
     )
+
     this.markers.forEach(marker => marker.addTo(this.map));
   }
 
 
+  protected readonly control = control;
 
-  private initMenu() {
-
-  }
-
-
-  private call_drop() {
-    debugger
-  }
 }

@@ -203,6 +203,10 @@ export const abi=
           {
             "name": "z",
             "type": "u64"
+          },
+          {
+            "name": "scale_factor",
+            "type": "u16"
           }
         ],
         "outputs": [

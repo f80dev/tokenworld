@@ -1,6 +1,7 @@
 <div class="mainform" style="text-align: center;width:100%;">
 
   <app-input value_type="boolean" [value]="user.expert_mode"
+             style="display: inline-block;"
              (valueChange)="update_expert_mode($event)"
              label="Advanced mode"></app-input>
   <br>
@@ -15,35 +16,11 @@
   </button>
   <br><br>
 
-  <mat-expansion-panel *ngIf="user.expert_mode">
-    <mat-expansion-panel-header>Modèles</mat-expansion-panel-header>
-    <h6>Liste des modeles disponible</h6>
-    <div *ngFor="let model of models">
-      {{model}}
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>NFT dropped</mat-expansion-panel-header>
+    <div *ngFor="let nft of nfts">
+      - {{toText(nft.clan)}} - Position: {{nft.coords.lat}},{{nft.coords.long}}
     </div>
-    <br>
-    <button mat-raised-button (click)="add_model()" color="primary">Ajouter un model</button>
-
-    <br><br>
-    <div>
-      Selected model: {{sel_model}}
-    </div>
-
-  </mat-expansion-panel>
-
-  <br>
-  <br>
-  <mat-expansion-panel *ngIf="user.expert_mode">
-    <mat-expansion-panel-header>Installer un serveur PromptMarket</mat-expansion-panel-header>
-    <mat-tab-group>
-      <mat-tab label="Windows">
-        <ul>
-          <li>Installer docker</li>
-          <li>Exécuter la commande<br>docker run -d --name promptmarketserver -p 5000:5000 --gpus=all --env MODEL=stabilityai/stable-diffusion-3-medium -v C:/Users/hhoar/IdeaProjects/promptmarket/Creator/cache:/cache -it f80hub/promptmarketserver </li>
-        </ul>
-      </mat-tab>
-      <mat-tab label="Linux / Mac"></mat-tab>
-    </mat-tab-group>
   </mat-expansion-panel>
 
 </div>

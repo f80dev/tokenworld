@@ -6,13 +6,14 @@ import {Router} from '@angular/router';
 import {DEVNET, MAINNET, send_transaction} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
 import {abi} from '../../environments/abi';
 import {latLonToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {showMessage} from '../../tools';
+import {showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
+import {InputComponent} from '../input/input.component';
 
 @Component({
   selector: 'app-drop',
@@ -22,7 +23,9 @@ import {MatDialog} from '@angular/material/dialog';
     MatIcon,
     MatIconButton,
     NgIf,
-    HourglassComponent
+    HourglassComponent,
+    InputComponent,
+    MatButton
   ],
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
@@ -33,6 +36,7 @@ export class DropComponent implements AfterViewInit {
   user = inject(UserService)
   router = inject(Router)
   dialog=inject(MatDialog)
+  sel_nft: any;
 
 
   async ngAfterViewInit() {
@@ -41,6 +45,7 @@ export class DropComponent implements AfterViewInit {
     let addr = Address.fromBech32(this.user.address)
     let url_network = this.user.network == "elrond-devnet" ? DEVNET : MAINNET;
     const apiNetworkProvider = new ApiNetworkProvider(url_network);
+
 
     for (let nft of await apiNetworkProvider.getNonFungibleTokensOfAccount(addr)) {
       let prop = nft.attributes.toString("utf-8");
@@ -52,38 +57,50 @@ export class DropComponent implements AfterViewInit {
         nonce:nft.nonce,
         collection: nft.collection,
         id: nft.identifier,
+        identifier:nft.identifier,
         metadata: metadata,
-        visual: image
+        visual: image,
+        type:nft.type
       })
     }
-
   }
 
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   message: string=""
-
+  visibility=10
+  quantity=1
+  max_quantity=10
 
 
   async drop(nft: any) {
-    if(this.user.isConnected()){
-      let pos = latLonToCartesian(this.user.loc?.coords.latitude, this.user.loc?.coords.longitude)
-      let args = ["LesBG", 10000, Math.trunc(pos.x*environment.scale_factor), Math.trunc(pos.y*environment.scale_factor), Math.trunc(pos.z*environment.scale_factor)]
-      let contract: string = environment.contract_addr["elrond-devnet"];
+    let pos = latLonToCartesian(this.user.loc?.coords.latitude, this.user.loc?.coords.longitude,environment.scale_factor)
+    let args = ["LesBG", this.visibility,pos.x,pos.y,pos.z]
+    let contract: string = environment.contract_addr["elrond-devnet"];
+    try{
       wait_message(this,"Dropping in progress")
       let tx = await send_transaction(this.user.provider,
         "drop_nft",
         this.user.address,
         args,
         contract,
-        nft.collection, nft.nonce,1, abi);
+        nft.collection, nft.nonce,this.quantity, abi,nft.type);
       wait_message(this)
-      this.router.navigate(["map"])
-    }else{
-      this.user.login(this)
+    }catch (e){
+      showError(this,e)
+      wait_message(this)
     }
+    this.quit()
 
   }
 
 
+  select(nft: any) {
+    this.sel_nft=nft
+  }
+
+  private quit() {
+    this.sel_nft=null
+    this.router.navigate(["map"])
+  }
 }

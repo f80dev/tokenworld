@@ -73,4 +73,8 @@ export class AppComponent implements OnInit {
   go_settings() {
     this.router.navigate(["settings"])
   }
+
+  go_admin() {
+    this.router.navigate(["admin"])
+  }
 }

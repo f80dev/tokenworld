@@ -73,18 +73,21 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async show() {
-    let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude)
-    let args=["LesBG",Math.trunc(pos.x*environment.scale_factor),Math.trunc(pos.y*environment.scale_factor),Math.trunc(pos.z*environment.scale_factor)]
+    let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
+    let args=[
+      "LesBG",
+      pos.x,pos.y,pos.z,
+      10000
+    ]
     let contract:string=environment.contract_addr["elrond-devnet"];
     if(this.user.address){
+
       let nfts=await query("show_nfts",this.user.address, args, contract, abi);
 
       this.markers=[]
       for(let nft of nfts){
-        let coords=cartesianToPolar(nft.x/environment.scale_factor,nft.y/environment.scale_factor,nft.z/environment.scale_factor)
-        this.markers.push(
-          L.marker([coords.lat, coords.long]), // Amman
-        )
+        let coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+        this.markers.push(L.marker([coords.lat, coords.long]))
       }
       this.markers.forEach(marker => marker.addTo(this.map));
     }

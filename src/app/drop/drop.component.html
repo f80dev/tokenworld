@@ -1,14 +1,42 @@
 <div class="mainform" style="text-align: center;padding: 5px;">
   <app-hourglass [message]="message"></app-hourglass><br>
 
-  <h5 *ngIf="nfts.length==0">No NFT available to drop</h5>
-  <h5 *ngIf="nfts.length>0">Select a NFT to drop</h5>
+  <div *ngIf="message==''">
+    <h5 *ngIf="nfts.length==0">No NFT available to drop</h5>
 
-  <div *ngFor="let nft of nfts" class="vignette">
-    {{nft.name}}<br>
-    <img [src]="nft.visual" style="cursor: pointer;" (click)="drop(nft)">
 
-    <button mat-icon-button (click)="drop(nft)" title="Drop here"><mat-icon>download</mat-icon></button>
+    <div *ngIf="!sel_nft">
+      <h5 *ngIf="nfts.length>0">Select a NFT to drop</h5>
+      <div *ngFor="let nft of nfts" class="vignette">
+        {{nft.name}}<br>
+        <img [src]="nft.visual" style="cursor: pointer;" (click)="select(nft)">
+
+
+      </div>
+    </div>
+
+
+    <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
+      <h5 *ngIf="nfts.length>0">Dropping {{sel_nft.collection}} ?</h5>
+
+
+      <app-input value_type="slide" [min]="0" [max]="100000"
+                 label="Visibility under" unity="meters"
+                 (valueChange)="visibility=$event" [value]="visibility"></app-input>
+
+      <app-input value_type="slide" [min]="0" [max]="max_quantity"
+                 label="Number to drop" unity="NFT"
+                 (valueChange)="quantity=$event" [value]="quantity"></app-input>
+
+      <button mat-raised-button (click)="drop(sel_nft)"
+              title="Drop here">Drop !</button>
+    </div>
+
+    <br>
+
+
+
   </div>
+
 
 </div>

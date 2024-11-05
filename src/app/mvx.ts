@@ -159,7 +159,7 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,
                                        args:any,contract_addr:string,
-                                       token="",nonce=0,value=0,abi:any,gasLimit=50000000n) {
+                                       token="",nonce=0,value=0,abi:any,_type="fungible",gasLimit=50000000n) {
   //envoi d'une transaction
 
 
@@ -200,101 +200,94 @@ export async function send_transaction(provider:any,function_name:string,sender_
     //voir https://multiversx.github.io/mx-sdk-js-core/v13/classes/TokenTransfer.html
 
     let token_transfer=null
-    let transaction:Transaction;
+    let transaction:Transaction | undefined
     console.log("Transaction sur le contrat https://devnet-explorer.multiversx.com/accounts/"+contract_addr)
-    if(nonce>0){
-      let _t=TokenTransfer.semiFungible(token,nonce,1)
+
+    if(_type.startsWith("Semi")){
+      let _t=TokenTransfer.semiFungible(token,nonce,value)
       transaction = factory.createTransactionForExecute({
         sender: sender,
         contract: Address.fromBech32(contract_addr),
         function: function_name,
         gasLimit: gasLimit,
-        nativeTransferAmount:0n,
         arguments: args,
         tokenTransfers:[_t]
       });
-    }else{
-      if(token.length>0){
-        transaction = factory.createTransactionForExecute({
+    }
+
+    if(_type.startsWith("Fungible")){
+      let _t=TokenTransfer.fungibleFromAmount(token,value,18)
+      transaction = factory.createTransactionForExecute({
           sender: sender,
           contract: Address.fromBech32(contract_addr),
           function: function_name,
           gasLimit: gasLimit,
-          nativeTransferAmount:0n,
           arguments: args,
-          tokenTransfers:[
-            new TokenTransfer({
-              token: new Token({identifier: token}),
-              amount: BigInt(value),
-            })
-          ]
-        });
-      }else{
+          tokenTransfers: [_t]
+        })
+    }
+
+    if(_type.startsWith("NonFungible")){
+      let _t=TokenTransfer.nonFungible(token,nonce)
         transaction = factory.createTransactionForExecute({
           sender: sender,
           contract: Address.fromBech32(contract_addr),
           function: function_name,
           gasLimit: gasLimit,
-          nativeTransferAmount:BigInt(value*1e18),
+          tokenTransfers: [_t],
           arguments: args
         });
       }
 
-    }
 
 
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#transfer--execute
 
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#signing-transactions-1
     //voir exemple https://github.com/multiversx/mx-sdk-js-examples/blob/0d35714c9172ea5a31a7563a155a942b9249782e/signing-providers/src/extension.js#L52
-    transaction.nonce=BigInt(_sender.nonce)
+    if(transaction){
+      transaction.nonce=BigInt(_sender.nonce)
 
-    let sign_transaction
-    if(!user_signer){
-      sign_transaction=await provider.signTransaction(transaction)
-    }else{
-      transaction.signature=await user_signer.sign(transaction.serializeForSigning())
-      sign_transaction=transaction
+      let sign_transaction
+      if(!user_signer){
+        sign_transaction=await provider.signTransaction(transaction)
+      }else{
+        transaction.signature=await user_signer.sign(transaction.serializeForSigning())
+        sign_transaction=transaction
+      }
+
+
+      //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#creating-network-providers
+      //const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
+
+
+      //Voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#broadcast-using-a-network-provider
+      //const txHash = await proxyNetworkProvider.sendTransaction(transaction);
+      try{
+        let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
+
+        const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
+        const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(hash);
+
+        const converter = new TransactionsConverter();
+        const parser = new SmartContractTransactionsOutcomeParser();
+
+        const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
+        const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+
+        resolve(parsedOutcome)
+      } catch (e) {
+        console.log(e)
+        reject(e)
+      }
     }
-
-
-    //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#creating-network-providers
-    //const proxyNetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
-
-
-    //Voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#broadcast-using-a-network-provider
-    //const txHash = await proxyNetworkProvider.sendTransaction(transaction);
-    try{
-      let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
-
-      const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
-      const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(hash);
-
-      const converter = new TransactionsConverter();
-      const parser = new SmartContractTransactionsOutcomeParser();
-
-      const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
-      const parsedOutcome = parser.parseDeploy({ transactionOutcome });
-
-      resolve(parsedOutcome)
-    } catch (e) {
-      console.log(e)
-      reject(e)
-    }
-
-    //Attente du résultat
-    //const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
-    // const transactionOnNetworkUsingProxy  = await watcherUsingApi.awaitCompleted(txHash);
-    //
-    // const converter = new TransactionsConverter();
-    // const parser = new SmartContractTransactionsOutcomeParser();
-    //
-    // const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingProxy);
-    // const parsedOutcome = parser.parseDeploy({ transactionOutcome });
-
 
   })
 
+}
+
+export function toText(array:Uint8Array) : string {
+  return new TextDecoder('utf-8').decode(array)
 }
 
 

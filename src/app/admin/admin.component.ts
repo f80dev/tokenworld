@@ -10,7 +10,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {_prompt} from "../prompt/prompt.component";
 import {InputComponent} from "../input/input.component";
 import {UserService} from "../user.service";
-import {get_smartcontract_address} from "../mvx";
+import {get_smartcontract_address, query, toText} from "../mvx";
+import {abi} from '../../environments/abi';
+import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
 
 @Component({
   selector: 'app-admin',
@@ -35,15 +37,15 @@ export class AdminComponent implements OnInit {
   sel_model: any;
   options=[{label:"Main network",value:"mainnet"},{label:"Test network",value:"devnet"}]
   sel_network=this.options[1]
+  nfts:any[]=[]
 
-  refresh(){
-    this.api._get(environment.server+"/models").subscribe((rep:any)=>{
-      this.models=rep.models
-      this.sel_model=rep.selected
-    })
-    this.api._get(environment.render_server+"/infos").subscribe((infos:any)=>{
-      this.infos=infos
-    })
+  async refresh(){
+    this.nfts=[]
+    for(let nft of await query("tokemons",this.user.address,[],environment.contract_addr["elrond-devnet"],abi)){
+      nft.coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+      this.nfts.push(nft)
+    }
+
   }
 
   ngOnInit(): void {
@@ -64,6 +66,8 @@ export class AdminComponent implements OnInit {
     open("https://"+prefix+"explorer.multiversx.com/accounts/"+get_smartcontract_address(environment,this.user),"smartcontract")
   }
 
+
+
   update_network($event: any) {
     this.user.logout()
     this.user.network=$event.value
@@ -74,4 +78,9 @@ export class AdminComponent implements OnInit {
     this.user.expert_mode=$event
     localStorage.setItem("expert_mode",$event ? "true" : "false")
   }
+
+  protected readonly TextDecoder = TextDecoder;
+  protected readonly toText = toText;
+  protected readonly latLonToCartesian = latLonToCartesian;
+  protected readonly cartesianToPolar = cartesianToPolar;
 }

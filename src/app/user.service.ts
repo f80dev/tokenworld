@@ -17,6 +17,7 @@ export class UserService {
   network:string="elrond-devnet"
   balance=0
   params:any
+  nonce:number=0
   loc:GeolocationPosition={coords: {
       latitude: 0, longitude: 0,
       accuracy: 0,
@@ -55,9 +56,10 @@ export class UserService {
   }
 
 
-  async set_balance(esdt:string="egld") {
+  async set_balance_and_nonce(esdt:string="egld") {
     let _account=await toAccount(this.address)
     this.balance= _account.balance.toNumber()/1e18
+    this.nonce=_account.nonce
   }
 
 
@@ -75,13 +77,14 @@ export class UserService {
             url_direct_xportal_connect:""
           }
           this.authent(r)
-          this.set_balance("egld")
+          this.set_balance_and_nonce("egld")
           resolve(r)
           showMessage(vm,"Identification ok")
         } else {
           try{
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle)
             this.authent(r)
+            this.set_balance_and_nonce()
             resolve(r)
           }catch (e){
             reject()

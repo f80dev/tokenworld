@@ -1,7 +1,8 @@
 <div class="mainform" style="text-align: center;padding: 5px;">
   <app-hourglass [message]="message"></app-hourglass><br>
 
-  <h5 *ngIf="nfts==[]">No NFT available to drop</h5>
+  <h5 *ngIf="nfts.length==0">No NFT available to drop</h5>
+  <h5 *ngIf="nfts.length>0">Select a NFT to drop</h5>
 
   <div *ngFor="let nft of nfts" class="vignette">
     {{nft.name}}<br>

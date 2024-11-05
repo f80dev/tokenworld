@@ -18,6 +18,7 @@ export const environment = {
   shorter_service:"",
   appli:"",
   transfer_page:"https://t.f80.fr",
+  scale_factor:10,
 
   render_server: "https://api.f80.fr:9876",
   fee: 0,

@@ -68,7 +68,7 @@ export class DropComponent implements AfterViewInit {
   async drop(nft: any) {
     if(this.user.isConnected()){
       let pos = latLonToCartesian(this.user.loc?.coords.latitude, this.user.loc?.coords.longitude)
-      let args = ["LesBG", 10000, pos.x, pos.y, pos.z]
+      let args = ["LesBG", 10000, Math.trunc(pos.x*environment.scale_factor), Math.trunc(pos.y*environment.scale_factor), Math.trunc(pos.z*environment.scale_factor)]
       let contract: string = environment.contract_addr["elrond-devnet"];
       wait_message(this,"Dropping in progress")
       let tx = await send_transaction(this.user.provider,
@@ -76,7 +76,7 @@ export class DropComponent implements AfterViewInit {
         this.user.address,
         args,
         contract,
-        nft.id, 1e-18, abi);
+        nft.collection, nft.nonce,1, abi);
       wait_message(this)
       this.router.navigate(["map"])
     }else{

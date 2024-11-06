@@ -129,7 +129,7 @@ export const abi=
           },
           {
             "name": "visibility",
-            "type": "u16"
+            "type": "u32"
           },
           {
             "name": "x",
@@ -206,12 +206,13 @@ export const abi=
           },
           {
             "name": "scale_factor",
-            "type": "u16"
+            "type": "u32"
           }
         ],
         "outputs": [
           {
-            "type": "List<Tokemon>"
+            "type": "variadic<Tokemon>",
+            "multi_result": true
           }
         ]
       },
@@ -279,7 +280,7 @@ export const abi=
           },
           {
             "name": "visibility",
-            "type": "u16"
+            "type": "u32"
           }
         ]
       }

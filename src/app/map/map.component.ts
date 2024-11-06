@@ -79,6 +79,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       pos.x,pos.y,pos.z,
       10000
     ]
+    debugger
     let contract:string=environment.contract_addr["elrond-devnet"];
     if(this.user.address){
 
@@ -86,8 +87,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
       this.markers=[]
       for(let nft of nfts){
+        var giftIcon = L.icon({
+          iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
+          iconSize: [38, 38], // size of the icon
+          iconAnchor: [19, 36], // point of the icon which will correspond to marker's location
+          popupAnchor: [-19, -19] // point from which the popup should open relative to the iconAnchor  
+        });
+
         let coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
-        this.markers.push(L.marker([coords.lat, coords.long]))
+        this.markers.push(L.marker([coords.lat, coords.long],{icon:giftIcon, alt:"me"}))
       }
       this.markers.forEach(marker => marker.addTo(this.map));
     }
@@ -100,15 +108,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     var meIcon = L.icon({
       iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
       iconSize: [38, 38], // size of the icon
-      iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-      popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor  
+      iconAnchor: [19, 19], // point of the icon which will correspond to marker's location
+      popupAnchor: [-19, -19] // point from which the popup should open relative to the iconAnchor  
     });
 
     var center=L.icon({
       iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
       iconSize: [38, 38], // size of the icon
-      iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-      popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor  
+      iconAnchor: [19, 19], // point of the icon which will correspond to marker's location
+      popupAnchor: [-19, -19] // point from which the popup should open relative to the iconAnchor  
     });
 
     this.markers.push(

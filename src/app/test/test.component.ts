@@ -15,9 +15,10 @@ import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
 export class TestComponent implements OnInit {
 
   ngOnInit(): void {
-    let lg=10
-    let lt=5
-    let res=latLonToCartesian(lt,lg,10)
+    let scale=1000000
+    let p=latLonToCartesian(-20,2,scale)
+    let res2 = cartesianToPolar(p.x,p.y,p.z,scale)
+    debugger
   }
 
 

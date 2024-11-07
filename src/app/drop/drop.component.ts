@@ -14,6 +14,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
 import {InputComponent} from '../input/input.component';
+import {toNFT} from '../tokemon/tokemon.component';
 
 @Component({
   selector: 'app-drop',
@@ -43,23 +44,18 @@ export class DropComponent implements AfterViewInit {
     if (!this.user.isConnected()) {await this.user.login(this)}
 
     let addr = Address.fromBech32(this.user.address)
-    let url_network = this.user.network == "elrond-devnet" ? DEVNET : MAINNET;
-    const apiNetworkProvider = new ApiNetworkProvider(url_network);
-
+    const apiNetworkProvider = new ApiNetworkProvider(this.user.network == "elrond-devnet" ? DEVNET : MAINNET);
 
     for (let nft of await apiNetworkProvider.getNonFungibleTokensOfAccount(addr)) {
-      let prop = nft.attributes.toString("utf-8");
-      let metadata = "https://ipfs.io/ipfs/" + prop.split("metadata:")[1]
-      let image = "https://ipfs.io/ipfs/" + prop.split("metadata:")[1].replace(".json", ".png")
-
+      let prop=toNFT(nft)
       this.nfts.push({
         name: nft.name,
         nonce:nft.nonce,
         collection: nft.collection,
         id: nft.identifier,
         identifier:nft.identifier,
-        metadata: metadata,
-        visual: image,
+        metadata: prop.metadata,
+        visual: prop.visual,
         type:nft.type
       })
     }
@@ -74,7 +70,11 @@ export class DropComponent implements AfterViewInit {
 
 
   async drop(nft: any) {
-    let pos = latLonToCartesian(this.user.loc?.coords.latitude, this.user.loc?.coords.longitude,environment.scale_factor)
+    let pos = latLonToCartesian(
+      this.user.center_map.lat,
+      this.user.center_map.lng,
+      environment.scale_factor
+    )
     let args = ["LesBG", this.visibility,pos.x,pos.y,pos.z]
     let contract: string = environment.contract_addr["elrond-devnet"];
     try{

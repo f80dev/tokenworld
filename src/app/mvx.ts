@@ -159,7 +159,8 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,
                                        args:any,contract_addr:string,
-                                       token="",nonce=0,value=0,abi:any,_type="fungible",gasLimit=50000000n) {
+                                       token="",nonce=0,value=0,abi:any,
+                                       _type: string="",gasLimit=50000000n) {
   //envoi d'une transaction
 
 
@@ -202,6 +203,16 @@ export async function send_transaction(provider:any,function_name:string,sender_
     let token_transfer=null
     let transaction:Transaction | undefined
     console.log("Transaction sur le contrat https://devnet-explorer.multiversx.com/accounts/"+contract_addr)
+
+    if(_type==""){
+      transaction = factory.createTransactionForExecute({
+        sender: sender,
+        contract: Address.fromBech32(contract_addr),
+        function: function_name,
+        gasLimit: gasLimit,
+        arguments: args
+      });
+    }
 
     if(_type.startsWith("Semi")){
       let _t=TokenTransfer.semiFungible(token,nonce,value)

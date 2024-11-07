@@ -1,0 +1,9 @@
+<div class="mainform" style="text-align: center;">
+  <app-hourglass [message]="message"></app-hourglass>
+  <br>
+
+  <app-tokemon [item]="item"  [network]="user.network"></app-tokemon>
+  <br>
+  <button mat-raised-button (click)="on_capture()"
+          *ngIf="message.length==0">Capture</button>
+</div>

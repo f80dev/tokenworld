@@ -54,6 +54,17 @@ export const abi=
         ]
       },
       {
+        "name": "killed",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "variadic<u32>",
+            "multi_result": true
+          }
+        ]
+      },
+      {
         "name": "fee",
         "mutability": "readonly",
         "inputs": [],
@@ -151,6 +162,21 @@ export const abi=
         ]
       },
       {
+        "name": "capture",
+        "mutability": "mutable",
+        "inputs": [
+          {
+            "name": "item_id",
+            "type": "u32"
+          },
+          {
+            "name": "amount",
+            "type": "BigUint"
+          }
+        ],
+        "outputs": []
+      },
+      {
         "name": "add_tokemon",
         "mutability": "mutable",
         "payableInTokens": [
@@ -243,6 +269,10 @@ export const abi=
         "type": "struct",
         "fields": [
           {
+            "name": "id",
+            "type": "u32"
+          },
+          {
             "name": "clan",
             "type": "bytes"
           },
@@ -286,3 +316,4 @@ export const abi=
       }
     }
   }
+

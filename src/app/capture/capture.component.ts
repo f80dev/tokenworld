@@ -56,6 +56,7 @@ export class CaptureComponent implements OnInit {
     } catch (e){
       wait_message(this);
     }
+
     showMessage(this,"You are the new owner of this NFT")
     setTimeout(()=>{this.router.navigate(["map"])})
 

@@ -75,6 +75,7 @@ export class DropComponent implements AfterViewInit {
       this.user.center_map.lng,
       environment.scale_factor
     )
+    //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
     let args = ["LesBG", this.visibility,pos.x,pos.y,pos.z]
     let contract: string = environment.contract_addr["elrond-devnet"];
     try{

@@ -7,10 +7,7 @@ import {NgIf} from '@angular/common';
 
 
 export function toNFT(nft:any) : any {
-  let prop = nft.attributes.toString("utf-8");
-  nft.metadata== "https://ipfs.io/ipfs/" + prop.split("metadata:")[1]
-  nft.visual = "https://ipfs.io/ipfs/" + prop.split("metadata:")[1].replace(".json", ".png")
-  return nft
+
 }
 
 

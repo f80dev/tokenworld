@@ -37,7 +37,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private vision: CircleMarker<any> | undefined;
   private target: Marker<any> | undefined;
   private me:  Marker<any> | undefined;
-
+  popup=L.popup()
 
 
   async ngAfterViewInit() {
@@ -83,17 +83,18 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
     // var targetIcon = L.icon({
     //   iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
-    //   iconSize: [38, 38], // size of the icon
-    //   iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+    //   iconSize: [30, 30], // size of the icon
+    //   iconAnchor: [-15, -15], // point of the icon which will correspond to marker's location
     // });
-
     // this.target=L.marker([this.map.getCenter().lat, this.map.getCenter().lng],{icon:targetIcon, alt:"target"})
+
     this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
 
     // this.target.addTo(this.map)
     this.me.addTo(this.map)
 
     this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
+
   }
 
 
@@ -102,7 +103,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     return new Promise(async (resolve,reject) => {
       this.user.loc=await this.geolocService.getCurrentPosition()
       if(this.user.loc){
-        resolve(this.map.setView(new LatLng(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude),17))
+        resolve(this.map.setView(new LatLng(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude),16))
       }else{
         reject()
       }
@@ -123,8 +124,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       for(let nft of nfts){
         var giftIcon = L.icon({
           iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
-          iconSize: [38, 38], // size of the icon
-          iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+          iconSize: [30, 30],// size of the icon
+          shadowSize: [10,10],
+          iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
         })
 
         let coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
@@ -132,6 +134,11 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         let marker=L.marker([coords.lat, coords.long],{icon:giftIcon, alt:nft})
         marker.on("mouseover",(event)=>{this.mouseover(event)})
         marker.on("dblclick",(event)=>{this.select_nft(event)})
+
+        L.circleMarker([coords.lat,coords.long], {
+          color: '#474747',fillColor: '#474747',
+          fillOpacity: 0.5,radius: 2
+        }).addTo(this.map);
 
         marker.addTo(this.map)
       }
@@ -149,7 +156,11 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   private mouseover(event: LeafletMouseEvent) {
     let nft=event.target.options.alt
-    this.infos=new TextDecoder("utf-8").decode(nft.clan)
+    let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+    this.popup
+      .setLatLng(event.latlng)
+      .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'><br>"+pos.lat+","+pos.long)
+      .openOn(this.map);
   }
 
 

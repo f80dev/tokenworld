@@ -7,16 +7,17 @@ import {UserService} from './user.service';
 import {getParams, showMessage} from '../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
-import {NgIf} from '@angular/common';
+import {DecimalPipe, NgIf} from '@angular/common';
 import {GeolocService} from './geoloc.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
+import {_prompt} from './prompt/prompt.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent],
+  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent, DecimalPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -76,5 +77,13 @@ export class AppComponent implements OnInit {
 
   go_admin() {
     this.router.navigate(["admin"])
+  }
+
+  async moveto() {
+    let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
+    let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
+    if(r){
+      this.user.center_map={lat:Number(r.split(",")[0]),lng:Number(r.split(",")[1])}
+    }
   }
 }

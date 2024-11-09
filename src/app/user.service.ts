@@ -28,7 +28,7 @@ export class UserService {
     }, timestamp: 0}
 
   expert_mode:boolean=false
-  center_map: any;
+  center_map: {lat:number,lng:number} | undefined
 
   constructor() { }
 
@@ -40,6 +40,7 @@ export class UserService {
     url_direct_xportal_connect: string
   }) {
     this.address = $event.address
+    localStorage.setItem("address",this.address)
     this.provider = $event.provider
     this.strong=$event.strong
     this.addr_change.next(this.address)

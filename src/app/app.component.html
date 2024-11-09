@@ -1,5 +1,12 @@
 <router-outlet></router-outlet>
 <mat-toolbar color="primary" class="bottom-toolbar">
+
+  <div style="display: inline-block;font-size: small;margin-right: 50px;">
+    {{user.center_map?.lat | number:"1.0-5"}}&nbsp;,&nbsp;{{user.center_map?.lng | number:"1.0-5"}}
+    <button mat-icon-button (click)="moveto()" title="Se décplacer"><mat-icon>plane</mat-icon></button>
+  </div>
+
+
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
   <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
 

@@ -14,7 +14,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {$$, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
 import {InputComponent} from '../input/input.component';
-import {toNFT} from '../tokemon/tokemon.component';
+import {WalletComponent} from '../wallet/wallet.component';
 
 @Component({
   selector: 'app-drop',
@@ -26,45 +26,23 @@ import {toNFT} from '../tokemon/tokemon.component';
     NgIf,
     HourglassComponent,
     InputComponent,
-    MatButton
+    MatButton,
+    WalletComponent
   ],
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
 })
 export class DropComponent implements AfterViewInit {
 
-  nfts: any[] = []
   user = inject(UserService)
   router = inject(Router)
   dialog=inject(MatDialog)
   sel_nft: any;
 
-
   async ngAfterViewInit() {
-
     if (!this.user.address) {
       this.user.address=localStorage.getItem("address") || ""
       if(!this.user.address)await this.user.login(this)
-    }
-
-    let addr = Address.fromBech32(this.user.address)
-    const apiNetworkProvider = new ApiNetworkProvider(this.user.network == "elrond-devnet" ? DEVNET : MAINNET);
-
-    for (let nft of await apiNetworkProvider.getNonFungibleTokensOfAccount(addr)) {
-      let prop = nft.attributes.toString("utf-8")
-      let metadata= "https://ipfs.io/ipfs/" + prop.split("metadata:")[1]
-      let _nft=await apiNetworkProvider.getNonFungibleToken(nft.collection,nft.nonce)
-      debugger
-      this.nfts.push({
-        name: nft.name,
-        nonce:nft.nonce,
-        collection: nft.collection,
-        id: nft.identifier,
-        identifier:nft.identifier,
-        metadata: metadata,
-        visual: _nft,
-        type:nft.type
-      })
     }
   }
 
@@ -102,17 +80,15 @@ export class DropComponent implements AfterViewInit {
         wait_message(this)
       }
       this.quit()
-
     }
-
   }
 
 
-  select(nft: any) {
-    this.sel_nft=nft
-  }
 
-  private quit() {
+
+
+
+  quit() {
     this.sel_nft=null
     this.router.navigate(["map"])
   }

@@ -2,24 +2,13 @@
   <app-hourglass [message]="message"></app-hourglass><br>
 
   <div *ngIf="message==''">
-    <h5 *ngIf="nfts.length==0">No NFT available to drop</h5>
-
-
-    <div *ngIf="!sel_nft">
-      <h5 *ngIf="nfts.length>0">Select a NFT to drop</h5>
-      <div *ngFor="let nft of nfts" class="vignette">
-        {{nft.name}}<br>
-        <img [src]="nft.visual" style="cursor: pointer;" (click)="select(nft)">
-
-
-      </div>
-    </div>
-
+    <app-wallet [address]="user.address"
+                *ngIf="!sel_nft" message="Select a NFT to drop"
+                [network]="user.network"
+                (selectChanged)="sel_nft=$event">
+    </app-wallet>
 
     <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
-      <h5 *ngIf="nfts.length>0">Dropping {{sel_nft.collection}} ?</h5>
-
-
       <app-input value_type="slide" [min]="0" [max]="100000"
                  label="Visibility under" unity="meters"
                  (valueChange)="visibility=$event" [value]="visibility"></app-input>
@@ -28,8 +17,7 @@
                  label="Number to drop" unity="NFT"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
-      <button mat-raised-button (click)="drop(sel_nft)"
-              title="Drop here">Drop !</button>
+      <button mat-raised-button (click)="drop(sel_nft)" title="Drop here">Drop !</button>
     </div>
 
     <br>

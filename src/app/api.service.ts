@@ -42,6 +42,20 @@ export class ApiService {
   }
 
 
+  _service(name:string,params="",domain="https://api.multiversx.com/",withException=true) : Promise<any[]> {
+    return new Promise((resolve,reject)=> {
+      this._get(domain+name,params).subscribe((response:any[])=>{
+        resolve(response)
+      },(err:any)=>{
+        if(!withException){
+          resolve([])
+        }else{
+          reject(err)
+        }
+      })
+    })
+  }
+
   _get(url: string, param: string = "", _timeout = 30000, cacheDelayInSec = 0) {
     if (!url.startsWith("http")) {
       url = "/api/" + url;

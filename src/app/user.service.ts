@@ -29,6 +29,7 @@ export class UserService {
 
   expert_mode:boolean=false
   center_map: {lat:number,lng:number} | undefined
+  nfts: any[] = [];
 
   constructor() { }
 

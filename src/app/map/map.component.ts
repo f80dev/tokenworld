@@ -115,13 +115,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     if(this.user.center_map){
       let pos=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,environment.scale_factor)
       //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
-      let args=["LesBG", pos.x,pos.y,pos.z, 10000]
+      let args=["LesBG", pos.x,pos.y,pos.z, environment.scale_factor]
 
       let contract:string=environment.contract_addr["elrond-devnet"];
-      let nfts=await query("show_nfts",this.user.address, args, contract, abi);
+      this.user.nfts=await query("show_nfts",this.user.address, args, contract, abi);
 
-      $$("Chargement de "+nfts.length+" tokemons")
-      for(let nft of nfts){
+      $$("Chargement de "+this.user.nfts.length+" tokemons")
+      for(let nft of this.user.nfts){
         var giftIcon = L.icon({
           iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
           iconSize: [30, 30],// size of the icon
@@ -159,7 +159,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
     this.popup
       .setLatLng(event.latlng)
-      .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'><br>"+pos.lat+","+pos.long)
+      .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'>")
       .openOn(this.map);
   }
 

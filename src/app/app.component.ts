@@ -4,14 +4,14 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {MatDialog} from '@angular/material/dialog';
 import {environment} from "../environments/environment";
 import {UserService} from './user.service';
-import {getParams, showMessage} from '../tools';
+import {getParams, setParams, showMessage} from '../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
 import {DecimalPipe, NgIf} from '@angular/common';
-import {GeolocService} from './geoloc.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
 import {_prompt} from './prompt/prompt.component';
+import {cartesianToPolar, distance} from './tokenworld';
 
 
 @Component({
@@ -84,6 +84,17 @@ export class AppComponent implements OnInit {
     let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
     if(r){
       this.user.center_map={lat:Number(r.split(",")[0]),lng:Number(r.split(",")[1])}
+    }
+  }
+
+  open_capture() {
+    if(this.user.center_map){
+      for(let nft of this.user.nfts){
+        let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+        if(distance(this.user.center_map?.lat,this.user.center_map?.lng,pos.lat,pos.long)<100){
+          this.router.navigate(["capture"],{queryParams:{p:setParams(nft)}})
+        }
+      }
     }
   }
 }

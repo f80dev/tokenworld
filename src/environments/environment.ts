@@ -62,6 +62,5 @@ export const environment = {
 
   website: "https://f80.fr",
   company:" F80",
-  seuil_capture: 0.1
-
+  seuil_capture: 0.12
 }

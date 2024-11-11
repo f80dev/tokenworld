@@ -32,12 +32,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private markers:L.Marker[]=[]
 
   center: any;
-  private infos: string=""
   private layer: TileLayer | undefined
   private vision: CircleMarker<any> | undefined;
-  private target: Marker<any> | undefined;
   private me:  Marker<any> | undefined;
-  popup=L.popup()
 
 
   async ngAfterViewInit() {
@@ -110,6 +107,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
       if(this.user.center_map) {
+        this.markers=[]
         $$("Chargement des tokemon")
         let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
         //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
@@ -135,6 +133,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           L.circleMarker([coords.lat, coords.long], {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
 
           marker.addTo(this.map)
+          this.markers.push(marker)
         }
       }
     })
@@ -147,21 +146,27 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
 
-  private mouseover(event: LeafletMouseEvent) {
-    let nft=event.target.options.alt
-    let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
-    let dist=this.user.center_map ? distance(this.user.center_map?.lat,this.user.center_map?.lng,pos.lat,pos.long) : environment.seuil_capture
-    if(dist<environment.seuil_capture){
-      this.user.tokemon_selected=nft
-      //TODO trouver un signe pour mettre en avant le marker
+  private get_closest_tokemon_from(center:any,seuil=0.1) : any {
+    let d_min=1e18
+    let _selected_marker:L.Marker | undefined
+    for(let marker of this.markers){
+      let dist=distance(center.lat,center.lng,marker.getLatLng().lat,marker.getLatLng().lng)
+      if(dist<d_min){
+        _selected_marker=marker
+        d_min=dist
+      }
+    }
+    $$("Plus proche "+d_min)
+    if(d_min<seuil && _selected_marker){
+      return _selected_marker.options.alt
     }else{
-      this.user.tokemon_selected=null
+      return null
     }
 
-    // this.popup
-    //   .setLatLng(event.latlng)
-    //   .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'>")
-    //   .openOn(this.map);
+  }
+
+  private mouseover(event: LeafletMouseEvent) {
+    let nft=event.target.options.alt
   }
 
 
@@ -174,7 +179,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
     //this.target?.setLatLng(new LatLng(this.user.center_map.lat,this.user.center_map.lng))
-    this.refresh()
+    this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
   }
 
 }

@@ -4,7 +4,6 @@ import {getParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
-import {latLonToCartesian} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {send_transaction} from '../mvx';

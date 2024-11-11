@@ -1,8 +1,9 @@
-import {Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ApiNetworkProvider} from '@multiversx/sdk-core/out';
 import {DEVNET, MAINNET} from '../mvx';
 import {UserService} from '../user.service';
 import {NgIf} from '@angular/common';
+import {ApiService} from '../api.service';
 
 
 
@@ -21,20 +22,29 @@ export function toNFT(nft:any) : any {
   templateUrl: './tokemon.component.html',
   styleUrl: './tokemon.component.css'
 })
-export class TokemonComponent implements OnChanges {
+export class TokemonComponent implements OnChanges,AfterViewInit {
+  async ngAfterViewInit() {
+    setTimeout(async ()=>{
+      let nft_id=this.item.nft+"-0"+this.item.nonce.toString(16)
+      let nft:any=await this.api._service("nfts/"+nft_id,"","https://devnet-api.multiversx.com/",false)
+      this.item.visual=nft.hasOwnProperty("media") ? nft.media[0].hasOwnProperty("thumbnailUrl") ? nft.media[0].thumbnailUrl : nft.media[0].originalUrl : ""
+    },50)
 
-  user=inject(UserService)
+  }
+
+  api=inject(ApiService)
+
   @Input() network="elrond-devnet"
   @Input() item:any
-  nft:any
+  @Input() size="100px"
 
   async ngOnChanges(changes: any) {
-    if(changes.hasOwnProperty("item") && changes.item.currentValue){
-      const apiNetworkProvider = new ApiNetworkProvider(this.network == "elrond-devnet" ? DEVNET : MAINNET);
-      this.nft=await apiNetworkProvider.getNonFungibleToken(this.item.nft,Number(this.item.nonce))
-      this.nft=toNFT(this.nft)
-      this.item.label=this.item.clan.toString("utf-8")
-    }
+    // if(changes.hasOwnProperty("item")){
+    //   let id=changes.item.currentValue.id
+    //   let nft:any=await this.api._service("nfts/"+id,"","https://devnet-api.multiversx.com/")
+    //
+    //   this.item.name=nft.name
+    // }
   }
 
 

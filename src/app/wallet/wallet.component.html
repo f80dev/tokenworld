@@ -1,11 +1,6 @@
 <h5 *ngIf="nfts.length==0">No NFT available</h5>
 
 <h5 *ngIf="nfts.length>0">{{message}}</h5>
-<div *ngFor="let nft of nfts" class="vignette" [style.width]="size">
-  {{nft.name}}<br>
-  <small>{{nft.metadata.description}}</small>
-  <br>
-  <img [src]="nft.visual" style="cursor: pointer;width:100%;" (click)="select(nft)">
-  <br>
-  {{nft.balance}}
-</div>
+
+<app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (click)="select(nft)">
+</app-tokemon>

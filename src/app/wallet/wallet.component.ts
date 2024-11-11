@@ -1,14 +1,16 @@
 import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {ApiService} from '../api.service';
+import {TokemonComponent} from '../tokemon/tokemon.component';
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
-    imports: [
-        NgForOf,
-        NgIf
-    ],
+  imports: [
+    NgForOf,
+    NgIf,
+    TokemonComponent
+  ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.css'
 })

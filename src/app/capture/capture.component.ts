@@ -27,7 +27,6 @@ import {NgIf} from '@angular/common';
 export class CaptureComponent implements OnInit {
   item: any;
 
-
   async ngOnInit() {
     this.item = await getParams(this.routes)
   }

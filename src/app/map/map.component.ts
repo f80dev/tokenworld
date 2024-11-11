@@ -7,7 +7,7 @@ import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
 import {query} from '../mvx';
 import {abi} from '../../environments/abi';
-import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
+import {cartesianToPolar, distance, latLonToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -42,8 +42,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async ngAfterViewInit() {
     try{
-      this.initializeMap()
-      this.refresh()
+      await this.initializeMap()
+      await this.center_to_loc()
+      await this.add_tokemon_to_markers()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
     }
@@ -66,34 +67,29 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async initializeMap() {
-    this.map = L.map('map');
+    return new Promise(async (resolve, reject) => {
+      this.map = L.map('map');
 
-    L.tileLayer(baseMapURl).addTo(this.map);
-    L.tileLayer(baseMapURl, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map).redraw()
+      L.tileLayer(baseMapURl).addTo(this.map);
+      L.tileLayer(baseMapURl, {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(this.map).redraw()
 
-    await this.center_to_loc()
+      await this.center_to_loc()
 
-    var meIcon = L.icon({
-      iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
-      iconSize: [38, 38], // size of the icon
-      iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
-    });
+      var meIcon = L.icon({
+        iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
+        iconSize: [38, 38], // size of the icon
+        iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+      });
 
-    // var targetIcon = L.icon({
-    //   iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
-    //   iconSize: [30, 30], // size of the icon
-    //   iconAnchor: [-15, -15], // point of the icon which will correspond to marker's location
-    // });
-    // this.target=L.marker([this.map.getCenter().lat, this.map.getCenter().lng],{icon:targetIcon, alt:"target"})
+      this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
 
-    this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
+      this.me.addTo(this.map)
 
-    // this.target.addTo(this.map)
-    this.me.addTo(this.map)
-
-    this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
+      this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
+      resolve(true)
+    })
 
   }
 
@@ -112,39 +108,36 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async add_tokemon_to_markers() {
-    if(this.user.center_map){
-      let pos=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,environment.scale_factor)
-      //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
-      let args=["LesBG", pos.x,pos.y,pos.z, environment.scale_factor]
+    return new Promise(async (resolve,reject) => {
+      if(this.user.center_map) {
+        $$("Chargement des tokemon")
+        let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
+        //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
+        let args = ["LesBG", pos.x, pos.y, pos.z, environment.scale_factor]
 
-      let contract:string=environment.contract_addr["elrond-devnet"];
-      this.user.nfts=await query("show_nfts",this.user.address, args, contract, abi);
+        let contract: string = environment.contract_addr["elrond-devnet"];
+        this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
 
-      $$("Chargement de "+this.user.nfts.length+" tokemons")
-      for(let nft of this.user.nfts){
-        var giftIcon = L.icon({
-          iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
-          iconSize: [30, 30],// size of the icon
-          shadowSize: [10,10],
-          iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
-        })
+        $$("Chargement de " + this.user.nfts.length + " tokemons")
+        for (let nft of this.user.nfts) {
+          var giftIcon = L.icon({
+            iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
+            iconSize: [30, 30],// size of the icon
+            shadowSize: [10, 10],
+            iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
+          })
 
-        let coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+          let coords = cartesianToPolar(nft.x, nft.y, nft.z, environment.scale_factor)
+          let marker = L.marker([coords.lat, coords.long], {icon: giftIcon, alt: nft})
+          marker.on("mouseover", (event) => {this.mouseover(event)})
+          marker.on("dblclick", (event) => {this.select_nft(event)})
 
-        let marker=L.marker([coords.lat, coords.long],{icon:giftIcon, alt:nft})
-        marker.on("mouseover",(event)=>{this.mouseover(event)})
-        marker.on("dblclick",(event)=>{this.select_nft(event)})
+          L.circleMarker([coords.lat, coords.long], {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
 
-        L.circleMarker([coords.lat,coords.long], {
-          color: '#474747',fillColor: '#474747',
-          fillOpacity: 0.5,radius: 2
-        }).addTo(this.map);
-
-        marker.addTo(this.map)
+          marker.addTo(this.map)
+        }
       }
-    }
-
-
+    })
   }
 
 
@@ -157,16 +150,22 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private mouseover(event: LeafletMouseEvent) {
     let nft=event.target.options.alt
     let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
-    this.popup
-      .setLatLng(event.latlng)
-      .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'>")
-      .openOn(this.map);
+    let dist=this.user.center_map ? distance(this.user.center_map?.lat,this.user.center_map?.lng,pos.lat,pos.long) : environment.seuil_capture
+    if(dist<environment.seuil_capture){
+      this.user.tokemon_selected=nft
+      //TODO trouver un signe pour mettre en avant le marker
+    }else{
+      this.user.tokemon_selected=null
+    }
+
+    // this.popup
+    //   .setLatLng(event.latlng)
+    //   .setContent(nft.clan.toString()+"<br><img style='width:100px;' src='"+nft.visual+"'>")
+    //   .openOn(this.map);
   }
 
 
-  private refresh() {
-    this.add_tokemon_to_markers()
-    this.markers.forEach(marker => marker.addTo(this.map));
+  async refresh() {
     this.layer?.redraw()
   }
 

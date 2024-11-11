@@ -6,7 +6,7 @@ import {environment} from "../environments/environment";
 import {UserService} from './user.service';
 import {getParams, setParams, showMessage} from '../tools';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {DecimalPipe, NgIf} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
@@ -17,7 +17,7 @@ import {cartesianToPolar, distance} from './tokenworld';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent, DecimalPipe],
+  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent, DecimalPipe, MatButton],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -88,13 +88,6 @@ export class AppComponent implements OnInit {
   }
 
   open_capture() {
-    if(this.user.center_map){
-      for(let nft of this.user.nfts){
-        let pos=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
-        if(distance(this.user.center_map?.lat,this.user.center_map?.lng,pos.lat,pos.long)<100){
-          this.router.navigate(["capture"],{queryParams:{p:setParams(nft)}})
-        }
-      }
-    }
+    this.router.navigate(["capture"],{queryParams:{p:setParams(this.user.tokemon_selected,"","")}})
   }
 }

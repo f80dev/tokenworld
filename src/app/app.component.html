@@ -6,10 +6,13 @@
     <button mat-icon-button (click)="moveto()" title="Se décplacer"><mat-icon>plane</mat-icon></button>
   </div>
 
-
+  <button mat-raised-button (click)="open_capture()" *ngIf="user.tokemon_selected">
+    <mat-icon>archive</mat-icon>
+    {{user.tokemon_selected.name}}
+  </button>
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
   <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
-  <button mat-icon-button (click)="open_capture()"><mat-icon>archive</mat-icon></button>
+
 
 
   <button mat-icon-button (click)="go_settings()" title="Settings"><mat-icon>settings</mat-icon></button>

@@ -24,7 +24,7 @@ export const environment = {
   offset_lng:0.0009,
 
   render_server: "https://api.f80.fr:9876",
-  fee: 0,
+  fee: 10,
   style:"promptmarket.css",
 
 

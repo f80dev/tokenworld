@@ -161,7 +161,6 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 
 export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],user:UserService,tokens_to_transfer: TokenTransfer[],gasLimit=50000000n) {
   return new Promise(async (resolve, reject) => {
-
     if(!user || !user.network)reject(false);
 
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });

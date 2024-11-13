@@ -91,4 +91,7 @@ export class DropComponent implements AfterViewInit {
     this.sel_nft=null
     this.router.navigate(["map"])
   }
+
+  protected readonly environment = environment;
+  lifepoint: number = 0;
 }

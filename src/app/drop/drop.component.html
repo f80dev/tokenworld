@@ -17,7 +17,13 @@
                  label="Number to drop" unity="NFT"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
-      <button mat-raised-button (click)="drop(sel_nft)" title="Drop here">Drop !</button>
+      <app-input value_type="slide" [min]="0" [max]="environment.max_pv_loading"
+                 label="Vitality" unity="LIFEPOINT"
+                 (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
+
+      <button mat-raised-button
+              (click)="drop(sel_nft)"
+              title="Drop here">Drop !</button>
     </div>
 
     <br>

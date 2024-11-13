@@ -12,6 +12,8 @@ import {ApiService} from "./api.service";
 import {UserService} from "./user.service";
 import {Octokit} from "@octokit/rest";
 import {now} from "../tools";
+import {abi} from '../environments/abi';
+import {environment} from '../environments/environment';
 
 export const DEVNET="https://devnet-api.multiversx.com"
 export const MAINNET="https://api.multiversx.com"
@@ -157,6 +159,47 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 }
 
 
+export async function send_transaction_transfers(provider:any,function_name:string,args:any[],user:UserService,tokens_to_transfer: TokenTransfer[],gasLimit=50000000n) {
+  return new Promise(async (resolve, reject) => {
+
+    if(!user || !user.network)reject(false);
+
+    const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
+    let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
+    const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
+    let contract_addr:string=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
+    let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
+
+    let transaction = factory.createTransactionForExecute({
+      sender: _sender.address,
+      contract: Address.fromBech32(contract_addr),
+      function: function_name,
+      gasLimit: gasLimit,
+      arguments: args,
+      tokenTransfers:tokens_to_transfer
+    });
+    transaction.nonce=BigInt(_sender.nonce)
+    let sign_transaction=await provider.signTransaction(transaction)
+    try{
+      let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
+
+      const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
+      const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(hash);
+
+      const converter = new TransactionsConverter();
+      const parser = new SmartContractTransactionsOutcomeParser();
+
+      const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
+      const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+
+      resolve(parsedOutcome)
+    } catch (e) {
+      console.log(e)
+      reject(e)
+    }
+  })
+}
+
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,
                                        args:any,contract_addr:string,
                                        token="",nonce=0,value=0,abi:any,
@@ -177,7 +220,6 @@ export async function send_transaction(provider:any,function_name:string,sender_
       user_signer=UserSigner.fromPem(provider)
       sender_addr=user_signer.getAddress().bech32()
     }
-
 
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({

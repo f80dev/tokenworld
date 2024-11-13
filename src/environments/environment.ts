@@ -13,7 +13,7 @@ export const environment = {
   storage:"github",
   visual: "./assets/coffre.jpg",
   claim: "Valoriser vos contenus en quelques clics",
-  token: "NFLUCOIN-4921ed",
+  token: "LIFEPOINT-7f9101",
   max_file_size:50000000,
   shorter_service:"",
   appli:"",

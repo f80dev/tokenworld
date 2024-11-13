@@ -8,7 +8,6 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {abi} from '../../environments/abi';
 import {latLonToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, showError, showMessage} from '../../tools';
@@ -34,6 +33,8 @@ import {WalletComponent} from '../wallet/wallet.component';
 })
 export class DropComponent implements AfterViewInit, OnChanges {
 
+  lifepoint: number = 0;
+  name="";
 
   user = inject(UserService)
   router = inject(Router)
@@ -43,14 +44,12 @@ export class DropComponent implements AfterViewInit, OnChanges {
   async ngAfterViewInit() {
     if (!this.user.address) {
       this.user.address=localStorage.getItem("address") || ""
-
       if(!this.user.address)await this.user.login(this)
     }
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
     if(this.sel_nft)this.name=this.sel_nft.collection
   }
 
@@ -101,12 +100,12 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.router.navigate(["map"])
   }
 
-  protected readonly environment = environment;
-  lifepoint: number = 0;
-  name="";
+
 
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
   }
+
+  protected readonly environment = environment;
 }

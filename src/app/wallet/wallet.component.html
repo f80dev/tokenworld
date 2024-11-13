@@ -1,6 +1,22 @@
-<h5 *ngIf="nfts.length==0">No NFT available</h5>
+<div style="width:100%;text-align: center">
+  <h5 *ngIf="nfts.length==0">No NFT available</h5>
+  <h5 *ngIf="nfts.length>0">{{message}}</h5>
 
-<h5 *ngIf="nfts.length>0">{{message}}</h5>
+  <h5 *ngIf="account">{{account.balance/1e18 | number:"1.0-4"}} eGLD</h5>
 
-<app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (click)="select(nft)">
-</app-tokemon>
+  <div style="display: inline-block;width: 90%;">
+    <table>
+      <tr style="width:100%;text-align: center;"  *ngFor="let token of tokens">
+        <td>{{token.name}}</td>
+        <td>{{token.balance/1e18}}</td>
+        <td *ngIf="selected"><button mat-raised-button (click)="select_esdt(token)">Drop</button></td>
+      </tr>
+    </table>
+  </div>
+
+  <br>
+
+  <app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (click)="select(nft)">
+  </app-tokemon>
+
+</div>

@@ -1,7 +1,8 @@
 import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+import {DecimalPipe, NgForOf, NgIf} from "@angular/common";
 import {ApiService} from '../api.service';
 import {TokemonComponent} from '../tokemon/tokemon.component';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-wallet',
@@ -9,7 +10,9 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
   imports: [
     NgForOf,
     NgIf,
-    TokemonComponent
+    TokemonComponent,
+    DecimalPipe,
+    MatButton
   ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.css'
@@ -23,18 +26,27 @@ export class WalletComponent implements OnChanges {
   @Output() selectChanged = new EventEmitter()
   @Input() size="200px"
   @Input() message: string=""
+  tokens: any[]=[];
+  balances: any[]=[];
+  account: any;
+  @Input() selected=false;
 
   async refresh(){
     //let addr = Address.fromBech32(this.address)
     //const apiNetworkProvider = new ApiNetworkProvider(this.network == "elrond-devnet" ? DEVNET : MAINNET);
+
+    this.tokens=await this.api._service("accounts/"+this.address+"/tokens","","https://devnet-api.multiversx.com/")
+    this.account=await this.api._service("accounts/"+this.address,"","https://devnet-api.multiversx.com/")
+
     this.nfts=[]
     for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {
       let prop = nft.attributes.toString("utf-8")
       let tags=prop.split(";metadata:")[0].replace("tags:" ,"")
-      let visual=nft.hasOwnProperty("media") ? nft.media[0].hasOwnProperty("thumbnailUrl") ? nft.media[0].thumbnailUrl : nft.media[0].originalUrl : ""
+
+      nft.visual=nft.hasOwnProperty("media") ? nft.media[0].hasOwnProperty("thumbnailUrl") ? nft.media[0].thumbnailUrl : nft.media[0].originalUrl : ""
+
       let cid=prop.split("metadata:")[1]
-      nft.visual=visual
-      nft.metadata=await this.api._service("ipfs/"+cid,"","https://ipfs.io/",false)
+      if(!nft.hasOwnProperty("metadata")){nft.metadata=await this.api._service("ipfs/"+cid,"","https://ipfs.io/",false)}
       nft.tags=tags
       this.nfts.push(nft)
     }
@@ -49,4 +61,7 @@ export class WalletComponent implements OnChanges {
     if(changes.hasOwnProperty("address"))this.refresh()
   }
 
+  select_esdt($event:any) {
+    this.selectChanged.emit($event)
+  }
 }

@@ -49,7 +49,6 @@ export class DropComponent implements AfterViewInit {
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   message: string=""
-  visibility=10
   quantity=1
   max_quantity=10
 
@@ -64,7 +63,7 @@ export class DropComponent implements AfterViewInit {
       )
       $$("Ajout d'un tokemon en ",this.user.center_map)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
-      let args = ["LesBG", this.visibility, pos.x, pos.y, pos.z]
+      let args = ["LesBG", Math.round(this.user.visibility), pos.x, pos.y, pos.z]
       let contract: string = environment.contract_addr["elrond-devnet"];
       try {
         wait_message(this, "Dropping in progress")

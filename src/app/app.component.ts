@@ -12,12 +12,17 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
 import {_prompt} from './prompt/prompt.component';
 import {cartesianToPolar, distance} from './tokenworld';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
+import {InputComponent} from './input/input.component';
+import {config} from 'rxjs';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent, DecimalPipe, MatButton],
+  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton, NgIf, MapComponent, DecimalPipe, MatButton, MatCheckbox, MatSlideToggle, FormsModule, InputComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -62,14 +67,6 @@ export class AppComponent implements OnInit {
     this.router.navigate(["map"])
   }
 
-  open_drop() {
-    if(this.user.address){
-      this.router.navigate(["drop"])
-    } else {
-      this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
-    }
-
-  }
 
   go_settings() {
     this.router.navigate(["settings"])
@@ -79,15 +76,8 @@ export class AppComponent implements OnInit {
     this.router.navigate(["admin"])
   }
 
-  async moveto() {
-    let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
-    let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
-    if(r){
-      this.user.center_map={lat:Number(r.split(",")[0]),lng:Number(r.split(",")[1])}
-    }
-  }
 
-  open_capture() {
-    this.router.navigate(["capture"],{queryParams:{p:setParams(this.user.tokemon_selected,"","")}})
-  }
+
+
+
 }

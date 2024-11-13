@@ -1,0 +1,21 @@
+.disk {
+  background-color: #535353; /* Set the color of the disk */
+  opacity: 0.2;
+  border-radius: 50%; /* Make it a circle */
+  z-index: 100;
+  left:50%;
+  top: 50%;
+  position:absolute;
+  display: block;
+}
+
+.target {
+  position:fixed;
+  display: block;
+  z-index: 100;
+  left:50%;
+  top: 50%;
+  width:40px;
+  margin-top:-20px;
+  margin-left:-20px;
+}

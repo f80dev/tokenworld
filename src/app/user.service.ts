@@ -31,6 +31,9 @@ export class UserService {
   center_map: {lat:number,lng:number} | undefined
   nfts: any[] = [];
   tokemon_selected: any;
+  zoom: number=16;
+  show_visibility: boolean = false;
+  visibility: number = 100
 
   constructor() { }
 

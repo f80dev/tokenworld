@@ -11,7 +11,7 @@
     <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
       <app-input value_type="slide" [min]="0" [max]="100000"
                  label="Visibility under" unity="meters"
-                 (valueChange)="visibility=$event" [value]="visibility"></app-input>
+                 (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
 
       <app-input value_type="slide" [min]="0" [max]="max_quantity"
                  label="Number to drop" unity="NFT"

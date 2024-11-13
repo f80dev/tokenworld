@@ -11,13 +11,31 @@ import {cartesianToPolar, distance, latLonToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatIcon} from '@angular/material/icon';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {_prompt} from '../prompt/prompt.component';
+import {FormsModule} from '@angular/forms';
+import {NgIf} from '@angular/common';
+import {InputComponent} from '../input/input.component';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 
 const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [
+    MatIcon,
+    MatIconButton,
+    MatSlideToggle,
+    FormsModule,
+    MatButton,
+    NgIf,
+    InputComponent,
+    MatSlider,
+    MatSliderThumb
+  ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
@@ -33,7 +51,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   center: any;
   private layer: TileLayer | undefined
-  private vision: CircleMarker<any> | undefined;
   private me:  Marker<any> | undefined;
 
 
@@ -49,18 +66,24 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
 
+  open_drop() {
+    let bounds=this.map.getBounds()
+    var southWest = bounds.getNorthWest();
+    var northEast = bounds.getNorthEast();
+    var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
+    if(this.user.address){
+      this.router.navigate(["drop"],{queryParams:{distance:distance}})
+    } else {
+      this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
+    }
+
+  }
+
   ngOnChanges(changes: any): void {
     if(!changes.lat.firstChange)this.center_to_loc();
   }
 
 
-  private drawCircle(){
-    this.vision = L.circleMarker([this.map.getCenter().lng,this.map.getCenter().lat], {
-      color: 'red',fillColor: '#f03',
-      fillOpacity: 0.5,radius: 500
-    }).addTo(this.map);
-
-  }
 
 
   async initializeMap() {
@@ -85,6 +108,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       this.me.addTo(this.map)
 
       this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
+      this.map.on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
       resolve(true)
     })
 
@@ -95,8 +119,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   center_to_loc() {
     return new Promise(async (resolve,reject) => {
       this.user.loc=await this.geolocService.getCurrentPosition()
-      if(this.user.loc){
-        resolve(this.map.setView(new LatLng(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude),16))
+      let loc=this.user.center_map ? this.user.center_map : {lat:this.user.loc.coords.latitude,lng:this.user.loc.coords.longitude}
+      if(loc){
+        resolve(this.map.setView(new LatLng(loc.lat,loc.lng),this.user.zoom || 16))
       }else{
         reject()
       }
@@ -175,11 +200,25 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
 
-  private movemap(event: L.LeafletEvent) {
+  private movemap(event: any) {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
-    //this.target?.setLatLng(new LatLng(this.user.center_map.lat,this.user.center_map.lng))
     this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
   }
+
+
+  async moveto() {
+    let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
+    let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
+    if(r){
+      this.user.center_map={lat:Number(r.split(",")[0]),lng:Number(r.split(",")[1])}
+    }
+  }
+
+
+  open_capture() {
+    this.router.navigate(["capture"],{queryParams:{p:setParams(this.user.tokemon_selected,"","")}})
+  }
+
 
 }

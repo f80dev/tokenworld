@@ -5,12 +5,16 @@
     <app-wallet [address]="user.address"
                 *ngIf="!sel_nft" message="Select a NFT to drop"
                 [network]="user.network"
-                (selectChanged)="sel_nft=$event">
+                (selectChanged)="on_select($event)">
     </app-wallet>
 
     <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
-      <app-input value_type="slide" [min]="0" [max]="100000"
-                 label="Visibility under" unity="meters"
+      <app-input value_type="text"
+                 label="Tokemon's name"
+                 (valueChange)="name=$event" [value]="name"></app-input>
+
+      <app-input value_type="slide" [min]="0" [max]="1000"
+                 label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
 
       <app-input value_type="slide" [min]="0" [max]="max_quantity"
@@ -24,6 +28,10 @@
       <button mat-raised-button
               (click)="drop(sel_nft)"
               title="Drop here">Drop !</button>
+
+      <button mat-raised-button
+              (click)="sel_nft=null"
+              title="Cancel">Cancel</button>
     </div>
 
     <br>

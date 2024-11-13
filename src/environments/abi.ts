@@ -75,6 +75,25 @@ export const abi=
         ]
       },
       {
+        "name": "pv_token",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "TokenIdentifier"
+          }
+        ]
+      },
+      {
+        "name": "fund",
+        "mutability": "mutable",
+        "payableInTokens": [
+          "*"
+        ],
+        "inputs": [],
+        "outputs": []
+      },
+      {
         "name": "add_user",
         "mutability": "readonly",
         "inputs": [
@@ -90,41 +109,26 @@ export const abi=
         ]
       },
       {
-        "name": "move_tokemon",
+        "name": "capture",
         "mutability": "mutable",
+        "payableInTokens": [
+          "*"
+        ],
         "inputs": [
           {
-            "name": "tokemon_id",
+            "name": "t_id",
             "type": "u32"
-          },
-          {
-            "name": "x",
-            "type": "u64"
-          },
-          {
-            "name": "y",
-            "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
           }
         ],
         "outputs": []
       },
       {
-        "name": "set_mode",
+        "name": "reloading",
         "mutability": "mutable",
-        "inputs": [
-          {
-            "name": "tokemon_id",
-            "type": "u32"
-          },
-          {
-            "name": "new_mode",
-            "type": "u8"
-          }
+        "payableInTokens": [
+          "*"
         ],
+        "inputs": [],
         "outputs": []
       },
       {
@@ -135,7 +139,7 @@ export const abi=
         ],
         "inputs": [
           {
-            "name": "clan",
+            "name": "name",
             "type": "bytes"
           },
           {
@@ -162,21 +166,6 @@ export const abi=
         ]
       },
       {
-        "name": "capture",
-        "mutability": "mutable",
-        "inputs": [
-          {
-            "name": "item_id",
-            "type": "u32"
-          },
-          {
-            "name": "amount",
-            "type": "BigUint"
-          }
-        ],
-        "outputs": []
-      },
-      {
         "name": "add_tokemon",
         "mutability": "mutable",
         "payableInTokens": [
@@ -184,7 +173,7 @@ export const abi=
         ],
         "inputs": [
           {
-            "name": "clan",
+            "name": "name",
             "type": "bytes"
           },
           {
@@ -214,10 +203,6 @@ export const abi=
         "name": "show_nfts",
         "mutability": "readonly",
         "inputs": [
-          {
-            "name": "clan",
-            "type": "bytes"
-          },
           {
             "name": "x",
             "type": "u64"
@@ -273,7 +258,7 @@ export const abi=
             "type": "u32"
           },
           {
-            "name": "clan",
+            "name": "name",
             "type": "bytes"
           },
           {

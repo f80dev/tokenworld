@@ -136,7 +136,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         $$("Chargement des tokemon")
         let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
         //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
-        let args = ["LesBG", pos.x, pos.y, pos.z, environment.scale_factor]
+        let args = [pos.x, pos.y, pos.z, environment.scale_factor]
 
         let contract: string = environment.contract_addr["elrond-devnet"];
         this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);

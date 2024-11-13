@@ -159,7 +159,7 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 }
 
 
-export async function send_transaction_transfers(provider:any,function_name:string,args:any[],user:UserService,tokens_to_transfer: TokenTransfer[],gasLimit=50000000n) {
+export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],user:UserService,tokens_to_transfer: TokenTransfer[],gasLimit=50000000n) {
   return new Promise(async (resolve, reject) => {
 
     if(!user || !user.network)reject(false);
@@ -199,6 +199,7 @@ export async function send_transaction_transfers(provider:any,function_name:stri
     }
   })
 }
+
 
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,
                                        args:any,contract_addr:string,

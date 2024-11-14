@@ -38,7 +38,7 @@ export class CaptureComponent implements OnInit {
   user = inject(UserService)
   router=inject(Router)
   message: string=""
-  max_engagment: number=0;
+  max_engagment: number=100;
   pv_to_engage: any=1;
 
 

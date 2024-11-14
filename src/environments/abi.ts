@@ -1,4 +1,5 @@
 export const abi=
+
   {
     "buildInfo": {
       "rustc": {
@@ -86,6 +87,7 @@ export const abi=
       },
       {
         "name": "fund",
+        "onlyOwner": true,
         "mutability": "mutable",
         "payableInTokens": [
           "*"
@@ -120,7 +122,11 @@ export const abi=
             "type": "u32"
           }
         ],
-        "outputs": []
+        "outputs": [
+          {
+            "type": "bool"
+          }
+        ]
       },
       {
         "name": "reloading",
@@ -301,4 +307,3 @@ export const abi=
       }
     }
   }
-

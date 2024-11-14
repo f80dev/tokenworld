@@ -1,8 +1,8 @@
 <div *ngIf="item" class="vignette" [style.width]="size">
-  {{item?.name}}<br>
+  {{item?.name.toString('utf-8')}}<br>
   <small>{{item.metadata?.description}}</small>
   <br>
-  <img [src]="item.visual" style="cursor: pointer;width:100%;">
+  <img *ngIf="item?.visual" [src]="item.visual" style="cursor: pointer;width:100%;">
   <br>
   {{item.balance}}
 </div>

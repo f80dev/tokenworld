@@ -27,7 +27,6 @@ export class WalletComponent implements OnChanges {
   @Input() size="200px"
   @Input() message: string=""
   tokens: any[]=[];
-  balances: any[]=[];
   account: any;
   @Input() selected=false;
 
@@ -35,8 +34,9 @@ export class WalletComponent implements OnChanges {
     //let addr = Address.fromBech32(this.address)
     //const apiNetworkProvider = new ApiNetworkProvider(this.network == "elrond-devnet" ? DEVNET : MAINNET);
 
-    this.tokens=await this.api._service("accounts/"+this.address+"/tokens","","https://devnet-api.multiversx.com/")
     this.account=await this.api._service("accounts/"+this.address,"","https://devnet-api.multiversx.com/")
+    this.tokens=await this.api._service("accounts/"+this.address+"/tokens","","https://devnet-api.multiversx.com/")
+    this.tokens.push({name:"eGLD",balance:this.account.balance/1e18})
 
     this.nfts=[]
     for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {

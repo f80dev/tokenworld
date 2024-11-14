@@ -1,12 +1,18 @@
 <div class="mainform" style="text-align: center;">
   <app-hourglass [message]="message"></app-hourglass>
   <br>
-  <h5>Capture this tokemon ?</h5>
-  <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
-  <br>
-  <app-input value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
-             [min]="0" [max]="max_engagment" label="PV to engage"></app-input>
+  <div *ngIf="message.length==0">
+    <h5>Capture this tokemon ?</h5>
+    <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
+    <br>
+    <app-input value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
+               style="width:300px;display: inline-block;"
+               [min]="0" [max]="max_engagment" label="PV to engage"></app-input>
+    <br>
 
-  <button mat-raised-button (click)="on_capture()"
-          *ngIf="message.length==0">Capture</button>
+    <button mat-raised-button (click)="on_capture()">Capture</button>
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+
+  </div>
+
 </div>

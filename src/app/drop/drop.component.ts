@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import { send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
@@ -10,7 +10,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
 import {latLonToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {$$, showError, showMessage} from '../../tools';
+import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
 import {InputComponent} from '../input/input.component';
 import {WalletComponent} from '../wallet/wallet.component';
@@ -36,6 +36,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
   lifepoint: number = 0;
   name="";
 
+  routes=inject(ActivatedRoute)
   user = inject(UserService)
   router = inject(Router)
   dialog=inject(MatDialog)
@@ -62,13 +63,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   async drop(nft: any) {
     if (!this.user.isConnected()) {await this.user.login(this)}
-    if (this.user.center_map) {
+    let center:any=await getParams(this.routes) || {}
+    if(!center.lat && !center.lng) {center=this.user.center_map}
+    if (center) {
       let pos = latLonToCartesian(
-        this.user.center_map.lat+environment.offset_lat,
-        this.user.center_map.lng+environment.offset_lng,
+        Number(center.lat)+environment.offset_lat,
+        Number(center.lng)+environment.offset_lng,
         environment.scale_factor
       )
-      $$("Ajout d'un tokemon en ",this.user.center_map)
+      $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
       let contract: string = environment.contract_addr["elrond-devnet"];

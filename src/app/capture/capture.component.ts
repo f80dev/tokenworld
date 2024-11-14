@@ -9,7 +9,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {send_transaction} from '../mvx';
 import {abi} from '../../environments/abi';
 import {MatDialog} from '@angular/material/dialog';
-import {NgIf} from '@angular/common';
+import {Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 
 @Component({
@@ -27,10 +27,10 @@ import {InputComponent} from '../input/input.component';
 })
 export class CaptureComponent implements OnInit {
   item: any;
+  _location=inject(Location)
 
   async ngOnInit() {
     this.item = await getParams(this.routes)
-    debugger
   }
 
   dialog=inject(MatDialog)
@@ -64,5 +64,9 @@ export class CaptureComponent implements OnInit {
     showMessage(this,"You are the new owner of this NFT")
     setTimeout(()=>{this.router.navigate(["map"])})
 
+  }
+
+  cancel() {
+    this._location.back()
   }
 }

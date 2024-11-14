@@ -72,7 +72,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     var northEast = bounds.getNorthEast();
     var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
     if(this.user.address){
-      this.router.navigate(["drop"],{queryParams:{distance:distance}})
+      this.router.navigate(["drop"],{queryParams:{lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,distance:distance}})
     } else {
       this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
     }

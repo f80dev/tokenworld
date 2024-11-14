@@ -2,8 +2,7 @@
      style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
-<div style="display: block;position: fixed;text-align:right;right:0;top:0;width: 100%;z-index: 1000;background: none;font-weight: bolder;" *ngIf="user">
-    <button mat-icon-button (click)="moveto()" title="Se décplacer"><mat-icon>plane</mat-icon></button>
+<div class="toolbox" *ngIf="user">
 <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
   <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
@@ -12,6 +11,8 @@
   <mat-slider style="display: inline-block;width:50%;max-width: 200px;margin-top:-18px;" [step]="1" [min]="0" [max]="300">
     <input matSliderThumb [value]="user.visibility" (valueChange)="user.visibility=$event">
   </mat-slider>
+  <button mat-icon-button (click)="moveto()" title="Se décplacer"><mat-icon>pin_drop</mat-icon></button>
+
 </div>
 
 

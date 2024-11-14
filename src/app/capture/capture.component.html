@@ -2,8 +2,11 @@
   <app-hourglass [message]="message"></app-hourglass>
   <br>
   <h5>Capture this tokemon ?</h5>
-  <app-tokemon [item]="item"  [network]="user.network"></app-tokemon>
+  <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
   <br>
+  <app-input value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
+             [min]="0" [max]="max_engagment" label="PV to engage"></app-input>
+
   <button mat-raised-button (click)="on_capture()"
           *ngIf="message.length==0">Capture</button>
 </div>

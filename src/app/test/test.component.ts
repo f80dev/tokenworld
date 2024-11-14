@@ -3,6 +3,7 @@ import {AuthentComponent} from '../authent/authent.component';
 import {ApiService} from '../api.service';
 import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
 import {WalletComponent} from '../wallet/wallet.component';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-test',
@@ -17,9 +18,8 @@ import {WalletComponent} from '../wallet/wallet.component';
 export class TestComponent implements OnInit {
 
   ngOnInit(): void {
-    let scale=1000000
-    let p=latLonToCartesian(-20,2,scale)
-    let res2 = cartesianToPolar(p.x,p.y,p.z,scale)
+    let fee=environment.fee
+    debugger
   }
 
   api=inject(ApiService)

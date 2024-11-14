@@ -1,14 +1,13 @@
 import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Address, ApiNetworkProvider, TokenTransfer} from '@multiversx/sdk-core/out';
+import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 
-import {DEVNET, MAINNET, send_transaction, send_transaction_with_transfers} from '../mvx';
+import { send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {abi} from '../../environments/abi';
 import {latLonToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, showError, showMessage} from '../../tools';
@@ -34,33 +33,32 @@ import {WalletComponent} from '../wallet/wallet.component';
 })
 export class DropComponent implements AfterViewInit, OnChanges {
 
+  lifepoint: number = 0;
+  name="";
 
   user = inject(UserService)
   router = inject(Router)
   dialog=inject(MatDialog)
   sel_nft: any;
+  message: string=""
+  quantity=1
+  max_quantity=10
+  max_pv_loading: number=environment.max_pv_loading
 
   async ngAfterViewInit() {
     if (!this.user.address) {
       this.user.address=localStorage.getItem("address") || ""
-
       if(!this.user.address)await this.user.login(this)
     }
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
     if(this.sel_nft)this.name=this.sel_nft.collection
   }
 
 
-
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
-  message: string=""
-  quantity=1
-  max_quantity=10
-
 
   async drop(nft: any) {
     if (!this.user.isConnected()) {await this.user.login(this)}
@@ -74,14 +72,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
       let contract: string = environment.contract_addr["elrond-devnet"];
-      try {
-        wait_message(this, "Dropping in progress")
-        let tokens=[
-          TokenTransfer.fungibleFromAmount(environment.token,this.lifepoint,18),
-          TokenTransfer.semiFungible(this.sel_nft.nft,this.sel_nft.nonce,this.quantity)
-        ]
-        let tx = await send_transaction_with_transfers(this.user.provider,"drop_nft",args,this.user,tokens)
+      let token=environment.token
+      wait_message(this, "Dropping in progress")
 
+      let tokens=[]
+      tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
+      tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
+
+      try {
+        let tx = await send_transaction_with_transfers(this.user.provider,"drop_nft",args,this.user,tokens)
         wait_message(this)
       } catch (e) {
         showError(this, e)
@@ -92,21 +91,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
   }
 
 
-
-
-
-
   quit() {
     this.sel_nft=null
     this.router.navigate(["map"])
   }
 
-  protected readonly environment = environment;
-  lifepoint: number = 0;
-  name="";
 
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
   }
+
 }

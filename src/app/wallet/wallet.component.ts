@@ -3,6 +3,7 @@ import {DecimalPipe, NgForOf, NgIf} from "@angular/common";
 import {ApiService} from '../api.service';
 import {TokemonComponent} from '../tokemon/tokemon.component';
 import {MatButton} from '@angular/material/button';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-wallet',
@@ -19,6 +20,7 @@ import {MatButton} from '@angular/material/button';
 })
 export class WalletComponent implements OnChanges {
   api=inject(ApiService)
+  user=inject(UserService)
 
   nfts: any[] = []
   @Input() address=""
@@ -26,17 +28,13 @@ export class WalletComponent implements OnChanges {
   @Output() selectChanged = new EventEmitter()
   @Input() size="200px"
   @Input() message: string=""
-  tokens: any[]=[];
   account: any;
   @Input() selected=false;
 
   async refresh(){
     //let addr = Address.fromBech32(this.address)
     //const apiNetworkProvider = new ApiNetworkProvider(this.network == "elrond-devnet" ? DEVNET : MAINNET);
-
-    this.account=await this.api._service("accounts/"+this.address,"","https://devnet-api.multiversx.com/")
-    this.tokens=await this.api._service("accounts/"+this.address+"/tokens","","https://devnet-api.multiversx.com/")
-    this.tokens.push({name:"eGLD",balance:this.account.balance/1e18})
+    await this.user.init_balance(this.api)
 
     this.nfts=[]
     for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {
@@ -51,6 +49,7 @@ export class WalletComponent implements OnChanges {
       this.nfts.push(nft)
     }
   }
+
 
   select(nft: any) {
     this.selectChanged.emit(nft)

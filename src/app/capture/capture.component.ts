@@ -6,11 +6,12 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {send_transaction} from '../mvx';
+import {send_transaction, send_transaction_with_transfers} from '../mvx';
 import {abi} from '../../environments/abi';
 import {MatDialog} from '@angular/material/dialog';
 import {Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
+import {TokenTransfer} from '@multiversx/sdk-core/out';
 
 @Component({
   selector: 'app-capture',
@@ -38,8 +39,8 @@ export class CaptureComponent implements OnInit {
   user = inject(UserService)
   router=inject(Router)
   message: string=""
-  max_engagment: number=100;
-  pv_to_engage: any=1;
+  max_engagment: number=100
+  pv_to_engage: any=0
 
 
   async on_capture() {
@@ -49,14 +50,10 @@ export class CaptureComponent implements OnInit {
     let contract: string = environment.contract_addr["elrond-devnet"];
     try {
       wait_message(this, "Capturing in progress")
-      let tx = await send_transaction(this.user.provider,
-        "capture",
-        this.user.address,
-        args,
-        contract,
-        environment.token, 0, this.pv_to_engage, abi);
+      let tokens=[]
+      if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(environment.token,this.pv_to_engage,18))
+      let tx = await send_transaction_with_transfers(this.user.provider,"capture",args,this.user,tokens);
       wait_message(this)
-      debugger
     } catch (e){
       wait_message(this);
     }

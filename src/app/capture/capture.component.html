@@ -5,9 +5,10 @@
     <h5>Capture this tokemon ?</h5>
     <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
     <br>
-    <app-input value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
-               style="width:300px;display: inline-block;"
-               [min]="0" [max]="max_engagment" label="Life Point to engage"></app-input>
+    <app-input  *ngIf="item.pv>0"
+                value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
+                style="width:300px;display: inline-block;"
+                [min]="0" [max]="max_engagment" label="Life Point to engage"></app-input>
     <br>
     <br>
 

@@ -79,7 +79,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       wait_message(this, "Dropping in progress")
 
       let tokens=[]
-      tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
+      if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {

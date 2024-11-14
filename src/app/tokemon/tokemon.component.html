@@ -1,9 +1,10 @@
 <div *ngIf="item" class="vignette" [style.width]="size">
-  {{nft.name.toString('utf-8')}}<br>
+  {{nft.name}}<br>
   <small>{{item.metadata?.description}}</small>
   <br>
-  <img *ngIf="nft" [src]="nft.url" style="cursor: pointer;width:100%;">
+  <img *ngIf="nft" [src]="nft.url"
+       style="cursor: pointer;width:100%;">
   <br>
-  LifePoint: {{item.pv}}
+  <div *ngIf="item.pv>0">{{item.pv}} LifePoint</div>
   <br>
 </div>

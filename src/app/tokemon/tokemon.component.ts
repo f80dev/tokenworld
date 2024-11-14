@@ -31,8 +31,10 @@ export class TokemonComponent implements OnChanges {
   api=inject(ApiService)
 
   async ngOnChanges(changes: SimpleChanges) {
-    let nft_id=this.item.nft+"-0"+this.item.nonce.toString(16)
-    this.nft=await this.api._service("nfts/"+nft_id,"","https://devnet-api.multiversx.com/",false)
+    if(changes.hasOwnProperty("item")){
+      let nft_id=this.item.hasOwnProperty("nft") ? this.item.nft+"-0"+this.item.nonce.toString(16) : this.item.identifier
+      this.nft=await this.api._service("nfts/"+nft_id,"","https://devnet-api.multiversx.com/",false)
+    }
   }
 
 

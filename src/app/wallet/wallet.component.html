@@ -4,7 +4,7 @@
 
   <div style="display: inline-block;width: 90%;">
     <table style="width:100%;">
-      <tr *ngFor="let token of tokens">
+      <tr *ngFor="let token of user.tokens">
         <td style="text-align: right;width:50%;">{{token.name}}</td>
         <td style="text-align: left;width:50%;">{{token.balance/1e18 | number:"1.0-4"}}</td>
         <td *ngIf="selected"><button mat-raised-button (click)="select_esdt(token)">Drop</button></td>

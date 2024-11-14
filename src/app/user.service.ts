@@ -4,6 +4,7 @@ import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
 import {toAccount, usersigner_from_pem} from "./mvx";
 import {showMessage} from "../tools";
 import {Account, Address} from "@multiversx/sdk-core/out";
+import {ApiService} from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class UserService {
   signature:string=""
   provider: any
   strong: boolean=false
+  tokens:any[]=[]
   addr_change = new Subject<string>();
   network:string="elrond-devnet"
   balance=0
@@ -103,4 +105,13 @@ export class UserService {
     })
   }
 
+  init_balance(api: ApiService) {
+    return new Promise(async (resolve)=>{
+      let domain=this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
+      let account:any=await api._service("accounts/"+this.address,"",domain)
+      this.tokens=await api._service("accounts/"+this.address+"/tokens","",domain)
+      this.tokens.push({name:"eGLD",balance:account.balance/1e18})
+      resolve(true)
+    })
+  }
 }

@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   }
 
 
-
-
-
+  open_build() {
+    this.router.navigate(["build"])
+  }
 }

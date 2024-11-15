@@ -76,14 +76,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     } else {
       this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
     }
-
   }
+
 
   ngOnChanges(changes: any): void {
     if(!changes.lat.firstChange)this.center_to_loc();
   }
-
-
 
 
   async initializeMap() {

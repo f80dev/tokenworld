@@ -14,6 +14,7 @@ import {Octokit} from "@octokit/rest";
 import {now} from "../tools";
 import {abi} from '../environments/abi';
 import {environment} from '../environments/environment';
+import {utf8ToHex} from '@multiversx/sdk-core/out/utils.codec';
 
 export const DEVNET="https://devnet-api.multiversx.com"
 export const MAINNET="https://api.multiversx.com"
@@ -130,6 +131,8 @@ export function usersigner_from_pem(pemText:string) : UserSigner {
 }
 
 
+
+
 export function get_transactions(api:ApiService,smartcontract_addr:string,abi=null,network="devnet") : Promise<any[]> {
   //voir la documentation https://api.multiversx.com/
   return new Promise(async (resolve, reject) => {
@@ -159,14 +162,16 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 }
 
 
-export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],user:UserService,tokens_to_transfer: TokenTransfer[],gasLimit=50000000n) {
+export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],
+                                                user:UserService,tokens_to_transfer: TokenTransfer[],
+                                                gasLimit=50000000n, contract_addr="") {
   return new Promise(async (resolve, reject) => {
     if(!user || !user.network)reject(false);
 
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
-    let contract_addr:string=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
+    if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
     let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
 
     let transaction = factory.createTransactionForExecute({
@@ -341,6 +346,28 @@ export async function send_transaction(provider:any,function_name:string,sender_
 
 export function toText(array:Uint8Array) : string {
   return new TextDecoder('utf-8').decode(array)
+}
+
+
+export function createNFT(name:string,visual:string,collection:string,user:UserService,network="elrond-devnet", gasLimit=50000000n) : string {
+  const apiNetworkProvider = new ApiNetworkProvider(network=="devnet" ? "https://devnet-api.multiversx.com" : "https://api.multiversx.com")
+  const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
+  let factory = new SmartContractTransactionsFactory({config: factoryConfig});
+  const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
+  let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
+  //voir https://docs.multiversx.com/tokens/nft-tokens/#creation-of-an-nft
+  //voir https://docs.multiversx.com/developers/sc-calls-format/#converting-numeric-values-in-javascript
+  //voir https://github.com/multiversx/mx-sdk-js-core/blob/main/src/utils.codec.ts
+  let args=utf8ToHex(collection)
+  let transaction = factory.createTransactionForExecute({
+    sender: _sender.address,
+    contract: Address.fromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"),
+    function: "ESDTNFTCreate",
+    gasLimit: gasLimit,
+    arguments: args,
+    tokenTransfers:tokens_to_transfer
+  });
+
 }
 
 

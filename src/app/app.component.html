@@ -10,15 +10,14 @@
 
 
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
-
+  <button mat-icon-button (click)="open_build()" title="Créer un tokemon"><mat-icon>camera</mat-icon></button>
 
   <button mat-icon-button (click)="go_settings()" title="Settings"><mat-icon>settings</mat-icon></button>
 
   <button *ngIf="user.isConnected()" mat-icon-button (click)="logout()" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
   <button *ngIf="!user.isConnected()" mat-icon-button (click)="login()" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
 
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <button *ngIf="!user.isConnected()" mat-icon-button (click)="go_admin()"><mat-icon>build</mat-icon></button>
+  <button mat-icon-button (click)="go_admin()"><mat-icon>build</mat-icon></button>
 
   <button  mat-icon-button (click)="test()"><mat-icon>science</mat-icon></button>
 </mat-toolbar>

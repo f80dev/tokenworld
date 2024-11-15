@@ -9,6 +9,7 @@ import {MapComponent} from './map/map.component';
 import {DropComponent} from './drop/drop.component';
 import {SettingsComponent} from './settings/settings.component';
 import {CaptureComponent} from './capture/capture.component';
+import {BuildComponent} from './build/build.component';
 
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'admin', component: AdminComponent},
   { path: 'about', component: AboutComponent},
   { path: 'login', component: LoginComponent},
+  { path: 'build', component: BuildComponent},
   { path: 'test', component: TestComponent},
   { path: 'drop', component: DropComponent},
   { path: 'capture', component: CaptureComponent},

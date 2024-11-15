@@ -1,0 +1,19 @@
+<div class="mainform">
+  <app-hourglass [message]="message"></app-hourglass>
+
+  <div style="display: inline-block;max-width:1000px">
+    <app-input label="Name of your NFT" [value]="name" (valueChange)="name=$event"></app-input>
+
+    <br>
+
+    <app-upload-file (uploaded)="onFileSelected($event)"
+                     *ngIf="message==''" width="250px" height="100px"
+                     style="display: inline-block;padding: 20px;"
+                     [maxsize]="100000000">
+      <span>Take a photo</span>
+    </app-upload-file>
+
+  </div>
+
+
+</div>

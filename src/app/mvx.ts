@@ -349,25 +349,22 @@ export function toText(array:Uint8Array) : string {
 }
 
 
-export function createNFT(name:string,visual:string,collection:string,user:UserService,network="elrond-devnet", gasLimit=50000000n) : string {
+export async function createNFT(name:string,visual:string,collection:string,user:UserService,network="elrond-devnet", gasLimit=50000000n) {
   const apiNetworkProvider = new ApiNetworkProvider(network=="devnet" ? "https://devnet-api.multiversx.com" : "https://api.multiversx.com")
   const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
   let factory = new SmartContractTransactionsFactory({config: factoryConfig});
-  const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
-  let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
+   let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
   //voir https://docs.multiversx.com/tokens/nft-tokens/#creation-of-an-nft
   //voir https://docs.multiversx.com/developers/sc-calls-format/#converting-numeric-values-in-javascript
   //voir https://github.com/multiversx/mx-sdk-js-core/blob/main/src/utils.codec.ts
-  let args=utf8ToHex(collection)
+  let args=[utf8ToHex(collection)]
   let transaction = factory.createTransactionForExecute({
     sender: _sender.address,
     contract: Address.fromBech32("erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u"),
     function: "ESDTNFTCreate",
     gasLimit: gasLimit,
-    arguments: args,
-    tokenTransfers:tokens_to_transfer
-  });
-
+    arguments: args
+  })
 }
 
 

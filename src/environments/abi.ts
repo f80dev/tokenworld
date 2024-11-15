@@ -1,5 +1,4 @@
 export const abi=
-
   {
     "buildInfo": {
       "rustc": {
@@ -109,6 +108,17 @@ export const abi=
             "type": "u32"
           }
         ]
+      },
+      {
+        "name": "take",
+        "mutability": "mutable",
+        "inputs": [
+          {
+            "name": "t_id",
+            "type": "u32"
+          }
+        ],
+        "outputs": []
       },
       {
         "name": "capture",

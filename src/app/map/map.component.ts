@@ -150,6 +150,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
           let coords = cartesianToPolar(nft.x, nft.y, nft.z, environment.scale_factor)
           let marker = L.marker([coords.lat, coords.long], {icon: giftIcon, alt: nft})
+
+          marker.bindTooltip(nft.name+" ("+nft.pv+" LP)").openTooltip()
           marker.on("mouseover", (event) => {this.mouseover(event)})
           marker.on("dblclick", (event) => {this.select_nft(event)})
 
@@ -190,6 +192,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   private mouseover(event: LeafletMouseEvent) {
     let nft=event.target.options.alt
+
   }
 
 

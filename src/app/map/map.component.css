@@ -5,6 +5,7 @@
   z-index: 100;
   left:50%;
   top: 50%;
+  transform: translate(40px,40px);
   position:absolute;
   display: block;
   pointer-events: none;
@@ -17,8 +18,8 @@
   left:50%;
   top: 50%;
   width:40px;
-  margin-top:-20px;
-  margin-left:-20px;
+  margin-top:16px;
+  margin-left:16px;
 }
 
 

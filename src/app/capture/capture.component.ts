@@ -52,15 +52,18 @@ export class CaptureComponent implements OnInit {
       wait_message(this, "Capturing in progress")
       let tokens=[]
       if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(environment.token,this.pv_to_engage,18))
-      let tx = await send_transaction_with_transfers(this.user.provider,"capture",args,this.user,tokens);
+      let tx = await send_transaction_with_transfers(
+        this.user.provider,
+        this.pv_to_engage>0 ? "capture" : "take",
+        args,
+        this.user,
+        tokens);
       wait_message(this)
     } catch (e){
       wait_message(this);
     }
-
     showMessage(this,"You are the new owner of this NFT")
     setTimeout(()=>{this.router.navigate(["map"])})
-
   }
 
   cancel() {

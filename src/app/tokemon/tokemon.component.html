@@ -5,6 +5,6 @@
   <img *ngIf="nft" [src]="nft.url"
        style="cursor: pointer;width:100%;">
   <br>
-  <div *ngIf="item.pv>0">{{item.pv}} LifePoint</div>
+  <div *ngIf="item?.pv>0">{{item.pv}} LifePoint</div>
   <br>
 </div>

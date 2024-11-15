@@ -205,6 +205,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
     this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
+    this.refresh()
   }
 
 

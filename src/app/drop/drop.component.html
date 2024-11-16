@@ -22,9 +22,10 @@
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
       <app-input value_type="slide" [min]="0" [max]="max_pv_loading"
-                 label="Vitality" unity="LifePoint"
+                 label="Vitality to inject" unity="LifePoint"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 
+      <br><br>
       <button mat-raised-button
               (click)="drop(sel_nft)"
               title="Drop here">Drop !</button>
@@ -34,9 +35,9 @@
               title="Cancel">Cancel</button>
     </div>
 
-    <br>
-
+    <br><br><br>
     <app-upload-file extensions=".csv"
+                     style="display: none"
                      title="Charger un ficher excel"
                      width="100%"
                      height="60px"

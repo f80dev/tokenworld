@@ -19,7 +19,6 @@ export class TestComponent implements OnInit {
 
   ngOnInit(): void {
     let fee=environment.fee
-    debugger
   }
 
   api=inject(ApiService)

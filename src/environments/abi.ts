@@ -148,7 +148,7 @@ export const abi=
         "outputs": []
       },
       {
-        "name": "drop_nft",
+        "name": "drop",
         "mutability": "mutable",
         "payableInTokens": [
           "*"

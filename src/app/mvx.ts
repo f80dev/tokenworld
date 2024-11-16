@@ -108,12 +108,14 @@ export function toAddress(addr:string) : Address {
   return Address.fromBech32(addr)
 }
 
+
+
 export function toAccount(addr:string,network:string=DEVNET) : Promise<AccountOnNetwork> {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13/#synchronizing-an-account-object
   return new Promise(async (resolve, reject) => {
     try{
-      let r= await new ApiNetworkProvider(network).getAccount(toAddress(addr))
-      resolve(r)
+      if(network.endsWith("/"))network=network.substring(0,network.length-1)
+      resolve(await new ApiNetworkProvider(network).getAccount(toAddress(addr)))
     }catch (e) {
       reject(e)
     }

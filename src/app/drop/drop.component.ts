@@ -15,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {InputComponent} from '../input/input.component';
 import {WalletComponent} from '../wallet/wallet.component';
 import {UploadFileComponent} from '../upload-file/upload-file.component';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-drop',
@@ -38,6 +39,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
   lifepoint: number = 0;
   name="";
 
+  api=inject(ApiService)
   routes=inject(ActivatedRoute)
   user = inject(UserService)
   router = inject(Router)
@@ -46,13 +48,11 @@ export class DropComponent implements AfterViewInit, OnChanges {
   message: string=""
   quantity=1
   max_quantity=10
-  max_pv_loading: number=environment.max_pv_loading
+  max_pv_loading=0
 
   async ngAfterViewInit() {
-    if (!this.user.address) {
-      this.user.address=localStorage.getItem("address") || ""
-      if(!this.user.address)await this.user.login(this)
-    }
+    await this.user.login(this)
+    this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
   }
 
 
@@ -76,8 +76,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
-      let contract: string = environment.contract_addr["elrond-devnet"];
-      let token=environment.token
+      let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping in progress")
 
       let tokens=[]
@@ -85,7 +84,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let tx = await send_transaction_with_transfers(this.user.provider,"drop_nft",args,this.user,tokens)
+        let tx = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
         wait_message(this)
       } catch (e) {
         showError(this, e)

@@ -52,6 +52,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   center: any;
   private layer: TileLayer | undefined
   private me:  Marker<any> | undefined;
+  private target:  Marker<any> | undefined;
 
 
   async ngAfterViewInit() {
@@ -101,9 +102,17 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
       });
 
+      var targetIcon = L.icon({
+        iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
+        iconSize: [38, 38], // size of the icon
+        iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+      });
+
       this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
+      //this.target=L.marker([this.user.center_map.lat, this.user.center_map.lng],{icon:targetIcon, alt:"target"})
 
       this.me.addTo(this.map)
+      //this.target.addTo(this.map)
 
       this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
       this.map.on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
@@ -155,7 +164,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           marker.on("mouseover", (event) => {this.mouseover(event)})
           marker.on("dblclick", (event) => {this.select_nft(event)})
 
-          L.circleMarker([coords.lat, coords.long], {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
+          L.circleMarker(
+            [coords.lat, coords.long],
+            {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}
+          ).addTo(this.map);
 
           marker.addTo(this.map)
           this.markers.push(marker)
@@ -205,6 +217,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
     this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
+    //this.target?.setLatLng({lat:this.user.center_map.lat,lng:this.user.center_map.lng})
     this.refresh()
   }
 

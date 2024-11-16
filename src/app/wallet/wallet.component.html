@@ -4,17 +4,19 @@
 
   <div style="display: inline-block;width: 90%;">
     <table style="width:100%;">
-      <tr *ngFor="let token of user.tokens">
-        <td style="text-align: right;width:50%;">{{token.name}}</td>
-        <td style="text-align: left;width:50%;">{{token.balance/1e18 | number:"1.0-4"}}</td>
-        <td *ngIf="selected"><button mat-raised-button (click)="select_esdt(token)">Drop</button></td>
+      <tr *ngFor="let k of tokens">
+        <td style="text-align: right;width:50%;">{{user.tokens[k].name}}</td>
+        <td style="text-align: left;width:50%;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
+        <td *ngIf="selected"><button mat-raised-button (click)="select_esdt(user.tokens[k])">Drop</button></td>
       </tr>
     </table>
   </div>
 
   <br>
 
-  <app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (select)="select(nft)">
+  <app-tokemon *ngFor="let nft of nfts"  [item]="nft"
+               [size]="size"
+               (select)="select(nft)">
   </app-tokemon>
 
 </div>

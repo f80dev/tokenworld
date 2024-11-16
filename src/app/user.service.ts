@@ -4,6 +4,7 @@ import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
 import {toAccount, usersigner_from_pem} from "./mvx";
 import {showMessage} from "../tools";
 import {ApiService} from './api.service';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class UserService {
   signature:string=""
   provider: any
   strong: boolean=false
-  tokens:any[]=[]
+  tokens:any={}
   addr_change = new Subject<string>();
   network:string="elrond-devnet"
   balance=0
@@ -47,8 +48,8 @@ export class UserService {
     url_direct_xportal_connect: string
   }) {
     this.address = $event.address
-    this.account=await toAccount(this.address)
     localStorage.setItem("address",this.address)
+    this.account=await toAccount(this.address)
     this.provider = $event.provider
     this.strong=$event.strong
     this.addr_change.next(this.address)
@@ -65,11 +66,6 @@ export class UserService {
   }
 
 
-  async set_balance_and_nonce(esdt:string="egld") {
-    this.balance= this.account.balance.toNumber()/1e18
-    this.nonce=this.account.nonce
-  }
-
 
   login(vm: any,subtitle="",pem_file="") {
     return new Promise(async (resolve, reject) => {
@@ -85,14 +81,14 @@ export class UserService {
             url_direct_xportal_connect:""
           }
           this.authent(r)
-          this.set_balance_and_nonce("egld")
+          await this.init_balance(vm.api)
           resolve(r)
           showMessage(vm,"Identification ok")
         } else {
           try{
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle)
             this.authent(r)
-            this.set_balance_and_nonce()
+            await this.init_balance(vm.api)
             resolve(r)
           }catch (e){
             reject()
@@ -105,12 +101,35 @@ export class UserService {
     })
   }
 
+
+  get_domain(){
+    return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
+  }
+
+
   init_balance(api: ApiService) {
     return new Promise(async (resolve)=>{
-      let domain=this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
-      this.tokens=await api._service("accounts/"+this.address+"/tokens","",domain)
-      this.tokens.push({name:"eGLD",balance:this.account.balance/1e18})
+      if(!this.address)throw new Error("Address not initialize")
+      this.account=await toAccount(this.address,this.get_domain())
+
+      let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
+      let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""
+      tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:this.account.balance})
+
+      for(let t of tokens){
+        this.tokens[t.identifier]=t
+      }
+
       resolve(true)
     })
+  }
+
+
+  get_balance(s: string) : number {
+    return this.tokens[s].balance/1e18
+  }
+
+  get_default_token() {
+    return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
   }
 }

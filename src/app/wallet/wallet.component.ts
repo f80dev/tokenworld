@@ -30,12 +30,9 @@ export class WalletComponent implements OnChanges {
   @Input() message: string=""
   account: any;
   @Input() selected=false;
+  tokens: string[] = [];
 
   async refresh(){
-    //let addr = Address.fromBech32(this.address)
-    //const apiNetworkProvider = new ApiNetworkProvider(this.network == "elrond-devnet" ? DEVNET : MAINNET);
-    await this.user.init_balance(this.api)
-
     this.nfts=[]
     for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {
       let prop = nft.attributes.toString("utf-8")
@@ -48,6 +45,9 @@ export class WalletComponent implements OnChanges {
       nft.tags=tags
       this.nfts.push(nft)
     }
+
+    await this.user.init_balance(this.api)
+    this.tokens=Object.keys(this.user.tokens)
   }
 
 

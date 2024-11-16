@@ -51,7 +51,7 @@ export class CaptureComponent implements OnInit {
     try {
       wait_message(this, "Capturing in progress")
       let tokens=[]
-      if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(environment.token,this.pv_to_engage,18))
+      if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
       let tx = await send_transaction_with_transfers(
         this.user.provider,
         this.pv_to_engage>0 ? "capture" : "take",

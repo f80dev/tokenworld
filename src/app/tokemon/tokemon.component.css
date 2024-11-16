@@ -4,3 +4,8 @@
   overflow: hidden;
   text-align: center;
 }
+
+mat-icon {
+  font-size: small;
+  margin-bottom: -10px;
+}

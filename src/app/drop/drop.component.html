@@ -36,6 +36,14 @@
 
     <br>
 
+    <app-upload-file extensions=".csv"
+                     title="Charger un ficher excel"
+                     width="100%"
+                     height="60px"
+                     (uploaded)="upload_excel($event)">
+      Drop en masse
+    </app-upload-file>
+
 
 
   </div>

@@ -3,7 +3,6 @@ import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
 import {toAccount, usersigner_from_pem} from "./mvx";
 import {showMessage} from "../tools";
-import {Account, Address} from "@multiversx/sdk-core/out";
 import {ApiService} from './api.service';
 
 @Injectable({
@@ -36,6 +35,7 @@ export class UserService {
   zoom: number=16;
   show_visibility: boolean = false;
   visibility: number = 100
+  account: any;
 
   constructor() { }
 
@@ -47,6 +47,7 @@ export class UserService {
     url_direct_xportal_connect: string
   }) {
     this.address = $event.address
+    this.account=await toAccount(this.address)
     localStorage.setItem("address",this.address)
     this.provider = $event.provider
     this.strong=$event.strong
@@ -65,9 +66,8 @@ export class UserService {
 
 
   async set_balance_and_nonce(esdt:string="egld") {
-    let _account=await toAccount(this.address)
-    this.balance= _account.balance.toNumber()/1e18
-    this.nonce=_account.nonce
+    this.balance= this.account.balance.toNumber()/1e18
+    this.nonce=this.account.nonce
   }
 
 
@@ -108,9 +108,8 @@ export class UserService {
   init_balance(api: ApiService) {
     return new Promise(async (resolve)=>{
       let domain=this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
-      let account:any=await api._service("accounts/"+this.address,"",domain)
       this.tokens=await api._service("accounts/"+this.address+"/tokens","",domain)
-      this.tokens.push({name:"eGLD",balance:account.balance/1e18})
+      this.tokens.push({name:"eGLD",balance:this.account.balance/1e18})
       resolve(true)
     })
   }

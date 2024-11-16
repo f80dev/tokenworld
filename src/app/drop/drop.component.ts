@@ -3,7 +3,7 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
-import { send_transaction_with_transfers} from '../mvx';
+import {create_transaction, send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -14,6 +14,7 @@ import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
 import {InputComponent} from '../input/input.component';
 import {WalletComponent} from '../wallet/wallet.component';
+import {UploadFileComponent} from '../upload-file/upload-file.component';
 
 @Component({
   selector: 'app-drop',
@@ -26,7 +27,8 @@ import {WalletComponent} from '../wallet/wallet.component';
     HourglassComponent,
     InputComponent,
     MatButton,
-    WalletComponent
+    WalletComponent,
+    UploadFileComponent
   ],
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
@@ -103,6 +105,29 @@ export class DropComponent implements AfterViewInit, OnChanges {
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
+  }
+
+  convert_pos(content:string) : any {
+    if(content.split(",").length==2){
+      let lat=Number(content.split(",")[0])
+      let lng=Number(content.split(",")[1])
+      return latLonToCartesian(lat,lng,environment.scale_factor)
+    }
+  }
+
+  async upload_excel($event: any) {
+    let content=atob($event.content)
+    let rc=[]
+    for(let row of content.split("\n")){
+      let _row=row.split(";")
+      let id=_row[0]
+      let pos=this.convert_pos(_row[1])
+      let quantity=Number(_row[2])
+      let args= [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
+      let tt=TokenTransfer.semiFungible(id,this.user.nonce,quantity)
+      rc.push(await create_transaction("drop_nft",args,this.user,[tt]))
+    }
+
   }
 
 }

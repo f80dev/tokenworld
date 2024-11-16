@@ -14,7 +14,7 @@
 
   <br>
 
-  <app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (click)="select(nft)">
+  <app-tokemon *ngFor="let nft of nfts"  [item]="nft" [style.width]="size" (select)="select(nft)">
   </app-tokemon>
 
 </div>

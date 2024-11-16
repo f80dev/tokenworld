@@ -162,19 +162,17 @@ export function get_transactions(api:ApiService,smartcontract_addr:string,abi=nu
 }
 
 
-export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],
-                                                user:UserService,tokens_to_transfer: TokenTransfer[],
-                                                gasLimit=50000000n, contract_addr="") {
-  return new Promise(async (resolve, reject) => {
-    if(!user || !user.network)reject(false);
-
+export function create_transaction(function_name:string,args:any[],
+                                   user:UserService,tokens_to_transfer: TokenTransfer[],
+                                   gasLimit=50000000n, contract_addr="") : Promise<Transaction>  {
+  return new Promise(async (resolve) => {
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
     if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
     let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
 
-    let transaction = factory.createTransactionForExecute({
+    let transaction=factory.createTransactionForExecute({
       sender: _sender.address,
       contract: Address.fromBech32(contract_addr),
       function: function_name,
@@ -182,7 +180,23 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
       arguments: args,
       tokenTransfers:tokens_to_transfer
     });
-    transaction.nonce=BigInt(_sender.nonce)
+    resolve(transaction)
+
+  })
+
+}
+
+
+export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],
+                                                user:UserService,tokens_to_transfer: TokenTransfer[],
+                                                gasLimit=50000000n, contract_addr="") {
+  return new Promise(async (resolve, reject) => {
+    if(!user || !user.network)reject(false);
+
+    let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,gasLimit,contract_addr)
+    const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
+
+    transaction.nonce=BigInt(user.account.nonce)
     let sign_transaction=await provider.signTransaction(transaction)
     try{
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)

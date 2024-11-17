@@ -104,6 +104,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
+    this.max_quantity=this.sel_nft.balance
+
   }
 
   convert_pos(content:string) : any {

@@ -129,12 +129,6 @@ $nfluent-dark-theme: mat.m2-define-dark-theme((
 
 
 //voir https://material.angular.io/guide/theming#application-background-color
-body,html {
-  margin: 0;
-  padding: 0;
-  color: mat.m2-get-color-from-palette($nfluent-primary-color, 700);
-  background-color: white;
-}
 
 .color-accent {
   color: mat.m2-get-color-from-palette($nfluent-green-palette, 500);

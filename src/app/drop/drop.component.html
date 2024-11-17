@@ -9,6 +9,10 @@
     </app-wallet>
 
     <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
+
+      <img [src]="sel_nft.visual" style="width:300px;height: auto;">
+      <br><br>
+
       <app-input value_type="text"
                  label="Tokemon's name"
                  (valueChange)="name=$event" [value]="name"></app-input>
@@ -17,7 +21,7 @@
                  label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
 
-      <app-input value_type="slide" [min]="0" [max]="max_quantity"
+      <app-input *ngIf="max_quantity>1" value_type="slide" [min]="0" [max]="max_quantity"
                  label="Number to drop" unity="NFT"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 

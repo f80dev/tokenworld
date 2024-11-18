@@ -59,7 +59,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     try{
       await this.initializeMap()
       await this.center_to_loc()
-      await this.add_tokemon_to_markers()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
     }
@@ -95,17 +94,18 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       }).addTo(this.map).redraw()
 
       await this.center_to_loc()
+      let size=30
 
       var meIcon = L.icon({
         iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
-        iconSize: [38, 38], // size of the icon
-        iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+        iconSize: [size, size], // size of the icon
+        iconAnchor: [-size/2, -size/2], // point of the icon which will correspond to marker's location
       });
 
       var targetIcon = L.icon({
         iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
-        iconSize: [38, 38], // size of the icon
-        iconAnchor: [-19, -19], // point of the icon which will correspond to marker's location
+        iconSize: [size, size], // size of the icon
+        iconAnchor: [-size/2, -size/2], // point of the icon which will correspond to marker's location
       });
 
       this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
@@ -139,11 +139,16 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
       if(this.user.center_map) {
+        for(let m of this.markers){
+          m.removeFrom(this.map)
+        }
+
         this.markers=[]
+
         $$("Chargement des tokemon")
         let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
-        //let pos=latLonToCartesian(this.user.loc?.coords.latitude,this.user.loc?.coords.longitude,environment.scale_factor)
-        let args = [pos.x, pos.y, pos.z, environment.scale_factor]
+
+        let args = [pos.x, pos.y, pos.z, environment.scale_factor/1000]
 
         let contract: string = environment.contract_addr["elrond-devnet"];
         this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
@@ -175,6 +180,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       }
     })
   }
+
+
 
 
   async select_nft(event: LeafletMouseEvent) {
@@ -209,6 +216,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async refresh() {
+    this.add_tokemon_to_markers()
     this.layer?.redraw()
   }
 

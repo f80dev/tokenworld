@@ -8,8 +8,10 @@
   <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
   <button mat-icon-button (click)="open_capture()" *ngIf="user.tokemon_selected"><mat-icon>catching_pokemon</mat-icon></button>
 
-  <mat-slider style="display: inline-block;width:50%;max-width: 200px;margin-top:-18px;" [step]="1" [min]="0" [max]="300">
-    <input matSliderThumb [value]="user.visibility" (valueChange)="user.visibility=$event">
+  <mat-slider style="display: inline-block;width:50%;max-width: 200px;margin-top:-18px;" [step]="1" [min]="0" [max]="600">
+    <input matSliderThumb
+           [value]="user.visibility"
+           (valueChange)="user.visibility=$event">
   </mat-slider>
   <button mat-icon-button (click)="moveto()" title="Se décplacer"><mat-icon>pin_drop</mat-icon></button>
 

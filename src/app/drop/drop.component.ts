@@ -16,6 +16,7 @@ import {InputComponent} from '../input/input.component';
 import {WalletComponent} from '../wallet/wallet.component';
 import {UploadFileComponent} from '../upload-file/upload-file.component';
 import {ApiService} from '../api.service';
+import {eval_direct_url_xportal} from '../../crypto';
 
 @Component({
   selector: 'app-drop',
@@ -104,6 +105,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
+    this.max_quantity=this.sel_nft.balance
+
   }
 
   convert_pos(content:string) : any {
@@ -129,4 +132,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   }
 
+  open_xportal() {
+    let url=eval_direct_url_xportal(this.user.provider.uri)
+    open(url)
+  }
 }

@@ -24,8 +24,7 @@ export const environment = {
 
   scale_factor:1000000000,
   offset_lat:-0.00016,
-  offset_lng:0.000015,
-
+  offset_lng:0.000017,
   render_server: "https://api.f80.fr:9876",
   fee: 10,
   style:"promptmarket.css",

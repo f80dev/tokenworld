@@ -2,26 +2,13 @@
 //@import '~ngx-sharebuttons/themes/circles';
 @use '@angular/material' as mat;
 @include mat.core();
-@import "nfluent";
-
-$theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$blue-palette,
-  ),
-  typography: (
-    brand-family: 'Comic Sans',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
-
+@use '../m3-theme';
 
 html {
-  @include mat.core-theme($theme);
-  @include mat.button-theme($theme);
+  // Apply the light theme by default
+  @include mat.all-component-themes(m3-theme.$dark-theme);
+  //@include mat.core-theme(m3-theme.$dark-theme);
+  //@include mat.button-theme(m3-theme.$dark-theme);
 }
 
 
@@ -30,12 +17,10 @@ a:visited { text-decoration: none;color: gray;  }
 a:hover { text-decoration: none; color: lightgray; }
 a:active { text-decoration: none; color: gray; }
 
-body, html {
-  background-color: #1d1d1d;
-  color: white;
-  overflow: scroll;
-  scrollbar-width: none;
-}
+//body, html {
+//  overflow: scroll;
+//  scrollbar-width: none;
+//}
 
 button {
   margin: 15px;
@@ -47,6 +32,7 @@ button {
 
 .mainform {
   padding: 0.2%;
+  background-color: black;
   background-size: cover;
   text-align: center;
   width:100%;

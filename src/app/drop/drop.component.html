@@ -1,5 +1,10 @@
 <div class="mainform" style="text-align: center;padding: 5px;">
   <app-hourglass [message]="message"></app-hourglass><br>
+  <button mat-raised-button
+          *ngIf="message!=''"
+          (click)="open_xportal()">
+    Basculer sur xPortal
+  </button>
 
   <div *ngIf="message==''">
     <app-wallet [address]="user.address"

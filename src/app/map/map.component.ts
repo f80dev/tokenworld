@@ -155,10 +155,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
+          let icon=nft.owner==this.user.address ? "./assets/icons/house.png" : 'https://tokemon.f80.fr/assets/icons/pushpin.png'
           var giftIcon = L.icon({
-            iconUrl: 'https://tokemon.f80.fr/assets/icons/pushpin.png',
+            iconUrl: icon,
             iconSize: [30, 30],// size of the icon
-            shadowSize: [10, 10],
             iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
           })
 

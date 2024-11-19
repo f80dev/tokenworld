@@ -41,10 +41,11 @@ export class TokemonComponent implements OnChanges {
 
   @Input() network="elrond-devnet"
   @Input() item:any
-  @Input() size="100px"
+  @Input() size="200px"
   @Output() select = new EventEmitter()
   nft: any
   api=inject(ApiService)
+  size_h: any;
 
   async ngOnChanges(changes: SimpleChanges) {
     if(changes.hasOwnProperty("item")){

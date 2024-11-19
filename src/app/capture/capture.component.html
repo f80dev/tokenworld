@@ -6,9 +6,12 @@
     <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
     <br>
     <app-input  *ngIf="item.pv>0"
-                value_type="slider" [value]="pv_to_engage" (valueChange)="pv_to_engage=$event"
-                style="width:300px;display: inline-block;"
+                value_type="slider" [value]="pv_to_engage" (valueChange)="update_value($event)"
+                style="width:300px;display: inline-block;" unity="PV"
                 [min]="0" [max]="max_engagment" label="Life Point to engage"></app-input>
+    <br>
+    <br>
+    Chance to win {{chance_to_win | number:"1.1-3"}}
     <br>
     <br>
 

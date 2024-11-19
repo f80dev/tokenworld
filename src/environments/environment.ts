@@ -65,5 +65,10 @@ export const environment = {
   website: "https://f80.fr",
   company:" F80",
   seuil_capture: 0.03,
-  max_pv_loading: 1000
+  max_pv_loading: 1000,
+  nft_market: {
+    "elrond-devnet":"https://devnet.xspotlight.com/",
+    "elrond-mainnet":"https://xspotlight.com/",
+  }
+
 }

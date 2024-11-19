@@ -14,9 +14,17 @@
 
   <br>
 
-  <app-tokemon *ngFor="let nft of nfts"  [item]="nft"
-               [size]="size"
-               (select)="select(nft)">
-  </app-tokemon>
+  <div *ngIf="show.indexOf('nft')>-1">
+    <app-tokemon *ngFor="let nft of nfts"  [item]="nft"
+                 [size]="size"
+                 (select)="select(nft)">
+    </app-tokemon>
+    <div *ngIf="nfts.length==0">
+      You don't have any NFT. Buy or create NFT
+      <a [href]="nft_market" target="nft">here</a>
+    </div>
+  </div>
+
+
 
 </div>

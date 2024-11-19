@@ -8,12 +8,13 @@
 
   <div *ngIf="message==''">
     <app-wallet [address]="user.address"
-                *ngIf="!sel_nft" message="Select a NFT to drop"
+                show="nft"
+                *ngIf="!sel_nft" message="Select a NFT to create a tokemon"
                 [network]="user.network"
                 (selectChanged)="on_select($event)">
     </app-wallet>
 
-    <div style="max-width: 1000px;width:90%;display: inline-block;" *ngIf="sel_nft">
+    <div style="max-width: 800px;width:90%;display: inline-block;" *ngIf="sel_nft">
 
       <img [src]="sel_nft.visual" style="width:300px;height: auto;">
       <br><br>
@@ -31,6 +32,7 @@
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
       <app-input value_type="slide" [min]="0" [max]="max_pv_loading"
+                 *ngIf="max_pv_loading>0"
                  label="Vitality to inject" unity="LifePoint"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 

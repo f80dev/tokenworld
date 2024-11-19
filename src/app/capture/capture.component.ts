@@ -6,8 +6,7 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {send_transaction, send_transaction_with_transfers} from '../mvx';
-import {abi} from '../../environments/abi';
+import { send_transaction_with_transfers} from '../mvx';
 import {MatDialog} from '@angular/material/dialog';
 import {DecimalPipe, Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
@@ -42,7 +41,7 @@ export class CaptureComponent implements OnInit {
   router=inject(Router)
   message: string=""
   max_engagment: number=100
-  pv_to_engage: any=0
+  pv_to_engage: number=0
 
 
   async on_capture() {
@@ -74,6 +73,6 @@ export class CaptureComponent implements OnInit {
 
   update_value($event: any) {
     this.pv_to_engage=$event
-    this.chance_to_win=this.item.pv/this.pv_to_engage*100
+    this.chance_to_win=Math.round(this.item.pv / this.pv_to_engage)
   }
 }

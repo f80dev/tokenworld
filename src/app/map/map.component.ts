@@ -19,6 +19,7 @@ import {FormsModule} from '@angular/forms';
 import {NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
+import {MatDialog} from '@angular/material/dialog';
 
 const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -45,6 +46,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   geolocService=inject(GeolocService)
   user=inject(UserService)
   toast=inject(MatSnackBar)
+  dialog=inject(MatDialog)
 
   private map!: L.Map;
   private markers:L.Marker[]=[]

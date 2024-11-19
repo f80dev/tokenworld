@@ -11,7 +11,9 @@
                 [min]="0" [max]="max_engagment" label="Life Point to engage"></app-input>
     <br>
     <br>
-    Chance to win {{chance_to_win | number:"1.1-3"}}
+    <div *ngIf="pv_to_engage==0">No chance to win</div>
+    <div *ngIf="pv_to_engage>0">Chance to win 1 on {{chance_to_win}}</div>
+
     <br>
     <br>
 

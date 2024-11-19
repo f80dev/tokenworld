@@ -1,17 +1,13 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   inject,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
-import {ApiNetworkProvider} from '@multiversx/sdk-core/out';
-import {DEVNET, MAINNET} from '../mvx';
-import {UserService} from '../user.service';
+
 import {NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {MatIcon} from '@angular/material/icon';

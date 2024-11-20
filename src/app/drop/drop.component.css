@@ -8,6 +8,12 @@ app-input {
 }
 
 
+.zone_input {
+  max-width: 800px;
+  width:90%;
+  display: inline-block;
+}
+
 .disk {
   background-color: #535353; /* Set the color of the disk */
   opacity: 0.2;
@@ -15,7 +21,7 @@ app-input {
   z-index: 100;
   left:50%;
   top: 50%;
-  transform: translate(30px,37px);
+  /*transform: translate(30px,37px);*/
   position:absolute;
   display: block;
 }

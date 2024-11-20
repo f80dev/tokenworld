@@ -75,7 +75,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     var tokemonIcon = L.icon({
       iconUrl: 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg',
       iconSize: [size, size], // size of the icon
-      iconAnchor: [-size/2, -size/2], // point of the icon which will correspond to marker's location
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
     });
     L.marker([this.user.center_map!.lat, this.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(this.map)
     this.map.setView(this.user.center_map!,this.user.zoom || 16)
@@ -85,7 +85,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
       let distance_in_pixel=Math.sqrt(300*300+300+300)
       this.ech=distance_in_pixel/distance_in_meters
-      this.max_distance=distance_in_meters*this.ech
+      this.max_distance=distance_in_meters
     })
 
   }

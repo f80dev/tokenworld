@@ -19,6 +19,7 @@ import {NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
+import {U32Value} from '@multiversx/sdk-core/out';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -138,6 +139,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
+      // @ts-ignore
+      let contract: string = environment.contract_addr[this.user.network || "elrond-devnet"];
+      let _args = [this.user.address]
+
+      let idx=Number(await query("get_idx_address", this.user.address, _args, contract, abi))
+
       if(this.user.center_map) {
         for(let m of this.markers){
           m.removeFrom(this.map)
@@ -150,11 +157,11 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         let args = [this.user.address,pos.x, pos.y, pos.z, environment.scale_factor/1000]
 
-        let contract: string = environment.contract_addr["elrond-devnet"];
+
         this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
-          let icon=nft.owner==this.user.address ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
+          let icon=nft.owner==idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
           var giftIcon = L.icon({
             iconUrl: icon,
             iconSize: [30, 30],// size of the icon

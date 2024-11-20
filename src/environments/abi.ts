@@ -216,6 +216,21 @@ export const abi=
         ]
       },
       {
+        "name": "get_idx_address",
+        "mutability": "readonly",
+        "inputs": [
+          {
+            "name": "address",
+            "type": "Address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "u32"
+          }
+        ]
+      },
+      {
         "name": "show_nfts",
         "mutability": "readonly",
         "inputs": [
@@ -321,3 +336,4 @@ export const abi=
       }
     }
   }
+

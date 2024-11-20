@@ -3,16 +3,25 @@
   <br>
   <div *ngIf="message.length==0">
     <h5>Capture this tokemon ?</h5>
-    <app-tokemon [item]="item" [network]="user.network"></app-tokemon>
+    <app-tokemon [label_pv]="lang_pv"
+                 [item]="item" [network]="user.network"></app-tokemon>
     <br>
+
     <app-input  *ngIf="item.pv>0"
-                value_type="slider" [value]="pv_to_engage" (valueChange)="update_value($event)"
-                style="width:300px;display: inline-block;" unity="PV"
-                [min]="0" [max]="max_engagment" label="Life Point to engage"></app-input>
+                value_type="slider" [value]="pv_to_engage"
+                (valueChange)="update_value($event)"
+                style="width:300px;display: inline-block;"
+                unity="PV"
+                [min]="0" [max]="max_engagment"
+                label="Life Point to engage">
+    </app-input>
+
     <br>
     <br>
-    <div *ngIf="pv_to_engage==0">No chance to win</div>
-    <div *ngIf="pv_to_engage>0">Chance to win 1 on {{chance_to_win}}</div>
+    <div *ngIf="item.pv>0">
+      <div *ngIf="pv_to_engage==0">No chance to win</div>
+      <div *ngIf="pv_to_engage>0">1 in {{chance_to_win}} chance of winning</div>
+    </div>
 
     <br>
     <br>

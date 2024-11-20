@@ -48,12 +48,11 @@ export const environment = {
   ],
 
   dictionnary:{
-    fr:{
-      scale:{label:"Dimension de l'image produite",complexity:0},
-      device:{label:"Matériel",complexity:1},
-      inference:{label:"Nombre d'itération",complexity:0},
-      model:{label:"Model neuronal",complexity:1},
-      precision:{label:"Précision des calculs",complexity:1}
+    "fr":{
+      pv:"PV"
+    },
+    "en":{
+      pv:"HP"
     }
   },
 

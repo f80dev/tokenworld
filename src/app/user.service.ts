@@ -19,6 +19,7 @@ export class UserService {
   network:string="elrond-devnet"
   balance=0
   params:any
+  lang="fr"
   nonce:number=0
   loc:GeolocationPosition={coords: {
       latitude: 0, longitude: 0,
@@ -64,7 +65,6 @@ export class UserService {
     this.address=""
     this.provider=null;
   }
-
 
 
   login(vm: any,subtitle="",pem_file="") {

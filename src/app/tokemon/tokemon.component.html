@@ -1,21 +1,20 @@
 <div *ngIf="item" class="vignette" >
-  <div style="display: flex;justify-content: space-between;width: 100%">
+  <div style="display: flex;justify-content: space-between;width: 100%;">
     <div>
-      <mat-icon (click)="copy_ref()" [title]="item.identifier || item.nft">content_copy</mat-icon>
+      <mat-icon (click)="copy_ref()"
+                [title]="item.identifier || item.nft">content_copy</mat-icon>
       {{nft.name}}
     </div>
     <div style="flex-grow: 1;"></div>
-    <div *ngIf="item.pv>0">{{item.pv}} PV</div>
+    <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>
   </div>
 
-  <br>
-
-  <small>{{item.metadata?.description}}</small>
-  <br>
   <div *ngIf="nft" style="cursor: pointer;display: inline-block;margin:20px;"
        [style.width]="size" [style.height]="size">
     <img [src]="nft.url" (click)="on_select()" style="object-fit: cover;width:100%;height: 100%;">
   </div>
+
+  <div style="width: 100%;font-size: x-small;">{{item.metadata?.description}}</div>
   <br>
-  <br>
+
 </div>

@@ -33,6 +33,8 @@ export class CaptureComponent implements OnInit {
 
   async ngOnInit() {
     this.item = await getParams(this.routes)
+    // @ts-ignore
+    this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
   }
 
   dialog=inject(MatDialog)
@@ -75,4 +77,7 @@ export class CaptureComponent implements OnInit {
     this.pv_to_engage=$event
     this.chance_to_win=Math.round(this.item.pv / this.pv_to_engage)
   }
+
+  protected readonly environment = environment;
+  lang_pv: string="HP"
 }

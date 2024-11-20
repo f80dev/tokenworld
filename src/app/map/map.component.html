@@ -1,4 +1,4 @@
-<div id="map"
+<div id="map3"
      style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
@@ -6,14 +6,14 @@
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
-    <button mat-icon-button (click)="open_drop()"><mat-icon>download</mat-icon></button>
+    <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Drop</button>
     <button mat-icon-button (click)="open_capture()" *ngIf="user.tokemon_selected"><mat-icon>catching_pokemon</mat-icon></button>
 
-    <mat-slider style="display: inline-block;width:50%;max-width: 200px;margin-top:-18px;" [step]="1" [min]="0" [max]="600">
-      <input matSliderThumb
-             [value]="user.visibility"
-             (valueChange)="user.visibility=$event">
-    </mat-slider>
+<!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
+<!--      <input matSliderThumb-->
+<!--             [value]="user.visibility"-->
+<!--             (valueChange)="user.visibility=$event">-->
+<!--    </mat-slider>-->
     <button mat-icon-button (click)="moveto()" title="Se déplacer"><mat-icon>pin_drop</mat-icon></button>
 
   </div>
@@ -21,10 +21,5 @@
 </div>
 
 
-<div class="disk" [style.width]="user.visibility+'px'"
-     [style.height]="user.visibility+'px'"
-     [style.margin-top]="-user.visibility/2+'px'"
-     [style.margin-left]="-user.visibility/2+'px'" >
-</div>
 
 <img src="https://tokemon.f80.fr/assets/icons/target.png" class="target">

@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, inject, OnChanges} from '@angular/core';
 import * as L from 'leaflet';
-
-import { CircleMarker,  LatLng, LeafletMouseEvent, Marker, TileLayer} from 'leaflet';
+import { LatLng, LeafletMouseEvent, Marker, TileLayer} from 'leaflet';
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
@@ -21,7 +20,7 @@ import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 
-const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 @Component({
   selector: 'app-map',
@@ -48,7 +47,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   toast=inject(MatSnackBar)
   dialog=inject(MatDialog)
 
-  private map!: L.Map;
+  private map!: L.Map
   private markers:L.Marker[]=[]
 
   center: any;
@@ -74,7 +73,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     var northEast = bounds.getNorthEast();
     var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
     if(this.user.address){
-      this.router.navigate(["drop"],{queryParams:{lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,distance:distance}})
+      let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng},"","")
+      this.router.navigate(["drop"],{queryParams:{p:position}})
     } else {
       this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
     }
@@ -88,12 +88,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async initializeMap() {
     return new Promise(async (resolve, reject) => {
-      this.map = L.map('map');
+      this.map = L.map('map3');
 
       L.tileLayer(baseMapURl).addTo(this.map);
-      L.tileLayer(baseMapURl, {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(this.map).redraw()
+      L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map).redraw()
 
       await this.center_to_loc()
       let size=30
@@ -154,10 +152,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         let contract: string = environment.contract_addr["elrond-devnet"];
         this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
-
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
-          let icon=nft.owner==this.user.address ? "./assets/icons/house.png" : 'https://tokemon.f80.fr/assets/icons/pushpin.png'
+          let icon=nft.owner==this.user.address ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
           var giftIcon = L.icon({
             iconUrl: icon,
             iconSize: [30, 30],// size of the icon

@@ -6,6 +6,22 @@
     Basculer sur xPortal
   </button>
 
+  <app-input value_type="text" *ngIf="sel_nft"
+             label="Tokemon's name" class="zone_input"
+             (valueChange)="name=$event" [value]="name"></app-input>
+  <br>
+
+
+  <div class="map_style" [style.display]="!sel_nft || message.length>0 ? 'none' : 'inline-block'">
+    <div id="map" style="position: absolute;left:0;top:0;right: 0;bottom:0;z-index: 0;"></div>
+    <div class="disk" [style.width]="user.visibility*ech+'px'"
+         [style.height]="user.visibility*ech+'px'"
+         [style.margin-top]="-user.visibility*ech/2+'px'"
+         [style.margin-left]="-user.visibility*ech/2+'px'" >
+    </div>
+  </div>
+
+
   <div *ngIf="message==''">
     <app-wallet [address]="user.address"
                 show="nft"
@@ -14,16 +30,10 @@
                 (selectChanged)="on_select($event)">
     </app-wallet>
 
-    <div style="max-width: 800px;width:90%;display: inline-block;" *ngIf="sel_nft">
+    <div class="zone_input" *ngIf="sel_nft">
 
-      <img [src]="sel_nft.visual" style="width:300px;height: auto;">
-      <br><br>
 
-      <app-input value_type="text"
-                 label="Tokemon's name"
-                 (valueChange)="name=$event" [value]="name"></app-input>
-
-      <app-input value_type="slide" [min]="0" [max]="1000"
+      <app-input value_type="slide" [min]="0" [max]="max_distance"
                  label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
 

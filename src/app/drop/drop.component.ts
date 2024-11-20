@@ -2,7 +2,6 @@ import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-
 import {create_transaction, send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
@@ -17,6 +16,9 @@ import {WalletComponent} from '../wallet/wallet.component';
 import {UploadFileComponent} from '../upload-file/upload-file.component';
 import {ApiService} from '../api.service';
 import {eval_direct_url_xportal} from '../../crypto';
+import * as L from 'leaflet';
+import {baseMapURl} from '../map/map.component';
+import {LatLng} from 'leaflet';
 
 @Component({
   selector: 'app-drop',
@@ -50,10 +52,42 @@ export class DropComponent implements AfterViewInit, OnChanges {
   quantity=1
   max_quantity=10
   max_pv_loading=0
+  private map!: L.Map
+  ech: number=1
+  max_distance=1000;
 
   async ngAfterViewInit() {
     await this.user.login(this)
+    this.map = L.map('map')
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
+    let params:any=await getParams(this.routes)
+    this.user.center_map=new LatLng(params.lat,params.lng)
+  }
+
+
+  initializeMap() {
+
+    L.tileLayer(baseMapURl).addTo(this.map);
+    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map).redraw()
+
+    let size=30
+
+    var tokemonIcon = L.icon({
+      iconUrl: 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg',
+      iconSize: [size, size], // size of the icon
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+    });
+    L.marker([this.user.center_map!.lat, this.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(this.map)
+    this.map.setView(this.user.center_map!,this.user.zoom || 16)
+
+    this.map.on("zoomend",(event:L.LeafletEvent)=>{
+      let b=this.map.getBounds()
+      let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
+      let distance_in_pixel=Math.sqrt(300*300+300+300)
+      this.ech=distance_in_pixel/distance_in_meters
+      this.max_distance=distance_in_meters
+    })
+
   }
 
 
@@ -106,7 +140,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-
+    setTimeout(()=>{this.initializeMap()},500)
   }
 
   convert_pos(content:string) : any {

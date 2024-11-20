@@ -1,15 +1,4 @@
-.disk {
-  background-color: #535353; /* Set the color of the disk */
-  opacity: 0.2;
-  border-radius: 50%; /* Make it a circle */
-  z-index: 100;
-  left:50%;
-  top: 50%;
-  transform: translate(30px,37px);
-  position:absolute;
-  display: block;
-  pointer-events: none;
-}
+
 
 .target {
   position:fixed;
@@ -31,6 +20,7 @@
   width:fit-content;
   max-width:600px;
   z-index: 1000;
-  background: darkslategrey;
+  background: none;
   font-weight: bolder;
 }
+

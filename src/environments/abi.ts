@@ -220,6 +220,10 @@ export const abi=
         "mutability": "readonly",
         "inputs": [
           {
+            "name": "caller",
+            "type": "Address"
+          },
+          {
             "name": "x",
             "type": "u64"
           },

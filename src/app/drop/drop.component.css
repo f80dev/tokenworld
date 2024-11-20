@@ -2,3 +2,7 @@ img {
   width:150px;
   height:150px;
 }
+
+app-input {
+  margin: 30px;
+}

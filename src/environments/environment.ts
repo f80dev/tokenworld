@@ -48,12 +48,11 @@ export const environment = {
   ],
 
   dictionnary:{
-    fr:{
-      scale:{label:"Dimension de l'image produite",complexity:0},
-      device:{label:"Matériel",complexity:1},
-      inference:{label:"Nombre d'itération",complexity:0},
-      model:{label:"Model neuronal",complexity:1},
-      precision:{label:"Précision des calculs",complexity:1}
+    "fr":{
+      pv:"PV"
+    },
+    "en":{
+      pv:"HP"
     }
   },
 
@@ -65,5 +64,10 @@ export const environment = {
   website: "https://f80.fr",
   company:" F80",
   seuil_capture: 0.03,
-  max_pv_loading: 1000
+  max_pv_loading: 1000,
+  nft_market: {
+    "elrond-devnet":"https://devnet.xspotlight.com/",
+    "elrond-mainnet":"https://xspotlight.com/",
+  }
+
 }

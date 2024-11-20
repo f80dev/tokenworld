@@ -6,10 +6,9 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {send_transaction, send_transaction_with_transfers} from '../mvx';
-import {abi} from '../../environments/abi';
+import { send_transaction_with_transfers} from '../mvx';
 import {MatDialog} from '@angular/material/dialog';
-import {Location, NgIf} from '@angular/common';
+import {DecimalPipe, Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 
@@ -21,7 +20,8 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
     TokemonComponent,
     HourglassComponent,
     NgIf,
-    InputComponent
+    InputComponent,
+    DecimalPipe
   ],
   templateUrl: './capture.component.html',
   styleUrl: './capture.component.css'
@@ -29,9 +29,12 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 export class CaptureComponent implements OnInit {
   item: any;
   _location=inject(Location)
+  chance_to_win: number=1
 
   async ngOnInit() {
     this.item = await getParams(this.routes)
+    // @ts-ignore
+    this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
   }
 
   dialog=inject(MatDialog)
@@ -40,7 +43,7 @@ export class CaptureComponent implements OnInit {
   router=inject(Router)
   message: string=""
   max_engagment: number=100
-  pv_to_engage: any=0
+  pv_to_engage: number=0
 
 
   async on_capture() {
@@ -69,4 +72,12 @@ export class CaptureComponent implements OnInit {
   cancel() {
     this._location.back()
   }
+
+  update_value($event: any) {
+    this.pv_to_engage=$event
+    this.chance_to_win=Math.round(this.item.pv / this.pv_to_engage)
+  }
+
+  protected readonly environment = environment;
+  lang_pv: string="HP"
 }

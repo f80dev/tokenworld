@@ -154,10 +154,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         let contract: string = environment.contract_addr["elrond-devnet"];
         this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
-
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
-          let icon=nft.owner==this.user.address ? "./assets/icons/house.png" : 'https://tokemon.f80.fr/assets/icons/pushpin.png'
+          let icon=nft.owner==this.user.address ? "./assets/icons/push_pin_blue.png" : './assets/icons/push_pin_red.png'
           var giftIcon = L.icon({
             iconUrl: icon,
             iconSize: [30, 30],// size of the icon

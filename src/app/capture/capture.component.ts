@@ -11,6 +11,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {DecimalPipe, Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
+import {eval_direct_url_xportal} from '../../crypto';
+import {DeviceService} from '../device.service';
 
 @Component({
   selector: 'app-capture',
@@ -41,6 +43,8 @@ export class CaptureComponent implements OnInit {
   routes = inject(ActivatedRoute)
   user = inject(UserService)
   router=inject(Router)
+  device=inject(DeviceService)
+
   message: string=""
   max_engagment: number=100
   pv_to_engage: number=0
@@ -49,6 +53,7 @@ export class CaptureComponent implements OnInit {
   async on_capture() {
     if(!this.user.isConnected())await this.user.login(this);
 
+    debugger
     let args = [Number(this.item.id)]
     let contract: string = environment.contract_addr["elrond-devnet"];
     try {
@@ -80,4 +85,8 @@ export class CaptureComponent implements OnInit {
 
   protected readonly environment = environment;
   lang_pv: string="HP"
+
+  open_xportal() {
+    open(eval_direct_url_xportal(this.user.provider.uri))
+  }
 }

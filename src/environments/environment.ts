@@ -23,8 +23,8 @@ export const environment = {
   transfer_page:"https://t.f80.fr",
 
   scale_factor:1000000,
-  offset_lat:-0.00017,
-  offset_lng:0.00020,
+  offset_lat:0, //-0.00017,
+  offset_lng:0,  //0.00020,
   render_server: "https://api.f80.fr:9876",
   fee: 10,
   style:"promptmarket.css",

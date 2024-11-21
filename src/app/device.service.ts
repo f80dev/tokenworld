@@ -29,6 +29,11 @@ export class DeviceService {
     this.smallScreen=breakpointObserver.observe(Breakpoints.TabletPortrait+Breakpoints.Small+Breakpoints.Medium+Breakpoints.HandsetPortrait).pipe(map((result:any) => result.matches), shareReplay());
   }
 
+  private mobileUserAgents: RegExp = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
+  isMobile(): boolean { return this.mobileUserAgents.test(navigator.userAgent); }
+
+
   setTitle(newTitle:string){
     this.titleService.setTitle(newTitle);
   }

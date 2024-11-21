@@ -6,7 +6,7 @@
     Basculer sur xPortal
   </button>
 
-  <app-input value_type="text" *ngIf="sel_nft"
+  <app-input value_type="text" *ngIf="sel_nft && message.length==0"
              label="Tokemon's name" class="zone_input"
              (valueChange)="name=$event" [value]="name"></app-input>
   <br>

@@ -49,6 +49,7 @@ export class CaptureComponent implements OnInit {
   async on_capture() {
     if(!this.user.isConnected())await this.user.login(this);
 
+    debugger
     let args = [Number(this.item.id)]
     let contract: string = environment.contract_addr["elrond-devnet"];
     try {

@@ -19,6 +19,7 @@ import {eval_direct_url_xportal} from '../../crypto';
 import * as L from 'leaflet';
 import {baseMapURl} from '../map/map.component';
 import {LatLng} from 'leaflet';
+import {DeviceService} from '../device.service';
 
 @Component({
   selector: 'app-drop',
@@ -47,6 +48,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
   user = inject(UserService)
   router = inject(Router)
   dialog=inject(MatDialog)
+  device=inject(DeviceService)
+
   sel_nft: any;
   message: string=""
   quantity=1
@@ -167,7 +170,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
   }
 
   open_xportal() {
-    let url=eval_direct_url_xportal(this.user.provider.uri)
-    open(url)
+    open(eval_direct_url_xportal(this.user.provider.uri))
   }
 }

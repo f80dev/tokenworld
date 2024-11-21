@@ -1,6 +1,11 @@
 <div class="mainform" style="text-align: center;">
   <app-hourglass [message]="message"></app-hourglass>
   <br>
+  <button mat-raised-button
+          *ngIf="message!='' && device.isMobile()"
+          (click)="open_xportal()">
+    Basculer sur xPortal
+  </button>
   <div *ngIf="message.length==0">
     <h5>Capture this tokemon ?</h5>
     <app-tokemon [label_pv]="lang_pv"

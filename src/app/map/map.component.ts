@@ -140,10 +140,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
       // @ts-ignore
-      let contract: string = environment.contract_addr[this.user.network || "elrond-devnet"];
-      let _args = [this.user.address]
-
-      let idx=Number(await query("get_idx_address", this.user.address, _args, contract, abi))
+      let contract: string = this.user.get_sc_address(environment)
+      let idx=Number(await this.user.query("get_idx_address",  [this.user.address]))
 
       if(this.user.center_map) {
         for(let m of this.markers){
@@ -155,10 +153,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         $$("Chargement des tokemon")
         let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
 
-        let args = [this.user.address,pos.x, pos.y, pos.z, environment.scale_factor/1000]
+        let args = [this.user.address,pos.x, pos.y, pos.z] //environment.scale_factor/1000]
 
 
-        this.user.nfts = await query("show_nfts", this.user.address, args, contract, abi);
+        this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
           let icon=nft.owner==idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
@@ -250,4 +248,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
 
+  open_airdrop() {
+    this.router.navigate(["airdrop"],{queryParams:{p:setParams(this.user.center_map,"")}})
+  }
 }

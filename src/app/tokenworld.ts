@@ -1,3 +1,23 @@
+import {ApiService} from './api.service';
+import {query} from './mvx';
+import {UserService} from './user.service';
+import {environment} from '../environments/environment';
+import {abi} from '../environments/abi';
+
+export class Tokemon {
+  id: number = 0;
+  name: string = "";
+  owner: number = 0;
+  nft: string = "";
+  nonce: number = 0;
+  pv: number = 0;
+  x: number = 0;
+  y: number = 0;
+  z: number = 0;
+  mode: number = 0;
+  visibility: number = 0;
+}
+
 function degToRad(degrees:number):number {
   return degrees * (Math.PI / 180);
 }
@@ -44,3 +64,5 @@ export function distance(lat1:number, lon1:number, lat2:number, lon2:number): nu
 
   return R*c;
 }
+
+

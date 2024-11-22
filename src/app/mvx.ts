@@ -1,7 +1,7 @@
 import {
   Address,
   SmartContractTransactionsFactory,
-  Token, TokenTransfer, Transaction,
+  TokenTransfer, Transaction,
   TransactionsFactoryConfig
 } from "@multiversx/sdk-core/out";
 import { UserSigner } from "@multiversx/sdk-wallet";
@@ -22,6 +22,7 @@ export const MAINNET="https://api.multiversx.com"
 export async function mvx_api(url:string,params:string,api:any,network="devnet"): Promise<any[]> {
   //voir
   return new Promise((resolve, reject) => {
+    network=network.replace("elrond-","")
     if(!network.endsWith("-"))network=network+"-"
     if(url.startsWith("/"))url=url.substring(1)
     api._get("https://"+network+"api.multiversx.com/"+url,params).subscribe({
@@ -33,6 +34,12 @@ export async function mvx_api(url:string,params:string,api:any,network="devnet")
       }
     })
   })
+}
+
+
+export function get_nft(identifier: string, api:any,network: string) {
+  //voir https://api.multiversx.com/#/nfts/NftController_getNft
+  return mvx_api("/nfts/" + identifier,"",api,network);
 }
 
 
@@ -198,6 +205,7 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
     let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,gasLimit,contract_addr)
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
 
+    await user.refresh()
     transaction.nonce=BigInt(user.account.nonce)
     let sign_transaction=await provider.signTransaction(transaction)
     try{
@@ -226,7 +234,6 @@ export async function send_transaction(provider:any,function_name:string,sender_
                                        token="",nonce=0,value=0,abi:any,
                                        _type: string="",gasLimit=50000000n) {
   //envoi d'une transaction
-
 
   return new Promise(async (resolve, reject) => {
 
@@ -314,7 +321,6 @@ export async function send_transaction(provider:any,function_name:string,sender_
       }
 
 
-
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#transfer--execute
 
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#signing-transactions-1
@@ -365,6 +371,8 @@ export function toText(array:Uint8Array) : string {
 }
 
 
+
+
 export async function createNFT(name:string,visual:string,collection:string,user:UserService,network="elrond-devnet", gasLimit=50000000n) {
   const apiNetworkProvider = new ApiNetworkProvider(network=="devnet" ? "https://devnet-api.multiversx.com" : "https://api.multiversx.com")
   const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
@@ -384,17 +392,18 @@ export async function createNFT(name:string,visual:string,collection:string,user
 }
 
 
-export async function query(function_name:string,sender_addr:string,args:any[],contract_addr:string,abi:any,network="devnet") : Promise<any[]> {
+export async function query(function_name:string,args:any[],domain:string,sc_address:string) : Promise<any> {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#contract-queries
   return new Promise(async (resolve, reject) => {
-    const apiNetworkProvider = new ApiNetworkProvider(network=="devnet" ? "https://devnet-api.multiversx.com" : "https://api.multiversx.com")
+    if(domain.endsWith("/"))domain=domain.substring(0,domain.length-1)
+    const apiNetworkProvider = new ApiNetworkProvider(domain)
     const queryRunner = new QueryRunnerAdapter({networkProvider: apiNetworkProvider});
     let controller = new SmartContractQueriesController({
       queryRunner: queryRunner,
       abi: await create_abi(abi)
     });
     const query = controller.createQuery({
-      contract: contract_addr,
+      contract: sc_address,
       function: function_name,
       arguments: args,
     });

@@ -1,0 +1,31 @@
+<div class="mainform" style="text-align: center;">
+
+  <app-hourglass [message]="message"></app-hourglass>
+
+  <div *ngIf="message.length==0">
+    <app-wallet show="coin" [selected]="true"
+                style="display: inline-block;width:600px;"
+                message="Select a coin to drop"
+                [address]="user.address"
+                (selectChanged)="sel_coin=$event"></app-wallet>
+
+    <br>
+
+
+    <app-input *ngIf="sel_coin"
+               value_type="slider" [value]="amount_to_drop"
+               (valueChange)="update_value($event)"
+               style="width:350px;display: inline-block;"
+               [unity]="sel_coin.name"
+               [min]="1" [max]="max_amount"
+               label="Amount to drop">
+    </app-input>
+
+    <br><br>
+
+    <button *ngIf="sel_coin && amount_to_drop>0" mat-raised-button (click)="airdrop()">Drop !</button>
+
+  </div>
+
+
+</div>

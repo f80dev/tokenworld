@@ -1,3 +1,54 @@
-<div class="mainform">
+<div class="mainform" style="text-align: center;">
+  <app-hourglass [message]="message"></app-hourglass>
+  <app-wallet [address]="user.address" show="coin"></app-wallet>
+  <br>
+
+  <mat-expansion-panel *ngIf="tokemons.length>0">
+    <mat-expansion-panel-header>Your tokemons</mat-expansion-panel-header>
+    <table>
+      <tr>
+        <th>Visual</th>
+        <th>Names<br>(Tokemon/NFT)</th>
+        <th>Position</th><th>Visibility (meters)</th><th>PV</th>
+      </tr>
+      <tr *ngFor="let tokemon of tokemons" style="width: 100%;">
+        <td><img [src]="tokemon.content.url" style="width: 100px"></td>
+        <td>{{tokemon.name}} / {{tokemon.content.name}}</td>
+        <td>
+          <button mat-icon-button (click)="open_map(tokemon)"><mat-icon>map</mat-icon></button>
+        </td>
+        <td>{{tokemon.visibility}}</td>
+        <td>
+          {{tokemon.pv}}
+          <button mat-raised-button (click)="open_reload(tokemon)" *ngIf="max_pv_loading>0">Reload</button>
+        </td>
+      </tr>
+    </table>
+  </mat-expansion-panel>
+
+  <br>
+
+  <mat-expansion-panel *ngIf="sc_settings">
+    <mat-expansion-panel-header>Tokemon World</mat-expansion-panel-header>
+    <table style="text-align: left;">
+      <tr><td>Grid size</td><td>{{sc_settings.grid}}</td></tr>
+      <tr><td>Quota</td><td>{{sc_settings.quota}}</td></tr>
+      <tr><td>Fees</td><td>{{sc_settings.fee}}</td></tr>
+    </table>
+
+  </mat-expansion-panel>
+
+
+  <div *ngIf="sel_to_reload" style="width:80%;display: inline-block;max-width: 600px;margin-top:50px;">
+
+    <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
+               *ngIf="max_pv_loading>0"
+               label="Vitality to inject" unity="PV"
+               (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
+
+    <br>
+
+    <button mat-raised-button (click)="send()">Send</button>
+  </div>
 
 </div>

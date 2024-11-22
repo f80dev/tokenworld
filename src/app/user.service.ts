@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
-import {toAccount, usersigner_from_pem} from "./mvx";
+import {query, toAccount, usersigner_from_pem} from "./mvx";
 import {showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
+import {abi} from '../environments/abi';
+import {BigUIntValue, U64Value} from '@multiversx/sdk-core/out';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +68,29 @@ export class UserService {
     this.provider=null;
   }
 
+  get_sc_address(env:any) {
+    return env.contract_addr[this.network || "elrond-devnet"];
+  }
+
+
+
+  query(func:string,args:any[]=[],env:any=environment){
+    return query(func, args, this.get_domain(), this.get_sc_address(environment))
+  }
+
+
+  get_sc_settings() {
+    return new Promise(async (resolve, reject) => {
+      let rc:any= {}
+      rc.grid=Number(new BigUIntValue(await this.query("grid",[])).toString())
+      rc.quota=Number(new U64Value(await this.query("quota",[])).toString())
+      rc.fee=Number(new BigUIntValue(await this.query("fee",[])).toString())
+      resolve(rc)
+    })
+
+  }
+
+
 
   login(vm: any,subtitle="",pem_file="") {
     return new Promise(async (resolve, reject) => {
@@ -106,11 +131,18 @@ export class UserService {
     return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
   }
 
+   refresh(){
+    return new Promise(async (resolve)=>{
+      this.account=await toAccount(this.address,this.get_domain())
+      resolve(this.account)
+    })
+  }
+
 
   init_balance(api: ApiService) {
     return new Promise(async (resolve)=>{
       if(!this.address)throw new Error("Address not initialize")
-      this.account=await toAccount(this.address,this.get_domain())
+      await this.refresh()
 
       let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
       let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""

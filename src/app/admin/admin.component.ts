@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit {
 
   async refresh(){
     this.nfts=[]
-    for(let nft of await query("tokemons",this.user.address,[],environment.contract_addr["elrond-devnet"],abi)){
+    for(let nft of await this.user.query("tokemons",[])){
       nft.coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
       this.nfts.push(nft)
     }

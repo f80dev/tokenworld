@@ -6,7 +6,8 @@
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
-    <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Drop</button>
+    <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
+    <button mat-raised-button (click)="open_airdrop()"><mat-icon>paid</mat-icon>Airdrop</button>
     <button mat-icon-button (click)="open_capture()" *ngIf="user.tokemon_selected"><mat-icon>catching_pokemon</mat-icon></button>
 
 <!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
@@ -15,11 +16,8 @@
 <!--             (valueChange)="user.visibility=$event">-->
 <!--    </mat-slider>-->
     <button mat-icon-button (click)="moveto()" title="Se déplacer"><mat-icon>pin_drop</mat-icon></button>
-
   </div>
-
 </div>
-
 
 
 <img src="https://tokemon.f80.fr/assets/icons/target.png" class="target">

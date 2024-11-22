@@ -26,6 +26,18 @@ export const abi=
         {
           "name": "fee",
           "type": "u64"
+        },
+        {
+          "name": "grid",
+          "type": "u64"
+        },
+        {
+          "name": "quota",
+          "type": "u64"
+        },
+        {
+          "name": "scale_factor",
+          "type": "u32"
         }
       ],
       "outputs": []
@@ -75,6 +87,26 @@ export const abi=
         ]
       },
       {
+        "name": "grid",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "u64"
+          }
+        ]
+      },
+      {
+        "name": "quota",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "u64"
+          }
+        ]
+      },
+      {
         "name": "pv_token",
         "mutability": "readonly",
         "inputs": [],
@@ -101,6 +133,36 @@ export const abi=
           {
             "name": "addr",
             "type": "Address"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "u32"
+          }
+        ]
+      },
+      {
+        "name": "airdrop",
+        "mutability": "mutable",
+        "payableInTokens": [
+          "*"
+        ],
+        "inputs": [
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
+          },
+          {
+            "name": "visibility",
+            "type": "u64"
           }
         ],
         "outputs": [
@@ -140,6 +202,20 @@ export const abi=
       },
       {
         "name": "reloading",
+        "mutability": "mutable",
+        "payableInTokens": [
+          "*"
+        ],
+        "inputs": [
+          {
+            "name": "token_id",
+            "type": "u32"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "name": "reloading_all",
         "mutability": "mutable",
         "payableInTokens": [
           "*"
@@ -249,10 +325,6 @@ export const abi=
           {
             "name": "z",
             "type": "u64"
-          },
-          {
-            "name": "scale_factor",
-            "type": "u32"
           }
         ],
         "outputs": [

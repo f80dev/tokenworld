@@ -31,8 +31,6 @@
     </app-wallet>
 
     <div class="zone_input" *ngIf="sel_nft">
-
-
       <app-input value_type="slide" [min]="0" [max]="max_distance"
                  label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
@@ -43,7 +41,7 @@
 
       <app-input value_type="slide" [min]="0" [max]="max_pv_loading"
                  *ngIf="max_pv_loading>0"
-                 label="Vitality to inject" unity="LifePoint"
+                 label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 
       <br><br>

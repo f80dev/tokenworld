@@ -18,9 +18,18 @@
 
   <mat-expansion-panel>
     <mat-expansion-panel-header>NFT dropped</mat-expansion-panel-header>
-    <div *ngFor="let nft of nfts">
-      - {{toText(nft.clan)}} - Position: {{nft.coords.lat}},{{nft.coords.long}} - Visibility: {{nft.visibility}}
-    </div>
+    <table>
+      <tr>
+        <th>Name</th><th>Position</th><th>Visibility</th><th>PV</th>
+      </tr>
+      <tr *ngFor="let nft of nfts" style="width: 100%;">
+        <td>{{nft.name}}</td>
+        <td>{{nft.coords.lat}},{{nft.coords.long}}</td>
+        <td>{{nft.visibility}}</td>
+        <td>{{nft.pv}}</td>
+      </tr>
+    </table>
+
   </mat-expansion-panel>
 
 </div>

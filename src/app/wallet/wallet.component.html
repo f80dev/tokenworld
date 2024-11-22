@@ -1,13 +1,18 @@
 <div style="width:100%;text-align: center">
-  <h5 *ngIf="nfts.length==0">No NFT available</h5>
-  <h5 *ngIf="nfts.length>0">{{message}}</h5>
+  <h5>{{message}}</h5>
 
   <div style="display: inline-block;width: 90%;">
-    <table style="width:100%;">
+    <table>
       <tr *ngFor="let k of tokens">
-        <td style="text-align: right;width:50%;">{{user.tokens[k].name}}</td>
-        <td style="text-align: left;width:50%;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
-        <td *ngIf="selected"><button mat-raised-button (click)="select_esdt(user.tokens[k])">Drop</button></td>
+        <td style="text-align: right;">
+          <button *ngIf="selected"  mat-icon-button (click)="select_esdt(user.tokens[k])">
+            <mat-icon>arrow_right</mat-icon>
+          </button>
+        </td>
+        <td style="text-align: left;">
+          {{user.tokens[k].name}}
+        </td>
+        <td style="text-align: right;width:50%;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
       </tr>
     </table>
   </div>
@@ -19,6 +24,7 @@
                  [size]="size"
                  (select)="select(nft)">
     </app-tokemon>
+
     <div *ngIf="nfts.length==0">
       You don't have any NFT. Buy or create NFT
       <a [href]="nft_market" target="nft">here</a>

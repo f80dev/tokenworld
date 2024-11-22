@@ -1,0 +1,11 @@
+mat-expansion-panel {
+  max-width: 1200px;
+  width: 100%;
+  display: inline-block;
+}
+
+table {
+  text-align: center;
+  width:100%;
+  font-size: small;
+}

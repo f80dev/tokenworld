@@ -2,9 +2,10 @@ import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges
 import {DecimalPipe, NgForOf, NgIf} from "@angular/common";
 import {ApiService} from '../api.service';
 import {TokemonComponent} from '../tokemon/tokemon.component';
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-wallet',
@@ -14,7 +15,9 @@ import {environment} from '../../environments/environment';
     NgIf,
     TokemonComponent,
     DecimalPipe,
-    MatButton
+    MatButton,
+    MatIconButton,
+    MatIcon
   ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.css'
@@ -26,7 +29,7 @@ export class WalletComponent implements OnChanges {
   @Input() nft_market=environment.nft_market
   nfts: any[] = []
   @Input() address=""
-  @Input() show="coin,nft"
+  @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
   @Input() network="elrond-devnet"
   @Output() selectChanged = new EventEmitter()
   @Input() size="200px"
@@ -74,4 +77,6 @@ export class WalletComponent implements OnChanges {
   select_esdt($event:any) {
     this.selectChanged.emit($event)
   }
+
+
 }

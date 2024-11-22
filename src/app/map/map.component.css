@@ -24,3 +24,8 @@
   font-weight: bolder;
 }
 
+button {
+  margin: 10px;
+  width: 150px;
+}
+

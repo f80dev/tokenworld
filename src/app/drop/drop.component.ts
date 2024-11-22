@@ -69,7 +69,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   initializeMap() {
-
     L.tileLayer(baseMapURl).addTo(this.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map).redraw()
 
@@ -143,7 +142,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-    setTimeout(()=>{this.initializeMap()},500)
+    setTimeout(()=>{this.initializeMap()},200)
   }
 
   convert_pos(content:string) : any {

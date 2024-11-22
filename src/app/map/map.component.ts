@@ -249,6 +249,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   open_airdrop() {
-    this.router.navigate(["airdrop"],{queryParams:{p:setParams(this.user.center_map,"")}})
+    let obj={lat:this.user.center_map?.lat,lng:this.user.center_map?.lng}
+    this.router.navigate(["airdrop"],{queryParams:{p:setParams(obj,"","")}})
   }
 }

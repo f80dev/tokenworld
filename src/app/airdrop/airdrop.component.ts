@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import {WalletComponent} from '../wallet/wallet.component';
 import {UserService} from '../user.service';
 import {InputComponent} from '../input/input.component';
@@ -12,6 +12,8 @@ import {getParams, showError} from '../../tools';
 import {latLonToCartesian} from '../tokenworld';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LatLng} from 'leaflet';
+import * as L from 'leaflet';
+import {baseMapURl} from '../map/map.component';
 
 @Component({
   selector: 'app-airdrop',
@@ -26,13 +28,13 @@ import {LatLng} from 'leaflet';
   templateUrl: './airdrop.component.html',
   styleUrl: './airdrop.component.css'
 })
-export class AirdropComponent implements OnInit {
+export class AirdropComponent implements AfterViewInit {
 
-  async ngOnInit() {
-    let params:any=await getParams(this.routes)
-    this.user.center_map=new LatLng(params.lat,params.lng)
-  }
+  max_distance=1000
+  private map!: L.Map
 
+
+  ech: number=1
   routes=inject(ActivatedRoute)
   sel_coin: any;
   user=inject(UserService)
@@ -41,6 +43,40 @@ export class AirdropComponent implements OnInit {
   visibility: number=100;
   router=inject(Router)
   message: string=""
+
+
+  initializeMap() {
+
+    L.tileLayer(baseMapURl).addTo(this.map);
+    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
+      .addTo(this.map).redraw()
+
+    let size=30
+
+    var tokemonIcon = L.icon({
+      iconUrl: 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg',
+      iconSize: [size, size], // size of the icon
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+    });
+    L.marker([this.user.center_map!.lat, this.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(this.map)
+    this.map.setView(this.user.center_map!,this.user.zoom || 16)
+
+    this.map.on("zoomend",(event:L.LeafletEvent)=>{
+      let b=this.map.getBounds()
+      let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
+      let distance_in_pixel=Math.sqrt(300*300+300+300)
+      this.ech=distance_in_pixel/distance_in_meters
+      this.max_distance=distance_in_meters
+    })
+
+  }
+
+  async ngAfterViewInit() {
+    let params:any=await getParams(this.routes)
+    this.user.center_map=new LatLng(params.lat,params.lng)
+    setTimeout(()=>{this.initializeMap()},200)
+    await this.user.login(this)
+  }
 
   update_value($event: any) {
     this.amount_to_drop=$event

@@ -47,6 +47,8 @@ export class AppComponent implements OnInit {
     localStorage.setItem("address",this.user.address)
   }
 
+
+
   async ngOnInit() {
     let params:any=await getParams(this.routes)
     if(params.hasOwnProperty("signature")){
@@ -55,7 +57,12 @@ export class AppComponent implements OnInit {
     }
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
     this.user.address=localStorage.getItem("address") || ""
+
+    this.user.map=await this.user.query("map",[]);
+    this.user.map.url=this.user.map.url.toString()
   }
+
+
 
   protected readonly environment = environment;
 

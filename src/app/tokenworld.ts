@@ -3,6 +3,8 @@ import {query} from './mvx';
 import {UserService} from './user.service';
 import {environment} from '../environments/environment';
 import {abi} from '../environments/abi';
+import * as L from 'leaflet';
+import {baseMapURl} from './map/map.component';
 
 export class Tokemon {
   id: number = 0;
@@ -65,4 +67,45 @@ export function distance(lat1:number, lon1:number, lat2:number, lon2:number): nu
   return R*c;
 }
 
+
+
+export function initializeMap(vm:any,events:string,meIcon='https://tokemon.f80.fr/assets/icons/push_pin_blue.svg') {
+
+  if(vm.user.map.url=="map"){
+    L.tileLayer(baseMapURl).addTo(vm.map);
+    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
+      .addTo(vm.map).redraw()
+
+    let size=30
+
+    var tokemonIcon = L.icon({
+      iconUrl: meIcon,
+      iconSize: [size, size], // size of the icon
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+    });
+    L.marker([vm.user.center_map!.lat, vm.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(vm.map)
+    vm.map.setView(vm.user.center_map!,vm.user.zoom || 16)
+
+    if(events.indexOf("zoomend")>-1){
+      vm.map.on("zoomend",(event:L.LeafletEvent)=>{
+        let b=vm.map.getBounds()
+        let distance_in_meters=vm.map.distance(b.getNorthWest(),b.getSouthEast())
+        let distance_in_pixel=Math.sqrt(300*300+300+300)
+        vm.ech=distance_in_pixel/distance_in_meters
+        vm.max_distance=distance_in_meters
+      })
+    }
+
+    if(events.indexOf("zoom")>-1){
+      vm.map.on("zoom",(event:L.LeafletEvent)=>{vm.user.zoom=vm.map.getZoom()})
+    }
+
+    if(events.indexOf("moveend")>-1){
+      vm.map.on("moveend",(event:L.LeafletEvent)=>vm.movemap(event));
+    }
+  } else {
+
+  }
+
+}
 

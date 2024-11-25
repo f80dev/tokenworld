@@ -33,10 +33,66 @@ export const abi=
         },
         {
           "name": "quota",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "scale_factor",
+          "type": "u32"
+        },
+        {
+          "name": "entrance_x",
+          "type": "u64"
+        },
+        {
+          "name": "entrance_y",
+          "type": "u64"
+        },
+        {
+          "name": "entrance_z",
+          "type": "u64"
+        },
+        {
+          "name": "exit_x",
+          "type": "u64"
+        },
+        {
+          "name": "exit_y",
+          "type": "u64"
+        },
+        {
+          "name": "exit_z",
+          "type": "u64"
+        },
+        {
+          "name": "move_min",
+          "type": "u16"
+        },
+        {
+          "name": "move_max",
+          "type": "u16"
+        },
+        {
+          "name": "n_degrees",
+          "type": "u16"
+        },
+        {
+          "name": "map_path",
+          "type": "bytes"
+        },
+        {
+          "name": "width",
+          "type": "u64"
+        },
+        {
+          "name": "height",
+          "type": "u64"
+        },
+        {
+          "name": "min_visibility",
+          "type": "u32"
+        },
+        {
+          "name": "max_visibility",
           "type": "u32"
         }
       ],
@@ -102,7 +158,7 @@ export const abi=
         "inputs": [],
         "outputs": [
           {
-            "type": "u64"
+            "type": "u32"
           }
         ]
       },
@@ -113,6 +169,26 @@ export const abi=
         "outputs": [
           {
             "type": "TokenIdentifier"
+          }
+        ]
+      },
+      {
+        "name": "typeMove",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "MoveStructure"
+          }
+        ]
+      },
+      {
+        "name": "map",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "Map"
           }
         ]
       },
@@ -138,6 +214,29 @@ export const abi=
         "outputs": [
           {
             "type": "u32"
+          }
+        ]
+      },
+      {
+        "name": "can_move",
+        "mutability": "readonly",
+        "inputs": [
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "bool"
           }
         ]
       },
@@ -178,6 +277,29 @@ export const abi=
           {
             "name": "t_id",
             "type": "u32"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "name": "move_tokemon",
+        "mutability": "mutable",
+        "inputs": [
+          {
+            "name": "t_id",
+            "type": "u32"
+          },
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
           }
         ],
         "outputs": []
@@ -357,6 +479,73 @@ export const abi=
     "esdtAttributes": [],
     "hasCallback": false,
     "types": {
+      "Map": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "left_top",
+            "type": "Point"
+          },
+          {
+            "name": "right_bottom",
+            "type": "Point"
+          },
+          {
+            "name": "entrance",
+            "type": "Point"
+          },
+          {
+            "name": "exit",
+            "type": "Point"
+          },
+          {
+            "name": "url",
+            "type": "bytes"
+          },
+          {
+            "name": "min_visibility",
+            "type": "u32"
+          },
+          {
+            "name": "max_visibility",
+            "type": "u32"
+          }
+        ]
+      },
+      "MoveStructure": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "min_distance",
+            "type": "u16"
+          },
+          {
+            "name": "max_distance",
+            "type": "u16"
+          },
+          {
+            "name": "n_degrees",
+            "type": "u16"
+          }
+        ]
+      },
+      "Point": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "x",
+            "type": "u64"
+          },
+          {
+            "name": "y",
+            "type": "u64"
+          },
+          {
+            "name": "z",
+            "type": "u64"
+          }
+        ]
+      },
       "Tokemon": {
         "type": "struct",
         "fields": [
@@ -401,6 +590,14 @@ export const abi=
             "type": "u8"
           },
           {
+            "name": "coin",
+            "type": "TokenIdentifier"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
             "name": "visibility",
             "type": "u32"
           }
@@ -408,4 +605,3 @@ export const abi=
       }
     }
   }
-

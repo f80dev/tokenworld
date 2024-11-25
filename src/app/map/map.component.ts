@@ -4,9 +4,7 @@ import { LatLng, LeafletMouseEvent, Marker, TileLayer} from 'leaflet';
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {query} from '../mvx';
-import {abi} from '../../environments/abi';
-import {cartesianToPolar, distance, latLonToCartesian} from '../tokenworld';
+import {cartesianToPolar, distance, initializeMap, latLonToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -19,7 +17,6 @@ import {NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
-import {U32Value} from '@multiversx/sdk-core/out';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -59,7 +56,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async ngAfterViewInit() {
     try{
-      await this.initializeMap()
+      await initializeMap(this,"zoom,moveend")
       await this.center_to_loc()
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
@@ -86,41 +83,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     if(!changes.lat.firstChange)this.center_to_loc();
   }
 
-
-  async initializeMap() {
-    return new Promise(async (resolve, reject) => {
-      this.map = L.map('map3');
-
-      L.tileLayer(baseMapURl).addTo(this.map);
-      L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map).redraw()
-
-      await this.center_to_loc()
-      let size=30
-
-      var meIcon = L.icon({
-        iconUrl: 'https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
-        iconSize: [size, size], // size of the icon
-        iconAnchor: [-size/2, -size/2], // point of the icon which will correspond to marker's location
-      });
-
-      var targetIcon = L.icon({
-        iconUrl: 'https://tokemon.f80.fr/assets/icons/target.png',
-        iconSize: [size, size], // size of the icon
-        iconAnchor: [-size/2, -size/2], // point of the icon which will correspond to marker's location
-      });
-
-      this.me=L.marker([this.user.loc.coords.latitude, this.user.loc.coords.longitude],{icon:meIcon, alt:"me"})
-      //this.target=L.marker([this.user.center_map.lat, this.user.center_map.lng],{icon:targetIcon, alt:"target"})
-
-      this.me.addTo(this.map)
-      //this.target.addTo(this.map)
-
-      this.map.on("moveend",(event:L.LeafletEvent)=>this.movemap(event));
-      this.map.on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
-      resolve(true)
-    })
-
-  }
 
 
 

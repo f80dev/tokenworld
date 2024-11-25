@@ -40,6 +40,7 @@ export class UserService {
   show_visibility: boolean = false;
   visibility: number = 100
   account: any;
+  map: any;
 
   constructor() { }
 

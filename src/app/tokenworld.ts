@@ -104,7 +104,7 @@ export function initializeMap(vm:any,events:string,meIcon='https://tokemon.f80.f
       vm.map.on("moveend",(event:L.LeafletEvent)=>vm.movemap(event));
     }
   } else {
-
+    vm.user.zoom=2
   }
 
 }

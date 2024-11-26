@@ -26,6 +26,29 @@
 
 button {
   margin: 10px;
-  width: 150px;
+  width: 120px;
+  font-size: small;
 }
+
+.button-map {
+  z-index:100;
+  left:0;
+  display: block;
+  position: absolute;
+}
+
+.image-map {
+  display: block;
+  position: absolute;
+  left:0;
+  top:0;
+  z-index: 1;
+}
+
+.image-container {
+  position: absolute;
+  left:0;top:0;right:0;bottom:0;
+  z-index: 0;
+}
+
 

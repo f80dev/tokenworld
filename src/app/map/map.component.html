@@ -1,8 +1,16 @@
-<div id="map" [style.display]="user.map.url=='map' ? 'block' : 'none'"  style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
+<div id="map" [style.display]="user.map.url=='map' ? 'block' : 'none'"
+     style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
-<div style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;" *ngIf="user.map.url!='map'">
-  <img [src]="user.map.url">
+<div  class="image-container"
+     *ngIf="user.map.url!='map'">
+
+  <mat-icon (click)="zoom_in()" class="button-map" style="top:0;">add_circle</mat-icon>
+   <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
+
+  <img class="image-map"
+       [style.transform]="'translate(' + map_left + 'px, ' + map_top + 'px) scale(' + user.zoom + ')'"
+       [src]="user.map.url">
 </div>
 
 <div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center">
@@ -10,8 +18,9 @@
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
     <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
+    <button mat-raised-button (click)="move_tokemon()" *ngIf="user.tokemon_selected && user.tokemon_selected.owner==user.idx"><mat-icon>run_circle</mat-icon>Move</button>
     <button mat-raised-button (click)="open_airdrop()"><mat-icon>paid</mat-icon>Airdrop</button>
-    <button mat-icon-button (click)="open_capture()" *ngIf="user.tokemon_selected"><mat-icon>catching_pokemon</mat-icon></button>
+    <button mat-icon-button   (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
 
 <!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
 <!--      <input matSliderThumb-->

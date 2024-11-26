@@ -52,12 +52,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private layer: TileLayer | undefined
   private me:  Marker<any> | undefined;
   private target:  Marker<any> | undefined;
+  map_left=0
+  map_top=0
 
 
   async ngAfterViewInit() {
     try{
       await initializeMap(this,"zoom,moveend")
       await this.center_to_loc()
+
     }catch (err:any){
       showMessage(this,'Error getting location: ' + err.message)
     }
@@ -103,7 +106,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     return new Promise(async (resolve,reject) => {
       // @ts-ignore
       let contract: string = this.user.get_sc_address(environment)
-      let idx=Number(await this.user.query("get_idx_address",  [this.user.address]))
 
       if(this.user.center_map) {
         for(let m of this.markers){
@@ -121,7 +123,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
-          let icon=nft.owner==idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
+          let icon=nft.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
           var giftIcon = L.icon({
             iconUrl: icon,
             iconSize: [30, 30],// size of the icon
@@ -213,5 +215,19 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   open_airdrop() {
     let obj={lat:this.user.center_map?.lat,lng:this.user.center_map?.lng}
     this.router.navigate(["airdrop"],{queryParams:{p:setParams(obj,"","")}})
+  }
+
+
+
+  zoom_out() {
+    if(this.user.zoom<17)this.user.zoom=this.user.zoom+1;
+  }
+
+  zoom_in() {
+    if(this.user.zoom>0)this.user.zoom=this.user.zoom-1;
+  }
+
+  move_tokemon() {
+
   }
 }

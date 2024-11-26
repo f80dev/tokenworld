@@ -36,11 +36,12 @@ export class UserService {
   center_map: {lat:number,lng:number} | undefined
   nfts: any[] = [];
   tokemon_selected: any;
-  zoom: number=16;
+  zoom: number=5;
   show_visibility: boolean = false;
   visibility: number = 100
   account: any;
   map: any;
+  idx:number=0
 
   constructor() { }
 
@@ -52,6 +53,7 @@ export class UserService {
     url_direct_xportal_connect: string
   }) {
     this.address = $event.address
+    this.idx=Number(await this.query("get_idx_address",  [this.address]))
     localStorage.setItem("address",this.address)
     this.account=await toAccount(this.address)
     this.provider = $event.provider

@@ -104,8 +104,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
-      // @ts-ignore
-      let contract: string = this.user.get_sc_address(environment)
 
       if(this.user.center_map) {
         for(let m of this.markers){

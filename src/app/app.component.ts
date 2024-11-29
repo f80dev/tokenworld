@@ -50,16 +50,21 @@ export class AppComponent implements OnInit {
 
 
   async ngOnInit() {
-    let params:any=await getParams(this.routes)
-    if(params.hasOwnProperty("signature")){
-      this.user.signature=params.signature
-      this.user.address=params.address
-    }
-    this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-    this.user.address=localStorage.getItem("address") || ""
+    setTimeout(async()=>{
+      let params:any=await getParams(this.routes)
+      await this.user.init_network(params.sc,params.network,environment)
+      await this.user.init_map()
 
-    this.user.map=await this.user.query("map",[]);
-    this.user.map.url=this.user.map.url.toString()
+      this.user.address=params.address || localStorage.getItem("address") || ""
+
+      if(params.hasOwnProperty("signature")){
+        this.user.signature=params.signature
+        this.user.address=params.address
+      }
+      this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
+
+    })
+
   }
 
 

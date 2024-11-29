@@ -18,6 +18,7 @@ export class UserService {
   strong: boolean=false
   tokens:any={}
   addr_change = new Subject<string>();
+
   network:string="elrond-devnet"
   balance=0
   params:any
@@ -42,6 +43,8 @@ export class UserService {
   account: any;
   map: any;
   idx:number=0
+  sc_address=""
+  fee=0;
 
   constructor() { }
 
@@ -71,27 +74,14 @@ export class UserService {
     this.provider=null;
   }
 
-  get_sc_address(env:any) {
-    return env.contract_addr[this.network || "elrond-devnet"];
-  }
 
 
 
   query(func:string,args:any[]=[],env:any=environment){
-    return query(func, args, this.get_domain(), this.get_sc_address(environment))
+    return query(func, args, this.get_domain(), this.sc_address)
   }
 
 
-  get_sc_settings() {
-    return new Promise(async (resolve, reject) => {
-      let rc:any= {}
-      rc.grid=Number(new BigUIntValue(await this.query("grid",[])).toString())
-      rc.quota=Number(new U64Value(await this.query("quota",[])).toString())
-      rc.fee=Number(new BigUIntValue(await this.query("fee",[])).toString())
-      resolve(rc)
-    })
-
-  }
 
 
 
@@ -167,4 +157,27 @@ export class UserService {
   get_default_token() {
     return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
   }
+
+  init_network(sc_address: string="", network:string="elrond-devnet",env=environment) {
+    return new Promise(async (resolve, reject) => {
+
+      if(this.network!=network){
+        this.network=network
+        this.sc_address=""
+      }
+
+      // @ts-ignore
+      this.sc_address=sc_address.length>0 ? sc_address : env.contract_addr[network]
+      resolve(this.map)
+    })
+  }
+
+  init_map(){
+    return new Promise(async (resolve, reject) => {
+      this.map=await this.query("map",[])
+      this.map.url=this.map.url.toString()
+      resolve(this.map)
+    })
+  }
+
 }

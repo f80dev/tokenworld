@@ -69,7 +69,6 @@ export class SettingsComponent implements OnInit {
   async ngOnInit() {
     if(!this.user.isConnected())await this.user.login(this)
 
-    this.sc_settings=await this.user.get_sc_settings()
 
     this.refresh();
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))

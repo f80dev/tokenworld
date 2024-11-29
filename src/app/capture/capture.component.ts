@@ -54,7 +54,6 @@ export class CaptureComponent implements OnInit {
     if(!this.user.isConnected())await this.user.login(this);
 
     let args = [Number(this.item.id)]
-    let contract: string = environment.contract_addr["elrond-devnet"];
     try {
       wait_message(this, "Capturing in progress")
       let tokens=[]

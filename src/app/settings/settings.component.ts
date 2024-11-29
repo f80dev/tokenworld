@@ -92,8 +92,7 @@ export class SettingsComponent implements OnInit {
 
   async send() {
     wait_message(this, "Dropping ...")
-    let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
-    let tokens=[TokenTransfer.fungibleFromAmount(token,this.lifepoint,18)]
+    let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {

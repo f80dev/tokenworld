@@ -99,10 +99,6 @@ export async function create_abi(abi_content:any,api:any=null): Promise<AbiRegis
   })
 }
 
-export function get_smartcontract_address(env:any,user:UserService) : string {
-  if(!user)return "elrond-devnet"
-  return env.contract_addr.hasOwnProperty(user.network) ? env.contract_addr[user.network] || "elrond-devnet" : "elrond-devnet"
-}
 
 
 export function address_from_pem(pemText:string) : string {
@@ -177,8 +173,8 @@ export function create_transaction(function_name:string,args:any[],
   return new Promise(async (resolve) => {
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
-    const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
-    if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
+    const apiNetworkProvider = new ApiNetworkProvider(user.get_domain());
+    if(contract_addr=="")contract_addr=user.get_sc_address(environment)
     let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
 
     let transaction=factory.createTransactionForExecute({
@@ -200,10 +196,10 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
                                                 user:UserService,tokens_to_transfer: TokenTransfer[],
                                                 gasLimit=50000000n, contract_addr="") {
   return new Promise(async (resolve, reject) => {
-    if(!user || !user.network)reject(false);
+    if(!user || !user.get_network())reject(false);
 
     let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,gasLimit,contract_addr)
-    const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
+    const apiNetworkProvider = new ApiNetworkProvider(user.get_domain());
 
     await user.refresh()
     transaction.nonce=BigInt(user.account.nonce)

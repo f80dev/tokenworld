@@ -10,7 +10,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {_prompt} from "../prompt/prompt.component";
 import {InputComponent} from "../input/input.component";
 import {UserService} from "../user.service";
-import {get_smartcontract_address, query, toText} from "../mvx";
+import {toText} from "../mvx";
 import {abi} from '../../environments/abi';
 import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
 
@@ -62,15 +62,14 @@ export class AdminComponent implements OnInit {
   }
 
   show_contract() {
-    let prefix=this.user.network.indexOf("devnet")>-1 ? "devnet-" : ""
-    open("https://"+prefix+"explorer.multiversx.com/accounts/"+get_smartcontract_address(environment,this.user),"smartcontract")
+    open(this.user.get_explorer("/accounts/"+this.user.get_sc_address(environment)))
   }
 
 
 
   update_network($event: any) {
     this.user.logout()
-    this.user.network=$event.value
+    this.user.set_network($event.value)
     this.sel_network=$event
   }
 

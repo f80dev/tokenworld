@@ -1,6 +1,6 @@
 <div class="mainform">
   <h4>{{message}}</h4>
-  <app-authent *ngIf="user.address==''" [network]="user.network"
+  <app-authent *ngIf="user.address==''" [network]="user.get_network()"
                (authent)="authent($event)" [connexion]="connexion"></app-authent>
 
 </div>

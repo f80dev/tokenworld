@@ -26,7 +26,7 @@
     <app-wallet [address]="user.address"
                 show="nft"
                 *ngIf="!sel_nft" message="Select a NFT to create a tokemon"
-                [network]="user.network"
+                [network]="user.get_network()"
                 (selectChanged)="on_select($event)">
     </app-wallet>
 

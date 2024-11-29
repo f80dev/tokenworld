@@ -113,7 +113,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
-      let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
+      let token=this.user.get_network()
       wait_message(this, "Dropping ...")
 
       let tokens=[]

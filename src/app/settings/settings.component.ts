@@ -59,7 +59,6 @@ export class SettingsComponent implements OnInit {
       tokemon.id=id
       let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
       tokemon.content=await get_nft(identifier,this.api,this.user.network)
-
       if(tokemon.owner==idx)this.tokemons.push(tokemon)
     }
   }

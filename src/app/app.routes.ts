@@ -11,6 +11,7 @@ import {SettingsComponent} from './settings/settings.component';
 import {CaptureComponent} from './capture/capture.component';
 import {BuildComponent} from './build/build.component';
 import {AirdropComponent} from './airdrop/airdrop.component';
+import {CreateWorldComponent} from './create-world/create-world.component';
 
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'test', component: TestComponent},
   { path: 'drop', component: DropComponent},
   { path: 'airdrop', component: AirdropComponent},
+  { path: 'create', component: CreateWorldComponent},
   { path: 'capture', component: CaptureComponent},
   { path: 'map', component: MapComponent},
   { path: 'settings', component: SettingsComponent},

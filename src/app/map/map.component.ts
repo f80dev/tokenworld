@@ -57,15 +57,14 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async ngAfterViewInit() {
-    try{
-      await initializeMap(this,"zoom,moveend")
-      await this.center_to_loc()
+    setTimeout(async ()=>{
+      await this.user.geoloc(this.geolocService)
+      this.map=L.map('map')
+      initializeMap(this,this.user,"zoom,moveend",new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
+      this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),this.user.zoom || 16);
+    },500)
 
-    }catch (err:any){
-      showMessage(this,'Error getting location: ' + err.message)
-    }
   }
-
 
 
   open_drop() {
@@ -83,23 +82,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   ngOnChanges(changes: any): void {
-    if(!changes.lat.firstChange)this.center_to_loc();
+    //if(!changes.lat.firstChange)this.map.setView(this.user.loc,this.user.zoom || 16);;
   }
 
 
 
 
-  center_to_loc() {
-    return new Promise(async (resolve,reject) => {
-      this.user.loc=await this.geolocService.getCurrentPosition()
-      let loc=this.user.center_map ? this.user.center_map : {lat:this.user.loc.coords.latitude,lng:this.user.loc.coords.longitude}
-      if(loc){
-        resolve(this.map.setView(new LatLng(loc.lat,loc.lng),this.user.zoom || 16))
-      }else{
-        reject()
-      }
-    })
-  }
 
 
   async add_tokemon_to_markers() {
@@ -200,7 +188,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
     let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
     if(r){
-      this.user.center_map={lat:Number(r.split(",")[0]),lng:Number(r.split(",")[1])}
+      this.user.center_map=new LatLng(Number(r.split(",")[0]),Number(r.split(",")[1]))
     }
   }
 
@@ -227,5 +215,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   move_tokemon() {
 
+  }
+
+  create_world() {
+    this.router.navigate(["create"],
+      {
+        queryParams:{p: setParams({
+          NE: {lat: this.map.getBounds().getNorthEast().lat, lng: this.map.getBounds().getNorthEast().lng},
+          SW: {lat: this.map.getBounds().getSouthWest().lat, lng: this.map.getBounds().getSouthWest().lng}
+        },"","")}
+      })
   }
 }

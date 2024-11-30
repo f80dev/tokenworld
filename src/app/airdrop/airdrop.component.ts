@@ -49,7 +49,7 @@ export class AirdropComponent implements AfterViewInit {
   async ngAfterViewInit() {
     let params:any=await getParams(this.routes)
     this.user.center_map=new LatLng(params.lat,params.lng)
-    setTimeout(()=>{initializeMap(this,"zoomend")},200)
+    setTimeout(()=>{initializeMap(this,this.user,"zoomend",this.user.center_map)},200)
     await this.user.login(this)
   }
 

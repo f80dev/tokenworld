@@ -1,0 +1,17 @@
+table,tr {
+  width:100%;
+}
+
+td {
+  text-align: center;
+}
+
+.code_yaml {
+  width: 500px;
+  height:500px;
+  margin: 20px;
+  border-color: white;
+  background-color: grey;
+  color:white;
+  display: inline-block;
+}

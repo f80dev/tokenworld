@@ -5,6 +5,7 @@ import {environment} from '../environments/environment';
 import {abi} from '../environments/abi';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
+import {LatLng} from 'leaflet';
 
 export class Tokemon {
   id: number = 0;
@@ -69,22 +70,24 @@ export function distance(lat1:number, lon1:number, lat2:number, lon2:number): nu
 
 
 
-export function initializeMap(vm:any,events:string,meIcon='https://tokemon.f80.fr/assets/icons/push_pin_blue.svg') {
+export function initializeMap(vm:any,user:UserService,events:string,center:LatLng,meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png') {
 
-  if(vm.user.map.url=="map"){
+  if(user.map && user.map.url=="map"){
+
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
       .addTo(vm.map).redraw()
 
     let size=30
+    L.marker([center.lat,center.lng],{
+      icon:L.icon({
+        iconUrl: meIcon,
+        iconSize: [size, size], // size of the icon
+        iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+      }),
+      alt:"me"
+    }).addTo(vm.map)
 
-    var tokemonIcon = L.icon({
-      iconUrl: meIcon,
-      iconSize: [size, size], // size of the icon
-      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-    });
-    L.marker([vm.user.center_map!.lat, vm.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(vm.map)
-    vm.map.setView(vm.user.center_map!,vm.user.zoom || 16)
 
     if(events.indexOf("zoomend")>-1){
       vm.map.on("zoomend",(event:L.LeafletEvent)=>{
@@ -97,14 +100,14 @@ export function initializeMap(vm:any,events:string,meIcon='https://tokemon.f80.f
     }
 
     if(events.indexOf("zoom")>-1){
-      vm.map.on("zoom",(event:L.LeafletEvent)=>{vm.user.zoom=vm.map.getZoom()})
+      vm.map.on("zoom",(event:L.LeafletEvent)=>{user.zoom=vm.map.getZoom()})
     }
 
     if(events.indexOf("moveend")>-1){
       vm.map.on("moveend",(event:L.LeafletEvent)=>vm.movemap(event));
     }
   } else {
-    vm.user.zoom=2
+    user.zoom=2
   }
 
 }

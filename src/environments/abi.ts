@@ -94,6 +94,14 @@ export const abi=
         {
           "name": "max_visibility",
           "type": "u32"
+        },
+        {
+          "name": "max_player",
+          "type": "u16"
+        },
+        {
+          "name": "turns",
+          "type": "u16"
         }
       ],
       "outputs": []
@@ -143,22 +151,12 @@ export const abi=
         ]
       },
       {
-        "name": "grid",
+        "name": "turns",
         "mutability": "readonly",
         "inputs": [],
         "outputs": [
           {
-            "type": "u64"
-          }
-        ]
-      },
-      {
-        "name": "quota",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "u32"
+            "type": "u16"
           }
         ]
       },
@@ -169,16 +167,6 @@ export const abi=
         "outputs": [
           {
             "type": "TokenIdentifier"
-          }
-        ]
-      },
-      {
-        "name": "typeMove",
-        "mutability": "readonly",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "MoveStructure"
           }
         ]
       },
@@ -237,6 +225,16 @@ export const abi=
         "outputs": [
           {
             "type": "bool"
+          }
+        ]
+      },
+      {
+        "name": "get_map_path",
+        "mutability": "readonly",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "bytes"
           }
         ]
       },
@@ -491,6 +489,14 @@ export const abi=
             "type": "Point"
           },
           {
+            "name": "grid",
+            "type": "u64"
+          },
+          {
+            "name": "quota",
+            "type": "u32"
+          },
+          {
             "name": "entrance",
             "type": "Point"
           },
@@ -509,12 +515,11 @@ export const abi=
           {
             "name": "max_visibility",
             "type": "u32"
-          }
-        ]
-      },
-      "MoveStructure": {
-        "type": "struct",
-        "fields": [
+          },
+          {
+            "name": "max_player",
+            "type": "u16"
+          },
           {
             "name": "min_distance",
             "type": "u16"

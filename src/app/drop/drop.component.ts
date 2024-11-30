@@ -7,7 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {latLonToCartesian} from '../tokenworld';
+import {initializeMap, latLonToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
@@ -60,36 +60,13 @@ export class DropComponent implements AfterViewInit, OnChanges {
   max_distance=1000;
 
   async ngAfterViewInit() {
-    await this.user.login(this)
     this.map = L.map('map')
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
     let params:any=await getParams(this.routes)
     this.user.center_map=new LatLng(params.lat,params.lng)
-  }
 
-
-  initializeMap() {
-    L.tileLayer(baseMapURl).addTo(this.map);
-    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(this.map).redraw()
-
-    let size=30
-
-    var tokemonIcon = L.icon({
-      iconUrl: 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg',
-      iconSize: [size, size], // size of the icon
-      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-    });
-    L.marker([this.user.center_map!.lat, this.user.center_map!.lng],{icon:tokemonIcon, alt:"me"}).addTo(this.map)
-    this.map.setView(this.user.center_map!,this.user.zoom || 16)
-
-    this.map.on("zoomend",(event:L.LeafletEvent)=>{
-      let b=this.map.getBounds()
-      let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
-      let distance_in_pixel=Math.sqrt(300*300+300+300)
-      this.ech=distance_in_pixel/distance_in_meters
-      this.max_distance=distance_in_meters
-    })
-
+    $$("Drop sur les coordonnées ",this.user.center_map)
+    await this.user.login(this,"You must be connected to drop any NFT","",false)
   }
 
 
@@ -101,7 +78,10 @@ export class DropComponent implements AfterViewInit, OnChanges {
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
 
   async drop(nft: any) {
-    if (!this.user.isConnected()) {await this.user.login(this)}
+
+    this.user.visibility=this.user.map.min_visibility
+
+    await this.user.login(this,"You must be connected to drop any NFT","",true)
     let center:any=await getParams(this.routes) || {}
     if(!center.lat && !center.lng) {center=this.user.center_map}
     if (center) {
@@ -142,7 +122,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-    setTimeout(()=>{this.initializeMap()},200)
+    setTimeout(()=> {
+      initializeMap(this,this.user,"zoomend",this.user.center_map,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+    },200)
   }
 
   convert_pos(content:string) : any {

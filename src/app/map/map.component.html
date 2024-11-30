@@ -1,9 +1,9 @@
-<div id="map" [style.display]="user.map?.url=='map' ? 'block' : 'none'"
+<div id="map" [style.display]="user.map && user.map.url=='map' ? 'block' : 'none'"
      style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
-<div  class="image-container"
-     *ngIf="user.map.url!='map'">
+<div class="image-container"
+     *ngIf="user.map && user.map.url!='map'">
 
   <mat-icon (click)="zoom_in()" class="button-map" style="top:0;">add_circle</mat-icon>
    <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
@@ -21,6 +21,7 @@
     <button mat-raised-button (click)="move_tokemon()" *ngIf="user.tokemon_selected && user.tokemon_selected.owner==user.idx"><mat-icon>run_circle</mat-icon>Move</button>
     <button mat-raised-button (click)="open_airdrop()"><mat-icon>paid</mat-icon>Airdrop</button>
     <button mat-icon-button   (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
+    <button mat-icon-button   (click)="create_world()" ><mat-icon>build</mat-icon></button>
 
 <!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
 <!--      <input matSliderThumb-->

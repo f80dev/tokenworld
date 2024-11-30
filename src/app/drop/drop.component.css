@@ -3,9 +3,6 @@ img {
   height:150px;
 }
 
-app-input {
-  margin: 30px;
-}
 
 
 .zone_input {
@@ -13,6 +10,5 @@ app-input {
   width:90%;
   display: inline-block;
 }
-
 
 

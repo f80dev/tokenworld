@@ -16,6 +16,7 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
+import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-settings',
@@ -30,7 +31,10 @@ import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expa
     MatIcon,
     MatIconButton,
     MatExpansionPanel,
-    MatExpansionPanelHeader
+    MatExpansionPanelHeader,
+    MatTabGroup,
+    MatTab,
+    MatTabHeader
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
@@ -48,6 +52,7 @@ export class SettingsComponent implements OnInit {
   message: string=""
   sc_settings: any
 
+
   async refresh(){
     this.tokemons=[]
     let idx=Number(await this.user.query("get_idx_address",[this.user.address]))
@@ -61,15 +66,12 @@ export class SettingsComponent implements OnInit {
       tokemon.content=await get_nft(identifier,this.api,this.user.network)
       if(tokemon.owner==idx)this.tokemons.push(tokemon)
     }
+    this.sc_settings=await this.user.query("map");
   }
-
-
 
 
   async ngOnInit() {
     if(!this.user.isConnected())await this.user.login(this)
-
-
     this.refresh();
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
     }

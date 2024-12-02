@@ -1,5 +1,5 @@
 import {
-  Address,
+  Address, BytesValue,
   SmartContractTransactionsFactory,
   TokenTransfer, Transaction,
   TransactionsFactoryConfig
@@ -395,7 +395,7 @@ export async function createNFT(name:string,visual:string,collection:string,user
 export async function query(function_name:string,args:any[],domain:string,sc_address:string) : Promise<any> {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#contract-queries
   return new Promise(async (resolve, reject) => {
-    if(domain.endsWith("/"))domain=domain.substring(0,domain.length-1)
+    if (domain.endsWith("/")) domain = domain.substring(0, domain.length - 1)
     const apiNetworkProvider = new ApiNetworkProvider(domain)
     const queryRunner = new QueryRunnerAdapter({networkProvider: apiNetworkProvider});
     let controller = new SmartContractQueriesController({
@@ -407,14 +407,33 @@ export async function query(function_name:string,args:any[],domain:string,sc_add
       function: function_name,
       arguments: args,
     });
-    try{
+    try {
       const response = await controller.runQuery(query);
-      let jsonResponse=controller.parseQueryResponse(response)
+      let jsonResponse = controller.parseQueryResponse(response)
       resolve(jsonResponse[0])
-    }catch (e){
+    } catch (e) {
       reject(e)
     }
 
   })
+}
+
+export async  function deploy(owner:string,code:BytesValue) {
+  const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
+  let factory = new SmartContractTransactionsFactory({
+    config: factoryConfig,
+    abi: await create_abi(abi)
+  });
+  let args = [10];
+
+  const deployTransaction = factory.createTransactionForDeploy({
+    sender: Address.fromBech32(owner),
+    bytecode: code.valueOf(),
+    gasLimit: 6000000n,
+    arguments: args
+  });
+  //deployTransaction.nonce = deployer.getNonceThenIncrement();
 
 }
+
+

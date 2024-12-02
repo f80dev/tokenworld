@@ -7,11 +7,16 @@ td {
 }
 
 .code_yaml {
-  width: 500px;
-  height:500px;
+  width: 800px;
+  height:300px;
   margin: 20px;
+  padding: 10px;
   border-color: white;
-  background-color: grey;
-  color:white;
+  background-color: #131313;
+  border-color: gray;
+  font-size: small;
+  font-family: "Courier New", serif;
+  color:greenyellow;
+  text-align: left;
   display: inline-block;
 }

@@ -46,6 +46,7 @@ export class UserService {
   idx:number=0
   sc_address=""
   fee=0;
+  zone: any;
 
   constructor() { }
 
@@ -100,7 +101,6 @@ export class UserService {
 
   login(vm: any,subtitle="",pem_file="",strong=false) {
     return new Promise(async (resolve, reject) => {
-      debugger
       if(!this.address)this.address=localStorage.getItem("address") || ""
       if(this.isConnected(strong)){
         resolve(true)
@@ -113,14 +113,14 @@ export class UserService {
             encrypted:"",
             url_direct_xportal_connect:""
           }
-          this.authent(r)
+          await this.authent(r)
           await this.init_balance(vm.api)
           resolve(r)
           showMessage(vm,"Identification ok")
         } else {
           try{
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle)
-            this.authent(r)
+            await this.authent(r)
             await this.init_balance(vm.api)
             resolve(r)
           }catch (e){

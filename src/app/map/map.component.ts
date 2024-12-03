@@ -60,7 +60,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     setTimeout(async ()=>{
       await this.user.geoloc(this.geolocService)
       this.map=L.map('map')
-      initializeMap(this,this.user,"zoom,moveend",new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
+      initializeMap(this,this.user,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
+        .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
+        .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
+
       this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),this.user.zoom || 16);
     },500)
 
@@ -109,7 +112,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
         for (let nft of this.user.nfts) {
-          let icon=nft.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
+          let icon=nft.owner!=this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
           var giftIcon = L.icon({
             iconUrl: icon,
             iconSize: [30, 30],// size of the icon
@@ -170,6 +173,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async refresh() {
+    this.user.zone={
+      NE: {lat: this.map.getBounds().getNorthEast().lat, lng: this.map.getBounds().getNorthEast().lng},
+      SW: {lat: this.map.getBounds().getSouthWest().lat, lng: this.map.getBounds().getSouthWest().lng}
+    }
     this.add_tokemon_to_markers()
     this.layer?.redraw()
   }
@@ -217,13 +224,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   }
 
-  create_world() {
-    this.router.navigate(["create"],
-      {
-        queryParams:{p: setParams({
-          NE: {lat: this.map.getBounds().getNorthEast().lat, lng: this.map.getBounds().getNorthEast().lng},
-          SW: {lat: this.map.getBounds().getSouthWest().lat, lng: this.map.getBounds().getSouthWest().lng}
-        },"","")}
-      })
-  }
+
+
 }

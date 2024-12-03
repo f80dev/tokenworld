@@ -92,4 +92,12 @@ export class AppComponent implements OnInit {
   open_build() {
     this.router.navigate(["build"])
   }
+
+
+  create_world() {
+    this.router.navigate(["create"],
+      {
+        queryParams:{p: setParams(this.user.zone,"","")}
+      })
+  }
 }

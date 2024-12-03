@@ -1,7 +1,13 @@
 <div class="mainform">
   <div style="max-width: 1000px;display: inline-block;text-align: center;width:90%;">
-    <app-input label="Fee" help="" value_type="number" [value]="fee" (valueChange)="fee=$event"></app-input><br>
-    <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input><br>
+    <app-input label="Fee" help="" value_type="number" [value]="fee" (valueChange)="fee=$event"></app-input>
+    <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
+    <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
+    <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
+    <app-input label="Min visibility" help="" value_type="number" [value]="zone.min_visibility" (valueChange)="zone.min_visibility=$event"></app-input>
+    <app-input label="Max visibility" help="" value_type="number" [value]="zone.max_visibility" (valueChange)="zone.max_visibility=$event"></app-input>
+    <br>
+
 
     <mat-tab-group>
       <mat-tab label="Real" (select)="zone.map='map'">
@@ -15,21 +21,31 @@
           </tr>
         </table>
       </mat-tab>
-      <mat-tab label="Virtual">
 
+      <mat-tab label="Virtual">
         <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
         <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
-
       </mat-tab>
     </mat-tab-group>
 
 
-    <div class="code_yaml" [innerHTML]="yaml_content">
+    <mat-tab-group>
+      <mat-tab label="YAML">
+        <div class="code_yaml" [innerHTML]="yaml_content">
+        </div>
+        <br>
+        <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>
 
-    </div>
+      </mat-tab>
+      <mat-tab label="Command line">
+        <div class="code_yaml" [innerHTML]="script_content">
+        </div>
+        <br>
+        <button mat-raised-button (click)="copy(script_content)">Copy Script</button>
 
-    <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>
-    <button mat-raised-button (click)="copy(script_content)">Copy Script</button>
+      </mat-tab>
+    </mat-tab-group>
+
 
   </div>
 

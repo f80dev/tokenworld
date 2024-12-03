@@ -40,7 +40,6 @@ xcopy /f /y ..\NFTCalvi\src\crypto.ts src\
 xcopy /f /y ..\NFTCalvi\src\nft.ts src\
 xcopy /f /y ..\NFTCalvi\src\definitions.ts src\
 #xcopy /f /y ..\NFTCalvi\run_server.bat .
-xcopy /f /y ..\NFTCalvi\src\nfluent.ts src\
 xcopy /f /y ..\NFTCalvi\src\nfluent.scss src\
 xcopy /f /y ..\NFTCalvi\src\nfluent-dark.scss src\
 xcopy /f /y ..\NFTCalvi\src\styles.scss src\

@@ -17,7 +17,6 @@ import {UploadFileComponent} from '../upload-file/upload-file.component';
 import {ApiService} from '../api.service';
 import {eval_direct_url_xportal} from '../../crypto';
 import * as L from 'leaflet';
-import {baseMapURl} from '../map/map.component';
 import {LatLng} from 'leaflet';
 import {DeviceService} from '../device.service';
 
@@ -55,14 +54,16 @@ export class DropComponent implements AfterViewInit, OnChanges {
   quantity=1
   max_quantity=10
   max_pv_loading=0
-  private map!: L.Map
+  map!: L.Map
   ech: number=1
   max_distance=1000;
 
   async ngAfterViewInit() {
-    this.map = L.map('map')
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
+
     let params:any=await getParams(this.routes)
+    this.map = L.map('map')
+
     this.user.center_map=new LatLng(params.lat,params.lng)
 
     $$("Drop sur les coordonnées ",this.user.center_map)
@@ -76,12 +77,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
+  nfts: any[]=[];
 
   async drop(nft: any) {
 
     this.user.visibility=this.user.map.min_visibility
 
     await this.user.login(this,"You must be connected to drop any NFT","",true)
+    $$("Authentification ",this.user.provider)
+
     let center:any=await getParams(this.routes) || {}
     if(!center.lat && !center.lng) {center=this.user.center_map}
     if (center) {
@@ -123,7 +127,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
     setTimeout(()=> {
-      initializeMap(this,this.user,"zoomend",this.user.center_map,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+      initializeMap(this,this.user,this.user.center_map,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+        .on("zoomend",(event:L.LeafletEvent)=>{
+          let b=this.map.getBounds()
+          let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
+          let distance_in_pixel=Math.sqrt(300*300+300+300)
+          this.ech=distance_in_pixel/distance_in_meters
+          this.max_distance=distance_in_meters
+        })
+      this.map.setView(new LatLng(this.user.center_map.lat,this.user.center_map.lng),this.user.zoom || 16);
     },200)
   }
 
@@ -152,5 +164,13 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))
+  }
+
+  update_nfts($event: any) {
+    this.nfts=$event
+    if(this.nfts.length==0 && !this.user.strong){
+      this.user.logout()
+      this.user.login(this)
+    }
   }
 }

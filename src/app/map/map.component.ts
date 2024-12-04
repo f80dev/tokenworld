@@ -17,6 +17,7 @@ import {NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -44,6 +45,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   user=inject(UserService)
   toast=inject(MatSnackBar)
   dialog=inject(MatDialog)
+  clipboard=inject(Clipboard)
 
   private map!: L.Map
   private markers:L.Marker[]=[]
@@ -59,10 +61,18 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async ngAfterViewInit() {
     setTimeout(async ()=>{
       await this.user.geoloc(this.geolocService)
-      this.map=L.map('map')
+      this.map=L.map('map',{keyboard:true,scrollWheelZoom:true})
       initializeMap(this,this.user,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
         .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
+        .on("keypress",(event:L.LeafletKeyboardEvent)=>{
+          //https://leafletjs.com/reference.html#keyboardevent
+          if(event.originalEvent.key=="c"){
+            let txt=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,environment.scale_factor)
+            this.clipboard.copy(txt.x+","+txt.y+","+txt.z)
+            showMessage(this,"Position copied")
+          }
+        })
 
       this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),this.user.zoom || 16);
     },500)

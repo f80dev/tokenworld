@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
     this.user.logout()
   }
 
+
   async login() {
     await this.user.login(this)
     localStorage.setItem("address",this.user.address)
@@ -62,14 +63,12 @@ export class AppComponent implements OnInit {
         this.user.address=params.address
       }
       this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-
     })
-
   }
 
 
-
   protected readonly environment = environment;
+
 
   test() {
    this.router.navigate(["test"])

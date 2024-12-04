@@ -78,6 +78,8 @@ export function initializeMap(vm:any,user:UserService,center:LatLng,meIcon='http
       .addTo(vm.map).redraw()
 
     let size=30
+
+
     L.marker([center.lat,center.lng],{
       icon:L.icon({
         iconUrl: meIcon,
@@ -86,6 +88,19 @@ export function initializeMap(vm:any,user:UserService,center:LatLng,meIcon='http
       }),
       alt:"me"
     }).addTo(vm.map)
+
+    if(user.map.entrance.x+user.map.entrance.y+user.map.entrance.z!=0){
+      let entrance_polar=cartesianToPolar(user.map.entrance.x,user.map.entrance.y,user.map.entrance.z)
+      L.marker([center.lat,center.lng],{
+        icon:L.icon({
+          iconUrl: meIcon,
+          iconSize: [size, size], // size of the icon
+          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+        }),
+        alt:"Entrance"
+      }).addTo(vm.map)
+    }
+
 
     return vm.map
   } else {

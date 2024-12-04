@@ -27,6 +27,7 @@
                 show="nft"
                 *ngIf="!sel_nft" message="Select a NFT to create a tokemon"
                 [network]="user.network"
+                (listChanged)="update_nfts($event)"
                 (selectChanged)="on_select($event)">
     </app-wallet>
 

@@ -3,7 +3,7 @@
     <div>
       <mat-icon (click)="copy_ref()"
                 [title]="item.identifier || item.nft">content_copy</mat-icon>
-      {{nft.name}}
+      {{nft?.name}}
     </div>
     <div style="flex-grow: 1;"></div>
     <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>

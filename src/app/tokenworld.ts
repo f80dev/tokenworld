@@ -70,8 +70,7 @@ export function distance(lat1:number, lon1:number, lat2:number, lon2:number): nu
 
 
 
-export function initializeMap(vm:any,user:UserService,events:string,center:LatLng,meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png') {
-
+export function initializeMap(vm:any,user:UserService,center:LatLng,meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png') {
   if(user.map && user.map.url=="map"){
 
     L.tileLayer(baseMapURl).addTo(vm.map);
@@ -88,24 +87,7 @@ export function initializeMap(vm:any,user:UserService,events:string,center:LatLn
       alt:"me"
     }).addTo(vm.map)
 
-
-    if(events.indexOf("zoomend")>-1){
-      vm.map.on("zoomend",(event:L.LeafletEvent)=>{
-        let b=vm.map.getBounds()
-        let distance_in_meters=vm.map.distance(b.getNorthWest(),b.getSouthEast())
-        let distance_in_pixel=Math.sqrt(300*300+300+300)
-        vm.ech=distance_in_pixel/distance_in_meters
-        vm.max_distance=distance_in_meters
-      })
-    }
-
-    if(events.indexOf("zoom")>-1){
-      vm.map.on("zoom",(event:L.LeafletEvent)=>{user.zoom=vm.map.getZoom()})
-    }
-
-    if(events.indexOf("moveend")>-1){
-      vm.map.on("moveend",(event:L.LeafletEvent)=>vm.movemap(event));
-    }
+    return vm.map
   } else {
     user.zoom=2
   }

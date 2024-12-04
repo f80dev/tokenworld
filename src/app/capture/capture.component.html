@@ -25,7 +25,7 @@
     <br>
     <div *ngIf="item.pv>0">
       <div *ngIf="pv_to_engage==0">No chance to win</div>
-      <div *ngIf="pv_to_engage>0">1 in {{chance_to_win}} chance of winning</div>
+      <div *ngIf="pv_to_engage>0">1 in {{chance_to_win | number:"1.0-1"}} chance of winning</div>
     </div>
 
     <br>

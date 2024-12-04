@@ -79,7 +79,7 @@ export class CaptureComponent implements OnInit {
 
   update_value($event: any) {
     this.pv_to_engage=$event
-    this.chance_to_win=Math.round(this.item.pv / this.pv_to_engage)
+    this.chance_to_win=1+this.item.pv / this.pv_to_engage
   }
 
   protected readonly environment = environment;

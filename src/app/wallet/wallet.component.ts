@@ -32,6 +32,8 @@ export class WalletComponent implements OnChanges {
   @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
   @Input() network="elrond-devnet"
   @Output() selectChanged = new EventEmitter()
+  @Output() listChanged = new EventEmitter()
+
   @Input() size="200px"
   @Input() message: string=""
   account: any;
@@ -52,6 +54,7 @@ export class WalletComponent implements OnChanges {
         nft.tags=tags
         this.nfts.push(nft)
       }
+      this.listChanged.emit(this.nfts)
     }
 
     if(this.show.indexOf("coin")>-1){

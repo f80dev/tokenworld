@@ -5,12 +5,13 @@ import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {getParams, showMessage} from '../../tools';
 import {ActivatedRoute} from '@angular/router';
-import {latLonToCartesian} from '../tokenworld';
+import {initializeMap, latLonToCartesian} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BytesValue, StringValue, TokenIdentifierValue} from '@multiversx/sdk-core/out';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-create-world',
@@ -32,6 +33,7 @@ export class CreateWorldComponent implements AfterViewInit {
   routes=inject(ActivatedRoute)
   clipboard=inject(Clipboard)
   toast=inject(MatSnackBar)
+  user=inject(UserService)
 
   grid=20
   quota=20
@@ -51,23 +53,23 @@ export class CreateWorldComponent implements AfterViewInit {
     this.zone.n_degrees=8
     this.zone.map=BytesValue.fromUTF8("map").toString()
     this.update_yaml()
+
   }
 
   update_yaml(){
-    let ne=latLonToCartesian(this.zone.NE.lat,this.zone.NE.lng,environment.scale_factor)
-    let sw=latLonToCartesian(this.zone.SW.lat,this.zone.SW.lng,environment.scale_factor)
-    let entrance:any=this.zone.entrance || {x:0,y:0,z:0}
-    let exit:any=this.zone.exit || {x:0,y:0,z:0}
+
+    let entrance=this.zone.entrance || {x:0,y:0}
+    let exit=this.zone.exit || {x:0,y:0}
 
     let s="title: Map de test\nauthor: hhoareau\n"
     s=s+"\nsettings:\n"
     s=s+"\tfee: "+this.fee+"\n"
     s=s+"\tmap: map\n"
     s=s+"\tlimits:\n"
-    s=s+"\t\tNE: "+ne.x+","+ne.y+","+ne.z+"\n"
-    s=s+"\t\tSW: "+sw.x+","+sw.y+","+sw.z+"\n"
-    s=s+"\tEntrance: "+entrance.x+","+entrance.y+","+entrance.z+"\n"
-    s=s+"\tExit: "+exit.x+","+exit.y+","+exit.z+"\n"
+    s=s+"\t\tNE: "+this.zone.NE.x+","+this.zone.NE.y+"\n"
+    s=s+"\t\tSW: "+this.zone.SW.x+","+this.zone.SW.y+"\n"
+    s=s+"\tEntrance: "+entrance.x+","+entrance.y+"\n"
+    s=s+"\tExit: "+exit.x+","+exit.y+"\n"
 
     this.yaml_content=s.replaceAll("\n","<br>").replaceAll("\t","&nbsp;")
     this.script_content="mxpy contract deploy --metadata-payable --metadata-not-upgradeable --recall-nonce" +
@@ -85,10 +87,10 @@ export class CreateWorldComponent implements AfterViewInit {
       .replace("$QUOTA",String(this.fee))
       .replace("$SCALE_FACTOR",String(this.fee))
 
-      .replace("$ENTRANCE_X",entrance.x).replace("$ENTRANCE_Y",entrance.y).replace("$ENTRANCE_Z",entrance.z)
-      .replace("$EXIT_X",exit.x).replace("$EXIT_Y",exit.y).replace("$EXIT_Z",exit.z)
-      .replace("$NE_X",String(ne.x)).replace("$NE_Y",String(ne.y)).replace("$NE_Z",String(ne.z))
-      .replace("$SW_X",String(sw.x)).replace("$SW_Y",String(sw.y)).replace("$SW_Z",String(sw.z))
+      .replace("$ENTRANCE_X",entrance.x).replace("$ENTRANCE_Y",entrance.y)
+      .replace("$EXIT_X",exit.x).replace("$EXIT_Y",exit.y)
+      .replace("$NE_X",String(this.zone.NE.x)).replace("$NE_Y",String(this.zone.NE.y))
+      .replace("$SW_X",String(this.zone.SW.x)).replace("$SW_Y",String(this.zone.SW.y))
 
       .replace("$MOVE_MIN",this.zone.min_distance)
       .replace("$MOVE_MAX",this.zone.max_distance)

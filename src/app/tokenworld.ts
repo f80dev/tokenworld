@@ -5,7 +5,7 @@ import {environment} from '../environments/environment';
 import {abi} from '../environments/abi';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
-import {LatLng} from 'leaflet';
+import {LatLng, Point} from 'leaflet';
 
 export class Tokemon {
   id: number = 0;
@@ -29,7 +29,8 @@ function radToDeg(radian:number):number {
   return radian * (180/Math.PI);
 }
 
-export function latLonToCartesian(lat:number, lon:number,scale:number=1,radius:number = 6371): {x:number,y:number,z:number} {
+
+export function latLonToCartesian_old(lat:number, lon:number,scale:number=1,radius:number = 6371): {x:number,y:number,z:number} {
   const latRad = degToRad(lat);
   const lonRad = degToRad(lon);
 
@@ -41,16 +42,52 @@ export function latLonToCartesian(lat:number, lon:number,scale:number=1,radius:n
 }
 
 
-export function cartesianToPolar(x:number, y:number,z:number,scale:number=1) {
-  const xx=x/scale
-  const yy=y/scale
-  const zz=z/scale
-  const r = Math.sqrt(xx * xx + yy * yy + zz * zz);
-  const theta = Math.acos(zz / r);
-  const phi = Math.atan2(yy, xx);
 
-  return { lat:90-radToDeg(theta),long:radToDeg(phi), radius:r };
+export function latLonToCartesian(lat:number, lon:number,zoom:number,scale=1,translate=0): L.Point {
+  //voir https://leafletjs.com/reference.html#projection
+
+  //let metresPerPixel = 40075016.686 * Math.abs(Math.cos(map.getCenter().lat * Math.PI/180)) / Math.pow(2, map.getZoom()+8);
+
+  let result=L.CRS.Simple.latLngToPoint(new LatLng(lat,lon),zoom)
+  result.x=result.x*scale+translate
+  result.y=result.y*scale+translate
+  return result
 }
+
+
+
+// export function latLonToCartesian(map:L.Map,lat:number, lon:number,scale:number=1,radius:number = 6371): {x:number,y:number,z:number} {
+//   let metresPerPixel = 40075016.686 * Math.abs(Math.cos(map.getCenter().lat * Math.PI/180)) / Math.pow(2, map.getZoom()+8);
+//
+//   map.project(new LatLng(lat,lon),zoom)
+//
+//   const latRad = degToRad(lat);
+//   const lonRad = degToRad(lon);
+//
+//   const x = radius * Math.cos(latRad) * Math.cos(lonRad)*scale;
+//   const y = radius * Math.cos(latRad) * Math.sin(lonRad)*scale;
+//   const z = radius * Math.sin(latRad) * scale;
+//
+//   return { x:Math.round(x), y:Math.round(y), z:Math.round(z) };
+// }
+
+
+export function cartesianToPolar(x:number, y:number,zoom:number,scale:number=1,translate:number=0) : L.LatLng {
+  return L.CRS.Simple.pointToLatLng(new Point(x/scale+translate,y/scale+translate),zoom)
+}
+
+
+//
+// export function cartesianToPolar(x:number, y:number,z:number,scale:number=1) {
+//   const xx=x/scale
+//   const yy=y/scale
+//   const zz=z/scale
+//   const r = Math.sqrt(xx * xx + yy * yy + zz * zz);
+//   const theta = Math.acos(zz / r);
+//   const phi = Math.atan2(yy, xx);
+//
+//   return { lat:90-radToDeg(theta),long:radToDeg(phi), radius:r };
+// }
 
 
 export function distance(lat1:number, lon1:number, lat2:number, lon2:number): number {

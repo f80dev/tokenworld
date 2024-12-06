@@ -58,8 +58,9 @@ export class AirdropComponent implements AfterViewInit {
   }
 
   async airdrop() {
-    let pos=latLonToCartesian(this.user.center_map!.lat,this.user.center_map!.lng,environment.scale_factor)
-    let args = [pos.x, pos.y, pos.z,Math.round(this.visibility)]
+    let pos=latLonToCartesian(this.user.center_map!.lat,this.user.center_map!.lng,this.map.getZoom()
+      ,environment.scale_factor,environment.translate_factor)
+    let args = [pos.x, pos.y,Math.round(this.visibility)]
 
     wait_message(this, "Dropping ...")
 

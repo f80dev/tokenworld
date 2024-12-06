@@ -68,8 +68,10 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         .on("keypress",(event:L.LeafletKeyboardEvent)=>{
           //https://leafletjs.com/reference.html#keyboardevent
           if(event.originalEvent.key=="c"){
-            let txt=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,environment.scale_factor)
-            this.clipboard.copy(txt.x+","+txt.y+","+txt.z)
+            //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
+            let pos=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,this.map.getZoom(),
+              environment.scale_factor,environment.translate_factor)
+            this.clipboard.copy(pos.x+","+pos.y)
             showMessage(this,"Position copied")
           }
         })
@@ -114,10 +116,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.markers=[]
 
         $$("Chargement des tokemon")
-        let pos = latLonToCartesian(this.user.center_map.lat, this.user.center_map.lng, environment.scale_factor)
-
-        let args = [this.user.address,pos.x, pos.y, pos.z] //environment.scale_factor/1000]
-
+        let pos = latLonToCartesian(
+          this.user.center_map.lat,
+          this.user.center_map.lng,
+          this.map.getZoom(),
+          environment.scale_factor,
+          environment.translate_factor)
+        let args = [this.user.address,pos.x, pos.y] //environment.scale_factor/1000]
 
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
@@ -129,15 +134,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
             iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
           })
 
-          let coords = cartesianToPolar(nft.x, nft.y, nft.z, environment.scale_factor)
-          let marker = L.marker([coords.lat, coords.long], {icon: giftIcon, alt: nft})
+          let coords = cartesianToPolar(nft.x, nft.y,  this.map.getZoom(),environment.scale_factor)
+          let marker = L.marker([coords.lat, coords.lng], {icon: giftIcon, alt: nft})
 
           marker.bindTooltip(nft.name+" ("+nft.pv+" LP)").openTooltip()
           marker.on("mouseover", (event) => {this.mouseover(event)})
           marker.on("dblclick", (event) => {this.select_nft(event)})
 
           L.circleMarker(
-            [coords.lat, coords.long],
+            [coords.lat, coords.lng],
             {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}
           ).addTo(this.map);
 
@@ -183,10 +188,14 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async refresh() {
+    let ne=this.map.getBounds().getNorthEast()
+    let sw=this.map.getBounds().getSouthWest()
+
     this.user.zone={
-      NE: {lat: this.map.getBounds().getNorthEast().lat, lng: this.map.getBounds().getNorthEast().lng},
-      SW: {lat: this.map.getBounds().getSouthWest().lat, lng: this.map.getBounds().getSouthWest().lng}
+      NE: latLonToCartesian(ne.lat,ne.lng,this.map.getZoom()),
+      SW: latLonToCartesian(sw.lat,sw.lng,this.map.getZoom())
     }
+
     this.add_tokemon_to_markers()
     this.layer?.redraw()
   }

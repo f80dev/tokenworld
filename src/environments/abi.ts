@@ -48,10 +48,6 @@ export const abi=
           "type": "u64"
         },
         {
-          "name": "entrance_z",
-          "type": "u64"
-        },
-        {
           "name": "exit_x",
           "type": "u64"
         },
@@ -60,7 +56,19 @@ export const abi=
           "type": "u64"
         },
         {
-          "name": "exit_z",
+          "name": "ne_x",
+          "type": "u64"
+        },
+        {
+          "name": "ne_y",
+          "type": "u64"
+        },
+        {
+          "name": "sw_x",
+          "type": "u64"
+        },
+        {
+          "name": "sw_y",
           "type": "u64"
         },
         {
@@ -78,14 +86,6 @@ export const abi=
         {
           "name": "map_path",
           "type": "bytes"
-        },
-        {
-          "name": "width",
-          "type": "u64"
-        },
-        {
-          "name": "height",
-          "type": "u64"
         },
         {
           "name": "min_visibility",
@@ -216,10 +216,6 @@ export const abi=
           {
             "name": "y",
             "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
           }
         ],
         "outputs": [
@@ -251,10 +247,6 @@ export const abi=
           },
           {
             "name": "y",
-            "type": "u64"
-          },
-          {
-            "name": "z",
             "type": "u64"
           },
           {
@@ -293,10 +285,6 @@ export const abi=
           },
           {
             "name": "y",
-            "type": "u64"
-          },
-          {
-            "name": "z",
             "type": "u64"
           }
         ],
@@ -365,10 +353,6 @@ export const abi=
           {
             "name": "y",
             "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
           }
         ],
         "outputs": [
@@ -398,10 +382,6 @@ export const abi=
           },
           {
             "name": "y",
-            "type": "u64"
-          },
-          {
-            "name": "z",
             "type": "u64"
           }
         ],
@@ -441,10 +421,6 @@ export const abi=
           {
             "name": "y",
             "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
           }
         ],
         "outputs": [
@@ -481,11 +457,11 @@ export const abi=
         "type": "struct",
         "fields": [
           {
-            "name": "left_top",
+            "name": "ne",
             "type": "Point"
           },
           {
-            "name": "right_bottom",
+            "name": "sw",
             "type": "Point"
           },
           {
@@ -544,10 +520,6 @@ export const abi=
           {
             "name": "y",
             "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
           }
         ]
       },
@@ -579,16 +551,8 @@ export const abi=
             "type": "u64"
           },
           {
-            "name": "x",
-            "type": "u64"
-          },
-          {
-            "name": "y",
-            "type": "u64"
-          },
-          {
-            "name": "z",
-            "type": "u64"
+            "name": "position",
+            "type": "Point"
           },
           {
             "name": "mode",

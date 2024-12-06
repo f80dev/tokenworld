@@ -92,11 +92,12 @@ export class DropComponent implements AfterViewInit, OnChanges {
       let pos = latLonToCartesian(
         Number(center.lat)+environment.offset_lat,
         Number(center.lng)+environment.offset_lng,
-        environment.scale_factor
+          this.map.getZoom(),
+          environment.scale_factor,environment.translate_factor
       )
       $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
-      let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
+      let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y]
       let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping ...")
 
@@ -143,7 +144,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(content.split(",").length==2){
       let lat=Number(content.split(",")[0])
       let lng=Number(content.split(",")[1])
-      return latLonToCartesian(lat,lng,environment.scale_factor)
+      return latLonToCartesian(lat,lng,this.map.getZoom(),
+        environment.scale_factor,
+        environment.translate_factor)
     }
   }
 

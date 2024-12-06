@@ -4,19 +4,16 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {MatDialog} from '@angular/material/dialog';
 import {environment} from "../environments/environment";
 import {UserService} from './user.service';
-import {getParams, setParams, showMessage} from '../tools';
+import {getParams, setParams} from '../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {DecimalPipe, NgIf} from '@angular/common';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MapComponent} from './map/map.component';
-import {_prompt} from './prompt/prompt.component';
-import {cartesianToPolar, distance} from './tokenworld';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {InputComponent} from './input/input.component';
-import {config} from 'rxjs';
 
 
 @Component({

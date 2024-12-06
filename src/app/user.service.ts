@@ -5,8 +5,6 @@ import {query, toAccount, usersigner_from_pem} from "./mvx";
 import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
-import {abi} from '../environments/abi';
-import {BigUIntValue, U64Value} from '@multiversx/sdk-core/out';
 import {LatLng} from 'leaflet';
 
 @Injectable({
@@ -42,7 +40,7 @@ export class UserService {
   show_visibility: boolean = false;
   visibility: number = 0
   account: any;
-  map: any;
+  map: any
   idx:number=0
   sc_address=""
   fee=0;

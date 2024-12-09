@@ -4,8 +4,6 @@ import {environment} from '../environments/environment';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
-import {$$} from '../tools';
-import proj4 from 'proj4';
 
 export class Tokemon {
   id: number = 0;
@@ -97,15 +95,15 @@ function azimuthalEquidistantProjection(pt:LatLng, lat0=48.8566, lon0 = 2.3522, 
 
 
 
-export function polarToCartesian(lat:number, lon:number,scale:number=1,translate=0,radius:number = 6371): {x:number,y:number,z:number} {
-  const latRad = degToRad(lat);
-  const lonRad = degToRad(lon);
+export function polarToCartesian(polar:LatLng,scale:number=1,translate=0,radius:number = 6371): Point3D {
+  const latRad = degToRad(polar.lat);
+  const lonRad = degToRad(polar.lng);
 
   const x = radius * Math.cos(latRad) * Math.cos(lonRad)*scale;
   const y = radius * Math.cos(latRad) * Math.sin(lonRad)*scale;
   const z = radius * Math.sin(latRad) * scale;
 
-  return { x:Math.round(x)+translate, y:Math.round(y)+translate, z:Math.round(z)+translate };
+  return new Point3D(Math.round(x)+translate, Math.round(y)+translate, Math.round(z)+translate )
 }
 
 
@@ -153,7 +151,10 @@ export function distance(p1:LatLng, p2:LatLng,R=6371): number {
 export function initializeMap(vm:any,user:UserService,
                               center:LatLng,
                               meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',zoom=16) {
-  if(user.game.url=="map" || user.game.url==""){
+
+  if(!vm.map)
+
+  if(user.game.url=="map" || user.game.url=="")user.zoom=2;
 
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
@@ -184,9 +185,6 @@ export function initializeMap(vm:any,user:UserService,
 
 
     return vm.map
-  } else {
-    user.zoom=2
-  }
 
 }
 

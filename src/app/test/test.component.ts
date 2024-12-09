@@ -1,14 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AuthentComponent} from '../authent/authent.component';
 import {ApiService} from '../api.service';
-import {cartesianToPolar, distance, initializeMap, polarToCartesian} from '../tokenworld';
 import {WalletComponent} from '../wallet/wallet.component';
-import {environment} from '../../environments/environment';
 import * as L from 'leaflet';
 import {UserService} from '../user.service';
-import {Bounds, LatLng, Point} from 'leaflet';
-import {$$} from '../../tools';
-import proj4 from 'proj4';
+
+
 
 @Component({
   selector: 'app-test',

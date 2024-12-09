@@ -90,10 +90,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(!center.lat && !center.lng) {center=this.user.center_map}
     if (center) {
       let pos = polarToCartesian(
-        Number(center.lat)+environment.offset_lat,
-        Number(center.lng)+environment.offset_lng,
-          this.map.getZoom(),
-          environment.scale_factor,environment.translate_factor
+        new LatLng(Number(center.lat)+environment.offset_lat,Number(center.lng)+environment.offset_lng),environment.scale_factor,environment.translate_factor
       )
       $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
@@ -146,9 +143,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(content.split(",").length==2){
       let lat=Number(content.split(",")[0])
       let lng=Number(content.split(",")[1])
-      return polarToCartesian(lat,lng,this.map.getZoom(),
-        environment.scale_factor,
-        environment.translate_factor)
+      return polarToCartesian(new LatLng(lat,lng),environment.scale_factor,environment.translate_factor)
     }
   }
 

@@ -70,12 +70,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async ngAfterViewInit() {
     setTimeout(async ()=>{
       await this.user.geoloc(this.geolocService)
+
       this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
       let zoom=this.user.zoom || 16
 
-      let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
-      let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
-      this.map.setMaxBounds(new LatLngBounds(ne,sw))
+      //let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
+      //let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
+      //this.map.setMaxBounds(new LatLngBounds(ne,sw))
 
       initializeMap(this,this.user,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
@@ -84,8 +85,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           //https://leafletjs.com/reference.html#keyboardevent
           if(event.originalEvent.key=="c"){
             //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
-            let pos=polarToCartesian(this.user.center_map.lat,this.user.center_map.lng,this.map.getZoom(),
-              environment.scale_factor,environment.translate_factor)
+            let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
             this.clipboard.copy(pos.x+","+pos.y)
             showMessage(this,"Position copied")
           }
@@ -118,8 +118,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
 
-
-
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
 
@@ -131,12 +129,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.markers=[]
 
         $$("Chargement des tokemon")
-        let pos = polarToCartesian(
-          this.user.center_map.lat,
-          this.user.center_map.lng,
-          this.map.getZoom(),
-          environment.scale_factor,
-          environment.translate_factor)
+        let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         let args = [this.user.address,pos.x, pos.y] //environment.scale_factor/1000]
 
         this.user.nfts = await this.user.query("show_nfts",  args);
@@ -167,8 +160,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       }
     })
   }
-
-
 
 
   async select_nft(event: LeafletMouseEvent) {
@@ -203,12 +194,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async refresh() {
-    let ne=this.map.getBounds().getNorthEast()
-    let sw=this.map.getBounds().getSouthWest()
 
     this.user.zone={
-      NE: polarToCartesian(ne.lat,ne.lng,this.map.getZoom(),environment.scale_factor,environment.translate_factor),
-      SW: polarToCartesian(sw.lat,sw.lng,this.map.getZoom(),environment.scale_factor,environment.translate_factor)
+      NE: this.map.getBounds().getNorthEast(),
+      SW: this.map.getBounds().getSouthWest(),
+      zoom:this.map.getZoom(),
+      center:this.map.getCenter()
     }
 
     this.add_tokemon_to_markers()

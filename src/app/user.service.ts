@@ -6,6 +6,7 @@ import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
+import {Game} from './tokenworld';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class UserService {
   show_visibility: boolean = false;
   visibility: number = 0
   account: any;
-  map: any
+  game: Game=new Game;
   idx:number=0
   sc_address=""
   fee=0;
@@ -185,17 +186,19 @@ export class UserService {
 
       // @ts-ignore
       this.sc_address=sc_address.length>0 ? sc_address : env.contract_addr[network]
-      resolve(this.map)
+      resolve(this.game)
     })
   }
 
-  init_map(){
+  init_game(){
     return new Promise(async (resolve, reject) => {
-      this.map=await this.query("map",[])
-      this.map.url=this.map.url.toString()
-      this.visibility=this.map.max_visibility
-      $$("Initialisation des paramètres de la carte ",this.map)
-      resolve(this.map)
+      let game=await this.query("games",[])
+
+      this.game=game
+      this.game.url=this.game.url.toString()
+      this.visibility=this.game.max_visibility
+      $$("Initialisation des paramètres de la carte ",this.game)
+      resolve(this.game)
     })
   }
 

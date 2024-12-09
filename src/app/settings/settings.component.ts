@@ -60,7 +60,7 @@ export class SettingsComponent implements OnInit {
     let id=0
     for(let tokemon of await this.user.query("tokemons",[])){
       id++
-      tokemon.coords=cartesianToPolar(tokemon.x,tokemon.y,1,environment.scale_factor)
+      tokemon.coords=cartesianToPolar(tokemon,1,environment.scale_factor)
       tokemon.id=id
       let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
       tokemon.content=await get_nft(identifier,this.api,this.user.network)

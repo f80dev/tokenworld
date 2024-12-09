@@ -12,7 +12,7 @@ import {InputComponent} from "../input/input.component";
 import {UserService} from "../user.service";
 import {get_smartcontract_address, query, toText} from "../mvx";
 import {abi} from '../../environments/abi';
-import {cartesianToPolar, latLonToCartesian} from '../tokenworld';
+import {cartesianToPolar, polarToCartesian} from '../tokenworld';
 
 @Component({
   selector: 'app-admin',
@@ -42,7 +42,7 @@ export class AdminComponent implements OnInit {
   async refresh(){
     this.nfts=[]
     for(let nft of await this.user.query("tokemons",[])){
-      nft.coords=cartesianToPolar(nft.x,nft.y,nft.z,environment.scale_factor)
+      nft.coords=cartesianToPolar(nft,environment.scale_factor)
       this.nfts.push(nft)
     }
 
@@ -81,6 +81,6 @@ export class AdminComponent implements OnInit {
 
   protected readonly TextDecoder = TextDecoder;
   protected readonly toText = toText;
-  protected readonly latLonToCartesian = latLonToCartesian;
+  protected readonly latLonToCartesian = polarToCartesian;
   protected readonly cartesianToPolar = cartesianToPolar;
 }

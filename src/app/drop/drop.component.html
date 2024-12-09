@@ -32,7 +32,7 @@
     </app-wallet>
 
     <div class="zone_input" *ngIf="sel_nft">
-      <app-input value_type="slide" [min]="user.map.min_visibility" [max]="user.map.max_visibility"
+      <app-input value_type="slide" [min]="user.game.min_visibility" [max]="user.game.max_visibility"
                  label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
       <br>
@@ -49,7 +49,7 @@
 
       <br><br>
       <button mat-raised-button
-              (click)="drop(sel_nft)"
+              (click)="drop()"
               title="Drop here">Drop !</button>
 
       <button mat-raised-button

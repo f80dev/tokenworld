@@ -11,7 +11,7 @@ import {AccountOnNetwork} from "@multiversx/sdk-network-providers/out";
 import {ApiService} from "./api.service";
 import {UserService} from "./user.service";
 import {Octokit} from "@octokit/rest";
-import {now} from "../tools";
+import {$$, now} from "../tools";
 import {abi} from '../environments/abi';
 import {environment} from '../environments/environment';
 import {utf8ToHex} from '@multiversx/sdk-core/out/utils.codec';
@@ -202,6 +202,8 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
   return new Promise(async (resolve, reject) => {
     if(!user || !user.network)reject(false);
 
+    $$("Appel de "+function_name+" avec les arguments "+args.join(" , "))
+    if(tokens_to_transfer.length>0)$$(" ... avec transfert de token")
     let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,gasLimit,contract_addr)
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
 

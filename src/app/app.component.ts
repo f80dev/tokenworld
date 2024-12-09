@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     setTimeout(async()=>{
       let params:any=await getParams(this.routes)
       await this.user.init_network(params.sc,params.network,environment)
-      await this.user.init_map()
+      await this.user.init_game()
 
       this.user.address=params.address || localStorage.getItem("address") || ""
 

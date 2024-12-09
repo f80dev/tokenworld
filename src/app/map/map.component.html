@@ -1,16 +1,16 @@
-<div id="map" [style.display]="user.map && user.map.url=='map' ? 'block' : 'none'"
+<div id="map" [style.display]="user.game && user.game.url=='map' ? 'block' : 'none'"
      style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
 <div class="image-container"
-     *ngIf="user.map && user.map.url!='map'">
+     *ngIf="user.game && user.game.url!='map'">
 
   <mat-icon (click)="zoom_in()" class="button-map" style="top:0;">add_circle</mat-icon>
    <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
 
   <img class="image-map"
        [style.transform]="'translate(' + map_left + 'px, ' + map_top + 'px) scale(' + user.zoom + ')'"
-       [src]="user.map.url">
+       [src]="user.game.url">
 </div>
 
 <div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center">

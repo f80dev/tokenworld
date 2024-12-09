@@ -5,13 +5,14 @@ import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {getParams, showMessage} from '../../tools';
 import {ActivatedRoute} from '@angular/router';
-import {initializeMap, latLonToCartesian} from '../tokenworld';
+import {initializeMap, polarToCartesian} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BytesValue, StringValue, TokenIdentifierValue} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-create-world',
@@ -43,6 +44,7 @@ export class CreateWorldComponent implements AfterViewInit {
   script_content: string=""
   max_player=100
   turns=0
+  map!: L.Map
 
   async ngAfterViewInit() {
     this.zone=await getParams(this.routes)
@@ -53,7 +55,7 @@ export class CreateWorldComponent implements AfterViewInit {
     this.zone.n_degrees=8
     this.zone.map=BytesValue.fromUTF8("map").toString()
     this.update_yaml()
-
+    initializeMap(this.map,this.user,this.user.center_map)
   }
 
   update_yaml(){
@@ -77,7 +79,7 @@ export class CreateWorldComponent implements AfterViewInit {
       "        --pem=./wallet/owner.pem" +
       "        --gas-limit 70000000" +
       "        --proxy $PROXY --chain D" +
-      "        --arguments $FEE $GRID $QUOTA $SCALE_FACTOR $ENTRANCE_X $ENTRANCE_Y $ENTRANCE_Z $EXIT_X $EXIT_Y $EXIT_Z $NE_X $NE_Y $NE_Z $SW_X $SW_Y $SW_Z $MOVE_MIN $MOVE_MAX $N_DEGREES $MAP_PATH $MIN_VISIBILITY $MAX_VISIBILITY $MAX_PLAYERS $TURN" +
+      "        --arguments $FEE $GRID $QUOTA $SCALE_FACTOR $ENTRANCE_X $ENTRANCE_Y $EXIT_X $EXIT_Y $NE_X $NE_Y $SW_X $SW_Y $MOVE_MIN $MOVE_MAX $N_DEGREES $MAP_PATH $MIN_VISIBILITY $MAX_VISIBILITY $MAX_PLAYERS $TURN" +
       "        --send" +
       "        --outfile=./output/deploy-devnet.interaction.json"
 

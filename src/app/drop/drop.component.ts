@@ -7,7 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {initializeMap, latLonToCartesian} from '../tokenworld';
+import {initializeMap, polarToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
@@ -79,9 +79,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   nfts: any[]=[];
 
-  async drop(nft: any) {
+  async drop() {
 
-    this.user.visibility=this.user.map.min_visibility
+    this.user.visibility=this.user.game.min_visibility
 
     await this.user.login(this,"You must be connected to drop any NFT","",true)
     $$("Authentification ",this.user.provider)
@@ -89,7 +89,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     let center:any=await getParams(this.routes) || {}
     if(!center.lat && !center.lng) {center=this.user.center_map}
     if (center) {
-      let pos = latLonToCartesian(
+      let pos = polarToCartesian(
         Number(center.lat)+environment.offset_lat,
         Number(center.lng)+environment.offset_lng,
           this.map.getZoom(),
@@ -97,6 +97,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
       )
       $$("Ajout d'un tokemon en ",center)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
+
+      if(pos.x<0 || pos.y<0)throw new Error("Negative position")
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y]
       let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping ...")
@@ -144,7 +146,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(content.split(",").length==2){
       let lat=Number(content.split(",")[0])
       let lng=Number(content.split(",")[1])
-      return latLonToCartesian(lat,lng,this.map.getZoom(),
+      return polarToCartesian(lat,lng,this.map.getZoom(),
         environment.scale_factor,
         environment.translate_factor)
     }

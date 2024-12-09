@@ -9,7 +9,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {send_transaction_with_transfers} from '../mvx';
 import {getParams, showError} from '../../tools';
-import {initializeMap, latLonToCartesian} from '../tokenworld';
+import {initializeMap, polarToCartesian} from '../tokenworld';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LatLng} from 'leaflet';
 import * as L from 'leaflet';
@@ -58,7 +58,7 @@ export class AirdropComponent implements AfterViewInit {
   }
 
   async airdrop() {
-    let pos=latLonToCartesian(this.user.center_map!.lat,this.user.center_map!.lng,this.map.getZoom()
+    let pos=polarToCartesian(this.user.center_map!.lat,this.user.center_map!.lng,this.map.getZoom()
       ,environment.scale_factor,environment.translate_factor)
     let args = [pos.x, pos.y,Math.round(this.visibility)]
 

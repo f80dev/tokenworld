@@ -1,10 +1,19 @@
 import {AfterViewInit, Component, inject, OnChanges} from '@angular/core';
 import * as L from 'leaflet';
-import { LatLng, LeafletMouseEvent, Marker, TileLayer} from 'leaflet';
+import {
+  Bounds,
+  LatLng,
+  LatLngBounds,
+  LatLngBoundsExpression,
+  LatLngBoundsLiteral,
+  LeafletMouseEvent,
+  Marker,
+  TileLayer
+} from 'leaflet';
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, distance, initializeMap, latLonToCartesian} from '../tokenworld';
+import {cartesianToPolar, distance, initializeMap, polarToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -61,7 +70,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async ngAfterViewInit() {
     setTimeout(async ()=>{
       await this.user.geoloc(this.geolocService)
-      this.map=L.map('map',{keyboard:true,scrollWheelZoom:true})
+      this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
+      let zoom=this.user.zoom || 16
+
+      let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
+      let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
+      this.map.setMaxBounds(new LatLngBounds(ne,sw))
+
       initializeMap(this,this.user,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
         .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
@@ -69,15 +84,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           //https://leafletjs.com/reference.html#keyboardevent
           if(event.originalEvent.key=="c"){
             //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
-            let pos=latLonToCartesian(this.user.center_map.lat,this.user.center_map.lng,this.map.getZoom(),
+            let pos=polarToCartesian(this.user.center_map.lat,this.user.center_map.lng,this.map.getZoom(),
               environment.scale_factor,environment.translate_factor)
             this.clipboard.copy(pos.x+","+pos.y)
             showMessage(this,"Position copied")
           }
         })
 
-      this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),this.user.zoom || 16);
-    },500)
+      this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),zoom);
+    },1500)
 
   }
 
@@ -116,7 +131,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.markers=[]
 
         $$("Chargement des tokemon")
-        let pos = latLonToCartesian(
+        let pos = polarToCartesian(
           this.user.center_map.lat,
           this.user.center_map.lng,
           this.map.getZoom(),
@@ -134,7 +149,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
             iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
           })
 
-          let coords = cartesianToPolar(nft.x, nft.y,  this.map.getZoom(),environment.scale_factor)
+          let coords = cartesianToPolar(nft,  this.map.getZoom(),environment.scale_factor)
           let marker = L.marker([coords.lat, coords.lng], {icon: giftIcon, alt: nft})
 
           marker.bindTooltip(nft.name+" ("+nft.pv+" LP)").openTooltip()
@@ -166,7 +181,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     let d_min=1e18
     let _selected_marker:L.Marker | undefined
     for(let marker of this.markers){
-      let dist=distance(center.lat,center.lng,marker.getLatLng().lat,marker.getLatLng().lng)
+      let dist=distance(center,marker.getLatLng())
       if(dist<d_min){
         _selected_marker=marker
         d_min=dist
@@ -192,8 +207,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     let sw=this.map.getBounds().getSouthWest()
 
     this.user.zone={
-      NE: latLonToCartesian(ne.lat,ne.lng,this.map.getZoom()),
-      SW: latLonToCartesian(sw.lat,sw.lng,this.map.getZoom())
+      NE: polarToCartesian(ne.lat,ne.lng,this.map.getZoom(),environment.scale_factor,environment.translate_factor),
+      SW: polarToCartesian(sw.lat,sw.lng,this.map.getZoom(),environment.scale_factor,environment.translate_factor)
     }
 
     this.add_tokemon_to_markers()

@@ -158,9 +158,12 @@ export function distance(p1:LatLng, p2:LatLng,R=6371): number {
 
 export function initializeMap(vm:any,zone:any,
                               center:LatLng,
-                              meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',zoom=16) {
+                              meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
+                              entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
+                              exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
 
-  if(!vm.map && zone){
+  if(vm.map && zone){
+
     if(zone.url=="map" || zone.url=="")zone.zoom=2;
 
     L.tileLayer(baseMapURl).addTo(vm.map);
@@ -169,24 +172,37 @@ export function initializeMap(vm:any,zone:any,
 
     let size=30
 
-    L.marker([center.lat,center.lng],{
-      icon:L.icon({
-        iconUrl: meIcon,
-        iconSize: [size, size], // size of the icon
-        iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-      }),
-      alt:"me"
-    }).addTo(vm.map)
-
-    if(zone.entrance.x+zone.entrance.y+zone.entrance.z!=0){
-      let entrance_polar=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
+    if(meIcon!=""){
       L.marker([center.lat,center.lng],{
         icon:L.icon({
           iconUrl: meIcon,
           iconSize: [size, size], // size of the icon
           iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
         }),
+        alt:"me"
+      }).addTo(vm.map)
+    }
+
+
+    if(zone.entrance.lat+zone.entrance.lng!=0){
+      L.marker(zone.entrance,{
+        icon:L.icon({
+          iconUrl: entranceIcon,
+          iconSize: [size, size], // size of the icon
+          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+        }),
         alt:"Entrance"
+      }).addTo(vm.map)
+    }
+
+    if(zone.exit.lat+zone.exit.lng!=0){
+      L.marker(zone.exit,{
+        icon:L.icon({
+          iconUrl: exitIcon,
+          iconSize: [size, size], // size of the icon
+          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+        }),
+        alt:"Exit"
       }).addTo(vm.map)
     }
   }

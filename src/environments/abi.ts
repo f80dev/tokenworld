@@ -1,3 +1,4 @@
+
 export const abi={
   "buildInfo": {
     "rustc": {
@@ -105,6 +106,10 @@ export const abi={
         "*"
       ],
       "inputs": [
+        {
+          "name": "game_title",
+          "type": "bytes"
+        },
         {
           "name": "grid",
           "type": "u64"
@@ -507,6 +512,10 @@ export const abi={
       "type": "struct",
       "fields": [
         {
+          "name": "title",
+          "type": "bytes"
+        },
+        {
           "name": "ne",
           "type": "Point"
         },
@@ -640,4 +649,3 @@ export const abi={
     }
   }
 }
-

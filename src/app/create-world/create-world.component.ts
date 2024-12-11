@@ -17,6 +17,8 @@ import {send_transaction_with_transfers} from '../mvx';
 import {wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
 import {LatLng} from 'leaflet';
+import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-create-world',
@@ -41,6 +43,8 @@ export class CreateWorldComponent implements OnInit {
   user=inject(UserService)
   router=inject(Router)
   geolocService=inject(GeolocService)
+  dialog=inject(MatDialog)
+  api=inject(ApiService)
 
   grid=20
   quota=20
@@ -66,6 +70,8 @@ export class CreateWorldComponent implements OnInit {
       n_degrees: 8,
       map:"map",
       zoom:16,
+      entrance:new LatLng(0,0),
+      exit: new LatLng(0,0),
       center:new LatLng(44,2),
       title:"mon titre"
     }
@@ -80,8 +86,6 @@ export class CreateWorldComponent implements OnInit {
         this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
       }
     }
-
-
 
 
     $$("Initialisation de la carte avec ",this.zone)
@@ -101,9 +105,8 @@ export class CreateWorldComponent implements OnInit {
         this.zone.exit = event.target
       })
     this.map.setView(this.zone.center, this.zone.zoom)
-
-
-
+    this.zone.NE = this.map.getBounds().getNorthEast()
+    this.zone.SW = this.map.getBounds().getSouthWest()
   }
 
 
@@ -114,8 +117,12 @@ export class CreateWorldComponent implements OnInit {
 
   async create_game() {
 
-    let entrance = polarToCartesian(this.zone.entrance, environment.scale_factor)
-    let exit = polarToCartesian(this.zone.exit, environment.scale_factor)
+    await this.user.login(this)
+
+    $$("Creation d'une partie avec ",this.zone)
+
+    let entrance = this.zone.exit.lng+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor) : new Point3D(0,0,0)
+    let exit =  this.zone.exit.lat+this.zone.exit.lat!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor) : new Point3D(0,0,0)
     let ne = polarToCartesian(this.zone.NE, environment.scale_factor)
     let sw = polarToCartesian(this.zone.SW, environment.scale_factor)
 
@@ -131,12 +138,21 @@ export class CreateWorldComponent implements OnInit {
 
 
     this.args = [
-      this.grid, this.quota,
-      entrance.x, entrance.y, entrance.z, exit.x, exit.y, exit.z,
-      ne.x, ne.y, ne.z, sw.x, sw.y, sw.z,
-      this.zone.min_distance, this.zone.max_distance, this.zone.n_degrees,
-      new StringValue("map"),
-      this.max_player, this.turns
+      this.title,
+      this.grid,
+      this.quota,
+
+      entrance.x, entrance.y, entrance.z,
+      exit.x, exit.y, exit.z,
+      ne.x, ne.y, ne.z,
+      sw.x, sw.y, sw.z,
+
+      this.zone.min_distance, this.zone.max_distance,this.zone.n_degrees,
+
+      "map",
+      this.zone.min_visibility,this.zone.max_visibility,
+      this.max_player,
+      this.turns
     ]
 
     let tokens=[]

@@ -33,6 +33,7 @@ export class Point3D {
 
 
 export class Game {
+  id: number=0
   ne=new Point3D()
   sw=new Point3D()
   grid=100
@@ -98,6 +99,7 @@ function azimuthalEquidistantProjection(pt:LatLng, lat0=48.8566, lon0 = 2.3522, 
 
 
 export function polarToCartesian(polar:LatLng,scale:number=1,translate=0,radius:number = 6371): Point3D {
+  if(!polar)return new Point3D(0,0,0)
   const latRad = degToRad(polar.lat);
   const lonRad = degToRad(polar.lng);
 
@@ -108,6 +110,10 @@ export function polarToCartesian(polar:LatLng,scale:number=1,translate=0,radius:
   return new Point3D(Math.round(x)+translate, Math.round(y)+translate, Math.round(z)+translate )
 }
 
+
+export function center_of(pt1:Point3D,pt2:Point3D) : Point3D {
+  return new Point3D((pt2.x+pt1.x)/2,(pt2.y+pt1.y)/2,(pt2.z+pt1.z)/2)
+}
 
 export function cartesianToPolar(pt:Point3D,scale:number=1,translate=0) : LatLng {
   const xx=pt.x/scale-translate
@@ -150,12 +156,12 @@ export function distance(p1:LatLng, p2:LatLng,R=6371): number {
 
 
 
-export function initializeMap(vm:any,user:UserService,
+export function initializeMap(vm:any,zone:any,
                               center:LatLng,
                               meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',zoom=16) {
 
-  if(!vm.map && user.game){
-    if(user.game.url=="map" || user.game.url=="")user.zoom=2;
+  if(!vm.map && zone){
+    if(zone.url=="map" || zone.url=="")zone.zoom=2;
 
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
@@ -172,8 +178,8 @@ export function initializeMap(vm:any,user:UserService,
       alt:"me"
     }).addTo(vm.map)
 
-    if(user.game.entrance.x+user.game.entrance.y+user.game.entrance.z!=0){
-      let entrance_polar=cartesianToPolar(user.game.entrance,environment.scale_factor,environment.translate_factor)
+    if(zone.entrance.x+zone.entrance.y+zone.entrance.z!=0){
+      let entrance_polar=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
       L.marker([center.lat,center.lng],{
         icon:L.icon({
           iconUrl: meIcon,
@@ -183,12 +189,7 @@ export function initializeMap(vm:any,user:UserService,
         alt:"Entrance"
       }).addTo(vm.map)
     }
-
-
-
   }
-
-    return vm.map
-
+  return vm.map
 }
 

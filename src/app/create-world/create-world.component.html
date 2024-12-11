@@ -32,7 +32,7 @@
     <!--        </table>-->
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-      <app-input label="PV bank" help="" value_type="slider" [min]="0" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
+      <app-input label="PV bank" help="" style="width:90%;" value_type="slider" [min]="0" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
       <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
       <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>

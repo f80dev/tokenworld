@@ -48,9 +48,9 @@ export class AppComponent implements OnInit {
 
 
   async ngOnInit() {
-    setTimeout(async()=>{
+
       let params:any=await getParams(this.routes)
-      await this.user.init_network(params.sc,params.network,environment)
+      this.user.network=params.network || environment.networks[0].value
 
       this.user.address=params.address || localStorage.getItem("address") || ""
 
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
       }
       this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
       this.router.navigate(["games"],{queryParams:{game_id:params.game}})
-    })
+
   }
 
 
@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
   create_world() {
     this.router.navigate(["create"],
       {
-        queryParams:{p: setParams(this.user.zone,"","")}
+        queryParams:{p: setParams({zone:this.user.zone},"","")}
       })
   }
 }

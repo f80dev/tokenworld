@@ -121,7 +121,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
 
-      if(this.user.center_map) {
+
+      if(this.user.center_map && this.user.game) {
         for(let m of this.markers){
           m.removeFrom(this.map)
         }
@@ -130,7 +131,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         $$("Chargement des tokemon")
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-        let args = [this.user.address,pos.x, pos.y] //environment.scale_factor/1000]
+        let args = [this.user.game.id,this.user.address,pos.x, pos.y] //environment.scale_factor/1000]
 
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")

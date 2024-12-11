@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, inject} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import {MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
-import {cartesianToPolar, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
+import {cartesianToPolar, center_of, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -15,6 +15,8 @@ import {UserService} from '../user.service';
 import * as L from 'leaflet';
 import {send_transaction_with_transfers} from '../mvx';
 import {wait_message} from '../hourglass/hourglass.component';
+import {GeolocService} from '../geoloc.service';
+import {LatLng} from 'leaflet';
 
 @Component({
   selector: 'app-create-world',
@@ -32,12 +34,13 @@ import {wait_message} from '../hourglass/hourglass.component';
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
 })
-export class CreateWorldComponent implements AfterViewInit {
+export class CreateWorldComponent implements OnInit {
   routes=inject(ActivatedRoute)
   clipboard=inject(Clipboard)
   toast=inject(MatSnackBar)
   user=inject(UserService)
   router=inject(Router)
+  geolocService=inject(GeolocService)
 
   grid=20
   quota=20
@@ -53,73 +56,56 @@ export class CreateWorldComponent implements AfterViewInit {
   title="Mon titre"
   real: boolean=true
 
-  async ngAfterViewInit() {
+  async ngOnInit() {
+    $$("Appel de onInit")
+    this.zone={
+      min_visibility:10,
+      max_visibility:100,
+      min_distance:1,
+      max_distance:10,
+      n_degrees: 8,
+      map:"map",
+      zoom:16,
+      center:new LatLng(44,2),
+      title:"mon titre"
+    }
+
     let params:any=await getParams(this.routes)
-    $$("Récupération de la zone ",this.zone)
-    if(params.hasOwnProperty("min_visibility")){
-      this.zone=params
-    }else{
-      this.zone={
-        min_visibility:10,
-        max_visibility:100,
-        min_distance:1,
-        max_distance:10,
-        n_degrees: 8,
-        map:"map",
-        title:"mon titre"
+
+    if(params.hasOwnProperty("zone")) {
+      this.zone = params.zone
+      $$("Récupération de la zone ",this.zone)
+    } else {
+      if(await this.user.geoloc(this.geolocService)){
+        this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
       }
     }
 
 
-    this.update_yaml()
 
-    this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
-    initializeMap(this,this.user,this.user.center_map,"")
-      .on("moveend",(event:L.LeafletEvent)=> {
-        this.zone.NE=this.map.getBounds().getNorthEast()
-        this.zone.SW=this.map.getBounds().getSouthWest()
-      })
-      .on("zoomend",(event:L.LeafletEvent)=> {
-        this.zone.zoom=this.map.getZoom()
-      })
-      .on("click",(event:L.LeafletEvent)=> {
-        this.zone.entrance=event.target
-      })
-      .on("dblclick",(event:L.LeafletEvent)=> {
-        this.zone.exit=event.target
-      })
 
-    this.map.setView(this.zone.center,this.zone.zoom)
+    $$("Initialisation de la carte avec ",this.zone)
+    this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
+    initializeMap(this, this.zone, this.zone.center, "")
+      .on("moveend", (event: L.LeafletEvent) => {
+        this.zone.NE = this.map.getBounds().getNorthEast();
+        this.zone.SW = this.map.getBounds().getSouthWest()
+      })
+      .on("zoomend", (event: L.LeafletEvent) => {
+        this.zone.zoom = this.map.getZoom()
+      })
+      .on("click", (event: L.LeafletEvent) => {
+        this.zone.entrance = event.target
+      })
+      .on("dblclick", (event: L.LeafletEvent) => {
+        this.zone.exit = event.target
+      })
+    this.map.setView(this.zone.center, this.zone.zoom)
+
+
 
   }
 
-  update_yaml(){
-
-    let entrance=polarToCartesian(this.zone.entrance,environment.scale_factor)
-    let exit=polarToCartesian(this.zone.exit,environment.scale_factor)
-    let ne=polarToCartesian(this.zone.NE,environment.scale_factor)
-    let sw=polarToCartesian(this.zone.SW,environment.scale_factor)
-
-    let s="title: Map de test\nauthor: hhoareau\n"
-    s=s+"\nsettings:\n"
-    s=s+"\tfee: "+this.fee+"\n"
-    s=s+"\tmap: map\n"
-    s=s+"\tlimits:\n"
-    s=s+"\t\tNE: "+ne.x+","+ne.y+","+ne.z+"\n"
-    s=s+"\t\tSW: "+sw.x+","+sw.y+","+sw.z+"\n"
-    s=s+"\tEntrance: "+entrance.x+","+entrance.y+","+entrance.z+"\n"
-    s=s+"\tExit: "+exit.x+","+exit.y+","+exit.z+"\n"
-
-
-    this.args=[
-      this.grid,this.quota,
-      entrance.x,entrance.y,entrance.z,exit.x,exit.y,exit.z,
-      ne.x,ne.y,ne.z,sw.x,sw.y,sw.z,
-      this.zone.min_distance,this.zone.max_distance,this.zone.n_degrees,
-      new StringValue("map"),
-      this.max_player,this.turns
-    ]
-  }
 
   quit(){
     this.router.navigate( ["map"])
@@ -127,6 +113,32 @@ export class CreateWorldComponent implements AfterViewInit {
 
 
   async create_game() {
+
+    let entrance = polarToCartesian(this.zone.entrance, environment.scale_factor)
+    let exit = polarToCartesian(this.zone.exit, environment.scale_factor)
+    let ne = polarToCartesian(this.zone.NE, environment.scale_factor)
+    let sw = polarToCartesian(this.zone.SW, environment.scale_factor)
+
+    let s = "title: Map de test\nauthor: hhoareau\n"
+    s = s + "\nsettings:\n"
+    s = s + "\tfee: " + this.fee + "\n"
+    s = s + "\tmap: map\n"
+    s = s + "\tlimits:\n"
+    s = s + "\t\tNE: " + ne.x + "," + ne.y + "," + ne.z + "\n"
+    s = s + "\t\tSW: " + sw.x + "," + sw.y + "," + sw.z + "\n"
+    s = s + "\tEntrance: " + entrance.x + "," + entrance.y + "," + entrance.z + "\n"
+    s = s + "\tExit: " + exit.x + "," + exit.y + "," + exit.z + "\n"
+
+
+    this.args = [
+      this.grid, this.quota,
+      entrance.x, entrance.y, entrance.z, exit.x, exit.y, exit.z,
+      ne.x, ne.y, ne.z, sw.x, sw.y, sw.z,
+      this.zone.min_distance, this.zone.max_distance, this.zone.n_degrees,
+      new StringValue("map"),
+      this.max_player, this.turns
+    ]
+
     let tokens=[]
     if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
     try {
@@ -138,6 +150,8 @@ export class CreateWorldComponent implements AfterViewInit {
     }
     this.quit()
   }
+
+
 
   copy(txt: string) {
     this.clipboard.copy(txt)

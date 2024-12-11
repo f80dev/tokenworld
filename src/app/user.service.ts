@@ -43,7 +43,6 @@ export class UserService {
   account: any;
   game: Game | undefined;
   idx:number=0
-  sc_address=""
   fee=0;
   zone: any;
 
@@ -78,8 +77,8 @@ export class UserService {
 
 
 
-  query(func:string,args:any[]=[],env:any=environment){
-    return query(func, args, this.get_domain(), this.sc_address)
+  query(func:string,args:any[]=[]){
+    return query(func, args, this.get_domain(), this.get_sc_address())
   }
 
 
@@ -184,18 +183,7 @@ export class UserService {
     return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
   }
 
-  init_network(sc_address: string="", network:string="elrond-devnet",env=environment) {
-    return new Promise(async (resolve, reject) => {
 
-      if(this.network!=network){
-        this.network=network
-        this.sc_address=""
-      }
-
-      this.sc_address=sc_address.length>0 ? sc_address : this.get_sc_address()
-      resolve(true)
-    })
-  }
 
   init_game(game:any){
       this.game=game

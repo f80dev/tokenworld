@@ -4,7 +4,7 @@ import {ApiService} from '../api.service';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
-import {getParams} from '../../tools';
+import {$$, getParams} from '../../tools';
 
 @Component({
   selector: 'app-games',
@@ -23,14 +23,17 @@ export class GamesComponent implements OnInit {
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
-    this.games=await this.user.query("games",[],environment)
+    this.games=await this.user.query("games",[])
     if(this.games.length==0){
+      $$("No game available")
       this.router.navigate(["create"])
+    }else{
+      if(params.hasOwnProperty("game")){
+        this.user.init_game(this.games[Number(params.game)])
+        this.quit()
+      }
     }
-    if(params.hasOwnProperty("game")){
-      this.user.init_game(this.games[Number(params.game)])
-      this.quit()
-    }
+
   }
 
   quit(){

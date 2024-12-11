@@ -387,7 +387,6 @@ export class AuthentComponent implements OnInit,OnChanges {
 
     if(network=="code"){
       if(this.access_code && this.access_code.length==8){
-        debugger
         this.api.access_code_checking(this.access_code,this.address).subscribe(()=>{
           this.strong_connect();
         },(err:any)=>{

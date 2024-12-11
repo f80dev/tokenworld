@@ -55,9 +55,11 @@ function degToRad(degrees:number):number {
   return degrees * (Math.PI / 180);
 }
 
+
 function radToDeg(radian:number):number {
   return radian * (180/Math.PI);
 }
+
 
 
 export function latLonToCartesian_old(lat:number, lon:number,scale:number=1,radius:number = 6371): Point3D {
@@ -152,9 +154,8 @@ export function initializeMap(vm:any,user:UserService,
                               center:LatLng,
                               meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',zoom=16) {
 
-  if(!vm.map)
-
-  if(user.game.url=="map" || user.game.url=="")user.zoom=2;
+  if(!vm.map && user.game){
+    if(user.game.url=="map" || user.game.url=="")user.zoom=2;
 
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
@@ -171,7 +172,7 @@ export function initializeMap(vm:any,user:UserService,
       alt:"me"
     }).addTo(vm.map)
 
-    if(user.game.entrance.x+user.game.entrance.y!=0){
+    if(user.game.entrance.x+user.game.entrance.y+user.game.entrance.z!=0){
       let entrance_polar=cartesianToPolar(user.game.entrance,environment.scale_factor,environment.translate_factor)
       L.marker([center.lat,center.lng],{
         icon:L.icon({
@@ -183,6 +184,9 @@ export function initializeMap(vm:any,user:UserService,
       }).addTo(vm.map)
     }
 
+
+
+  }
 
     return vm.map
 

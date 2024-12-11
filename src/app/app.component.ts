@@ -51,7 +51,6 @@ export class AppComponent implements OnInit {
     setTimeout(async()=>{
       let params:any=await getParams(this.routes)
       await this.user.init_network(params.sc,params.network,environment)
-      await this.user.init_game()
 
       this.user.address=params.address || localStorage.getItem("address") || ""
 
@@ -60,6 +59,7 @@ export class AppComponent implements OnInit {
         this.user.address=params.address
       }
       this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
+      this.router.navigate(["games"],{queryParams:{game_id:params.game}})
     })
   }
 

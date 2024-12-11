@@ -1,6 +1,6 @@
 <router-outlet></router-outlet>
 
-<mat-toolbar color="primary" class="bottom-toolbar">
+<mat-toolbar *ngIf="user.game" color="primary" class="bottom-toolbar">
 
   <div style="display: inline-block;font-size: small;margin-right: 50px;">
 <!--    <app-input style="display:inline-block;width:100px" *ngIf="user.show_visibility"-->

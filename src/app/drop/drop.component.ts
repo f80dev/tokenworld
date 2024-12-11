@@ -80,39 +80,41 @@ export class DropComponent implements AfterViewInit, OnChanges {
   nfts: any[]=[];
 
   async drop() {
+    if(this.user.game){
+      this.user.visibility=this.user.game.min_visibility
 
-    this.user.visibility=this.user.game.min_visibility
+      await this.user.login(this,"You must be connected to drop any NFT","",true)
+      $$("Authentification ",this.user.provider)
 
-    await this.user.login(this,"You must be connected to drop any NFT","",true)
-    $$("Authentification ",this.user.provider)
+      let center:any=await getParams(this.routes) || {}
+      if(!center.lat && !center.lng) {center=this.user.center_map}
+      if (center) {
+        let pos = polarToCartesian(
+          new LatLng(Number(center.lat)+environment.offset_lat,Number(center.lng)+environment.offset_lng),environment.scale_factor,environment.translate_factor
+        )
+        $$("Ajout d'un tokemon en ",center)
+        //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
 
-    let center:any=await getParams(this.routes) || {}
-    if(!center.lat && !center.lng) {center=this.user.center_map}
-    if (center) {
-      let pos = polarToCartesian(
-        new LatLng(Number(center.lat)+environment.offset_lat,Number(center.lng)+environment.offset_lng),environment.scale_factor,environment.translate_factor
-      )
-      $$("Ajout d'un tokemon en ",center)
-      //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
+        if(pos.x<0 || pos.y<0)throw new Error("Negative position")
+        let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y]
+        let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
+        wait_message(this, "Dropping ...")
 
-      if(pos.x<0 || pos.y<0)throw new Error("Negative position")
-      let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y]
-      let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
-      wait_message(this, "Dropping ...")
+        let tokens=[]
+        if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
+        tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
-      let tokens=[]
-      if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
-      tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
-
-      try {
-        let tx = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
-        wait_message(this)
-      } catch (e) {
-        showError(this, e)
-        wait_message(this)
+        try {
+          let tx = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
+          wait_message(this)
+        } catch (e) {
+          showError(this, e)
+          wait_message(this)
+        }
+        this.quit()
       }
-      this.quit()
     }
+
   }
 
 

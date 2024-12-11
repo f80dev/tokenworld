@@ -12,6 +12,7 @@ import {CaptureComponent} from './capture/capture.component';
 import {BuildComponent} from './build/build.component';
 import {AirdropComponent} from './airdrop/airdrop.component';
 import {CreateWorldComponent} from './create-world/create-world.component';
+import {GamesComponent} from './games/games.component';
 
 
 export const routes: Routes = [
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'build', component: BuildComponent},
   { path: 'test', component: TestComponent},
   { path: 'drop', component: DropComponent},
+  { path: 'games', component: GamesComponent},
   { path: 'airdrop', component: AirdropComponent},
   { path: 'create', component: CreateWorldComponent},
   { path: 'capture', component: CaptureComponent},

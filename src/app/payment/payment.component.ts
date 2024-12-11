@@ -166,7 +166,6 @@ export class PaymentComponent implements AfterContentInit,OnDestroy {
   async show_user_balance(addr:string,token_id:string,network:string){
     try{
       wait_message(this,"Calcul de votre encours")
-      debugger
       this.balance=await this.get_balance(addr,token_id,network) ///(10**this.money!.decimals);
       wait_message(this)
       if(Number(this.price)>this.balance.balance || this.balance.egld<0.001){

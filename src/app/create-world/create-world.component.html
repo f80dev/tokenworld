@@ -1,38 +1,38 @@
 <div class="mainform" style="text-align: center;">
-
   <h6>Game Zone</h6>
-  <div id="map" class="map_style" style="pointer-events: all;" >
-  </div>
+  <div id="map" class="map_style" style="pointer-events: all;" ></div>
 
   <br>
 
+  <table><tr style="width: 100%;">
+    <td style="text-align: right;width:50%;">
+      <app-input label="Game's title" value_type="text" style="display: inline-block;"
+                 [value]="title" (valueChange)="title=$event"></app-input>
+    </td>
+    <td style="text-align: left;">
+      <button mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+    </td>
+  </tr></table>
 
-  <div style="max-width: 1000px;display: inline-block;text-align: center;width:90%;" *ngIf="zone">
+  <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -50px;" *ngIf="zone">
+    <app-input label="Real map" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
+    <div *ngIf="!real">
+      <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
+      <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
+    </div>
 
-
-    <mat-tab-group>
-      <mat-tab label="Real" (select)="zone.map='map'">
-        <table>
-          <tr>
-            <td>Limits</td>
-            <td>
-              {{zone.NE.lat | number:"1.0-3"}},{{zone.NE.lng | number:"1.0-3"}} -
-              {{zone.SW.lat | number:"1.0-3"}},{{zone.SW.lng | number:"1.0-3"}}
-            </td>
-          </tr>
-        </table>
-      </mat-tab>
-
-      <mat-tab label="Virtual">
-        <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
-        <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
-      </mat-tab>
-    </mat-tab-group>
-
-
+    <!--            <table>&ndash;&gt;-->
+    <!--          <tr>-->
+    <!--            <td>Limits</td>-->
+    <!--            <td>-->
+    <!--              {{zone.NE.lat | number:"1.0-3"}},{{zone.NE.lng | number:"1.0-3"}} - -->
+    <!--              {{zone.SW.lat | number:"1.0-3"}},{{zone.SW.lng | number:"1.0-3"}}-->
+    <!--            </td>-->
+    <!--          </tr>-->
+    <!--        </table>-->
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-      <app-input label="Fee" help="" value_type="number" [value]="fee" (valueChange)="fee=$event"></app-input>
+      <app-input label="PV bank" help="" value_type="slider" [min]="0" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
       <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
       <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>

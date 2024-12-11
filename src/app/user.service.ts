@@ -41,7 +41,7 @@ export class UserService {
   show_visibility: boolean = false;
   visibility: number = 0
   account: any;
-  game: Game=new Game;
+  game: Game | undefined;
   idx:number=0
   sc_address=""
   fee=0;
@@ -172,6 +172,14 @@ export class UserService {
     }
   }
 
+  get_sc_address() {
+    if(this.network.indexOf("devnet")>-1){
+      return environment.contract_addr["elrond-devnet"]
+    }else{
+      return environment.contract_addr["elrond-mainnet"]
+    }
+  }
+
   get_default_token() {
     return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
   }
@@ -184,22 +192,14 @@ export class UserService {
         this.sc_address=""
       }
 
-      // @ts-ignore
-      this.sc_address=sc_address.length>0 ? sc_address : env.contract_addr[network]
-      resolve(this.game)
+      this.sc_address=sc_address.length>0 ? sc_address : this.get_sc_address()
+      resolve(true)
     })
   }
 
-  init_game(){
-    return new Promise(async (resolve, reject) => {
-      let game=await this.query("games",[])
-
+  init_game(game:any){
       this.game=game
-      this.game.url=this.game.url.toString()
-      this.visibility=this.game.max_visibility
       $$("Initialisation des paramètres de la carte ",this.game)
-      resolve(this.game)
-    })
   }
 
 }

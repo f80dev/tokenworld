@@ -67,33 +67,42 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   map_top=0
 
 
+  async init_map(){
+    $$("Initialisation de la carte principal")
+    await this.user.geoloc(this.geolocService)
+
+    this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
+    let zoom=this.user.zoom || 16
+
+    if(this.user.game){
+      let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
+      let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
+      this.map.setMaxBounds(new LatLngBounds(ne,sw))
+
+    }
+
+    initializeMap(this,this.user.zone,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
+      .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
+      .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
+      .on("keypress",(event:L.LeafletKeyboardEvent)=>{
+        //https://leafletjs.com/reference.html#keyboardevent
+        if(event.originalEvent.key=="c"){
+          //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
+          let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+          this.clipboard.copy(pos.x+","+pos.y)
+          showMessage(this,"Position copied")
+        }
+      })
+
+    this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),zoom);
+
+  }
+
+
   async ngAfterViewInit() {
-    setTimeout(async ()=>{
-      await this.user.geoloc(this.geolocService)
-
-      this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
-      let zoom=this.user.zoom || 16
-
-      //let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
-      //let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
-      //this.map.setMaxBounds(new LatLngBounds(ne,sw))
-
-      initializeMap(this,this.user,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
-        .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
-        .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
-        .on("keypress",(event:L.LeafletKeyboardEvent)=>{
-          //https://leafletjs.com/reference.html#keyboardevent
-          if(event.originalEvent.key=="c"){
-            //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
-            let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-            this.clipboard.copy(pos.x+","+pos.y)
-            showMessage(this,"Position copied")
-          }
-        })
-
-      this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),zoom);
-    },1500)
-
+    setTimeout(()=>{
+      if(this.user && this.user.game)this.init_map()
+    },500)
   }
 
 

@@ -1,5 +1,6 @@
 <div class="mainform" style="text-align: center;">
   <h6>Game Zone</h6>
+  <app-hourglass [message]="message"></app-hourglass>
   <div id="map" class="map_style" style="pointer-events: all;" ></div>
 
   <br>
@@ -10,12 +11,12 @@
                  [value]="title" (valueChange)="title=$event"></app-input>
     </td>
     <td style="text-align: left;">
-      <button mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+      <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
     </td>
   </tr></table>
 
   <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -50px;" *ngIf="zone">
-    <app-input label="Real map" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
+
     <div *ngIf="!real">
       <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
       <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
@@ -30,9 +31,10 @@
     <!--            </td>-->
     <!--          </tr>-->
     <!--        </table>-->
+    <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-      <app-input label="PV bank" help="" style="width:90%;" value_type="slider" [min]="0" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
+      <app-input label="PV bank" help="" style="width:90%;" value_type="slider" [min]="1" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
       <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
       <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
@@ -41,8 +43,10 @@
     </mat-expansion-panel>
 
 
+    <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+      <app-input label="Real map" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
       <mat-tab-group>
         <mat-tab label="YAML">
           <div class="code_yaml" [innerHTML]="yaml_content">

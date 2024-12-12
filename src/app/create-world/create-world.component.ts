@@ -13,8 +13,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {BytesValue, StringType, StringValue, TokenIdentifierValue, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import * as L from 'leaflet';
-import {send_transaction_with_transfers} from '../mvx';
-import {wait_message} from '../hourglass/hourglass.component';
+import {send_transaction, send_transaction_with_transfers} from '../mvx';
+import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
 import {LatLng} from 'leaflet';
 import {MatDialog} from '@angular/material/dialog';
@@ -31,7 +31,8 @@ import {ApiService} from '../api.service';
     NgIf,
     InputComponent,
     DecimalPipe,
-    MatButton
+    MatButton,
+    HourglassComponent
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -56,9 +57,17 @@ export class CreateWorldComponent implements OnInit {
   turns=0
   map!: L.Map
   args: any;
-  lifepoint=0;
+  lifepoint=1;
   title="Mon titre"
   real: boolean=true
+  message: string=""
+
+  update_zone(){
+    this.zone.zoom = this.map.getZoom()
+    this.zone.NE = this.map.getBounds().getNorthEast()
+    this.zone.SW = this.map.getBounds().getSouthWest()
+  }
+
 
   async ngOnInit() {
     $$("Appel de onInit")
@@ -92,11 +101,10 @@ export class CreateWorldComponent implements OnInit {
     this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
     initializeMap(this, this.zone, this.zone.center, "")
       .on("moveend", (event: L.LeafletEvent) => {
-        this.zone.NE = this.map.getBounds().getNorthEast();
-        this.zone.SW = this.map.getBounds().getSouthWest()
+        this.update_zone()
       })
       .on("zoomend", (event: L.LeafletEvent) => {
-        this.zone.zoom = this.map.getZoom()
+        this.update_zone()
       })
       .on("click", (event: L.LeafletEvent) => {
         this.zone.entrance = event.target
@@ -105,8 +113,7 @@ export class CreateWorldComponent implements OnInit {
         this.zone.exit = event.target
       })
     this.map.setView(this.zone.center, this.zone.zoom)
-    this.zone.NE = this.map.getBounds().getNorthEast()
-    this.zone.SW = this.map.getBounds().getSouthWest()
+    this.update_zone()
   }
 
 
@@ -117,7 +124,7 @@ export class CreateWorldComponent implements OnInit {
 
   async create_game() {
 
-    await this.user.login(this)
+    await this.user.login(this,"Authentification required to create a new game","",true)
 
     $$("Creation d'une partie avec ",this.zone)
 
@@ -156,8 +163,10 @@ export class CreateWorldComponent implements OnInit {
     ]
 
     let tokens=[]
-    if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
+
     try {
+      wait_message(this,"Your world is building ...")
+      tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
       let tx = await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
     } catch (e) {

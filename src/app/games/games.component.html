@@ -1,8 +1,14 @@
 <div class="mainform" style="text-align: center;">
-  <table>
+  <table style="width: 100%;">
     <tr style="width:100%" *ngFor="let game of games">
-      <td>{{game.title}}</td>
-      <td>Select</td>
+      <td style="text-align: left;">
+        {{game.title}}<br>
+        bank: {{game.bank/1e18}} LP
+      </td>
+      <td style="width:30%;">
+        <button mat-raised-button (click)="see_map(game)">Map</button>
+        <button mat-raised-button (click)="select(game)">Select</button>
+      </td>
     </tr>
   </table>
 </div>

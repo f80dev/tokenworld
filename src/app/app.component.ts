@@ -4,7 +4,7 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {MatDialog} from '@angular/material/dialog';
 import {environment} from "../environments/environment";
 import {UserService} from './user.service';
-import {getParams, setParams} from '../tools';
+import {$$, getParams, setParams} from '../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {DecimalPipe, NgIf} from '@angular/common';
@@ -51,8 +51,8 @@ export class AppComponent implements OnInit {
 
       let params:any=await getParams(this.routes)
       this.user.network=params.network || environment.networks[0].value
-
       this.user.address=params.address || localStorage.getItem("address") || ""
+      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 
       if(params.hasOwnProperty("signature")){
         this.user.signature=params.signature

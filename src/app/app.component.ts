@@ -96,4 +96,8 @@ export class AppComponent implements OnInit {
         queryParams:{p: setParams({zone:this.user.zone},"","")}
       })
   }
+
+  open_games() {
+    this.router.navigate(["games"])
+  }
 }

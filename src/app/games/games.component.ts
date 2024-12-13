@@ -2,9 +2,10 @@ import {Component, inject, OnInit} from '@angular/core';
 import {NgForOf} from '@angular/common';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {$$, getParams} from '../../tools';
+import {$$, getParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-games',
@@ -19,6 +20,7 @@ import {cartesianToPolar, center_of} from '../tokenworld';
 export class GamesComponent implements OnInit {
   games: any;
   user=inject(UserService)
+  toast=inject(MatSnackBar)
   routes=inject(ActivatedRoute)
   router=inject(Router)
 
@@ -37,6 +39,7 @@ export class GamesComponent implements OnInit {
     }else{
       if(this.games.length==1) {
         $$("une seule partie disponible donc on la sélectionne")
+        showMessage(this,"There is only one game")
         this.user.init_game(this.games[0])
         this.quit()
       }else{

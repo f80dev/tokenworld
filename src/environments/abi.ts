@@ -462,6 +462,10 @@ export const abi={
       "mutability": "readonly",
       "inputs": [
         {
+          "name": "game_id",
+          "type": "u32"
+        },
+        {
           "name": "caller",
           "type": "Address"
         },

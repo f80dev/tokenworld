@@ -155,6 +155,19 @@ export function distance(p1:LatLng, p2:LatLng,R=6371): number {
 }
 
 
+export function add_icon(map:any,icon:string,pos:LatLng,size=30){
+  if(icon=='')return false
+  L.marker(pos,{
+    icon:L.icon({
+      iconUrl: icon,
+      iconSize: [size, size], // size of the icon
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+    }),
+    alt:"me"
+  }).addTo(map)
+  return true
+}
+
 
 export function initializeMap(vm:any,zone:any,
                               center:LatLng,
@@ -163,48 +176,15 @@ export function initializeMap(vm:any,zone:any,
                               exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
 
   if(vm.map && zone){
-
     if(zone.url=="map" || zone.url=="")zone.zoom=2;
 
     L.tileLayer(baseMapURl).addTo(vm.map);
-    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
-      .addTo(vm.map).redraw()
+    L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
-    let size=30
+    add_icon(vm.map,meIcon,center)
 
-    if(meIcon!=""){
-      L.marker([center.lat,center.lng],{
-        icon:L.icon({
-          iconUrl: meIcon,
-          iconSize: [size, size], // size of the icon
-          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-        }),
-        alt:"me"
-      }).addTo(vm.map)
-    }
-
-
-    if(zone.entrance.lat+zone.entrance.lng!=0){
-      L.marker(zone.entrance,{
-        icon:L.icon({
-          iconUrl: entranceIcon,
-          iconSize: [size, size], // size of the icon
-          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-        }),
-        alt:"Entrance"
-      }).addTo(vm.map)
-    }
-
-    if(zone.exit.lat+zone.exit.lng!=0){
-      L.marker(zone.exit,{
-        icon:L.icon({
-          iconUrl: exitIcon,
-          iconSize: [size, size], // size of the icon
-          iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
-        }),
-        alt:"Exit"
-      }).addTo(vm.map)
-    }
+    if(zone.entrance.lat+zone.entrance.lng!=0)add_icon(vm.map,entranceIcon,zone.entrance)
+    if(zone.exit.lat+zone.exit.lng!=0)add_icon(vm.map,exitIcon,zone.exit)
   }
   return vm.map
 }

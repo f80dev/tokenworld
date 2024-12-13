@@ -1,6 +1,9 @@
-<div class="mainform" style="text-align: center;">
+<app-hourglass [message]="message"></app-hourglass>
+
+<div *ngIf="message==''" class="mainform" style="text-align: center;">
   <h6>Game Zone</h6>
-  <app-hourglass [message]="message"></app-hourglass>
+
+
   <div id="map" class="map_style" style="pointer-events: all;" ></div>
 
   <br>

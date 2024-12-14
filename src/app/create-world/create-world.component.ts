@@ -99,6 +99,9 @@ export class CreateWorldComponent implements OnInit {
 
     $$("Initialisation de la carte avec ",this.zone)
     this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
+
+    const popup = L.popup().setContent('<button id="cmdAddEntrance" type="button">Add Entrance</button> <button id="cmdAddExit" type="button">Add Exit</button>')
+
     initializeMap(this, this.zone, this.zone.center, "")
       .on("moveend", (event: L.LeafletEvent) => {
         this.update_zone()
@@ -107,11 +110,19 @@ export class CreateWorldComponent implements OnInit {
         this.update_zone()
       })
       .on("click", (event: L.LeafletEvent) => {
-        this.zone.entrance = event.target
+        debugger
+
+        this.map.openPopup(popup);
       })
       .on("dblclick", (event: L.LeafletEvent) => {
         this.zone.exit = event.target
       })
+
+
+    L.DomEvent.addListener(L.DomUtil.get('cmdAddEntrance')!, 'click', (e) => {
+      debugger
+    });
+
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()
   }

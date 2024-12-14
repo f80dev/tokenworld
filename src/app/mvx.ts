@@ -39,7 +39,7 @@ export async function mvx_api(url:string,params:string,api:any,network="devnet")
 
 export function get_nft(identifier: string, api:any,network: string) {
   //voir https://api.multiversx.com/#/nfts/NftController_getNft
-  return mvx_api("/nfts/" + identifier,"",api,network);
+  return mvx_api("/nfts/" + identifier,"",api,network)
 }
 
 

@@ -26,6 +26,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {abi} from '../../environments/abi';
 import {AbiRegistry, Field, Struct, U64Value} from '@multiversx/sdk-core/out';
+import {ApiService} from '../api.service';
+import {get_nft} from '../mvx';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -54,6 +56,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   toast=inject(MatSnackBar)
   dialog=inject(MatDialog)
   clipboard=inject(Clipboard)
+  api=inject(ApiService)
 
   private map!: L.Map
   private markers:L.Marker[]=[]
@@ -160,6 +163,17 @@ export class MapComponent implements OnChanges,AfterViewInit  {
             iconSize: [30, 30],// size of the icon
             iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
           })
+
+          if(this.user.preview){
+            let nonce=nft.nonce.toString(16)
+            let opt:any=await get_nft(nft.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce),this.api,this.user.network)
+            let size=50
+            giftIcon = L.icon({
+              iconUrl: opt.media[0].thumbnailUrl,
+              iconSize: [size, size],// size of the icon
+              iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+            })
+          }
 
           let coords = cartesianToPolar(nft.position,environment.scale_factor,environment.translate_factor)
 

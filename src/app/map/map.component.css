@@ -11,6 +11,16 @@
   margin-left:-20px;
 }
 
+.icon-button {
+  cursor:pointer;
+  margin:5px;
+  padding: 5px;
+  margin-bottom:-12px;
+  background-color:black;
+  font-size:x-large;
+  color:#0becc1;
+}
+
 
 .toolbox {
   display: inline-block;

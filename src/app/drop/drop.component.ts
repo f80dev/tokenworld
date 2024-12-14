@@ -19,6 +19,7 @@ import {eval_direct_url_xportal} from '../../crypto';
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {DeviceService} from '../device.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-drop',
@@ -48,6 +49,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
   router = inject(Router)
   dialog=inject(MatDialog)
   device=inject(DeviceService)
+  toast=inject(MatSnackBar)
 
   sel_nft: any;
   message: string=""
@@ -124,12 +126,13 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   on_select($event: any) {
+    $$("Selection du NFT ",$event)
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-    let pos=this.user.center_map
 
-
+    setTimeout(()=>{
+      let pos=this.user.center_map
       initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
         .on("zoomend",(event:L.LeafletEvent)=>{
           // let b=this.map.getBounds()
@@ -138,9 +141,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
           // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
           // this.max_distance=distance_in_meters
         })
-    setTimeout(()=>{
       this.map.setView(pos,this.user.zoom || 16);
-    },200)
+    },50)
 
 
   }

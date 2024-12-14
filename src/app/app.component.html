@@ -3,11 +3,13 @@
 <mat-toolbar *ngIf="user.game" color="primary" class="bottom-toolbar">
 
   <div style="display: inline-block;font-size: small;margin-right: 50px;">
+
 <!--    <app-input style="display:inline-block;width:100px" *ngIf="user.show_visibility"-->
 <!--               label="Visibility" (valueChange)="user.visibility=$event"-->
 <!--               value_type="number" [min]="1" [max]="500">-->
 <!--    </app-input>-->
   </div>
+
 
 
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>

@@ -118,7 +118,7 @@ export class CreateWorldComponent implements OnInit {
 
 
   quit(){
-    this.router.navigate( ["map"])
+    this.router.navigate( ["games"])
   }
 
 

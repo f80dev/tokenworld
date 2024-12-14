@@ -78,16 +78,19 @@ export class UserService {
 
 
   query(func:string,args:any[]=[]){
-    return query(func, args, this.get_domain(), this.get_sc_address())
+    $$("Appel de la fonction "+func+" avec les arguments ",args)
+    let rc=query(func, args, this.get_domain(), this.get_sc_address())
+    $$("Réponse ",rc)
+    return rc
   }
 
 
-  geoloc(geolocService:any){
+  geoloc(geolocService:any) : Promise<LatLng> {
     return new Promise(async (resolve, reject) => {
       try{
         this.loc=await geolocService.getCurrentPosition()
         $$("Localisation en ",this.loc)
-        resolve(true)
+        resolve(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude))
       }catch (e){
         reject()
       }

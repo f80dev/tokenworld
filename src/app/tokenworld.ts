@@ -4,6 +4,7 @@ import {environment} from '../environments/environment';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
+import {$$} from '../tools';
 
 export class Tokemon {
   id: number = 0;
@@ -183,8 +184,14 @@ export function initializeMap(vm:any,zone:any,
 
     add_icon(vm.map,meIcon,center)
 
-    if(zone.entrance.lat+zone.entrance.lng!=0)add_icon(vm.map,entranceIcon,zone.entrance)
-    if(zone.exit.lat+zone.exit.lng!=0)add_icon(vm.map,exitIcon,zone.exit)
+    if(zone.entrance && zone.entrance.lat+zone.entrance.lng!=0){
+      $$("entrance ajouté en ",zone.entrance)
+      add_icon(vm.map,entranceIcon,zone.entrance)
+    }
+    if(zone.exit && zone.exit.lat+zone.exit.lng!=0){
+      add_icon(vm.map,exitIcon,zone.exit)
+      $$("exit ajouté en ",zone.exit)
+    }
   }
   return vm.map
 }

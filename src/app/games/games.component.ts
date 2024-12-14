@@ -27,7 +27,7 @@ export class GamesComponent implements OnInit {
   async ngOnInit() {
     let params:any=await getParams(this.routes)
     this.games=[]
-    let id=0
+    let id=1 //le premier element d'un VecMapper commence à 1
     for(let game of await this.user.query("games",[])){
       game["id"]=id
       this.games.push(game)

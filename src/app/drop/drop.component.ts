@@ -57,14 +57,14 @@ export class DropComponent implements AfterViewInit, OnChanges {
   map!: L.Map
   ech: number=1
   max_distance=1000;
+  nfts: any[]=[];
 
   async ngAfterViewInit() {
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
 
     let params:any=await getParams(this.routes)
-    this.map = L.map('map')
-
     this.user.center_map=new LatLng(params.lat,params.lng)
+    this.map = L.map('map')
 
     $$("Drop sur les coordonnées ",this.user.center_map)
     await this.user.login(this,"You must be connected to drop any NFT","",false)
@@ -77,26 +77,22 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
-  nfts: any[]=[];
+
 
   async drop() {
     if(this.user.game){
+
       this.user.visibility=this.user.game.min_visibility
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
       $$("Authentification ",this.user.provider)
 
-      let center:any=await getParams(this.routes) || {}
-      if(!center.lat && !center.lng) {center=this.user.center_map}
-      if (center) {
-        let pos = polarToCartesian(
-          new LatLng(Number(center.lat)+environment.offset_lat,Number(center.lng)+environment.offset_lng),environment.scale_factor,environment.translate_factor
-        )
-        $$("Ajout d'un tokemon en ",center)
+
+        let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+        $$("Ajout d'un tokemon en ",pos)
         //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
 
-        if(pos.x<0 || pos.y<0)throw new Error("Negative position")
-        let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y]
+        let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z]
         let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
         wait_message(this, "Dropping ...")
 
@@ -113,7 +109,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
         }
         this.quit()
       }
-    }
+
 
   }
 
@@ -124,21 +120,29 @@ export class DropComponent implements AfterViewInit, OnChanges {
   }
 
 
+
+
+
   on_select($event: any) {
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-    setTimeout(()=> {
-      initializeMap(this,this.user,this.user.center_map,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+    let pos=this.user.center_map
+
+
+      initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
         .on("zoomend",(event:L.LeafletEvent)=>{
-          let b=this.map.getBounds()
-          let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
-          let distance_in_pixel=Math.sqrt(300*300+300+300)
-          this.ech=distance_in_pixel/distance_in_meters
-          this.max_distance=distance_in_meters
+          // let b=this.map.getBounds()
+          // let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
+          // let distance_in_pixel=Math.sqrt(300*300+300+300)
+          // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
+          // this.max_distance=distance_in_meters
         })
-      this.map.setView(new LatLng(this.user.center_map.lat,this.user.center_map.lng),this.user.zoom || 16);
+    setTimeout(()=>{
+      this.map.setView(pos,this.user.zoom || 16);
     },200)
+
+
   }
 
   convert_pos(content:string) : any {

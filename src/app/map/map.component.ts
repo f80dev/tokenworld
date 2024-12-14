@@ -1,11 +1,8 @@
 import {AfterViewInit, Component, inject, OnChanges} from '@angular/core';
 import * as L from 'leaflet';
 import {
-  Bounds,
   LatLng,
   LatLngBounds,
-  LatLngBoundsExpression,
-  LatLngBoundsLiteral,
   LeafletMouseEvent,
   Marker,
   TileLayer
@@ -27,6 +24,8 @@ import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
+import {abi} from '../../environments/abi';
+import {AbiRegistry, Field, Struct, U64Value} from '@multiversx/sdk-core/out';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -69,7 +68,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async init_map(){
     $$("Initialisation de la carte principal")
-    await this.user.geoloc(this.geolocService)
+    let geoloc_position=await this.user.geoloc(this.geolocService)
+    $$("Localisation de l'utilisateur en ",geoloc_position)
 
     this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
     let zoom=this.user.zoom || 16
@@ -77,11 +77,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     if(this.user.game){
       let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
-      this.map.setMaxBounds(new LatLngBounds(ne,sw))
-
+      L.rectangle(new LatLngBounds(sw,ne)).addTo(this.map);
+      //this.map.setMaxBounds(new LatLngBounds(ne,sw))
+      $$("Positionnement d'une limite ",{ne:ne,sw:sw})
     }
 
-    initializeMap(this,this.user.zone,new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude))
+    initializeMap(this,this.user.game,geoloc_position)
       .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
       .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
       .on("keypress",(event:L.LeafletKeyboardEvent)=>{
@@ -94,7 +95,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         }
       })
 
-    this.map.setView(new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude),zoom);
+
+    this.map.setView(geoloc_position,zoom);
 
   }
 
@@ -106,16 +108,24 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
 
-  open_drop() {
-    let bounds=this.map.getBounds()
-    var southWest = bounds.getNorthWest();
-    var northEast = bounds.getNorthEast();
-    var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
-    if(this.user.address){
-      let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng},"","")
-      this.router.navigate(["drop"],{queryParams:{p:position}})
-    } else {
-      this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
+  async open_drop() {
+    let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor)
+    //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
+
+    let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
+    if(message!=''){
+      showMessage(this,message)
+    }else{
+      let bounds=this.map.getBounds()
+      var southWest = bounds.getNorthWest();
+      var northEast = bounds.getNorthEast();
+      var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
+      if(this.user.address){
+        let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng},"","")
+        this.router.navigate(["drop"],{queryParams:{p:position}})
+      } else {
+        this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
+      }
     }
   }
 
@@ -142,6 +152,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
+
         for (let nft of this.user.nfts) {
           let icon=nft.owner!=this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
           var giftIcon = L.icon({
@@ -150,19 +161,16 @@ export class MapComponent implements OnChanges,AfterViewInit  {
             iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
           })
 
-          let coords = cartesianToPolar(nft,  this.map.getZoom(),environment.scale_factor)
-          let marker = L.marker([coords.lat, coords.lng], {icon: giftIcon, alt: nft})
+          let coords = cartesianToPolar(nft.position,environment.scale_factor,environment.translate_factor)
 
+          let marker = L.marker(coords, {icon: giftIcon, alt: nft})
           marker.bindTooltip(nft.name+" ("+nft.pv+" LP)").openTooltip()
           marker.on("mouseover", (event) => {this.mouseover(event)})
           marker.on("dblclick", (event) => {this.select_nft(event)})
-
-          L.circleMarker(
-            [coords.lat, coords.lng],
-            {color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}
-          ).addTo(this.map);
-
           marker.addTo(this.map)
+
+          L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
+
           this.markers.push(marker)
         }
       }

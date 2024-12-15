@@ -5,7 +5,7 @@ import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
-import {cartesianToPolar, center_of, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
+import {add_icon, cartesianToPolar, center_of, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -16,7 +16,7 @@ import * as L from 'leaflet';
 import {send_transaction, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
-import {LatLng} from 'leaflet';
+import {LatLng, Marker, point} from 'leaflet';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../api.service';
 
@@ -61,6 +61,10 @@ export class CreateWorldComponent implements OnInit {
   title="Mon titre"
   real: boolean=true
   message: string=""
+  show_menu: boolean=false
+  dropzone: LatLng=new LatLng(0,0);
+  private exit_marker: null | Marker<any>=null
+  private entrance_marker: null | Marker<any>=null
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -68,6 +72,13 @@ export class CreateWorldComponent implements OnInit {
     this.zone.SW = this.map.getBounds().getSouthWest()
   }
 
+  add_marker(){
+
+  }
+
+  refresh(){
+
+  }
 
   async ngOnInit() {
     $$("Appel de onInit")
@@ -99,9 +110,6 @@ export class CreateWorldComponent implements OnInit {
 
     $$("Initialisation de la carte avec ",this.zone)
     this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
-
-    const popup = L.popup().setContent('<button id="cmdAddEntrance" type="button">Add Entrance</button> <button id="cmdAddExit" type="button">Add Exit</button>')
-
     initializeMap(this, this.zone, this.zone.center, "")
       .on("moveend", (event: L.LeafletEvent) => {
         this.update_zone()
@@ -109,19 +117,10 @@ export class CreateWorldComponent implements OnInit {
       .on("zoomend", (event: L.LeafletEvent) => {
         this.update_zone()
       })
-      .on("click", (event: L.LeafletEvent) => {
-        debugger
-
-        this.map.openPopup(popup);
+      .on("click", (event: any) => {
+        this.dropzone=event.latlng
+        this.show_menu=!this.show_menu
       })
-      .on("dblclick", (event: L.LeafletEvent) => {
-        this.zone.exit = event.target
-      })
-
-
-    L.DomEvent.addListener(L.DomUtil.get('cmdAddEntrance')!, 'click', (e) => {
-      debugger
-    });
 
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()
@@ -153,7 +152,7 @@ export class CreateWorldComponent implements OnInit {
     s = s + "\t\tSW: " + sw.x + "," + sw.y + "," + sw.z + "\n"
     s = s + "\tEntrance: " + entrance.x + "," + entrance.y + "," + entrance.z + "\n"
     s = s + "\tExit: " + exit.x + "," + exit.y + "," + exit.z + "\n"
-
+    this.yaml_content=s
 
     this.args = [
       this.title,
@@ -192,5 +191,26 @@ export class CreateWorldComponent implements OnInit {
   copy(txt: string) {
     this.clipboard.copy(txt)
     showMessage(this,"Copied")
+  }
+
+  drop_pt(point_type="") {
+    if(point_type=="entrance"){
+      if(!this.entrance_marker){
+        this.entrance_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/flag.png",this.dropzone)
+      }else{
+        this.zone.entrance=this.dropzone
+        this.entrance_marker.setLatLng(this.dropzone)
+      }
+    }
+    if(point_type=="exit"){
+      if(!this.exit_marker){
+        this.exit_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/flag.png",this.dropzone)
+      }else{
+        this.zone.exit=this.dropzone
+        this.exit_marker.setLatLng(this.dropzone)
+      }
+
+    }
+    this.show_menu=false
   }
 }

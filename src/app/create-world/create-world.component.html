@@ -7,6 +7,11 @@
   <div id="map" class="map_style" style="pointer-events: all;" ></div>
 
   <br>
+  <div *ngIf="show_menu" style="height: 50px">
+    <button mat-raised-button (click)="drop_pt('entrance')">Entrance</button>
+    <button mat-raised-button (click)="drop_pt('exit')">Exit</button>
+  </div>
+  <br>
 
   <table><tr style="width: 100%;">
     <td style="text-align: right;width:50%;">
@@ -17,6 +22,8 @@
       <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
     </td>
   </tr></table>
+
+  <br><br>
 
   <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -50px;" *ngIf="zone">
 

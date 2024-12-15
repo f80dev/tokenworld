@@ -14,11 +14,9 @@ import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
 
 
-
 export function toNFT(nft:any) : any {
 
 }
-
 
 
 @Component({

@@ -10,7 +10,7 @@ import {
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, distance, initializeMap, polarToCartesian} from '../tokenworld';
+import {add_icon, cartesianToPolar, distance, initializeMap, polarToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';

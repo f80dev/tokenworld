@@ -17,17 +17,23 @@
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
-
     <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
     <button mat-raised-button (click)="move_tokemon()" *ngIf="user.tokemon_selected && user.tokemon_selected.owner==user.idx"><mat-icon>run_circle</mat-icon>Move</button>
-    <button mat-raised-button (click)="open_airdrop()"><mat-icon>paid</mat-icon>Airdrop</button>
-    <button mat-icon-button   (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
+    <button mat-icon-button  (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
 
     <mat-icon  (click)="moveto()"
                title="Se déplacer"
                class="icon-button">
       pin_drop
     </mat-icon>
+
+
+    <mat-icon  (click)="open_airdrop()"
+               title="Airdropr"
+               class="icon-button">
+      paid
+    </mat-icon>
+
 
 
     <mat-icon  (click)="user.preview=!user.preview;refresh();"

@@ -32,12 +32,12 @@
     </app-wallet>
 
     <div class="zone_input" *ngIf="sel_nft">
-      <app-input value_type="slide" [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
+      <app-input value_type="number" [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
                  label="Visibility" unity="meters"
                  (valueChange)="user.visibility=$event" [value]="user.visibility"></app-input>
       <br>
 
-      <app-input *ngIf="max_quantity>1" value_type="slide" [min]="1" [max]="max_quantity"
+      <app-input *ngIf="max_quantity>1" value_type="number" [min]="1" [max]="max_quantity"
                  label="Number to drop" unity="NFT"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
       <br>
@@ -46,6 +46,7 @@
                  *ngIf="max_pv_loading>0"
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
+      <br>
 
       <mat-slide-toggle [(ngModel)]="random_location">Random location</mat-slide-toggle>
 

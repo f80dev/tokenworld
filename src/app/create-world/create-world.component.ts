@@ -50,7 +50,13 @@ export class CreateWorldComponent implements OnInit {
   grid=20
   quota=20
   fee=5
-  zone:any
+  zone:any= {
+    min_distance: 1,
+    max_distance: 10,
+    n_degrees: 8,
+    map: "map",
+    zoom: 16
+  }
   yaml_content: string=""
   script_content: string=""
   max_player=100
@@ -65,6 +71,11 @@ export class CreateWorldComponent implements OnInit {
   dropzone: LatLng=new LatLng(0,0);
   private exit_marker: null | Marker<any>=null
   private entrance_marker: null | Marker<any>=null
+  max_visibility=10000
+  min_visibility=10
+  max_distance=100
+  min_distance=1
+  n_degrees=8
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -72,22 +83,10 @@ export class CreateWorldComponent implements OnInit {
     this.zone.SW = this.map.getBounds().getSouthWest()
   }
 
-  add_marker(){
-
-  }
-
-  refresh(){
-
-  }
 
   async ngOnInit() {
-    $$("Appel de onInit")
+
     this.zone={
-      min_visibility:10,
-      max_visibility:100,
-      min_distance:1,
-      max_distance:10,
-      n_degrees: 8,
       map:"map",
       zoom:16,
       entrance:new LatLng(0,0),
@@ -95,6 +94,7 @@ export class CreateWorldComponent implements OnInit {
       center:new LatLng(44,2),
       title:"mon titre"
     }
+    $$("Appel de onInit, initialisation de zone ",this.zone)
 
     let params:any=await getParams(this.routes)
 
@@ -133,13 +133,12 @@ export class CreateWorldComponent implements OnInit {
 
 
   async create_game() {
-
     await this.user.login(this,"Authentification required to create a new game","",true)
+    $$("Login user ",this.user)
 
     $$("Creation d'une partie avec ",this.zone)
-
-    let entrance = this.zone.exit.lng+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor) : new Point3D(0,0,0)
-    let exit =  this.zone.exit.lat+this.zone.exit.lat!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor) : new Point3D(0,0,0)
+    let entrance = this.zone.entrance && this.zone.entrance.lat+this.zone.entrance.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor) : new Point3D(0,0,0)
+    let exit =  this.zone.exit && this.zone.exit.lat+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor) : new Point3D(0,0,0)
     let ne = polarToCartesian(this.zone.NE, environment.scale_factor)
     let sw = polarToCartesian(this.zone.SW, environment.scale_factor)
 
@@ -164,13 +163,14 @@ export class CreateWorldComponent implements OnInit {
       ne.x, ne.y, ne.z,
       sw.x, sw.y, sw.z,
 
-      this.zone.min_distance, this.zone.max_distance,this.zone.n_degrees,
+      this.min_distance, this.max_distance,this.n_degrees,
 
       "map",
-      this.zone.min_visibility,this.zone.max_visibility,
+      this.min_visibility,this.max_visibility,
       this.max_player,
       this.turns
     ]
+    $$("Appel de la fonction avec les arguments ",this.args)
 
     let tokens=[]
 

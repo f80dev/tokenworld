@@ -86,38 +86,37 @@ export class DropComponent implements AfterViewInit, OnChanges {
   random_location: boolean = false;
 
 
+
   async drop() {
     if(this.user.game){
-
-      this.user.visibility=this.user.game.min_visibility
+      this.user.visibility=Number(this.user.game.min_visibility)
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
       $$("Authentification ",this.user.provider)
 
+      let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+      $$("Ajout d'un tokemon en ",pos)
+      //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
 
-        let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-        $$("Ajout d'un tokemon en ",pos)
-        //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
+      if(this.random_location)pos=new Point3D(0,0,0)
 
-        if(this.random_location)pos=new Point3D(0,0,0)
+      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z]
+      let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
+      wait_message(this, "Dropping ...")
 
-        let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z]
-        let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
-        wait_message(this, "Dropping ...")
+      let tokens=[]
+      if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint*this.quantity,18))
+      tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
-        let tokens=[]
-        if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint,18))
-        tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
-
-        try {
-          let tx = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
-          wait_message(this)
-        } catch (e) {
-          showError(this, e)
-          wait_message(this)
-        }
-        this.quit()
+      try {
+        let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
+        wait_message(this)
+      } catch (e) {
+        showError(this, e)
+        wait_message(this)
       }
+      this.quit()
+    }
   }
 
 
@@ -135,19 +134,20 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
 
+
+    let pos=this.user.center_map
+    initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+      .on("zoomend",(event:L.LeafletEvent)=>{
+        // let b=this.map.getBounds()
+        // let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
+        // let distance_in_pixel=Math.sqrt(300*300+300+300)
+        // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
+        // this.max_distance=distance_in_meters
+      })
     setTimeout(()=>{
-      let pos=this.user.center_map
-      initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
-        .on("zoomend",(event:L.LeafletEvent)=>{
-          // let b=this.map.getBounds()
-          // let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
-          // let distance_in_pixel=Math.sqrt(300*300+300+300)
-          // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
-          // this.max_distance=distance_in_meters
-        })
+      this.user.visibility=this.user.game!.min_visibility
       this.map.setView(pos,this.user.zoom || 16);
     },50)
-
 
   }
 

@@ -48,8 +48,9 @@
       <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
       <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
-      <app-input label="Min visibility" help="" value_type="number" [value]="zone.min_visibility" (valueChange)="zone.min_visibility=$event"></app-input>
-      <app-input label="Max visibility" help="" value_type="number" [value]="zone.max_visibility" (valueChange)="zone.max_visibility=$event"></app-input>
+      <app-input label="Min visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
+      <app-input label="Max visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>
     </mat-expansion-panel>
 
 

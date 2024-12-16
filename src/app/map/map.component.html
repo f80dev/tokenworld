@@ -19,8 +19,28 @@
 
     <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
     <button mat-raised-button (click)="move_tokemon()" *ngIf="user.tokemon_selected && user.tokemon_selected.owner==user.idx"><mat-icon>run_circle</mat-icon>Move</button>
-    <button mat-raised-button (click)="open_airdrop()"><mat-icon>paid</mat-icon>Airdrop</button>
-    <button mat-icon-button   (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
+    <button mat-icon-button  (click)="open_capture()" *ngIf="user.tokemon_selected "><mat-icon>catching_pokemon</mat-icon></button>
+
+    <mat-icon  (click)="moveto()"
+               title="Se déplacer"
+               class="icon-button">
+      pin_drop
+    </mat-icon>
+
+
+    <mat-icon  (click)="open_airdrop()"
+               title="Airdropr"
+               class="icon-button">
+      paid
+    </mat-icon>
+
+
+
+    <mat-icon  (click)="user.preview=!user.preview;refresh();"
+                 class="icon-button"
+                 [style.opacity]="user.preview ? 1.0 : 0.4">image
+      </mat-icon>
+
 
 
 <!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
@@ -28,7 +48,6 @@
 <!--             [value]="user.visibility"-->
 <!--             (valueChange)="user.visibility=$event">-->
 <!--    </mat-slider>-->
-    <button mat-icon-button (click)="moveto()" title="Se déplacer"><mat-icon>pin_drop</mat-icon></button>
   </div>
 </div>
 

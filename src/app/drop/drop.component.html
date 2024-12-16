@@ -47,6 +47,8 @@
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 
+      <mat-slide-toggle [(ngModel)]="random_location">Random location</mat-slide-toggle>
+
       <br><br>
       <button mat-raised-button
               (click)="drop()"

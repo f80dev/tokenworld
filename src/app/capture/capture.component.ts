@@ -13,6 +13,7 @@ import {InputComponent} from '../input/input.component';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-capture',
@@ -30,6 +31,7 @@ import {DeviceService} from '../device.service';
 })
 export class CaptureComponent implements OnInit {
   item: any;
+  api=inject(ApiService)
   _location=inject(Location)
   chance_to_win: number=1
 
@@ -51,26 +53,29 @@ export class CaptureComponent implements OnInit {
 
 
   async on_capture() {
-    if(!this.user.isConnected())await this.user.login(this);
+    await this.user.login(this,"","",true);
 
-    let args = [Number(this.item.id)]
-    let contract: string = environment.contract_addr["elrond-devnet"];
-    try {
-      wait_message(this, "Capturing in progress")
-      let tokens=[]
-      if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
-      let tx = await send_transaction_with_transfers(
-        this.user.provider,
-        this.pv_to_engage>0 ? "capture" : "take",
-        args,
-        this.user,
-        tokens);
-      wait_message(this)
-    } catch (e){
-      wait_message(this);
+    if(this.user.game){
+      try {
+        let func_name=this.pv_to_engage>0 ? "capture" : "take"
+        let args=func_name=="take" ? [this.user.game.id,Number(this.item.id)] : [Number(this.item.id)]
+        wait_message(this, "Capturing in progress")
+        let tokens=[]
+        if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
+        let tx = await send_transaction_with_transfers(
+          this.user.provider,
+          func_name,
+          args,
+          this.user,
+          tokens);
+        wait_message(this)
+      } catch (e){
+        wait_message(this);
+      }
+      showMessage(this,"You are the new owner of this NFT")
+      setTimeout(()=>{this.router.navigate(["map"])})
     }
-    showMessage(this,"You are the new owner of this NFT")
-    setTimeout(()=>{this.router.navigate(["map"])})
+
   }
 
   cancel() {

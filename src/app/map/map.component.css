@@ -11,6 +11,17 @@
   margin-left:-20px;
 }
 
+.icon-button {
+  border-radius: 40%;
+  cursor:pointer;
+  margin:4px;
+  padding: 6px;
+  margin-bottom:-12px;
+  background-color:black;
+  font-size:x-large;
+  color:#17A2B8;
+}
+
 
 .toolbox {
   display: inline-block;

@@ -45,6 +45,7 @@ export class UserService {
   idx:number=0
   fee=0;
   zone: any;
+  preview: boolean = false;
 
   constructor() { }
 

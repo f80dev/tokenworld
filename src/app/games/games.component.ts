@@ -39,7 +39,7 @@ export class GamesComponent implements OnInit {
     }else{
       if(this.games.length==1) {
         $$("une seule partie disponible donc on la sélectionne")
-        showMessage(this,"There is only one game")
+        //showMessage(this,"There is only one game")
         this.user.init_game(this.games[0])
         this.quit()
       }else{

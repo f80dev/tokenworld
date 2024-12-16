@@ -7,7 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {initializeMap, polarToCartesian} from '../tokenworld';
+import {initializeMap, Point3D, polarToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
@@ -19,6 +19,9 @@ import {eval_direct_url_xportal} from '../../crypto';
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {DeviceService} from '../device.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-drop',
@@ -32,7 +35,9 @@ import {DeviceService} from '../device.service';
     InputComponent,
     MatButton,
     WalletComponent,
-    UploadFileComponent
+    UploadFileComponent,
+    MatSlideToggle,
+    FormsModule
   ],
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
@@ -48,6 +53,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
   router = inject(Router)
   dialog=inject(MatDialog)
   device=inject(DeviceService)
+  toast=inject(MatSnackBar)
 
   sel_nft: any;
   message: string=""
@@ -77,6 +83,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
+  random_location: boolean = false;
 
 
   async drop() {
@@ -91,6 +98,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         $$("Ajout d'un tokemon en ",pos)
         //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
+
+        if(this.random_location)pos=new Point3D(0,0,0)
 
         let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z]
         let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
@@ -109,8 +118,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
         }
         this.quit()
       }
-
-
   }
 
 
@@ -122,14 +129,14 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
 
-
   on_select($event: any) {
+    $$("Selection du NFT ",$event)
     this.sel_nft=$event
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
-    let pos=this.user.center_map
 
-
+    setTimeout(()=>{
+      let pos=this.user.center_map
       initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
         .on("zoomend",(event:L.LeafletEvent)=>{
           // let b=this.map.getBounds()
@@ -138,9 +145,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
           // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
           // this.max_distance=distance_in_meters
         })
-    setTimeout(()=>{
       this.map.setView(pos,this.user.zoom || 16);
-    },200)
+    },50)
 
 
   }

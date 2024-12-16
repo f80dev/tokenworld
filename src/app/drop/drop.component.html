@@ -42,7 +42,7 @@
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
       <br>
 
-      <app-input value_type="slide" [min]="0" [max]="max_pv_loading"
+      <app-input value_type="number" [min]="0" [max]="max_pv_loading"
                  *ngIf="max_pv_loading>0"
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
@@ -54,7 +54,7 @@
       <button mat-raised-button
               (click)="drop()"
               title="Drop here">Drop !</button>
-
+      &nbsp;
       <button mat-raised-button
               (click)="sel_nft=null"
               title="Cancel">Cancel</button>

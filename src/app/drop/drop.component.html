@@ -7,12 +7,15 @@
   </button>
 
   <app-input value_type="text" *ngIf="sel_nft && message.length==0"
-             label="Tokemon's name" class="zone_input"
+             label="Tokemon's name" class="zone_input" help="Min length of 3 characters"
              (valueChange)="name=$event" [value]="name"></app-input>
   <br>
 
+  <mat-slide-toggle *ngIf="sel_nft && message.length==0"
+                    [(ngModel)]="random_location">Random location</mat-slide-toggle>
 
-  <div class="map_style" [style.display]="!sel_nft || message.length>0 ? 'none' : 'inline-block'">
+  <br>
+  <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
     <div id="map" style="position: absolute;left:0;top:0;right: 0;bottom:0;z-index: 0;"></div>
     <div class="disk" [style.width]="user.visibility*ech+'px'"
          [style.height]="user.visibility*ech+'px'"
@@ -20,7 +23,6 @@
          [style.margin-left]="-user.visibility*ech/2+'px'" >
     </div>
   </div>
-
 
   <div *ngIf="message==''">
     <app-wallet [address]="user.address"
@@ -48,9 +50,6 @@
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
       <br>
 
-      <mat-slide-toggle [(ngModel)]="random_location">Random location</mat-slide-toggle>
-
-      <br><br>
       <button mat-raised-button
               (click)="drop()"
               title="Drop here">Drop !</button>

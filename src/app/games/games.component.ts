@@ -23,6 +23,7 @@ export class GamesComponent implements OnInit {
   toast=inject(MatSnackBar)
   routes=inject(ActivatedRoute)
   router=inject(Router)
+  private selected_game: number=0;
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
@@ -35,25 +36,27 @@ export class GamesComponent implements OnInit {
     }
     if(this.games.length==0){
       $$("Aucune partie disponible")
-      this.router.navigate(["create"])
+      this.quit("create")
     }else{
       if(this.games.length==1) {
         $$("une seule partie disponible donc on la sélectionne")
-        //showMessage(this,"There is only one game")
         this.user.init_game(this.games[0])
         this.quit()
       }else{
         if(params.hasOwnProperty("game")){
-          this.user.init_game(this.games[Number(params.game)])
+          if(Number(params.game)>this.games.length)params.game=1
+          this.user.init_game(this.games[Number(params.game)-1])
           this.quit()
         }
       }
     }
   }
 
-  quit(){
-    this.router.navigate(["map"])
+  quit(redirect="map"){
+    if(this.user.game)localStorage.setItem("selected_game",String(this.user.game.id))
+    this.router.navigate([redirect])
   }
+
 
   select(game: any) {
     this.user.init_game(game)

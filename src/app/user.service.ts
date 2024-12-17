@@ -191,7 +191,7 @@ export class UserService {
 
   init_game(game:any){
       this.game=game
-      $$("Initialisation des paramètres de la carte ",this.game)
+      $$("Sélection de la partie ",this.game)
   }
 
 }

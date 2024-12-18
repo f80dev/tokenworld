@@ -14,8 +14,8 @@ export const environment = {
   visual: "./assets/coffre.jpg",
   claim: "Valoriser vos contenus en quelques clics",
   token: {
-    "elrond-devnet":"LIFEPOINT-7f9101",
-    "elrond-mainnet":"LIFEPOINT-7f9101"
+    "elrond-devnet":"LIFEPOINT-30c75e",
+    "elrond-mainnet":"LIFEPOINT-30c75e"
   },
   max_file_size:50000000,
   shorter_service:"",
@@ -59,7 +59,7 @@ export const environment = {
   },
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq35hyc0g75nqrfcky4p4xakhgafklzryp835sql74ps",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq37duh6uu5mrwa0wy5ln4rhms4djf3r8v835sklwpls",
     "elrond-mainnet":""
   },
 

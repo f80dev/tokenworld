@@ -37,6 +37,7 @@
 
 
     <mat-icon  (click)="user.preview=!user.preview;refresh();"
+               *ngIf="markers.length>0"
                  class="icon-button"
                  [style.opacity]="user.preview ? 1.0 : 0.4">image
       </mat-icon>

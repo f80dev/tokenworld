@@ -59,7 +59,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   api=inject(ApiService)
 
   private map!: L.Map
-  private markers:L.Marker[]=[]
+  markers:L.Marker[]=[]
 
   center: any;
   private layer: TileLayer | undefined

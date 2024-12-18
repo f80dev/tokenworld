@@ -89,6 +89,10 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   async drop() {
     if(this.user.game){
+      if(this.name.length<3){
+        showMessage(this,"3 characters required for the name")
+        return
+      }
       this.user.visibility=Number(this.user.game.min_visibility)
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
@@ -109,7 +113,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens)
+        let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
         wait_message(this)
       } catch (e) {
         showError(this, e)

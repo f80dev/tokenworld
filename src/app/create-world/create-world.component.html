@@ -50,7 +50,9 @@
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
       <app-input label="Min visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
       <app-input label="Max visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
-      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>
+<!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
+      <app-input label="Min loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
+      <app-input label="Max loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
     </mat-expansion-panel>
 
 

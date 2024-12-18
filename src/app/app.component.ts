@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
         this.user.address=params.address
       }
       this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-      this.router.navigate(["games"],{queryParams:{game_id:params.game}})
+      this.router.navigate(["games"],{queryParams:{game:params.game || localStorage.getItem("selected_game")}})
 
   }
 

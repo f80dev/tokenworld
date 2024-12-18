@@ -68,7 +68,7 @@ export class CreateWorldComponent implements OnInit {
   real: boolean=true
   message: string=""
   show_menu: boolean=false
-  dropzone: LatLng=new LatLng(0,0);
+  dropzone: LatLng=new LatLng(0,0)
   private exit_marker: null | Marker<any>=null
   private entrance_marker: null | Marker<any>=null
   max_visibility=10000
@@ -76,6 +76,8 @@ export class CreateWorldComponent implements OnInit {
   max_distance=100
   min_distance=1
   n_degrees=8
+  min_pv: number=0
+  max_pv: number=100
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()

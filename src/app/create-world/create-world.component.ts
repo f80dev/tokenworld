@@ -169,6 +169,7 @@ export class CreateWorldComponent implements OnInit {
 
       "map",
       this.min_visibility,this.max_visibility,
+      this.min_pv,this.max_pv,
       this.max_player,
       this.turns
     ]

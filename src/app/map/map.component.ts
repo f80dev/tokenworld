@@ -148,10 +148,18 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         }
 
         this.markers=[]
+        let ne=polarToCartesian(this.map.getBounds().getNorthEast(),environment.scale_factor)
+        let sw=polarToCartesian(this.map.getBounds().getSouthWest(),environment.scale_factor)
 
         $$("Chargement des tokemon")
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-        let args = [this.user.game.id,this.user.address,pos.x, pos.y,pos.z] //environment.scale_factor/1000]
+        let args = [
+          this.user.game.id,
+          this.user.address,
+          pos.x, pos.y,pos.z,
+          ne.x,ne.y,ne.z,
+          sw.x,sw.y,sw.z
+        ] //environment.scale_factor/1000]
 
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")

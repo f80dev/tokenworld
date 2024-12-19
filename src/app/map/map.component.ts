@@ -140,7 +140,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
 
-  add_tokemon_as_marker(uri:string,position:Point3D,label:string,size=50){
+  add_tokemon_as_marker(uri:string,position:Point3D,label:string,alt:any,size=50){
     let giftIcon = L.icon({
       iconUrl: uri,
       iconSize: [size, size],// size of the icon
@@ -148,7 +148,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     })
     let coords = cartesianToPolar(position,environment.scale_factor,environment.translate_factor)
 
-    let marker = L.marker(coords, {icon: giftIcon, alt: label})
+    let marker = L.marker(coords, {icon: giftIcon, alt:alt})
     marker.bindTooltip(label).openTooltip()
     marker.on("mouseover", (event) => {this.mouseover(event)})
     marker.on("dblclick", (event) => {this.select_nft(event)})
@@ -181,17 +181,19 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.user.nfts = await this.user.query("show_nfts",  args);
         $$("Chargement de " + this.user.nfts.length + " tokemons")
 
-        for (let nft of this.user.nfts) {
-          let icon=nft.owner!=this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
+        for (let tokemon of this.user.nfts) {
+          let icon=(tokemon.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg')
 
           if(this.user.preview){
-            let nonce=nft.nonce.toString(16)
-            get_nft(nft.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce),this.api,this.user.network).then((opt:any)=>{
+            let nonce=tokemon.nonce.toString(16)
+            let nft_id=tokemon.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce)
+            //let nft_id=tokemon.nft
+            get_nft(nft_id,this.api,this.user.network).then((opt:any)=>{
               $$("Récupération du nft ",opt)
-              this.markers.push(this.add_tokemon_as_marker(opt.media[0].thumbnailUrl,nft.position,nft.name+" ("+nft.pv+" LP)",50))
+              this.markers.push(this.add_tokemon_as_marker(opt.media[0].thumbnailUrl,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,50))
             })
           }else{
-            this.markers.push(this.add_tokemon_as_marker(icon,nft.position,nft.name+" ("+nft.pv+" LP)",30))
+            this.markers.push(this.add_tokemon_as_marker(icon,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,30))
           }
 
         }
@@ -201,8 +203,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async select_nft(event: LeafletMouseEvent) {
-    let nft=event.target.options.alt
-    this.router.navigate(["capture"],{queryParams:{p:setParams(nft,"","")}})
+    let tokemon=event.target.options.alt
+    this.router.navigate(["capture"],{queryParams:{p:setParams(tokemon,"","")}})
   }
 
 

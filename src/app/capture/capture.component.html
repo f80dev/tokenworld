@@ -1,4 +1,4 @@
-<div class="mainform" style="text-align: center;">
+<div class="mainform" style="text-align: center;" *ngIf="item">
   <app-hourglass [message]="message"></app-hourglass>
   <br>
   <button mat-raised-button
@@ -9,7 +9,9 @@
   <div *ngIf="message.length==0">
     <h5>Capture this tokemon ?</h5>
     <app-tokemon [label_pv]="lang_pv"
-                 [item]="item" [network]="user.network"></app-tokemon>
+                 [item]="item"
+                 [network]="user.network">
+    </app-tokemon>
     <br>
 
     <app-input  *ngIf="item.pv>0"

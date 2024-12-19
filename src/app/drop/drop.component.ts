@@ -84,6 +84,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   random_location: boolean = false;
+  diffusion=0
 
 
 
@@ -104,7 +105,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       if(this.random_location)pos=new Point3D(0,0,0)
 
-      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z]
+      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,this.diffusion*environment.scale_factor]
       let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping ...")
 

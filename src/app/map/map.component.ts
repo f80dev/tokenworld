@@ -4,13 +4,13 @@ import {
   LatLng,
   LatLngBounds,
   LeafletMouseEvent,
-  Marker,
+  Marker, Point,
   TileLayer
 } from 'leaflet';
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {add_icon, cartesianToPolar, distance, initializeMap, polarToCartesian} from '../tokenworld';
+import {add_icon, cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -140,6 +140,23 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
 
+  add_tokemon_as_marker(uri:string,position:Point3D,label:string,size=50){
+    let giftIcon = L.icon({
+      iconUrl: uri,
+      iconSize: [size, size],// size of the icon
+      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+    })
+    let coords = cartesianToPolar(position,environment.scale_factor,environment.translate_factor)
+
+    let marker = L.marker(coords, {icon: giftIcon, alt: label})
+    marker.bindTooltip(label).openTooltip()
+    marker.on("mouseover", (event) => {this.mouseover(event)})
+    marker.on("dblclick", (event) => {this.select_nft(event)})
+    marker.addTo(this.map)
+    L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
+    return marker
+  }
+
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
       if(this.user.center_map && this.user.game) {
@@ -166,34 +183,17 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
         for (let nft of this.user.nfts) {
           let icon=nft.owner!=this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg'
-          var giftIcon = L.icon({
-            iconUrl: icon,
-            iconSize: [30, 30],// size of the icon
-            iconAnchor: [15, 28], // point of the icon which will correspond to marker's location
-          })
 
           if(this.user.preview){
             let nonce=nft.nonce.toString(16)
-            let opt:any=await get_nft(nft.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce),this.api,this.user.network)
-            let size=50
-            giftIcon = L.icon({
-              iconUrl: opt.media[0].thumbnailUrl,
-              iconSize: [size, size],// size of the icon
-              iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+            get_nft(nft.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce),this.api,this.user.network).then((opt:any)=>{
+              $$("Récupération du nft ",opt)
+              this.markers.push(this.add_tokemon_as_marker(opt.media[0].thumbnailUrl,nft.position,nft.name+" ("+nft.pv+" LP)",50))
             })
+          }else{
+            this.markers.push(this.add_tokemon_as_marker(icon,nft.position,nft.name+" ("+nft.pv+" LP)",30))
           }
 
-          let coords = cartesianToPolar(nft.position,environment.scale_factor,environment.translate_factor)
-
-          let marker = L.marker(coords, {icon: giftIcon, alt: nft})
-          marker.bindTooltip(nft.name+" ("+nft.pv+" LP)").openTooltip()
-          marker.on("mouseover", (event) => {this.mouseover(event)})
-          marker.on("dblclick", (event) => {this.select_nft(event)})
-          marker.addTo(this.map)
-
-          L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
-
-          this.markers.push(marker)
         }
       }
     })

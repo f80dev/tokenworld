@@ -105,7 +105,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       if(this.random_location)pos=new Point3D(0,0,0)
 
-      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,this.diffusion*environment.scale_factor]
+      let p1=new Point3D(0,0,0)
+      let p2=new Point3D(0,0,0)
+      if(this.diffusion>0){
+        let diffusion=this.diffusion/100000
+        p1=polarToCartesian(new LatLng(this.user.center_map.lat+diffusion,this.user.center_map.lng+diffusion),environment.scale_factor)
+        p2=polarToCartesian(new LatLng(this.user.center_map.lat-diffusion,this.user.center_map.lng-diffusion),environment.scale_factor)
+      }
+
+      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
       let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping ...")
 

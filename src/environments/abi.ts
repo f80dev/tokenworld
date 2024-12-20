@@ -3,11 +3,11 @@
 export const abi={
   "buildInfo": {
     "rustc": {
-      "version": "1.82.0",
-      "commitHash": "f6e511eec7342f59a25f7c0534f1dbea00d01b14",
-      "commitDate": "2024-10-15",
+      "version": "1.78.0",
+      "commitHash": "9b00956e56009bab2aa15d7bff10916599e3d6d6",
+      "commitDate": "2024-04-29",
       "channel": "Stable",
-      "short": "rustc 1.82.0 (f6e511eec 2024-10-15)"
+      "short": "rustc 1.78.0 (9b00956e5 2024-04-29)"
     },
     "contractCrate": {
       "name": "tokemonworld",
@@ -415,7 +415,27 @@ export const abi={
           "type": "u64"
         },
         {
-          "name": "diffusion",
+          "name": "x1",
+          "type": "u64"
+        },
+        {
+          "name": "y1",
+          "type": "u64"
+        },
+        {
+          "name": "z1",
+          "type": "u64"
+        },
+        {
+          "name": "x2",
+          "type": "u64"
+        },
+        {
+          "name": "y2",
+          "type": "u64"
+        },
+        {
+          "name": "z2",
           "type": "u64"
         }
       ],
@@ -707,3 +727,4 @@ export const abi={
     }
   }
 }
+

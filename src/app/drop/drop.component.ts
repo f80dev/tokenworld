@@ -108,7 +108,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       let p1=new Point3D(0,0,0)
       let p2=new Point3D(0,0,0)
       if(this.diffusion>0){
-        let diffusion=this.diffusion/100000
+        let diffusion=this.diffusion/111320
         p1=polarToCartesian(new LatLng(this.user.center_map.lat+diffusion,this.user.center_map.lng+diffusion),environment.scale_factor)
         p2=polarToCartesian(new LatLng(this.user.center_map.lat-diffusion,this.user.center_map.lng-diffusion),environment.scale_factor)
       }

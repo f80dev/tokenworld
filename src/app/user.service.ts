@@ -6,7 +6,7 @@ import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
-import {Game} from './tokenworld';
+import {cartesianToPolar, center_of, Game} from './tokenworld';
 
 @Injectable({
   providedIn: 'root'
@@ -129,10 +129,7 @@ export class UserService {
             reject()
           }
         }
-
-
       }
-
     })
   }
 
@@ -191,7 +188,9 @@ export class UserService {
 
   init_game(game:any){
       this.game=game
+      this.center_map=cartesianToPolar(center_of(game.ne,game.sw))
       $$("Sélection de la partie ",this.game)
   }
+
 
 }

@@ -233,13 +233,12 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
 
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,
                                        args:any,contract_addr:string,
-                                       token="",nonce=0,value=0,abi:any,
+                                       token="",nonce=0,value=0,_abi:any=abi,
                                        _type: string="",gasLimit=50000000n) {
   //envoi d'une transaction
 
   return new Promise(async (resolve, reject) => {
 
-    let signer:any=null
     if(!provider){
       reject("Impossible de determiner l'envoyeur")
     }
@@ -254,7 +253,7 @@ export async function send_transaction(provider:any,function_name:string,sender_
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({
       config: factoryConfig,
-      abi:await create_abi(abi)
+      abi:await create_abi(_abi)
     });
     //voir https://github.com/multiversx/mx-sdk-js-web-wallet-provider/blob/main/src/walletProvider.ts
     const apiNetworkProvider = new ApiNetworkProvider(DEVNET);

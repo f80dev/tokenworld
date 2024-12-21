@@ -6,6 +6,7 @@ import {$$, getParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {send_transaction} from '../mvx';
 
 @Component({
   selector: 'app-games',
@@ -66,5 +67,10 @@ export class GamesComponent implements OnInit {
   see_map(game: any) {
     let center=cartesianToPolar(center_of(game.sw,game.ne))
     open("https://maps.google.com/maps/@"+center.lat+","+center.lng+",12z","maps")
+  }
+
+  async close_map(game: any) {
+    let args=[game.id]
+    let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
   }
 }

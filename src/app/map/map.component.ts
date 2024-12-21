@@ -234,14 +234,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async refresh() {
-
     this.user.zone={
       NE: this.map.getBounds().getNorthEast(),
       SW: this.map.getBounds().getSouthWest(),
       zoom:this.map.getZoom(),
       center:this.map.getCenter()
     }
-
     this.add_tokemon_to_markers()
     this.layer?.redraw()
   }

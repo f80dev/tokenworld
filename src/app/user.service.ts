@@ -6,7 +6,7 @@ import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
-import {cartesianToPolar, center_of, Game} from './tokenworld';
+import {cartesianToPolar, center_of, Game, polarToCartesian} from './tokenworld';
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +91,7 @@ export class UserService {
       try{
         this.loc=await geolocService.getCurrentPosition()
         $$("Localisation en ",this.loc)
+        $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
         resolve(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude))
       }catch (e){
         reject()

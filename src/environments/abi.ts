@@ -511,16 +511,28 @@ export const abi={
       ]
     },
     {
+      "name": "show_all_my_nfts",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "variadic<Tokemon>",
+          "multi_result": true
+        }
+      ]
+    },
+    {
       "name": "show_nfts",
       "mutability": "readonly",
       "inputs": [
         {
           "name": "game_id",
           "type": "u32"
-        },
-        {
-          "name": "caller",
-          "type": "Address"
         },
         {
           "name": "x",
@@ -532,30 +544,6 @@ export const abi={
         },
         {
           "name": "z",
-          "type": "u64"
-        },
-        {
-          "name": "ne_x",
-          "type": "u64"
-        },
-        {
-          "name": "ne_y",
-          "type": "u64"
-        },
-        {
-          "name": "ne_z",
-          "type": "u64"
-        },
-        {
-          "name": "sw_x",
-          "type": "u64"
-        },
-        {
-          "name": "sw_y",
-          "type": "u64"
-        },
-        {
-          "name": "sw_z",
           "type": "u64"
         }
       ],
@@ -746,4 +734,3 @@ export const abi={
     }
   }
 }
-

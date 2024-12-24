@@ -64,20 +64,8 @@ function radToDeg(radian:number):number {
 
 
 
-export function latLonToCartesian_old(lat:number, lon:number,scale:number=1,radius:number = 6371): Point3D {
-  const latRad = degToRad(lat);
-  const lonRad = degToRad(lon);
 
-  const x = radius * Math.cos(latRad) * Math.cos(lonRad)*scale;
-  const y = radius * Math.cos(latRad) * Math.sin(lonRad)*scale;
-  const z = radius * Math.sin(latRad) * scale;
-
-  return new Point3D(Math.round(x), Math.round(y), Math.round(z) );
-}
-
-
-
-function azimuthalEquidistantProjection(pt:LatLng, lat0=48.8566, lon0 = 2.3522, radius= 6371) {
+function azimuthalEquidistantProjection(pt:LatLng, lat0=48.8566, lon0 = 2.3522, radius= 6371000) {
   // Convert degrees to radians
   const latRad = pt.lat * Math.PI / 180;
   const lonRad = pt.lng * Math.PI / 180;
@@ -99,7 +87,7 @@ function azimuthalEquidistantProjection(pt:LatLng, lat0=48.8566, lon0 = 2.3522, 
 
 
 
-export function polarToCartesian(polar:LatLng,scale:number=1,translate=0,radius:number = 6371): Point3D {
+export function polarToCartesian(polar:LatLng,scale:number=1,translate=0,radius:number = 6371000): Point3D {
   if(!polar)return new Point3D(0,0,0)
   const latRad = degToRad(polar.lat);
   const lonRad = degToRad(polar.lng);
@@ -116,10 +104,12 @@ export function center_of(pt1:Point3D,pt2:Point3D) : Point3D {
   return new Point3D((pt2.x+pt1.x)/2,(pt2.y+pt1.y)/2,(pt2.z+pt1.z)/2)
 }
 
+
+
 export function cartesianToPolar(pt:Point3D,scale:number=1,translate=0) : LatLng {
-  const xx=pt.x/scale-translate
-  const yy=pt.y/scale-translate
-  const zz=pt.z/scale-translate
+  const xx=(pt.x-translate)/scale
+  const yy=(pt.y-translate)/scale
+  const zz=(pt.z-translate)/scale
   const r = Math.sqrt(xx * xx + yy * yy + zz * zz);
   const theta = Math.acos(zz / r);
   const phi = Math.atan2(yy, xx);
@@ -128,21 +118,10 @@ export function cartesianToPolar(pt:Point3D,scale:number=1,translate=0) : LatLng
 }
 
 
-//
-// export function cartesianToPolar(x:number, y:number,z:number,scale:number=1) {
-//   const xx=x/scale
-//   const yy=y/scale
-//   const zz=z/scale
-//   const r = Math.sqrt(xx * xx + yy * yy + zz * zz);
-//   const theta = Math.acos(zz / r);
-//   const phi = Math.atan2(yy, xx);
-//
-//   return { lat:90-radToDeg(theta),long:radToDeg(phi), radius:r };
-// }
 
 
-export function distance(p1:LatLng, p2:LatLng,R=6371): number {
-
+export function distance(p1:LatLng, p2:LatLng,R=6371000): number {
+  //Rayon de la terre en metres
   const dLat = degToRad(p2.lat - p1.lat);
   const dLon = degToRad(p2.lng- p1.lng);
 
@@ -152,7 +131,7 @@ export function distance(p1:LatLng, p2:LatLng,R=6371): number {
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return R*c*1000;
+  return R*c;
 }
 
 

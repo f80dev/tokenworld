@@ -105,12 +105,18 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       if(this.random_location)pos=new Point3D(0,0,0)
 
-      let p1=new Point3D(0,0,0)
-      let p2=new Point3D(0,0,0)
+      let p1=this.user.game.ne
+      let p2=this.user.game.sw
       if(this.diffusion>0){
         let diffusion=this.diffusion/111320
-        p1=polarToCartesian(new LatLng(this.user.center_map.lat+diffusion,this.user.center_map.lng+diffusion),environment.scale_factor)
-        p2=polarToCartesian(new LatLng(this.user.center_map.lat-diffusion,this.user.center_map.lng-diffusion),environment.scale_factor)
+        p1=polarToCartesian(
+          new LatLng(this.user.center_map.lat+diffusion,this.user.center_map.lng+diffusion),
+          environment.scale_factor,environment.translate_factor
+        )
+        p2=polarToCartesian(
+          new LatLng(this.user.center_map.lat-diffusion,this.user.center_map.lng-diffusion),
+          environment.scale_factor,environment.translate_factor
+        )
       }
 
       let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
@@ -137,8 +143,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.sel_nft=null
     this.router.navigate(["map"])
   }
-
-
 
 
   on_select($event: any) {
@@ -168,7 +172,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(content.split(",").length==2){
       let lat=Number(content.split(",")[0])
       let lng=Number(content.split(",")[1])
-      return polarToCartesian(new LatLng(lat,lng),environment.scale_factor,environment.translate_factor)
+      return polarToCartesian(
+        new LatLng(lat,lng),environment.scale_factor,environment.translate_factor)
     }
   }
 

@@ -1,4 +1,9 @@
-<app-hourglass [message]="message"></app-hourglass>
+<div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
+  <app-hourglass [message]="message"></app-hourglass>
+  <br>
+  <img src="https://tokemon.f80.fr/assets/under_construction.png">
+</div>
+
 
 <div *ngIf="message==''" class="mainform" style="text-align: center;">
   <h6>Game Zone</h6>
@@ -59,7 +64,7 @@
     <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
-      <app-input label="Real map" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
+      <app-input label="Use localisation" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
       <mat-tab-group>
         <mat-tab label="YAML">
           <div class="code_yaml" [innerHTML]="yaml_content">

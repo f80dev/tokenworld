@@ -27,7 +27,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import {abi} from '../../environments/abi';
 import {AbiRegistry, Field, Struct, U64Value} from '@multiversx/sdk-core/out';
 import {ApiService} from '../api.service';
-import {get_nft} from '../mvx';
+import {get_nft, send_transaction} from '../mvx';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -112,7 +112,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   async open_drop() {
-    let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor)
+    let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
 
     let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
@@ -153,7 +153,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     marker.on("mouseover", (event) => {this.mouseover(event)})
     marker.on("dblclick", (event) => {this.select_nft(event)})
     marker.addTo(this.map)
-    L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
+    //L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
     return marker
   }
 
@@ -165,20 +165,15 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         }
 
         this.markers=[]
-        let ne=polarToCartesian(this.map.getBounds().getNorthEast(),environment.scale_factor)
-        let sw=polarToCartesian(this.map.getBounds().getSouthWest(),environment.scale_factor)
-
         $$("Chargement des tokemon")
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         let args = [
           this.user.game.id,
-          this.user.address,
           pos.x, pos.y,pos.z,
-          ne.x,ne.y,ne.z,
-          sw.x,sw.y,sw.z
-        ] //environment.scale_factor/1000]
+        ]
 
         this.user.nfts = await this.user.query("show_nfts",  args);
+
         $$("Chargement de " + this.user.nfts.length + " tokemons")
 
         for (let tokemon of this.user.nfts) {
@@ -187,7 +182,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           if(this.user.preview){
             let nonce=tokemon.nonce.toString(16)
             let nft_id=tokemon.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce)
-            //let nft_id=tokemon.nft
+
             get_nft(nft_id,this.api,this.user.network).then((opt:any)=>{
               $$("Récupération du nft ",opt)
               this.markers.push(this.add_tokemon_as_marker(opt.media[0].thumbnailUrl,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,50))
@@ -195,7 +190,6 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           }else{
             this.markers.push(this.add_tokemon_as_marker(icon,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,30))
           }
-
         }
       }
     })
@@ -288,5 +282,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   }
 
 
-
+  async show_my_tokemon() {
+    await this.user.login(this,"Se connecter pour voir l'ensemble des tokemons","",true)
+    if(this.user.game){
+        let results:any=await send_transaction(
+        this.user.provider,"show_all_my_nfts",
+        this.user.address,[this.user.game.id],this.user.get_sc_address())
+        $$("Récupération de ",results.length)
+    }
+  }
 }

@@ -139,10 +139,10 @@ export class CreateWorldComponent implements OnInit {
     $$("Login user ",this.user)
 
     $$("Creation d'une partie avec ",this.zone)
-    let entrance = this.zone.entrance && this.zone.entrance.lat+this.zone.entrance.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor) : new Point3D(0,0,0)
-    let exit =  this.zone.exit && this.zone.exit.lat+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor) : new Point3D(0,0,0)
-    let ne = polarToCartesian(this.zone.NE, environment.scale_factor)
-    let sw = polarToCartesian(this.zone.SW, environment.scale_factor)
+    let entrance = this.zone.entrance && this.zone.entrance.lat+this.zone.entrance.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
+    let exit =  this.zone.exit && this.zone.exit.lat+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
+    let ne = polarToCartesian(this.zone.NE, environment.scale_factor,environment.translate_factor)
+    let sw = polarToCartesian(this.zone.SW, environment.scale_factor,environment.translate_factor)
 
     let s = "title: Map de test\nauthor: hhoareau\n"
     s = s + "\nsettings:\n"
@@ -178,7 +178,7 @@ export class CreateWorldComponent implements OnInit {
     let tokens=[]
 
     try {
-      wait_message(this,"Your world is building ...")
+      wait_message(this,"Your world is under construction  ...")
       tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
       let tx = await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)

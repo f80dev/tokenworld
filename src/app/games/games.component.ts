@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {$$, getParams, showMessage} from '../../tools';
@@ -13,7 +13,8 @@ import {send_transaction} from '../mvx';
   standalone: true,
   imports: [
     NgForOf,
-    MatButton
+    MatButton,
+    NgIf
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'

@@ -222,7 +222,11 @@ export const abi={
         "*"
       ],
       "inputs": [],
-      "outputs": []
+      "outputs": [
+        {
+          "type": "bool"
+        }
+      ]
     },
     {
       "name": "add_user",
@@ -704,7 +708,7 @@ export const abi={
         },
         {
           "name": "pv",
-          "type": "u64"
+          "type": "BigUint"
         },
         {
           "name": "position",
@@ -734,3 +738,4 @@ export const abi={
     }
   }
 }
+

@@ -66,7 +66,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
   nfts: any[]=[];
 
   async ngAfterViewInit() {
-    this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
+    await this.user.init_balance(this.api)
+    this.max_pv_loading=Math.min(this.user.game!.max_pv,this.user.get_balance(this.user.get_default_token()))
 
     let params:any=await getParams(this.routes)
     this.user.center_map=new LatLng(params.lat,params.lng)
@@ -81,11 +82,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
     if(this.sel_nft)this.name=this.sel_nft.collection
   }
 
-
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   random_location: boolean = false;
   diffusion=0
-
 
 
   async drop() {
@@ -103,10 +102,15 @@ export class DropComponent implements AfterViewInit, OnChanges {
       $$("Ajout d'un tokemon en ",pos)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
 
-      if(this.random_location)pos=new Point3D(0,0,0)
+      let p1=new Point3D(0,0,0)
+      let p2=new Point3D(0,0,0)
 
-      let p1=this.user.game.ne
-      let p2=this.user.game.sw
+      if(this.random_location){
+        pos=new Point3D(0,0,0)
+        p1=this.user.game.ne
+        p2=this.user.game.sw
+      }
+
       if(this.diffusion>0){
         let diffusion=this.diffusion/111320
         p1=polarToCartesian(
@@ -124,7 +128,10 @@ export class DropComponent implements AfterViewInit, OnChanges {
       wait_message(this, "Dropping ...")
 
       let tokens=[]
-      if(this.lifepoint>0)tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint*this.quantity,18))
+      if(this.lifepoint>0){
+        tokens.push(TokenTransfer.fungibleFromAmount(token,this.lifepoint*this.quantity,18))
+        $$("Transfert de "+tokens[0].amount+" "+tokens[0].token)
+      }
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
@@ -151,7 +158,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
     this.name=$event.name
     this.max_quantity=this.sel_nft.balance
 
-
     let pos=this.user.center_map
     initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
       .on("zoomend",(event:L.LeafletEvent)=>{
@@ -165,8 +171,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
       this.user.visibility=this.user.game!.min_visibility
       this.map.setView(pos,this.user.zoom || 16);
     },50)
-
   }
+
 
   convert_pos(content:string) : any {
     if(content.split(",").length==2){
@@ -176,6 +182,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
         new LatLng(lat,lng),environment.scale_factor,environment.translate_factor)
     }
   }
+
 
   async upload_excel($event: any) {
     let content=atob($event.content)
@@ -189,8 +196,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
       let tt=TokenTransfer.semiFungible(id,this.user.nonce,quantity)
       rc.push(await create_transaction("drop_nft",args,this.user,[tt]))
     }
-
   }
+
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))

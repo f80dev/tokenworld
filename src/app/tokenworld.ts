@@ -42,6 +42,8 @@ export class Game {
   entrance=new Point3D()
   exit=new Point3D()
   url:string=""
+  min_pv=0
+  max_pv=100
   min_visibility=10
   max_visibility=1000
   max_player=100

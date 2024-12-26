@@ -185,7 +185,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
             get_nft(nft_id,this.api,this.user.network).then((opt:any)=>{
               $$("Récupération du nft ",opt)
-              this.markers.push(this.add_tokemon_as_marker(opt.media[0].thumbnailUrl,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,50))
+              this.markers.push(this.add_tokemon_as_marker(opt.media[0].originalUrl,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,50))
             })
           }else{
             this.markers.push(this.add_tokemon_as_marker(icon,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,30))

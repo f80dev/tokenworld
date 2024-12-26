@@ -4,6 +4,10 @@ img {
 }
 
 
+button {
+  margin: 10px;
+}
+
 
 .zone_input {
   max-width: 800px;

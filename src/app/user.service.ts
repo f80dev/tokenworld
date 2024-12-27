@@ -35,7 +35,7 @@ export class UserService {
 
   expert_mode:boolean=false
   center_map: LatLng=new LatLng(0,0)
-  nfts: any[] = [];
+  tokemons: any[] = [];
   tokemon_selected: any;
   zoom: number=16;
   show_visibility: boolean = false;
@@ -57,12 +57,15 @@ export class UserService {
     url_direct_xportal_connect: string
   }) {
     this.address = $event.address
-    this.idx=Number(await this.query("get_idx_address",  [this.address]))
     localStorage.setItem("address",this.address)
     this.account=await toAccount(this.address)
     this.provider = $event.provider
     this.strong=$event.strong
     this.addr_change.next(this.address)
+  }
+
+  async init_idx(){
+    this.idx=Number(await this.query("get_idx_address",  [this.address]))
   }
 
   isConnected(strong=false) : boolean {
@@ -72,6 +75,7 @@ export class UserService {
 
   logout() {
     this.address=""
+    this.idx=0
     this.provider=null;
   }
 

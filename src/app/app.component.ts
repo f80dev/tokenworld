@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
       let params:any=await getParams(this.routes)
       this.user.network=params.network || environment.networks[0].value
       this.user.address=params.address || localStorage.getItem("address") || ""
+      this.user.init_idx()
       $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 
       if(params.hasOwnProperty("signature")){

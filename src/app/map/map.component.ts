@@ -80,7 +80,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     if(this.user.game){
       let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
-      L.rectangle(new LatLngBounds(sw,ne)).addTo(this.map);
+      L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map);
       //this.map.setMaxBounds(new LatLngBounds(ne,sw))
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
     }
@@ -157,12 +157,20 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     return marker
   }
 
+  remove_markers_from_map() {
+    $$("Suppression des marker de la map")
+    for(let m of this.markers){
+      m.removeFrom(this.map)
+    }
+  }
+
+
   async add_tokemon_to_markers() {
     return new Promise(async (resolve,reject) => {
+
       if(this.user.center_map && this.user.game) {
-        for(let m of this.markers){
-          m.removeFrom(this.map)
-        }
+
+        this.remove_markers_from_map()
 
         this.markers=[]
         $$("Chargement des tokemon")
@@ -171,12 +179,11 @@ export class MapComponent implements OnChanges,AfterViewInit  {
           this.user.game.id,
           pos.x, pos.y,pos.z,
         ]
+        this.user.tokemons = await this.user.query("show_nfts",  args);
 
-        this.user.nfts = await this.user.query("show_nfts",  args);
+        $$("Chargement de " + this.user.tokemons.length + " tokemons")
 
-        $$("Chargement de " + this.user.nfts.length + " tokemons")
-
-        for (let tokemon of this.user.nfts) {
+        for (let tokemon of this.user.tokemons) {
           let icon=(tokemon.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg')
 
           if(this.user.preview){

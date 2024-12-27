@@ -14,7 +14,7 @@
     </app-tokemon>
     <br>
 
-    <app-input  *ngIf="item.pv>0"
+    <app-input  *ngIf="item.pv>0 && item.owner!=user.idx"
                 value_type="slider" [value]="pv_to_engage"
                 (valueChange)="update_value($event)"
                 style="width:300px;display: inline-block;"
@@ -25,7 +25,7 @@
 
     <br>
     <br>
-    <div *ngIf="item.pv>0">
+    <div *ngIf="item.pv>0 && item.owner!=user.idx">
       <div *ngIf="pv_to_engage==0">No chance to win</div>
       <div *ngIf="pv_to_engage>0">1 in {{chance_to_win | number:"1.0-1"}} chance of winning</div>
     </div>

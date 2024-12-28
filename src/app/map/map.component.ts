@@ -76,6 +76,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       geoloc_position=await this.user.geoloc(this.geolocService)
       $$("Localisation de l'utilisateur en ",geoloc_position)
     }
+    this.user.center_map=geoloc_position
 
 
     this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
@@ -266,13 +267,16 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async moveto() {
     let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
     try{
-      let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
-      debugger
+      let r="0"
+      if(!this.user.game?.use_geoloc){
+        r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
+      }
       if(r=="0"){
         this.user.center_map=await this.user.geoloc(this.geolocService)
       }else{
         this.user.center_map=new LatLng(Number(r.split(",")[0]),Number(r.split(",")[1]))
       }
+      this.map.setView(this.user.center_map)
       this.movemap({target:this.user.center_map})
     }catch (e){
     }

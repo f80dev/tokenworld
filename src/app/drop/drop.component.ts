@@ -107,8 +107,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       if(this.random_location){
         pos=new Point3D(0,0,0)
-        p1=this.user.game.ne
-        p2=this.user.game.sw
+        p1=pos //new Point3D(this.user.game.ne.x,this.user.game.ne.y,this.user.game.ne.z)
+        p2=pos //new Point3D(this.user.game.sw.x,this.user.game.sw.y,this.user.game.sw.z)
       }
 
       if(this.diffusion>0){
@@ -124,6 +124,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
       }
 
       let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
+      $$("drop de "+this.name+" de visibilité "+this.user.visibility+" à la position ",pos)
+      $$("Zone NE ",p1)
+      $$("Zone SW ",p2)
       let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
       wait_message(this, "Dropping ...")
 
@@ -137,6 +140,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       try {
         let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
         wait_message(this)
+        $$("Resultat du drop ",rc)
       } catch (e) {
         showError(this, e)
         wait_message(this)

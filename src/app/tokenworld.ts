@@ -50,6 +50,7 @@ export class Game {
   min_distance=10
   max_distance=100
   n_degrees=8
+  use_geoloc=false
 }
 
 

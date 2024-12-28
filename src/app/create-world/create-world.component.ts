@@ -19,6 +19,8 @@ import {GeolocService} from '../geoloc.service';
 import {LatLng, Marker, point} from 'leaflet';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../api.service';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-create-world',
@@ -32,7 +34,9 @@ import {ApiService} from '../api.service';
     InputComponent,
     DecimalPipe,
     MatButton,
-    HourglassComponent
+    HourglassComponent,
+    MatSlideToggle,
+    FormsModule
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -78,6 +82,7 @@ export class CreateWorldComponent implements OnInit {
   n_degrees=8
   min_pv: number=0
   max_pv: number=100
+  use_geoloc=false;
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -171,7 +176,8 @@ export class CreateWorldComponent implements OnInit {
       this.min_visibility,this.max_visibility,
       this.min_pv,this.max_pv,
       this.max_player,
-      this.turns
+      this.turns,
+      this.use_geoloc
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 

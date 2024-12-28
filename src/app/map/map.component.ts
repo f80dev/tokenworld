@@ -180,6 +180,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.markers=[]
         $$("Chargement des tokemon")
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+        if(this.user.game.use_geoloc)pos=polarToCartesian(await this.user.geoloc(this.geolocService),environment.scale_factor,environment.translate_factor)
+
         let args = [
           this.user.game.id,
           pos.x, pos.y,pos.z,

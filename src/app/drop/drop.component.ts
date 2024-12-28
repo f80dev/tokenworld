@@ -93,7 +93,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
         showMessage(this,"3 characters required for the name")
         return
       }
-      this.user.visibility=Number(this.user.game.min_visibility)
+      this.user.visibility=Math.max(this.user.visibility,Number(this.user.game.min_visibility))
+      this.user.visibility=Math.min(this.user.visibility,Number(this.user.game.max_visibility))
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
       $$("Authentification ",this.user.provider)
@@ -105,7 +106,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       let p1=new Point3D(0,0,0)
       let p2=new Point3D(0,0,0)
 
-      if(this.random_location){
+      if(this.random_location || this.diffusion>0){
         pos=new Point3D(0,0,0)
         p1=pos //new Point3D(this.user.game.ne.x,this.user.game.ne.y,this.user.game.ne.z)
         p2=pos //new Point3D(this.user.game.sw.x,this.user.game.sw.y,this.user.game.sw.z)
@@ -123,7 +124,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
         )
       }
 
-      let args = [this.user.game.id,this.name, Math.round(this.user.visibility), pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
+      let args = [this.user.game.id,this.name, this.user.visibility, pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
       $$("drop de "+this.name+" de visibilité "+this.user.visibility+" à la position ",pos)
       $$("Zone NE ",p1)
       $$("Zone SW ",p2)

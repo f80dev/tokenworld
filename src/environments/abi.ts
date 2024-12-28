@@ -1,5 +1,6 @@
 
 
+
 export const abi={
   "buildInfo": {
     "rustc": {
@@ -206,6 +207,10 @@ export const abi={
         {
           "name": "turns",
           "type": "u16"
+        },
+        {
+          "name": "use_geoloc",
+          "type": "bool"
         }
       ],
       "outputs": [
@@ -615,6 +620,10 @@ export const abi={
         {
           "name": "exit",
           "type": "Point"
+        },
+        {
+          "name": "use_geoloc",
+          "type": "bool"
         },
         {
           "name": "url",

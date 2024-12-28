@@ -71,8 +71,12 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   async init_map(){
     $$("Initialisation de la carte principal")
-    let geoloc_position=await this.user.geoloc(this.geolocService)
-    $$("Localisation de l'utilisateur en ",geoloc_position)
+    let geoloc_position=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+    if(!localStorage.getItem("last_position_lat")){
+      geoloc_position=await this.user.geoloc(this.geolocService)
+      $$("Localisation de l'utilisateur en ",geoloc_position)
+    }
+
 
     this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
     let zoom=this.user.zoom || 16
@@ -107,6 +111,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async ngAfterViewInit() {
     setTimeout(()=>{
       if(this.user && this.user.game)this.init_map()
+
     },500)
   }
 
@@ -250,17 +255,26 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
     this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
-    //this.target?.setLatLng({lat:this.user.center_map.lat,lng:this.user.center_map.lng})
+    localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
+    localStorage.setItem("last_position_lng",String(this.user.center_map.lng))
     this.refresh()
   }
 
 
   async moveto() {
     let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
-    let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
-    if(r){
-      this.user.center_map=new LatLng(Number(r.split(",")[0]),Number(r.split(",")[1]))
+    try{
+      let r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
+      debugger
+      if(r=="0"){
+        this.user.center_map=await this.user.geoloc(this.geolocService)
+      }else{
+        this.user.center_map=new LatLng(Number(r.split(",")[0]),Number(r.split(",")[1]))
+      }
+      this.movemap({target:this.user.center_map})
+    }catch (e){
     }
+
   }
 
 

@@ -22,9 +22,7 @@ export const environment = {
   appli:"",
   transfer_page:"https://t.f80.fr",
 
-  scale_factor:1,
-  //scale_factor:100000000000,
-  translate_factor:1000000000,
+
   offset_lat:0, //-0.00017,
   offset_lng:0,  //0.00020,
   render_server: "https://api.f80.fr:9876",
@@ -58,8 +56,12 @@ export const environment = {
     }
   },
 
+  scale_factor:1000,
+  //scale_factor:100000000000,
+  translate_factor:1000000000,
+
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq7ffzp8t6p7mmamf9zj03jnj3klvalf8j835s8wd72p",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq8x2qpezx4f6lpr5ueehzpvv0r9czjl2a835s07clwk",
     "elrond-mainnet":""
   },
 

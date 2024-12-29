@@ -163,6 +163,8 @@ export class MapComponent implements OnChanges,AfterViewInit  {
     return marker
   }
 
+
+
   remove_markers_from_map() {
     $$("Suppression des marker de la map")
     for(let m of this.markers){
@@ -190,6 +192,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         this.user.tokemons = await this.user.query("show_nfts",  args);
 
         $$("Chargement de " + this.user.tokemons.length + " tokemons")
+        $$("Liste des tokemons ",this.user.tokemons)
 
         for (let tokemon of this.user.tokemons) {
           let icon=(tokemon.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg')

@@ -7,6 +7,8 @@ import {MatButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {send_transaction} from '../mvx';
+import {_prompt} from '../prompt/prompt.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-games',
@@ -24,6 +26,7 @@ export class GamesComponent implements OnInit {
   user=inject(UserService)
   toast=inject(MatSnackBar)
   routes=inject(ActivatedRoute)
+  dialog=inject(MatDialog)
   router=inject(Router)
   private selected_game: number=0;
 
@@ -40,7 +43,7 @@ export class GamesComponent implements OnInit {
       $$("Aucune partie disponible")
       this.quit("create")
     }else{
-      if(this.games.length==1) {
+      if(this.games.length==1 && params.autoconnect=='true') {
         $$("une seule partie disponible donc on la sélectionne")
         this.user.init_game(this.games[0])
         this.quit()
@@ -73,5 +76,13 @@ export class GamesComponent implements OnInit {
   async close_map(game: any) {
     let args=[game.id]
     let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
+  }
+
+  async stacking(game: any) {
+    await this.user.login(this,"","",true)
+    let max_amount=await _prompt(this,"Max amount per tokemon","","","number","Send","Cancel",false)
+    let args=[game.id,Number(max_amount)]
+    let result=await send_transaction(this.user.provider,"staking",this.user.address,args,this.user.get_sc_address())
+    showMessage(this,"Stacking sended")
   }
 }

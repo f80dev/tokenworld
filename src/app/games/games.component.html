@@ -8,6 +8,7 @@
       <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
         <button mat-raised-button (click)="see_map(game)">Map</button>
         <button mat-raised-button (click)="close_map(game)">Close</button>
+        <button mat-raised-button (click)="stacking(game)">AirDrop</button>
         <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
       </td>
     </tr>

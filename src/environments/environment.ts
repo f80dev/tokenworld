@@ -61,7 +61,7 @@ export const environment = {
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq984f8q6pruz4mxyrmdmngx0afndnjt2t835s7km83t",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqc9ymqtx8zkgux8yz8newj8nd7hr92hw6835snavswx",
     "elrond-mainnet":""
   },
 

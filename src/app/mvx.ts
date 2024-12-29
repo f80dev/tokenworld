@@ -1,5 +1,5 @@
 import {
-  Address, BytesValue,
+  Address, BytesValue, findEventsByFirstTopic,
   SmartContractTransactionsFactory,
   TokenTransfer, Transaction,
   TransactionsFactoryConfig
@@ -15,6 +15,7 @@ import {$$, now} from "../tools";
 import {abi} from '../environments/abi';
 import {environment} from '../environments/environment';
 import {utf8ToHex} from '@multiversx/sdk-core/out/utils.codec';
+import {gatherAllEvents} from '@multiversx/sdk-core/out/transactionsOutcomeParsers/resources';
 
 export const DEVNET="https://devnet-api.multiversx.com"
 export const MAINNET="https://api.multiversx.com"
@@ -355,6 +356,9 @@ export async function send_transaction(provider:any,function_name:string,sender_
 
         const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
         const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+
+        const [event] = gatherAllEvents(transactionOutcome);
+        debugger
 
         resolve(parsedOutcome)
       } catch (e) {

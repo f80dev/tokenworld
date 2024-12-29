@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
         this.user.address=params.address
       }
       this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-      this.router.navigate(["games"],{queryParams:{game:params.game || localStorage.getItem("selected_game")}})
+      this.router.navigate(["games"],{queryParams:{autoconnect:true,game:params.game || localStorage.getItem("selected_game")}})
 
   }
 
@@ -99,6 +99,10 @@ export class AppComponent implements OnInit {
   }
 
   open_games() {
-    this.router.navigate(["games"])
+    this.router.navigate(["games"],{queryParams:{autoconnect:false}})
+  }
+
+  go_mytokemons() {
+    this.router.navigate(["mytokemons"])
   }
 }

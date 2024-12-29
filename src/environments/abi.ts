@@ -310,6 +310,25 @@ export const abi={
       ]
     },
     {
+      "name": "staking",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        },
+        {
+          "name": "max_by_item",
+          "type": "BigUint"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "take",
       "mutability": "mutable",
       "inputs": [

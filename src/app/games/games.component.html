@@ -3,7 +3,8 @@
     <tr style="width:100%" *ngFor="let game of games">
       <td style="text-align: left;">
         {{game.title}}<br>
-        bank: {{game.bank/1e18}} LP
+        bank: {{game.bank/1e18}} LP<br>
+        Max/user: {{game.max_per_user}}
       </td>
       <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
         <button mat-raised-button (click)="see_map(game)">Map</button>

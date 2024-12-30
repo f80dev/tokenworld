@@ -144,11 +144,11 @@ export class DropComponent implements AfterViewInit, OnChanges {
         let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
         wait_message(this)
         $$("Resultat du drop ",rc)
+        this.quit()
       } catch (e) {
         showError(this, e)
         wait_message(this)
       }
-      this.quit()
     }
   }
 

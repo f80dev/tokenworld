@@ -1,6 +1,7 @@
 
 
 
+
 export const abi={
   "buildInfo": {
     "rustc": {
@@ -198,6 +199,10 @@ export const abi={
         },
         {
           "name": "max_pv",
+          "type": "u16"
+        },
+        {
+          "name": "max_per_user",
           "type": "u16"
         },
         {
@@ -691,6 +696,10 @@ export const abi={
         {
           "name": "closed",
           "type": "bool"
+        },
+        {
+          "name": "max_per_user",
+          "type": "u16"
         }
       ]
     },

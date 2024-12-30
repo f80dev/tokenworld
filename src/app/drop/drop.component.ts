@@ -60,10 +60,12 @@ export class DropComponent implements AfterViewInit, OnChanges {
   quantity=1
   max_quantity=10
   max_pv_loading=0
+
   map!: L.Map
   ech: number=1
   max_distance=1000;
   nfts: any[]=[];
+  visibility=30
 
   async ngAfterViewInit() {
     await this.user.init_balance(this.api)
@@ -93,8 +95,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
         showMessage(this,"3 characters required for the name")
         return
       }
-      this.user.visibility=Math.max(this.user.visibility,Number(this.user.game.min_visibility))
-      this.user.visibility=Math.min(this.user.visibility,Number(this.user.game.max_visibility))
+      this.visibility=Math.max(this.visibility,Number(this.user.game.min_visibility))
+      this.visibility=Math.min(this.visibility,Number(this.user.game.max_visibility))
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
       $$("Authentification ",this.user.provider)
@@ -124,7 +126,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
         )
       }
 
-      let args = [this.user.game.id,this.name, this.user.visibility, pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
+      let args = [this.user.game.id,this.name, this.visibility, pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
       $$("drop de "+this.name+" de visibilité "+this.user.visibility+" à la position ",pos)
       $$("Zone NE ",p1)
       $$("Zone SW ",p2)

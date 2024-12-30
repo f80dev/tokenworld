@@ -83,6 +83,7 @@ export class CreateWorldComponent implements OnInit {
   min_pv: number=0
   max_pv: number=100
   use_geoloc=false;
+  max_per_user: number = 30;
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -174,7 +175,7 @@ export class CreateWorldComponent implements OnInit {
 
       "map",
       this.min_visibility,this.max_visibility,
-      this.min_pv,this.max_pv,
+      this.min_pv,this.max_pv,this.max_per_user,
       this.max_player,
       this.turns,
       this.use_geoloc

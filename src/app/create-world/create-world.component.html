@@ -66,6 +66,9 @@
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
       <app-input label="Use localisation" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
+      <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
+
+
       <mat-tab-group>
         <mat-tab label="YAML">
           <div class="code_yaml" [innerHTML]="yaml_content">

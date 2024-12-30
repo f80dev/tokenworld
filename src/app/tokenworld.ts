@@ -150,6 +150,13 @@ export function add_icon(map:any,icon:string,pos:LatLng,title="me",size=30){
   }).addTo(map)
 }
 
+export async function hashMessage(message: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return hash;
+}
+
 
 export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
                                       exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {

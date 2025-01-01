@@ -55,13 +55,13 @@ export const environment = {
       pv:"LP"
     }
   },
-
+  
   scale_factor:1000,
   //scale_factor:100000000000,
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgq935sgy00y8q5pc72du4zuxfkfpjvkzx4835sk6j234",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqr6qhz74mp33q3gqns5w6aua7dn9w94j4835sgln060",
     "elrond-mainnet":""
   },
 

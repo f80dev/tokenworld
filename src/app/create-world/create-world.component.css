@@ -21,3 +21,12 @@ td {
   text-align: left;
   display: inline-block;
 }
+
+.image-container {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.image-container.loaded {
+  opacity: 1;
+}

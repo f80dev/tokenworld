@@ -183,6 +183,12 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
+    let entrance=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
+    let exit=cartesianToPolar(zone.exit,environment.scale_factor,environment.translate_factor)
+    if(zone.entrance)add_icon(vm.map,"https://tokemon.f80.fr/assets/icons/entrance.png",entrance)
+    if(zone.exit)add_icon(vm.map,"https://tokemon.f80.fr/assets/icons/exit.png",exit)
+
+
     add_icon(vm.map,meIcon,center)
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)
 

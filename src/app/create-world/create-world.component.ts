@@ -21,6 +21,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../api.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
+import {TutoComponent} from '../tuto/tuto.component';
 
 @Component({
   selector: 'app-create-world',
@@ -36,7 +37,8 @@ import {FormsModule} from '@angular/forms';
     MatButton,
     HourglassComponent,
     MatSlideToggle,
-    FormsModule
+    FormsModule,
+    TutoComponent
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -225,5 +227,16 @@ export class CreateWorldComponent implements OnInit {
 
     }
     this.show_menu=false
+  }
+
+  remove_gate() {
+    this.zone.entrance=null
+    this.zone.exit=null
+
+    this.entrance_marker?.removeFrom(this.map)
+    this.entrance_marker=null
+
+    this.exit_marker?.removeFrom(this.map)
+    this.exit_marker=null
   }
 }

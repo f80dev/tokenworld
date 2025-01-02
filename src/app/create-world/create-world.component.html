@@ -1,7 +1,9 @@
 <div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
   <app-hourglass [message]="message"></app-hourglass>
   <br>
-  <img src="https://tokemon.f80.fr/assets/under_construction.png" style="width:50%;max-width: 300px;">
+  <img src="https://tokemon.f80.fr/assets/under_construction.png"
+       class="image-container"
+       style="width:50%;max-width: 300px;">
 </div>
 
 
@@ -10,13 +12,21 @@
 
 
   <div id="map" class="map_style" style="pointer-events: all;" ></div>
+  <br>
+  <div class="mat-label" *ngIf="!show_menu">
+    Click on map to add entrance and exit
+  </div>
 
   <br>
   <div *ngIf="show_menu" style="height: 50px">
+    Choose to put an entrance gate or an exit gate on the map
+    <br>
     <button mat-raised-button (click)="drop_pt('entrance')">Entrance</button>
     <button mat-raised-button (click)="drop_pt('exit')">Exit</button>
   </div>
   <br>
+  <button mat-raised-button (click)="remove_gate()">Remove Gates</button>
+
 
   <table><tr style="width: 100%;">
     <td style="text-align: right;width:50%;">

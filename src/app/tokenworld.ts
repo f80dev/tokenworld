@@ -138,7 +138,7 @@ export function distance(p1:LatLng, p2:LatLng,R=6371000): number {
 }
 
 
-export function add_icon(map:any,icon:string,pos:LatLng,title="me",size=30){
+export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),title="me",size=30){
   if(icon=='')return null
   return L.marker(pos,{
     icon:L.icon({
@@ -162,17 +162,19 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://toke
                                       exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
 
   if(zone.entrance && zone.entrance.lat+zone.entrance.lng!=0){
-    $$("entrance ajouté en ",zone.entrance)
-    add_icon(vm.map,entranceIcon,zone.entrance)
+    let entrance=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
+    $$("entrance ajouté en ",entrance)
+    add_icon(vm.map,entranceIcon,entrance)
   }
   if(zone.exit && zone.exit.lat+zone.exit.lng!=0){
-    add_icon(vm.map,exitIcon,zone.exit)
-    $$("exit ajouté en ",zone.exit)
+    let exit=cartesianToPolar(zone.exit,environment.scale_factor,environment.translate_factor)
+    add_icon(vm.map,exitIcon,exit)
+    $$("exit ajouté en ",exit)
   }
 }
 
 export function initializeMap(vm:any,zone:any,
-                              center:LatLng,
+                              center:LatLng=new LatLng(0,0),
                               meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
                               entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
                               exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
@@ -183,20 +185,7 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
-
-
-    if(zone.entrance){
-      let entrance=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
-      add_icon(vm.map,"https://tokemon.f80.fr/assets/icons/entrance.png",entrance)
-    }
-
-    if(zone.exit){
-      let exit=cartesianToPolar(zone.exit,environment.scale_factor,environment.translate_factor)
-      add_icon(vm.map,"https://tokemon.f80.fr/assets/icons/exit.png",exit)
-    }
-
-
-    add_icon(vm.map,meIcon,center)
+    vm.me_marker=add_icon(vm.map,meIcon,center)
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)
 
   }

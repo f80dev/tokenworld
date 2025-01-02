@@ -89,13 +89,15 @@ export class UserService {
   }
 
 
-  geoloc(geolocService:any) : Promise<LatLng> {
+  geoloc(geolocService:any,marker:L.Marker | null=null) : Promise<LatLng> {
     return new Promise(async (resolve, reject) => {
       try{
         this.loc=await geolocService.getCurrentPosition()
-        $$("Localisation en ",this.loc)
+        $$("GéoLocalisation en ",this.loc)
         $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
-        resolve(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude))
+        let position=new LatLng(this.loc.coords.latitude,this.loc.coords.longitude)
+        if(marker)marker.setLatLng(position)
+        resolve(position)
       }catch (e){
         reject()
       }

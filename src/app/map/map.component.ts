@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnChanges} from '@angular/core';
+import {AfterViewInit, Component, inject, OnChanges, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import {
   LatLng,
@@ -48,7 +48,10 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
-export class MapComponent implements OnChanges,AfterViewInit  {
+export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
+  ngOnDestroy(): void {
+      clearInterval(this.geoloc_autorefresh)
+  }
 
   router=inject(Router)
   geolocService=inject(GeolocService)
@@ -63,21 +66,16 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
   center: any;
   private layer: TileLayer | undefined
-  private me:  Marker<any> | undefined;
-  private target:  Marker<any> | undefined;
+
   map_left=0
   map_top=0
-  selected_tokemon: Tokemon | undefined;
+  selected_tokemon: Tokemon | undefined
+  private me_marker: Marker | undefined
+  geoloc_autorefresh: any
 
 
   async init_map(){
     $$("Initialisation de la carte principal")
-    let geoloc_position=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
-    if(!localStorage.getItem("last_position_lat")){
-      geoloc_position=await this.user.geoloc(this.geolocService)
-      $$("Localisation de l'utilisateur en ",geoloc_position)
-    }
-    this.user.center_map=geoloc_position
 
 
     this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
@@ -91,7 +89,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
     }
 
-    initializeMap(this,this.user.game,geoloc_position)
+    initializeMap(this,this.user.game)
       .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
       .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
       .on("keypress",(event:L.LeafletKeyboardEvent)=>{
@@ -104,8 +102,13 @@ export class MapComponent implements OnChanges,AfterViewInit  {
         }
       })
 
+    await this.user.geoloc(this.geolocService,this.me_marker)
+    this.user.center_map=
+      localStorage.getItem("last_position_lat")
+        ? new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+        : new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
 
-    this.map.setView(geoloc_position,zoom);
+    this.map.setView(this.user.center_map,zoom);
 
   }
 
@@ -113,7 +116,9 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   async ngAfterViewInit() {
     setTimeout(()=>{
       if(this.user && this.user.game)this.init_map()
-
+      this.geoloc_autorefresh=setInterval(()=>{
+        this.user.geoloc(this.geolocService,this.me_marker)
+      },30000)
     },500)
   }
 

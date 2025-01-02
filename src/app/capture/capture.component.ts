@@ -61,16 +61,17 @@ export class CaptureComponent implements OnInit {
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
         let args=func_name=="take" ? [this.user.game.id,Number(this.item.id)] : [Number(this.item.id)]
-        wait_message(this, "Capturing in progress")
+        wait_message(this, "Capture in progress")
         let tokens=[]
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
-        let tx = await send_transaction_with_transfers(
+        let rc:any = await send_transaction_with_transfers(
           this.user.provider,
           func_name,
           args,
           this.user,
           tokens);
         wait_message(this)
+        showMessage(this,rc.returnMessage)
       } catch (e){
         wait_message(this);
       }

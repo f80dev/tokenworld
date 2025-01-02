@@ -136,7 +136,8 @@ export class CreateWorldComponent implements OnInit {
 
 
   quit(game_id:any){
-    this.router.navigate( ["games"],{queryParams:{autoconnect:true,game:game_id}})
+    this.user.init_game(game_id)
+    this.router.navigate( ["map"])
   }
 
 
@@ -203,10 +204,12 @@ export class CreateWorldComponent implements OnInit {
     showMessage(this,"Copied")
   }
 
+
+
   drop_pt(point_type="") {
     if(point_type=="entrance"){
       if(!this.entrance_marker){
-        this.entrance_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/flag.png",this.dropzone)
+        this.entrance_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/entrance.png",this.dropzone)
       }else{
         this.zone.entrance=this.dropzone
         this.entrance_marker.setLatLng(this.dropzone)
@@ -214,7 +217,7 @@ export class CreateWorldComponent implements OnInit {
     }
     if(point_type=="exit"){
       if(!this.exit_marker){
-        this.exit_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/flag.png",this.dropzone)
+        this.exit_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/exit.png",this.dropzone)
       }else{
         this.zone.exit=this.dropzone
         this.exit_marker.setLatLng(this.dropzone)

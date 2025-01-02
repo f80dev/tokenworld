@@ -10,7 +10,7 @@ import {
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {add_icon, cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
+import {add_icon, cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -67,6 +67,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private target:  Marker<any> | undefined;
   map_left=0
   map_top=0
+  selected_tokemon: Tokemon | undefined;
 
 
   async init_map(){
@@ -260,7 +261,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
   private movemap(event: any) {
     this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
-    this.user.tokemon_selected=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
+    this.selected_tokemon=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
     localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
     localStorage.setItem("last_position_lng",String(this.user.center_map.lng))
     this.refresh()
@@ -288,7 +289,7 @@ export class MapComponent implements OnChanges,AfterViewInit  {
 
 
   open_capture() {
-    this.router.navigate(["capture"],{queryParams:{p:setParams(this.user.tokemon_selected,"","")}})
+    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon,"","")}})
   }
 
 

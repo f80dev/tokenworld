@@ -55,19 +55,19 @@ export const environment = {
       pv:"LP"
     }
   },
-  
+
   scale_factor:1000,
   //scale_factor:100000000000,
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqr6qhz74mp33q3gqns5w6aua7dn9w94j4835sgln060",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqvt6czvx4nltuducakvs37fwyxfgaph0c835smwyru4",
     "elrond-mainnet":""
   },
 
   website: "https://f80.fr",
   company:" F80",
-  seuil_capture: 0.03,
+  seuil_capture: 10,
   max_pv_loading: 1000,
   nft_market: {
     "elrond-devnet":"https://devnet.xspotlight.com/",

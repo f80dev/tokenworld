@@ -135,8 +135,8 @@ export class CreateWorldComponent implements OnInit {
   }
 
 
-  quit(){
-    this.router.navigate( ["games"])
+  quit(game_id:any){
+    this.router.navigate( ["games"],{queryParams:{autoconnect:true,game:game_id}})
   }
 
 
@@ -183,17 +183,17 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de la fonction avec les arguments ",this.args)
 
     let tokens=[]
-
+    let game_id: any= 0
     try {
       wait_message(this,"Your world is under construction  ...")
       tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
-      let tx = await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
+      game_id= await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
     } catch (e) {
       showError(this, e)
       wait_message(this)
     }
-    this.quit()
+    this.quit(game_id)
   }
 
 

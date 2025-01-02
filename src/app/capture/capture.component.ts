@@ -35,12 +35,6 @@ export class CaptureComponent implements OnInit {
   _location=inject(Location)
   chance_to_win: number=1
 
-  async ngOnInit() {
-    this.item = await getParams(this.routes)
-    // @ts-ignore
-    this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
-  }
-
   dialog=inject(MatDialog)
   routes = inject(ActivatedRoute)
   user = inject(UserService)
@@ -50,6 +44,14 @@ export class CaptureComponent implements OnInit {
   message: string=""
   max_engagment: number=100
   pv_to_engage: number=0
+
+
+
+  async ngOnInit() {
+    this.item = await getParams(this.routes)
+    // @ts-ignore
+    this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
+  }
 
 
   async on_capture() {

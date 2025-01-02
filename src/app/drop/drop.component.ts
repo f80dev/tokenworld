@@ -141,10 +141,16 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let rc = await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
-        wait_message(this)
+        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
         $$("Resultat du drop ",rc)
-        this.quit()
+        if(rc.returnMessage!="ok"){
+          showMessage(this,rc.returnMessage)
+        }else{
+          showMessage(this,"Tokemons on the map")
+          setTimeout(()=>{this.quit()},500)
+        }
+        wait_message(this)
+
       } catch (e) {
         showError(this, e)
         wait_message(this)

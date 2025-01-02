@@ -28,6 +28,7 @@ import {UploadFileComponent} from "../upload-file/upload-file.component";
 import {MatButton} from "@angular/material/button";
 import {XALIAS_PROVIDER_DEVNET, XALIAS_PROVIDER_MAINNET} from "@multiversx/sdk-web-wallet-provider/out";
 import {eval_direct_url_xportal} from "../../crypto";
+import {QRCodeComponent} from 'angularx-qrcode';
 
 //Installation de @multiversx/sdk-wallet-connect-provider via yarn add @multiversx/sdk-wallet-connect-provider
 
@@ -56,6 +57,7 @@ interface IExtensionAccount {
       MatExpansionPanelHeader,
       MatCardTitle,
       MatAccordion,
+      QRCodeComponent,
       MatCard,
       ScannerComponent,
       CdkCopyToClipboard,
@@ -546,7 +548,8 @@ export class AuthentComponent implements OnInit,OnChanges {
     try{
       await this.provider.init()
       const { uri, approval } = await this.provider.connect();
-      this.qrcode=this.api.server_nfluent+"/api/qrcode/"+encodeURIComponent(uri);
+      this.qrcode=uri
+      //this.qrcode=this.api.server_nfluent+"/api/qrcode/"+encodeURIComponent(uri);
 
       this.url_xportal_direct_connect=eval_direct_url_xportal(uri)
       let address=await this.provider.login({approval});

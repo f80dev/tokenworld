@@ -117,6 +117,11 @@ export class CreateWorldComponent implements OnInit {
       }
     }
 
+    if(this.user.get_balance(this.user.get_default_token())<1){
+      showMessage(this,"You need almost 1 "+this.user.get_default_token()+" in your wallet")
+      this.quit(this.user.game!.id)
+    }
+
 
     $$("Initialisation de la carte avec ",this.zone)
     this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})

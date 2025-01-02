@@ -99,7 +99,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       this.visibility=Math.min(this.visibility,Number(this.user.game.max_visibility))
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
-      $$("Authentification ",this.user.provider)
+      //$$("Authentification ",this.user.provider)
 
       let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
       $$("Ajout d'un tokemon en ",pos)

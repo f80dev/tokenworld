@@ -38,11 +38,18 @@
 
       <div *ngIf="showWalletConnect" style="max-width: 450px;margin-left: -10px;width:100%;text-align: center;display: inline-block;">
         {{intro_message}}
-        <img [src]="qrcode"
-             *ngIf="qrcode.length>0"
-             (click)="qrcode=''"
-             title="Flasher ce qrcode depuis votre wallet"
-             style="width:90%;max-width: 250px;margin-top:5px;" [style.width]="size">
+
+        <qrcode [qrdata]="qrcode"
+                *ngIf="qrcode.length>0"
+                title="Flasher ce qrcode depuis votre wallet"
+                [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+
+<!--        <img [src]="qrcode"-->
+<!--             *ngIf="qrcode.length>0"-->
+<!--             (click)="qrcode=''"-->
+<!--             title="Flasher ce qrcode depuis votre wallet"-->
+<!--             style="width:90%;max-width: 250px;margin-top:5px;" [style.width]="size">-->
+<!--       -->
         <br>
 
         <button mat-raised-button

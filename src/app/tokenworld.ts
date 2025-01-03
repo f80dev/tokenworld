@@ -35,6 +35,9 @@ export class Point3D {
 
 export class Game {
   id: number=0
+  title: string=""
+  max_per_user=30
+  bank=0
   ne=new Point3D()
   sw=new Point3D()
   grid=100

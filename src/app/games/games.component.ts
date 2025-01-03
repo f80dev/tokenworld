@@ -12,6 +12,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {environment} from '../../environments/environment';
+import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
+import {GameComponent} from '../game/game.component';
 
 @Component({
   selector: 'app-games',
@@ -21,29 +23,28 @@ import {environment} from '../../environments/environment';
     MatButton,
     NgIf,
     MatIcon,
-    MatIconButton
+    MatIconButton,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    GameComponent
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'
 })
 export class GamesComponent implements OnInit {
-  games: any;
+  games: any[]=[];
   user=inject(UserService)
   toast=inject(MatSnackBar)
   routes=inject(ActivatedRoute)
   dialog=inject(MatDialog)
   router=inject(Router)
   clipboard=inject(Clipboard)
-  private selected_game: number=0;
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
     this.games=[]
-    let id=1 //le premier element d'un VecMapper commence à 1
     for(let game of await this.user.query("games",[])){
-      game["id"]=id
       this.games.push(game)
-      id=id+1
     }
     if(this.games.length==0){
       $$("Aucune partie disponible")

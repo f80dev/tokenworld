@@ -35,9 +35,8 @@ export class UserService {
 
   expert_mode:boolean=false
   center_map: LatLng=new LatLng(0,0)
-  tokemons: any[] = [];
-  zoom: number=16;
-  show_visibility: boolean = false;
+  tokemons: any[] = []
+  zoom: number=16
   visibility: number = 0
   account: any;
   game: Game | undefined;

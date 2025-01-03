@@ -72,6 +72,7 @@ export const environment = {
   nft_market: {
     "elrond-devnet":"https://devnet.xspotlight.com/",
     "elrond-mainnet":"https://xspotlight.com/",
-  }
+  },
+  gaz_limit: 5000000n
 
 }

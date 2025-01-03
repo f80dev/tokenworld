@@ -114,10 +114,12 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async ngAfterViewInit() {
-    setTimeout(()=>{
-      if(this.user && this.user.game)this.init_map()
+    setTimeout(async ()=>{
+      if(this.user && this.user.game)await this.init_map()
+
       this.geoloc_autorefresh=setInterval(()=>{
         this.user.geoloc(this.geolocService,this.me_marker)
+
       },30000)
     },500)
   }
@@ -264,7 +266,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   private movemap(event: any) {
-    this.user.center_map = event.target.getCenter()
+    if(event)this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
     this.selected_tokemon=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
     localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
@@ -273,11 +275,30 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   }
 
 
+  async recenter() {
+    if(!this.user.game?.use_geoloc){
+      let zone=this.user.game
+      let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
+      let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)
+
+      let center_lat=(ne.lat+sw.lat)/2
+      let center_lng=(ne.lng+sw.lng)/2
+      this.user.center_map=new L.LatLng(center_lat,center_lng)
+    }
+    else
+    {
+      this.user.center_map=await this.user.geoloc(this.geolocService)
+    }
+    this.map.setView(this.user.center_map,this.map.getZoom())
+    this.movemap(null)
+  }
+
+
   async moveto() {
-    let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
     try{
       let r="0"
       if(!this.user.game?.use_geoloc){
+        let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
         r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
       }
       if(r=="0"){

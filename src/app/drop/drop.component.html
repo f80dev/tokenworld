@@ -50,7 +50,7 @@
       <br>
 
       <app-input value_type="number" [min]="0" [max]="max_pv_loading"
-                 *ngIf="max_pv_loading>0"
+                 *ngIf="max_pv_loading>0" [help]="'Maximum'+max_pv_loading"
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
       <br>

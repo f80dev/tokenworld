@@ -11,6 +11,8 @@
         <button mat-raised-button (click)="close_map(game)">Close</button>
         <button mat-raised-button (click)="stacking(game)">AirDrop</button>
         <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
+        <button mat-icon-button (click)="share_map(game)"><mat-icon>share</mat-icon></button>
+
       </td>
     </tr>
   </table>

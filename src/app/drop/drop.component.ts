@@ -141,7 +141,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
+        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,5000000000n)
         $$("Resultat du drop ",rc)
         if(rc.returnMessage!="ok"){
           showMessage(this,rc.returnMessage)

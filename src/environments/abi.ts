@@ -1,7 +1,3 @@
-
-
-
-
 export const abi={
   "buildInfo": {
     "rustc": {
@@ -114,7 +110,7 @@ export const abi={
           "type": "bytes"
         },
         {
-          "name": "grid",
+          "name": "grid_size",
           "type": "u64"
         },
         {
@@ -474,8 +470,7 @@ export const abi={
       ],
       "outputs": [
         {
-          "type": "variadic<u32>",
-          "multi_result": true
+          "type": "u32"
         }
       ]
     },
@@ -630,7 +625,7 @@ export const abi={
           "type": "Point"
         },
         {
-          "name": "grid",
+          "name": "grid_size",
           "type": "u64"
         },
         {

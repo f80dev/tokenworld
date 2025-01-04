@@ -14,9 +14,10 @@ export const environment = {
   visual: "./assets/coffre.jpg",
   claim: "Valoriser vos contenus en quelques clics",
   token: {
-    "elrond-devnet":"TOKEMONPV-dca67f",
-    "elrond-mainnet":"TOKEMONPV-dca67f"
+    "elrond-devnet":"LIFEPOINT-30c75e",
+    "elrond-mainnet":"LIFEPOINT-30c75e"
   },
+  token_market: "https://tokemon.f80.fr/faucet",
   max_file_size:50000000,
   shorter_service:"",
   appli:"https://tokemon.f80.fr",
@@ -61,7 +62,7 @@ export const environment = {
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqck7a3tzkmm8f7xl8gppg3rmjfyj8zw4h835s4ff4c5",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqyhkhnx35gff7sc0tf82xrc2enas7kw6r835s3xqr60",
     "elrond-mainnet":""
   },
 
@@ -73,6 +74,6 @@ export const environment = {
     "elrond-devnet":"https://devnet.xspotlight.com/",
     "elrond-mainnet":"https://xspotlight.com/",
   },
-  gaz_limit: 5000000n
+  gaz_limit: 50000000n
 
 }

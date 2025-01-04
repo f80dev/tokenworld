@@ -14,6 +14,7 @@ import {AirdropComponent} from './airdrop/airdrop.component';
 import {CreateWorldComponent} from './create-world/create-world.component';
 import {GamesComponent} from './games/games.component';
 import {MytokemonsComponent} from './mytokemons/mytokemons.component';
+import {FaucetComponent} from './faucet/faucet.component';
 
 
 export const routes: Routes = [
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'test', component: TestComponent},
   { path: 'drop', component: DropComponent},
   { path: 'games', component: GamesComponent},
+  { path: 'faucet', component: FaucetComponent},
   { path: 'mytokemons', component: MytokemonsComponent},
   { path: 'airdrop', component: AirdropComponent},
   { path: 'create', component: CreateWorldComponent},

@@ -1,6 +1,6 @@
 import {
   Address, BytesValue, findEventsByFirstTopic,
-  SmartContractTransactionsFactory,
+  SmartContractTransactionsFactory, Token,
   TokenTransfer, Transaction,
   TransactionsFactoryConfig
 } from "@multiversx/sdk-core/out";
@@ -230,6 +230,37 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
     }
   })
 }
+
+//
+// export async function send_esdt(provider:any,function_name:string,sender_addr:string,dest:string,
+//                                        token,nonce,value,_abi:any=abi,
+//                                        _type: string="",gasLimit=50000000n) {
+//   //envoi d'une transaction
+//
+//
+//   return new Promise(async (resolve, reject) => {
+//     const factoryConfig = new TransactionsFactoryConfig({chainID: "D"});
+//     let factory = new SmartContractTransactionsFactory({
+//       config: factoryConfig,
+//       abi: await create_abi(_abi)
+//     });
+//
+//     const tx2 = await factory.createTransactionForESDTTokenTransfer({
+//       sender: sender_addr,
+//       receiver: dest,
+//       nonce:nonce,
+//       tokenTransfers: [
+//         new TokenTransfer({
+//           token: new Token({identifier: token}),
+//           amount: 10000n
+//         })
+//       ]
+//     });
+//
+//   })
+// }
+
+
 
 
 export async function send_transaction(provider:any,function_name:string,sender_addr:string,

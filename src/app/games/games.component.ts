@@ -44,6 +44,7 @@ export class GamesComponent implements OnInit {
     let params:any=await getParams(this.routes)
     this.games=[]
     for(let game of await this.user.query("games",[])){
+      game.id=this.games.length+1
       this.games.push(game)
     }
     if(this.games.length==0){

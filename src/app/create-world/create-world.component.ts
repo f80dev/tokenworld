@@ -99,8 +99,8 @@ export class CreateWorldComponent implements OnInit {
     this.zone={
       map:"map",
       zoom:16,
-      entrance:new LatLng(0,0),
-      exit: new LatLng(0,0),
+      entrance:new Point3D(0,0,0),
+      exit: new Point3D(0,0,0),
       center:new LatLng(44,2),
       title:"mon titre"
     }
@@ -117,9 +117,10 @@ export class CreateWorldComponent implements OnInit {
       }
     }
 
+    await this.user.init_balance(this.api)
     if(this.user.get_balance(this.user.get_default_token())<1){
       showMessage(this,"You need almost 1 "+this.user.get_default_token()+" in your wallet")
-      this.quit(this.user.game!.id)
+      if(this.user.game)this.quit(this.user.game!.id)
     }
 
 
@@ -191,17 +192,18 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de la fonction avec les arguments ",this.args)
 
     let tokens=[]
-    let game_id: any= 0
     try {
       wait_message(this,"Your world is under construction  ...")
       tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
-      game_id= await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
+      await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
+      let games=await this.user.query("games",[])
+      this.quit(games.length)
     } catch (e) {
       showError(this, e)
       wait_message(this)
     }
-    this.quit(game_id)
+
   }
 
 
@@ -214,19 +216,20 @@ export class CreateWorldComponent implements OnInit {
 
 
   drop_pt(point_type="") {
+    $$("Ajout de "+point_type+" sur ",this.dropzone)
     if(point_type=="entrance"){
+      this.zone.entrance=this.dropzone
       if(!this.entrance_marker){
         this.entrance_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/entrance.png",this.dropzone)
       }else{
-        this.zone.entrance=this.dropzone
         this.entrance_marker.setLatLng(this.dropzone)
       }
     }
     if(point_type=="exit"){
+      this.zone.exit=this.dropzone
       if(!this.exit_marker){
         this.exit_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/exit.png",this.dropzone)
       }else{
-        this.zone.exit=this.dropzone
         this.exit_marker.setLatLng(this.dropzone)
       }
 

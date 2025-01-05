@@ -24,7 +24,7 @@
     <button mat-raised-button (click)="drop_pt('exit')">Exit</button>
   </div>
   <br>
-  <button mat-raised-button (click)="remove_gate()">Remove Gates</button>
+  <button mat-raised-button *ngIf="!show_menu && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">Remove Gates</button>
 
 
   <table><tr style="width: 100%;">

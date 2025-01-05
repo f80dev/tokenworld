@@ -2,16 +2,27 @@
   <table style="width: 100%;">
     <tr style="width:100%" *ngFor="let game of games">
       <td style="text-align: left;">
-        {{game.title}}<br>
-        bank: {{game.bank/1e18}} LP<br>
-        Max/user: {{game.max_per_user}}
+        <app-game [game]="game">
+          <mat-expansion-panel *ngIf="game.owner==user.idx">
+            <mat-expansion-panel-header>My game</mat-expansion-panel-header>
+            <button mat-raised-button (click)="close_map(game)">Close</button>
+            <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+
+          </mat-expansion-panel>
+
+        </app-game>
+
+
       </td>
       <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
         <button mat-raised-button (click)="see_map(game)">Map</button>
-        <button mat-raised-button (click)="close_map(game)">Close</button>
-        <button mat-raised-button (click)="stacking(game)">AirDrop</button>
         <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
+        <button mat-icon-button (click)="share_map(game)"><mat-icon>share</mat-icon></button>
+
       </td>
     </tr>
   </table>
+
+
+
 </div>

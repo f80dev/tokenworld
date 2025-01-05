@@ -3,12 +3,17 @@ import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {$$, getParams, showMessage} from '../../tools';
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
 import {MatDialog} from '@angular/material/dialog';
+import {MatIcon} from '@angular/material/icon';
+import {Clipboard} from '@angular/cdk/clipboard';
+import {environment} from '../../environments/environment';
+import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
+import {GameComponent} from '../game/game.component';
 
 @Component({
   selector: 'app-games',
@@ -16,28 +21,31 @@ import {MatDialog} from '@angular/material/dialog';
   imports: [
     NgForOf,
     MatButton,
-    NgIf
+    NgIf,
+    MatIcon,
+    MatIconButton,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    GameComponent
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'
 })
 export class GamesComponent implements OnInit {
-  games: any;
+  games: any[]=[];
   user=inject(UserService)
   toast=inject(MatSnackBar)
   routes=inject(ActivatedRoute)
   dialog=inject(MatDialog)
   router=inject(Router)
-  private selected_game: number=0;
+  clipboard=inject(Clipboard)
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
     this.games=[]
-    let id=1 //le premier element d'un VecMapper commence à 1
     for(let game of await this.user.query("games",[])){
-      game["id"]=id
+      game.id=this.games.length+1
       this.games.push(game)
-      id=id+1
     }
     if(this.games.length==0){
       $$("Aucune partie disponible")
@@ -49,6 +57,7 @@ export class GamesComponent implements OnInit {
         this.quit()
       }else{
         if(params.hasOwnProperty("game")){
+          $$("Connexion à la partie ",params)
           if(Number(params.game)>this.games.length)params.game=1
           this.user.init_game(this.games[Number(params.game)-1])
           this.quit()
@@ -84,5 +93,10 @@ export class GamesComponent implements OnInit {
     let args=[game.id,Number(max_amount)]
     let result=await send_transaction(this.user.provider,"staking",this.user.address,args,this.user.get_sc_address())
     showMessage(this,"Stacking sended")
+  }
+
+  share_map(game: any) {
+    this.clipboard.copy(environment.appli+"/games?autoconnect=true&game="+game.id)
+    showMessage(this,"Link in clipboard")
   }
 }

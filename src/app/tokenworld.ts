@@ -35,6 +35,9 @@ export class Point3D {
 
 export class Game {
   id: number=0
+  title: string=""
+  max_per_user=30
+  bank=0
   ne=new Point3D()
   sw=new Point3D()
   grid=100
@@ -161,12 +164,13 @@ export async function hashMessage(message: string) {
 export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
                                       exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
 
-  if(zone.entrance && zone.entrance.lat+zone.entrance.lng!=0){
+  $$("Ajout de l'entree et la sortie")
+  if(zone.entrance && zone.entrance.x+zone.entrance.y+zone.entrance.z!=0){
     let entrance=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
     $$("entrance ajouté en ",entrance)
     add_icon(vm.map,entranceIcon,entrance)
   }
-  if(zone.exit && zone.exit.lat+zone.exit.lng!=0){
+  if(zone.exit && zone.exit.x+zone.exit.y+zone.exit.z!=0){
     let exit=cartesianToPolar(zone.exit,environment.scale_factor,environment.translate_factor)
     add_icon(vm.map,exitIcon,exit)
     $$("exit ajouté en ",exit)
@@ -176,8 +180,8 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://toke
 export function initializeMap(vm:any,zone:any,
                               center:LatLng=new LatLng(0,0),
                               meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
-                              entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
-                              exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
+                              entranceIcon="https://tokemon.f80.fr/assets/icons/entrance.png",
+                              exitIcon="https://tokemon.f80.fr/assets/icons/exit.png") {
 
   if(vm.map && zone){
     if(zone.url=="map" || zone.url=="")zone.zoom=2;

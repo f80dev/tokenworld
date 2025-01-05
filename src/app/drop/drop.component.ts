@@ -99,7 +99,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       this.visibility=Math.min(this.visibility,Number(this.user.game.max_visibility))
 
       await this.user.login(this,"You must be connected to drop any NFT","",true)
-      $$("Authentification ",this.user.provider)
+      //$$("Authentification ",this.user.provider)
 
       let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
       $$("Ajout d'un tokemon en ",pos)
@@ -141,7 +141,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,500000000n)
+        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,environment.gaz_limit)
         $$("Resultat du drop ",rc)
         if(rc.returnMessage!="ok"){
           showMessage(this,rc.returnMessage)

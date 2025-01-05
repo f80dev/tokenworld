@@ -1,0 +1,8 @@
+<div *ngIf="game" style="display: inline-block; ">
+  {{game!.title}}<br>
+  bank: {{game!.bank/1e18}} LP<br>
+  Max/user: {{game!.max_per_user}}
+
+  <br>
+  <ng-content></ng-content>
+</div>

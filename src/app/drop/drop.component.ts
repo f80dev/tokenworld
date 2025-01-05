@@ -86,7 +86,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   random_location: boolean = false;
-  diffusion=0
+  diffusion=50
 
 
   async drop() {

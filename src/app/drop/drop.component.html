@@ -6,13 +6,26 @@
     Basculer sur xPortal
   </button>
 
-  <app-input value_type="text" *ngIf="sel_nft && message.length==0"
-             label="Tokemon's name" class="zone_input" help="Min length of 3 characters"
-             (valueChange)="name=$event" [value]="name"></app-input>
+  <div *ngIf="sel_nft && message.length==0" class="zone_input" >
+    <button mat-raised-button
+            (click)="drop()"
+            title="Drop here">Drop !</button>
+
+    <button mat-raised-button
+            (click)="sel_nft=null"
+            title="Cancel">Cancel</button>
+    <br>
+
+    <app-input value_type="text"
+               label="Tokemon's name" help="Min length of 3 characters"
+               (valueChange)="name=$event" [value]="name"></app-input>
+
+  </div>
+
   <br>
 
   <mat-slide-toggle *ngIf="sel_nft && message.length==0"
-                    [(ngModel)]="random_location">Random location</mat-slide-toggle>
+                    [(ngModel)]="random_location">Everywhere in the game zone</mat-slide-toggle>
 
   <br>
   <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
@@ -53,15 +66,8 @@
                  *ngIf="max_pv_loading>0" [help]="'Maximum'+max_pv_loading"
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
-      <br>
 
-      <button mat-raised-button
-              (click)="drop()"
-              title="Drop here">Drop !</button>
 
-      <button mat-raised-button
-              (click)="sel_nft=null"
-              title="Cancel">Cancel</button>
     </div>
 
     <br><br><br>

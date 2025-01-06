@@ -53,7 +53,7 @@
       <br>
 
       <app-input *ngIf="max_quantity>1" value_type="number" [min]="1" [max]="max_quantity"
-                 label="Number to drop" unity="NFT"
+                 label="Number to drop" unity="NFT" [help]="'limit to '+max_quantity"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
       <br>
 

@@ -120,7 +120,7 @@ export class CreateWorldComponent implements OnInit {
     await this.user.init_balance(this.api)
     if(this.user.get_balance(this.user.get_default_token())<1){
       showMessage(this,"You need almost 1 "+this.user.get_default_token()+" in your wallet")
-      if(this.user.game)this.quit(this.user.game!.id)
+      if(this.user.game)this.quit(this.user.game)
     }
 
 
@@ -143,8 +143,8 @@ export class CreateWorldComponent implements OnInit {
   }
 
 
-  quit(game_id:any){
-    this.user.init_game(game_id)
+  quit(game:any){
+    this.user.init_game(game)
     this.router.navigate( ["map"])
   }
 
@@ -154,8 +154,11 @@ export class CreateWorldComponent implements OnInit {
     $$("Login user ",this.user)
 
     $$("Creation d'une partie avec ",this.zone)
-    let entrance = this.zone.entrance && this.zone.entrance.lat+this.zone.entrance.lng!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
-    let exit =  this.zone.exit && this.zone.exit.lat+this.zone.exit.lng!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
+    $$("Entrance ",this.zone.entrance)
+    $$("Exit ",this.zone.exit)
+
+    let entrance = this.zone.entrance && this.zone.entrance.x+this.zone.entrance.y!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
+    let exit =  this.zone.exit && this.zone.exit.y+this.zone.exit.x!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
     let ne = polarToCartesian(this.zone.NE, environment.scale_factor,environment.translate_factor)
     let sw = polarToCartesian(this.zone.SW, environment.scale_factor,environment.translate_factor)
 
@@ -198,7 +201,7 @@ export class CreateWorldComponent implements OnInit {
       await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
       let games=await this.user.query("games",[])
-      this.quit(games.length)
+      this.quit(games[games.length-1])
     } catch (e) {
       showError(this, e)
       wait_message(this)

@@ -169,7 +169,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
     $$("Selection du NFT ",$event)
     this.sel_nft=$event
     this.name=$event.name
-    this.max_quantity=this.sel_nft.balance
+    let max_per_user= this.user.idx==this.user.game!.owner ? 200 : (this.user.game?.max_per_user || 1000)
+    this.max_quantity=Math.min(this.sel_nft.balance,max_per_user)
 
     let pos=this.user.center_map
     initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')

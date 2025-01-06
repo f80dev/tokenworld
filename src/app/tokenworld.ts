@@ -54,6 +54,7 @@ export class Game {
   max_distance=100
   n_degrees=8
   use_geoloc=false
+  owner: number=0
 }
 
 

@@ -78,12 +78,10 @@ export class UserService {
   }
 
 
-
-
   query(func:string,args:any[]=[]){
     $$("Appel de la fonction "+func+" avec les arguments ",args)
     let rc=query(func, args, this.get_domain(), this.get_sc_address())
-    $$("Réponse ",rc)
+    //$$("Réponse ",rc)
     return rc
   }
 

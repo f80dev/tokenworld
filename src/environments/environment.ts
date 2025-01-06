@@ -74,6 +74,6 @@ export const environment = {
     "elrond-devnet":"https://devnet.xspotlight.com/",
     "elrond-mainnet":"https://xspotlight.com/",
   },
-  gaz_limit: 50000000n
+  gaz_limit: 75000000n
 
 }

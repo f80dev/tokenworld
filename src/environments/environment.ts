@@ -57,12 +57,11 @@ export const environment = {
     }
   },
 
-  scale_factor:1000,
-  //scale_factor:100000000000,
+  scale_factor:10,
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqs0hgp5mjxwxulln50akgxr4xpe88cjgt835sxq962f",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqk0ay60n3542mpuyqqvghpukl7je25std835su8rmxr",
     "elrond-mainnet":""
   },
 

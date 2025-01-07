@@ -193,11 +193,13 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         if(this.user.game.use_geoloc)pos=polarToCartesian(await this.user.geoloc(this.geolocService),environment.scale_factor,environment.translate_factor)
 
-        let args = [
-          this.user.game.id,
-          pos.x, pos.y,pos.z,
-        ]
-        this.user.tokemons = await this.user.query("show_nfts",  args);
+        if(this.user.game.tokemon_view){
+          let args = [this.user.game.id,this.user.address]
+          this.user.tokemons = await this.user.query("show_tokemon_by_tokemon",  args);
+        }else{
+          let args = [this.user.game.id, pos.x, pos.y,pos.z]
+          this.user.tokemons = await this.user.query("show_nfts",  args);
+        }
 
         $$("Chargement de " + this.user.tokemons.length + " tokemons")
         $$("Liste des tokemons ",this.user.tokemons)

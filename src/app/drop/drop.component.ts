@@ -91,6 +91,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
   async drop() {
     if(this.user.game){
+
       if(this.name.length<3){
         showMessage(this,"3 characters required for the name")
         return
@@ -126,7 +127,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
         )
       }
 
-      let args = [this.user.game.id,this.name, this.visibility, pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
+      let visibility=Math.round((Number(this.user.game.min_visibility)+Number(this.user.game.max_visibility))/2)
+      let args = [this.user.game.id,this.name, visibility, pos.x, pos.y,pos.z,p1.x,p1.y,p1.z,p2.x,p2.y,p2.z]
       $$("drop de "+this.name+" de visibilité "+this.user.visibility+" à la position ",pos)
       $$("Zone NE ",p1)
       $$("Zone SW ",p2)

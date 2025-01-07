@@ -1,11 +1,11 @@
 export const abi={
   "buildInfo": {
     "rustc": {
-      "version": "1.78.0",
-      "commitHash": "9b00956e56009bab2aa15d7bff10916599e3d6d6",
-      "commitDate": "2024-04-29",
+      "version": "1.82.0",
+      "commitHash": "f6e511eec7342f59a25f7c0534f1dbea00d01b14",
+      "commitDate": "2024-10-15",
       "channel": "Stable",
-      "short": "rustc 1.78.0 (9b00956e5 2024-04-29)"
+      "short": "rustc 1.82.0 (f6e511eec 2024-10-15)"
     },
     "contractCrate": {
       "name": "tokemonworld",
@@ -28,6 +28,10 @@ export const abi={
       },
       {
         "name": "scale_factor",
+        "type": "u32"
+      },
+      {
+        "name": "max_games_per_user",
         "type": "u32"
       }
     ],
@@ -212,6 +216,10 @@ export const abi={
         {
           "name": "use_geoloc",
           "type": "bool"
+        },
+        {
+          "name": "tokemon_view",
+          "type": "bool"
         }
       ],
       "outputs": [
@@ -367,6 +375,10 @@ export const abi={
         {
           "name": "z",
           "type": "u64"
+        },
+        {
+          "name": "with_attack",
+          "type": "bool"
         }
       ],
       "outputs": []
@@ -555,6 +567,25 @@ export const abi={
       ]
     },
     {
+      "name": "show_tokemon_by_tokemon",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        },
+        {
+          "name": "caller",
+          "type": "Address"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "List<Tokemon>"
+        }
+      ]
+    },
+    {
       "name": "show_nfts",
       "mutability": "readonly",
       "inputs": [
@@ -695,6 +726,10 @@ export const abi={
         {
           "name": "max_per_user",
           "type": "u16"
+        },
+        {
+          "name": "tokemon_view",
+          "type": "bool"
         }
       ]
     },

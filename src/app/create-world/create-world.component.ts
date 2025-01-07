@@ -77,7 +77,7 @@ export class CreateWorldComponent implements OnInit {
   dropzone: LatLng=new LatLng(0,0)
   private exit_marker: null | Marker<any>=null
   private entrance_marker: null | Marker<any>=null
-  max_visibility=10000
+  max_visibility=100
   min_visibility=10
   max_distance=100
   min_distance=1
@@ -86,6 +86,7 @@ export class CreateWorldComponent implements OnInit {
   max_pv: number=100
   use_geoloc=false;
   max_per_user: number = 30;
+  tokemon_vision: boolean=true;
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -186,11 +187,11 @@ export class CreateWorldComponent implements OnInit {
       this.min_distance, this.max_distance,this.n_degrees,
 
       "map",
-      this.min_visibility,this.max_visibility,
+      this.min_visibility*environment.scale_factor,this.max_visibility*environment.scale_factor,
       this.min_pv,this.max_pv,this.max_per_user,
       this.max_player,
       this.turns,
-      this.use_geoloc
+      this.use_geoloc,this.tokemon_vision
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 

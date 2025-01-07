@@ -30,11 +30,11 @@
   <br>
   <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
     <div id="map" style="position: absolute;left:0;top:0;right: 0;bottom:0;z-index: 0;"></div>
-    <div class="disk" [style.width]="user.visibility*ech+'px'"
-         [style.height]="user.visibility*ech+'px'"
-         [style.margin-top]="-user.visibility*ech/2+'px'"
-         [style.margin-left]="-user.visibility*ech/2+'px'" >
-    </div>
+<!--    <div class="disk" [style.width]="user.visibility*ech+'px'"-->
+<!--         [style.height]="user.visibility*ech+'px'"-->
+<!--         [style.margin-top]="-user.visibility*ech/2+'px'"-->
+<!--         [style.margin-left]="-user.visibility*ech/2+'px'" >-->
+<!--    </div>-->
   </div>
 
   <div *ngIf="message==''">
@@ -47,10 +47,10 @@
     </app-wallet>
 
     <div class="zone_input" *ngIf="sel_nft">
-      <app-input value_type="number" [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
-                 label="Visibility" unity="meters"
-                 (valueChange)="visibility=$event" [value]="visibility"></app-input>
-      <br>
+<!--      <app-input value_type="number" [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"-->
+<!--                 label="Visibility" unity="meters"-->
+<!--                 (valueChange)="visibility=$event" [value]="visibility"></app-input>-->
+<!--      <br>-->
 
       <app-input *ngIf="max_quantity>1" value_type="number" [min]="1" [max]="max_quantity"
                  label="Number to drop" unity="NFT" [help]="'limit to '+max_quantity"

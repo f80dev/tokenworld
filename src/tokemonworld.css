@@ -5,6 +5,19 @@ app-input {
 }
 
 
+.icon-button {
+  border-radius: 40%;
+  cursor:pointer;
+  margin:4px;
+  padding: 6px;
+  margin-bottom:-14px;
+  background-color: #121212;
+  font-size:x-large;
+  color: #23aca7;
+}
+
+
+
 .map_style {
   display: inline-block;
   position:relative;

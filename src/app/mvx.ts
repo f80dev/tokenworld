@@ -210,8 +210,10 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
 
     await user.refresh()
     transaction.nonce=BigInt(user.account.nonce)
-    let sign_transaction=await provider.signTransaction(transaction)
+
+
     try{
+      let sign_transaction=await provider.signTransaction(transaction)
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
 
       const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
@@ -224,9 +226,9 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
       const parsedOutcome = parser.parseDeploy({ transactionOutcome });
 
       resolve(parsedOutcome)
-    } catch (e) {
+    } catch (e:any) {
       console.log(e)
-      reject(e)
+      reject(e.message)
     }
   })
 }

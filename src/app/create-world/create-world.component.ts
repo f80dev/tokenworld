@@ -201,7 +201,7 @@ export class CreateWorldComponent implements OnInit {
       tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
       await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
-      let games=await this.user.query("games",[])
+      let games=await this.user.extract_games()
       this.quit(games[games.length-1])
     } catch (e) {
       showError(this, e)

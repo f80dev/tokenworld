@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {TokenTransfer} from '@multiversx/sdk-core/out';
+import {BigUIntValue, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {create_transaction, send_transaction_with_transfers} from '../mvx';
@@ -88,7 +88,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
   random_location: boolean = false;
   diffusion=50
 
-
   async drop() {
     if(this.user.game){
 
@@ -143,7 +142,8 @@ export class DropComponent implements AfterViewInit, OnChanges {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier,this.sel_nft.nonce,this.quantity))
 
       try {
-        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,environment.gaz_limit)
+        let gas_to_drop=environment.gaz_limit+environment.gaz_by_nft*BigInt(this.quantity);
+        let rc :any= await send_transaction_with_transfers(this.user.provider,"drop",args,this.user,tokens,gas_to_drop)
         $$("Resultat du drop ",rc)
         if(rc.returnMessage!="ok"){
           showMessage(this,rc.returnMessage)

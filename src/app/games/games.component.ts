@@ -40,30 +40,41 @@ export class GamesComponent implements OnInit {
   router=inject(Router)
   clipboard=inject(Clipboard)
 
-  async ngOnInit() {
+  async refresh(){
+    this.games=await this.user.extract_games()
     let params:any=await getParams(this.routes)
-    this.games=[]
-    for(let game of await this.user.query("games",[])){
-      game.id=this.games.length+1
-      this.games.push(game)
-    }
-    if(this.games.length==0){
-      $$("Aucune partie disponible")
-      this.quit("create")
-    }else{
-      if(this.games.length==1 && params.autoconnect=='true') {
-        $$("une seule partie disponible donc on la sélectionne")
-        this.user.init_game(this.games[0])
-        this.quit()
-      }else{
-        if(params.hasOwnProperty("game")){
-          $$("Connexion à la partie ",params)
-          if(Number(params.game)>this.games.length)params.game=1
-          this.user.init_game(this.games[Number(params.game)-1])
+    let autoconnect:boolean=(params.hasOwnProperty("autoconnect") && params.autoconnect=='true')
+    let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
+    if(game_id>this.games.length)game_id=0
+
+    if(autoconnect){
+      if(game_id>0 && this.games[game_id-1].closed){
+        game_id=0
+        showMessage(this,"This game is closed")
+      }
+
+      if(game_id>0){
+          this.user.init_game(this.games[game_id-1])
+          this.quit()
+      }else {
+        let i = 0
+        while (i < this.games.length && this.games[i].closed) {
+          i++
+        }
+        if(i==this.games.length)this.quit("create")
+        if (this.games[i].closed) {
+          this.quit("map")
+        } else {
+          this.user.init_game(this.games[i])
           this.quit()
         }
       }
     }
+  }
+
+
+  async ngOnInit() {
+    this.refresh()
   }
 
   quit(redirect="map"){
@@ -83,8 +94,11 @@ export class GamesComponent implements OnInit {
   }
 
   async close_map(game: any) {
+    await this.user.login(this,"","",true)
+    $$("Fermeture de ",game)
     let args=[game.id]
     let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
+    this.refresh()
   }
 
   async stacking(game: any) {
@@ -98,5 +112,9 @@ export class GamesComponent implements OnInit {
   share_map(game: any) {
     this.clipboard.copy(environment.appli+"/games?autoconnect=true&game="+game.id)
     showMessage(this,"Link in clipboard")
+  }
+
+  create_game() {
+    this.quit("create")
   }
 }

@@ -640,6 +640,10 @@ export const abi={
       "type": "struct",
       "fields": [
         {
+          "name": "id",
+          "type": "u32"
+        },
+        {
           "name": "title",
           "type": "bytes"
         },
@@ -805,3 +809,4 @@ export const abi={
     }
   }
 }
+

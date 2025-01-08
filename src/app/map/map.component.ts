@@ -2,9 +2,9 @@ import {AfterViewInit, Component, inject, OnChanges, OnDestroy} from '@angular/c
 import * as L from 'leaflet';
 import {
   LatLng,
-  LatLngBounds,
+  LatLngBounds, LeafletEvent,
   LeafletMouseEvent,
-  Marker, Point,
+  Marker, Point, Polyline,
   TileLayer
 } from 'leaflet';
 import {$$, setParams, showMessage} from '../../tools';
@@ -49,6 +49,10 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   styleUrl: './map.component.css'
 })
 export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
+  start_move: LatLng | null=null
+  marker_line: Polyline<any, any> | null=null
+  private tokemon_to_move: any;
+
   ngOnDestroy(): void {
       clearInterval(this.geoloc_autorefresh)
   }
@@ -69,7 +73,8 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
   map_left=0
   map_top=0
-  selected_tokemon: Tokemon | undefined
+  selected_marker: L.Marker | null=null
+  selected_tokemon: any = null
   private me_marker: Marker | undefined
   geoloc_autorefresh: any
 
@@ -92,6 +97,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     initializeMap(this,this.user.game)
       .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
       .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
+      .on("mousemove",(event:L.LeafletEvent)=>this.mousemove(event))
       .on("keypress",(event:L.LeafletKeyboardEvent)=>{
         //https://leafletjs.com/reference.html#keyboardevent
         if(event.originalEvent.key=="c"){
@@ -189,15 +195,19 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
         this.remove_markers_from_map()
 
         this.markers=[]
-        $$("Chargement des tokemon")
+
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         if(this.user.game.use_geoloc)pos=polarToCartesian(await this.user.geoloc(this.geolocService),environment.scale_factor,environment.translate_factor)
+        $$("Evaluation de la position de reference ",pos)
+
 
         if(this.user.game.tokemon_view){
           let args = [this.user.game.id,this.user.address]
+          $$("Chargement des tokemons vu par les tokemons de l'utilisateur ",args)
           this.user.tokemons = await this.user.query("show_tokemon_by_tokemon",  args);
         }else{
           let args = [this.user.game.id, pos.x, pos.y,pos.z]
+          $$("Chargement des tokemons autour de la position de reference ",args)
           this.user.tokemons = await this.user.query("show_nfts",  args);
         }
 
@@ -230,7 +240,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   }
 
 
-  private get_closest_tokemon_from(center:any,seuil=0.1) : any {
+  private get_closest_tokemon_from(center:any,seuil=0.1) : L.Marker | null {
     let d_min=1e18
     let _selected_marker:L.Marker | undefined
     for(let marker of this.markers){
@@ -242,7 +252,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     }
     $$("Plus proche "+d_min)
     if(d_min<seuil && _selected_marker){
-      return _selected_marker.options.alt
+      return _selected_marker
     }else{
       return null
     }
@@ -270,7 +280,10 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   private movemap(event: any) {
     if(event)this.user.center_map = event.target.getCenter()
     $$("Positionnement de la carte sur ",this.user.center_map)
-    this.selected_tokemon=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
+
+    this.selected_marker=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
+    this.selected_tokemon=this.selected_marker?.options.alt
+
     localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
     localStorage.setItem("last_position_lng",String(this.user.center_map.lng))
     this.refresh()
@@ -317,7 +330,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   open_capture() {
-    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon,"","")}})
+    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon!.options.alt,"","")}})
   }
 
 
@@ -336,7 +349,19 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     if(this.user.zoom>0)this.user.zoom=this.user.zoom-1;
   }
 
-  move_tokemon() {
+  async move_tokemon() {
+    if(!this.start_move){
+      this.tokemon_to_move=this.selected_tokemon
+      this.start_move=this.selected_marker!.getLatLng()
+    }else{
+      await this.user.login(this,"","",true)
+      $$("Execution du deplacement")
+      let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+      let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
+      let rc=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+      this.start_move=null
+      this.tokemon_to_move=null
+    }
 
   }
 
@@ -348,6 +373,17 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
         this.user.provider,"show_all_my_nfts",
         this.user.address,[this.user.game.id],this.user.get_sc_address())
         $$("Récupération de ",results.length)
+    }
+  }
+
+  private mousemove(event: LeafletEvent) {
+    if(this.start_move){
+      if(!this.marker_line){
+        this.marker_line=L.polyline([this.start_move,this.user.center_map],{color:'black'}).addTo(this.map)
+      }else{
+        this.marker_line.setLatLngs([this.start_move,this.user.center_map])
+      }
+
     }
   }
 }

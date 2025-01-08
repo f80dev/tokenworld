@@ -20,7 +20,7 @@
     <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
 
     <mat-icon  (click)="move_tokemon()"
-               *ngIf="selected_tokemon && selected_tokemon.owner==user.idx"
+               *ngIf="(selected_tokemon && selected_tokemon.owner==user.idx) || start_move"
                title="Move"
                class="icon-button">
       run_circle

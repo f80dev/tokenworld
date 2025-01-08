@@ -196,4 +196,16 @@ export class UserService {
   }
 
 
+  extract_games(opened=true,closed=true) : Promise<Game[]> {
+    let rc:Game[] = [];
+    return new Promise(async (resolve) => {
+      for (let game of await this.query("games", [])) {
+        if(game.closed && closed || !game.closed && opened) {
+          rc.push(game)
+        }
+      }
+      resolve(rc)
+    })
+  }
+
 }

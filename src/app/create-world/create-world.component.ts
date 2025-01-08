@@ -184,7 +184,7 @@ export class CreateWorldComponent implements OnInit {
       ne.x, ne.y, ne.z,
       sw.x, sw.y, sw.z,
 
-      this.min_distance, this.max_distance,this.n_degrees,
+      this.min_distance*environment.scale_factor, this.max_distance*environment.scale_factor,this.n_degrees,
 
       "map",
       this.min_visibility*environment.scale_factor,this.max_visibility*environment.scale_factor,
@@ -201,8 +201,10 @@ export class CreateWorldComponent implements OnInit {
       tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
       await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
       wait_message(this)
+
       let games=await this.user.extract_games()
       this.quit(games[games.length-1])
+
     } catch (e) {
       showError(this, e)
       wait_message(this)

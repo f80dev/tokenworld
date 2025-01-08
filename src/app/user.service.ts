@@ -120,12 +120,14 @@ export class UserService {
           }
           await this.authent(r)
           await this.init_balance(vm.api)
+          await this.init_idx()
           resolve(r)
           showMessage(vm,"Identification ok")
         } else {
           try{
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle)
             await this.authent(r)
+            await this.init_idx()
             await this.init_balance(vm.api)
             resolve(r)
           }catch (e){
@@ -196,12 +198,14 @@ export class UserService {
   }
 
 
-  extract_games(opened=true,closed=true) : Promise<Game[]> {
+  extract_games(opened=true,closed=true,user_filter=0) : Promise<Game[]> {
     let rc:Game[] = [];
     return new Promise(async (resolve) => {
       for (let game of await this.query("games", [])) {
         if(game.closed && closed || !game.closed && opened) {
-          rc.push(game)
+          if(user_filter==0 || game.owner==user_filter){
+            rc.push(game)
+          }
         }
       }
       resolve(rc)

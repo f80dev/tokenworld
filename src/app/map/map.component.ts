@@ -10,7 +10,7 @@ import {
 import {$$, setParams, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {add_icon, cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
+import {cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -24,10 +24,9 @@ import {InputComponent} from '../input/input.component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {abi} from '../../environments/abi';
-import {AbiRegistry, Field, Struct, U64Value} from '@multiversx/sdk-core/out';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction} from '../mvx';
+import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -43,7 +42,8 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     NgIf,
     InputComponent,
     MatSlider,
-    MatSliderThumb
+    MatSliderThumb,
+    HourglassComponent
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
@@ -74,14 +74,14 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   map_left=0
   map_top=0
   selected_marker: L.Marker | null=null
-  selected_tokemon: any = null
-  private me_marker: Marker | undefined
+  selected_tokemon: any | null = null
+  me_marker: Marker | undefined
   geoloc_autorefresh: any
+  message: string=""
 
 
   async init_map(){
     $$("Initialisation de la carte principal")
-
 
     this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
     let zoom=this.user.zoom || 16
@@ -173,7 +173,6 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     marker.on("mouseover", (event) => {this.mouseover(event)})
     marker.on("dblclick", (event) => {this.select_nft(event)})
     marker.addTo(this.map)
-    //L.circleMarker(coords,{color: '#474747', fillColor: '#474747', fillOpacity: 0.5, radius: 1}).addTo(this.map);
     return marker
   }
 
@@ -193,13 +192,11 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       if(this.user.center_map && this.user.game) {
 
         this.remove_markers_from_map()
-
         this.markers=[]
 
         let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
         if(this.user.game.use_geoloc)pos=polarToCartesian(await this.user.geoloc(this.geolocService),environment.scale_factor,environment.translate_factor)
         $$("Evaluation de la position de reference ",pos)
-
 
         if(this.user.game.tokemon_view){
           let args = [this.user.game.id,this.user.address]
@@ -223,7 +220,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
             get_nft(nft_id,this.api,this.user.network).then((opt:any)=>{
               $$("Récupération du nft ",opt)
-              this.markers.push(this.add_tokemon_as_marker(opt.media[0].originalUrl,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,50))
+              this.markers.push(this.add_tokemon_as_marker(opt.media[0].originalUrl,tokemon.position,tokemon.name+" ("+Number(tokemon.pv)+" LP)",tokemon,50))
             })
           }else{
             this.markers.push(this.add_tokemon_as_marker(icon,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,30))
@@ -283,6 +280,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
     this.selected_marker=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
     this.selected_tokemon=this.selected_marker?.options.alt
+    $$("Selection du tokemon ",this.selected_tokemon)
 
     localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
     localStorage.setItem("last_position_lng",String(this.user.center_map.lng))
@@ -358,9 +356,20 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       $$("Execution du deplacement")
       let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
       let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
-      let rc=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+      try{
+        wait_message(this,"Moving ...")
+        let rc=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+        this.refresh()
+        wait_message(this)
+      }catch (e:any) {
+        wait_message(this)
+        showMessage(this,e.returnMessage)
+      }
+
       this.start_move=null
       this.tokemon_to_move=null
+      this.marker_line?.removeFrom(this.map)
+      this.marker_line==null
     }
 
   }
@@ -385,5 +394,9 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       }
 
     }
+  }
+
+  fight() {
+
   }
 }

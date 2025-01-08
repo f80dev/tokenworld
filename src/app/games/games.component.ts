@@ -14,6 +14,9 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import {environment} from '../../environments/environment';
 import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {GameComponent} from '../game/game.component';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
+import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 
 @Component({
   selector: 'app-games',
@@ -26,7 +29,10 @@ import {GameComponent} from '../game/game.component';
     MatIconButton,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    GameComponent
+    GameComponent,
+    MatSlideToggle,
+    FormsModule,
+    HourglassComponent
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'
@@ -39,9 +45,22 @@ export class GamesComponent implements OnInit {
   dialog=inject(MatDialog)
   router=inject(Router)
   clipboard=inject(Clipboard)
+  show_closed_games=false;
+  show_my_games=false;
+  message="";
+
+
+
 
   async refresh(){
-    this.games=await this.user.extract_games()
+    let owner_filter=this.show_my_games ? this.user.idx : 0
+    this.games=await this.user.extract_games(true,this.show_closed_games,owner_filter)
+  }
+
+
+  async ngOnInit() {
+    await this.refresh()
+
     let params:any=await getParams(this.routes)
     let autoconnect:boolean=(params.hasOwnProperty("autoconnect") && params.autoconnect=='true')
     let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
@@ -54,8 +73,8 @@ export class GamesComponent implements OnInit {
       }
 
       if(game_id>0){
-          this.user.init_game(this.games[game_id-1])
-          this.quit()
+        this.user.init_game(this.games[game_id-1])
+        this.quit()
       }else {
         let i = 0
         while (i < this.games.length && this.games[i].closed) {
@@ -70,11 +89,6 @@ export class GamesComponent implements OnInit {
         }
       }
     }
-  }
-
-
-  async ngOnInit() {
-    this.refresh()
   }
 
   quit(redirect="map"){
@@ -97,7 +111,13 @@ export class GamesComponent implements OnInit {
     await this.user.login(this,"","",true)
     $$("Fermeture de ",game)
     let args=[game.id]
-    let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
+    wait_message(this,"Closing")
+    try{
+      let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
+    }catch (e:any){
+
+    }
+    wait_message(this)
     this.refresh()
   }
 
@@ -116,5 +136,10 @@ export class GamesComponent implements OnInit {
 
   create_game() {
     this.quit("create")
+  }
+
+  async update_only_mygame() {
+    await this.user.login(this,"","",true)
+    this.refresh()
   }
 }

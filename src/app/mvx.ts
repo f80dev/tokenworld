@@ -391,7 +391,6 @@ export async function send_transaction(provider:any,function_name:string,sender_
         const parsedOutcome = parser.parseDeploy({ transactionOutcome });
 
         const [event] = gatherAllEvents(transactionOutcome);
-        debugger
 
         resolve(parsedOutcome)
       } catch (e) {

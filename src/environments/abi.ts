@@ -171,11 +171,11 @@ export const abi={
         },
         {
           "name": "move_min",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "move_max",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "n_degrees",
@@ -705,11 +705,11 @@ export const abi={
         },
         {
           "name": "min_distance",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "max_distance",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "n_degrees",

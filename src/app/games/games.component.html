@@ -1,22 +1,37 @@
 <div class="mainform" style="text-align: center;">
-  <table style="width: 100%;">
+
+  <app-hourglass [message]="message">
+  </app-hourglass>
+
+  <div id="menu">
+    <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">Show closed game</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">Show only my game</mat-slide-toggle>
+  </div>
+
+
+  <table style="width: 100%;" *ngIf="message.length==0">
+    <tr>
+      <th>Games</th>
+      <th>Commandes</th>
+      <th>Play</th>
+    </tr>
     <tr style="width:100%" *ngFor="let game of games">
       <td style="text-align: left;">
         <app-game [game]="game">
-          <mat-expansion-panel *ngIf="game.owner==user.idx && !game.closed">
-            <mat-expansion-panel-header>Commandes</mat-expansion-panel-header>
-            <button mat-raised-button (click)="close_map(game)">Close</button>
-            <button mat-raised-button (click)="stacking(game)">AirDrop</button>
-          </mat-expansion-panel>
-
         </app-game>
 
       </td>
-      <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
-        <button mat-raised-button (click)="see_map(game)">Map</button>
-        <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
-       <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
+      <td>
+        <div *ngIf="game.owner==user.idx && !game.closed">
+          <button mat-raised-button (click)="close_map(game)">Close</button>
+          <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+        </div>
 
+      </td>
+      <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
+        <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
+        <mat-icon (click)="see_map(game)" class="icon-button" title="See the map">map</mat-icon>
+        <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
       </td>
     </tr>
   </table>

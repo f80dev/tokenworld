@@ -3,7 +3,7 @@
 </div>
 
 <div class="image-container"
-     *ngIf="user.game && user.game.url!='map'">
+     *ngIf="message.length==0 && user.game && user.game.url!='map'">
 
   <mat-icon (click)="zoom_in()" class="button-map" style="top:0;">add_circle</mat-icon>
    <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
@@ -13,11 +13,13 @@
        [src]="user.game.url">
 </div>
 
-<div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center">
+<app-hourglass [message]="message"></app-hourglass>
+
+<div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center" *ngIf="message.length==0">
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
-    <button mat-raised-button (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
+    <button mat-raised-button *ngIf="!start_move" (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
 
     <mat-icon  (click)="move_tokemon()"
                *ngIf="(selected_tokemon && selected_tokemon.owner==user.idx) || start_move"
@@ -26,39 +28,49 @@
       run_circle
     </mat-icon>
 
-    <mat-icon  (click)="open_capture()"
-               *ngIf="selected_tokemon"
-               title="Capture the tokemon"
-               class="icon-button">
-      catching_pokemon
-    </mat-icon>
+    <div *ngIf="!start_move" style="display: inline-block;">
+      <mat-icon  (click)="open_capture()"
+                 *ngIf="selected_tokemon && (selected_tokemon.owner==user.idx || selected_tokemon.pv==0)"
+                 title="Capture the tokemon"
+                 class="icon-button">
+        catching_pokemon
+      </mat-icon>
 
-    <mat-icon  (click)="recenter()"
-               title="Se déplacer"
-               class="icon-button">
-      pin_drop
-    </mat-icon>
+      <mat-icon  (click)="fight()"
+                 *ngIf="selected_tokemon && (selected_tokemon.owner!=user.idx && selected_tokemon.pv>0)"
+                 title="Fight the tokemon"
+                 class="icon-button">
+        bolt
+      </mat-icon>
 
-    <mat-icon  (click)="show_my_tokemon()"
-               title="Se déplacer"
-               class="icon-button">
-      person
-    </mat-icon>
+      <mat-icon  (click)="recenter()"
+                 title="Se déplacer"
+                 class="icon-button">
+        pin_drop
+      </mat-icon>
+
+      <mat-icon  (click)="show_my_tokemon()"
+                 title="Se déplacer"
+                 class="icon-button">
+        person
+      </mat-icon>
 
 
-    <mat-icon  (click)="open_airdrop()"
-               title="Airdropr"
-               class="icon-button">
-      paid
-    </mat-icon>
+      <mat-icon  (click)="open_airdrop()"
+                 title="Airdropr"
+                 class="icon-button">
+        paid
+      </mat-icon>
 
 
 
-    <mat-icon  (click)="user.preview=!user.preview;refresh();"
-               *ngIf="markers.length>0"
+      <mat-icon  (click)="user.preview=!user.preview;refresh();"
+                 *ngIf="markers.length>0"
                  class="icon-button"
                  [style.opacity]="user.preview ? 1.0 : 0.4">image
       </mat-icon>
+
+    </div>
 
 
 

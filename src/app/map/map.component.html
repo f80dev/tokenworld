@@ -28,7 +28,16 @@
       run_circle
     </mat-icon>
 
-    <div *ngIf="!start_move" style="display: inline-block;">
+
+    <mat-icon  (click)="fight()"
+               *ngIf="to_attack && selected_tokemon && selected_tokemon.owner==user.idx"
+               title="Fight the tokemon"
+               class="icon-button">
+      bolt
+    </mat-icon>
+
+
+    <div *ngIf="!start_move && !to_attack" style="display: inline-block;">
       <mat-icon  (click)="open_capture()"
                  *ngIf="selected_tokemon && (selected_tokemon.owner==user.idx || selected_tokemon.pv==0)"
                  title="Capture the tokemon"
@@ -36,12 +45,14 @@
         catching_pokemon
       </mat-icon>
 
+
       <mat-icon  (click)="fight()"
                  *ngIf="selected_tokemon && (selected_tokemon.owner!=user.idx && selected_tokemon.pv>0)"
                  title="Fight the tokemon"
                  class="icon-button">
         bolt
       </mat-icon>
+
 
       <mat-icon  (click)="recenter()"
                  title="Se déplacer"

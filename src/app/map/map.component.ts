@@ -75,6 +75,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   map_top=0
   selected_marker: L.Marker | null=null
   selected_tokemon: any | null = null
+  to_attack: any | null = null
   me_marker: Marker | undefined
   geoloc_autorefresh: any
   message: string=""
@@ -232,8 +233,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async select_nft(event: LeafletMouseEvent) {
-    let tokemon=event.target.options.alt
-    this.router.navigate(["capture"],{queryParams:{p:setParams(tokemon,"","")}})
+    this.map.setView(event.latlng)
   }
 
 
@@ -328,7 +328,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   open_capture() {
-    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon!.options.alt,"","")}})
+    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon,"","")}})
   }
 
 
@@ -396,7 +396,22 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     }
   }
 
-  fight() {
+  async fight() {
+    if(!this.to_attack){
+      this.to_attack=this.selected_tokemon
+    }else{
+      await this.user.login(this,"Login required to fight","",true);
+      let args=[this.user.game!.id,this.to_attack.id,this.selected_tokemon.id]
+      try{
+        wait_message(this,"Fight ...")
+        let rc=await send_transaction(this.user.provider,"fight",this.user.address,args,this.user.get_sc_address())
+        this.refresh()
+      }catch(e:any){
 
+      }
+      wait_message(this)
+      this.to_attack=null
+    }
   }
+
 }

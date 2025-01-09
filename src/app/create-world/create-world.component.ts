@@ -22,6 +22,7 @@ import {ApiService} from '../api.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {TutoComponent} from '../tuto/tuto.component';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-create-world',
@@ -38,7 +39,8 @@ import {TutoComponent} from '../tuto/tuto.component';
     HourglassComponent,
     MatSlideToggle,
     FormsModule,
-    TutoComponent
+    TutoComponent,
+    MatIcon
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -252,5 +254,10 @@ export class CreateWorldComponent implements OnInit {
 
     this.exit_marker?.removeFrom(this.map)
     this.exit_marker=null
+  }
+
+  async recenter() {
+    let pos=await this.user.geoloc(this.geolocService)
+    this.map.setView(pos)
   }
 }

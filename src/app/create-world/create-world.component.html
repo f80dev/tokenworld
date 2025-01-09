@@ -8,6 +8,13 @@
 
 <div *ngIf="message==''" class="mainform" style="text-align: center;">
   <h6>Game Zone</h6>
+  <mat-icon  (click)="recenter()"
+             title="Geoloc"
+             class="icon-button">
+    pin_drop
+  </mat-icon>
+
+  <br>
 
 
   <div id="map" class="map_style" style="pointer-events: all;" ></div>

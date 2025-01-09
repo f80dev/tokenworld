@@ -1,6 +1,20 @@
 @use '@angular/material' as mat;
 @import "@angular/material/prebuilt-themes/cyan-orange.css";
+@include mat.core();
 
+$theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$violet-palette,
+  ),
+  typography: (
+    brand-family: 'Comic Sans',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
+  )
+));
 
 app-input {
   margin: 20px;

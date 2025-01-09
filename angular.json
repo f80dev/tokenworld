@@ -36,10 +36,8 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/cyan-orange.css",
               "leaflet/dist/leaflet.css",
-              "src/styles.css",
-              "src/tokemonworld.css"
+              "src/tokemonworld.scss"
             ],
             "scripts": []
           },
@@ -100,8 +98,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/cyan-orange.css",
-              "src/styles.css",
-              "src/tokemonworld.css"
+              "src/tokemonworld.scss"
             ],
             "scripts": []
           }

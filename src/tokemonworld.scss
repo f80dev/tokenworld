@@ -1,8 +1,16 @@
+@use '@angular/material' as mat;
+@import "@angular/material/prebuilt-themes/cyan-orange.css";
+
 
 app-input {
   margin: 20px;
   display:inline-block;
 }
+
+a:link { text-decoration: none;color: gray;  }
+a:visited { text-decoration: none;color: gray;  }
+a:hover { text-decoration: none; color: lightgray; }
+a:active { text-decoration: none; color: gray; }
 
 
 .icon-button {
@@ -41,6 +49,38 @@ app-input {
 
 .panel {
   margin: 10px;
+}
+
+.blocbutton {
+  line-height: 85%;
+}
+
+
+.greylabel {
+  font-size: small;
+  opacity: 0.5;
+  line-height: 85%;
+  font-weight: lighter;
+}
+
+.data-table {
+  display: inline-block;
+  line-height: 90%;
+  font-size: small;
+  border-spacing: 5px;
+  margin: 10px;
+  text-align: left;
+}
+
+.mainform {
+  padding: 0.2%;
+  background-color: black;
+  background-size: cover;
+  text-align: center;
+  width:100%;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .vignette-zone {

@@ -108,6 +108,7 @@ export class UserService {
     return new Promise(async (resolve, reject) => {
       if(!this.address)this.address=localStorage.getItem("address") || ""
       if(this.isConnected(strong)){
+        await this.init_idx()
         resolve(true)
       }else{
         if(pem_file.length>0){

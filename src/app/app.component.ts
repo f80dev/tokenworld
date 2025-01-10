@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatDialog} from '@angular/material/dialog';
@@ -23,7 +23,8 @@ import {InputComponent} from './input/input.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit,AfterViewInit {
+
   title = 'tokemonworld';
   router=inject(Router)
   dialog=inject(MatDialog)
@@ -39,6 +40,30 @@ export class AppComponent implements OnInit {
     this.user.logout()
   }
 
+  async ngAfterViewInit() {
+    setTimeout(async ()=>{
+      let params:any=await getParams(this.routes)
+      this.user.network=params.network || environment.networks[0].value
+      this.user.address=params.address || ""
+      this.user.login(this,"","",false)
+
+
+      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
+
+      if(params.hasOwnProperty("signature")){
+        this.user.signature=params.signature
+        this.user.address=params.address
+      }
+      this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
+
+      if(!params.hasOwnProperty("debug")){
+        this.router.navigate(["games"],{queryParams:{autoconnect:true,game:params.game || localStorage.getItem("selected_game")}})
+      }
+
+    })
+
+  }
+
 
   async login() {
     await this.user.login(this)
@@ -49,19 +74,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
 
-      let params:any=await getParams(this.routes)
-      this.user.network=params.network || environment.networks[0].value
-      this.user.address=params.address || localStorage.getItem("address") || ""
-      this.user.init_idx()
-      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
-
-      if(params.hasOwnProperty("signature")){
-        this.user.signature=params.signature
-        this.user.address=params.address
-      }
-      this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-      this.router.navigate(["games"],{queryParams:{autoconnect:true,game:params.game || localStorage.getItem("selected_game")}})
-
   }
 
 
@@ -69,7 +81,7 @@ export class AppComponent implements OnInit {
 
 
   test() {
-   this.router.navigate(["test"])
+    this.router.navigate(["test"])
   }
 
   open_map() {

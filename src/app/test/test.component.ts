@@ -4,6 +4,8 @@ import {ApiService} from '../api.service';
 import {WalletComponent} from '../wallet/wallet.component';
 import * as L from 'leaflet';
 import {UserService} from '../user.service';
+import {MatButton} from '@angular/material/button';
+import {InputComponent} from '../input/input.component';
 
 
 
@@ -12,7 +14,9 @@ import {UserService} from '../user.service';
   standalone: true,
   imports: [
     AuthentComponent,
-    WalletComponent
+    WalletComponent,
+    MatButton,
+    InputComponent
   ],
   templateUrl: './test.component.html',
   styleUrl: './test.component.css'

@@ -1,20 +1,32 @@
 @use '@angular/material' as mat;
-@import "@angular/material/prebuilt-themes/cyan-orange.css";
-@include mat.core();
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-$theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,
-  ),
-  typography: (
-    brand-family: 'Comic Sans',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
-  )
-));
+html {
+  @include mat.theme((
+    color: mat.$cyan-palette,
+    typography: (
+      plain-family: Roboto,
+      brand-family: Open Sans,
+      bold-weight: 300,
+      medium-weight: 200,
+      regular-weight: 100,
+    ),
+    density: -1,
+  ));
+}
+
+:host {
+  color: var(--mat-sys-on-primary-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-body-large);
+}
+
+
+
+body {
+  color-scheme: dark;
+}
+
 
 app-input {
   margin: 20px;

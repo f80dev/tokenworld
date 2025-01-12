@@ -80,13 +80,18 @@ export class GamesComponent implements OnInit {
         while (i < this.games.length && this.games[i].closed) {
           i++
         }
-        if(i==this.games.length)this.quit("create")
-        if (this.games[i].closed) {
-          this.quit("map")
-        } else {
-          this.user.init_game(this.games[i])
-          this.quit()
+
+        if(i==this.games.length){
+          this.quit("create")
+        }else{
+          if (this.games[i].closed) {
+            this.quit("map")
+          } else {
+            this.user.init_game(this.games[i])
+            this.quit()
+          }
         }
+
       }
     }
   }

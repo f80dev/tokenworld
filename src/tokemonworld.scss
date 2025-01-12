@@ -1,35 +1,26 @@
 @use '@angular/material' as mat;
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 
 html {
+  color-scheme: light dark;
   @include mat.theme((
     color: mat.$cyan-palette,
     typography: (
       plain-family: Roboto,
       brand-family: Open Sans,
-      bold-weight: 300,
-      medium-weight: 200,
+      bold-weight: 500,
+      medium-weight: 300,
       regular-weight: 100,
     ),
-    density: -1,
+    density: -1
   ));
-}
-
-:host {
-  color: var(--mat-sys-on-primary-container);
-  border: 1px solid var(--mat-sys-outline-variant);
-  font: var(--mat-sys-body-large);
-}
-
-
-
-body {
-  color-scheme: dark;
+  --mat-sys-primary: #6750a4;
 }
 
 
 app-input {
   margin: 20px;
+  max-width: 200px;
   display:inline-block;
 }
 

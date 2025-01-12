@@ -143,6 +143,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       try {
         let gas_to_drop = environment.gaz_limit + environment.gaz_by_nft * BigInt(this.quantity);
+        $$("Gas to transaction ",gas_to_drop)
         let rc: any = await send_transaction_with_transfers(this.user.provider, "drop", args, this.user, tokens, gas_to_drop)
         $$("Resultat du drop ", rc)
         if (rc.returnMessage != "ok") {
@@ -173,7 +174,6 @@ export class DropComponent implements AfterViewInit, OnChanges {
     $$("Selection du NFT ", $event)
     this.sel_nft = $event
     this.name = $event.name
-    debugger
     let max_per_user = this.user.idx == Number(this.user.game!.owner) ? 200 : (this.user.game?.max_per_user || 1000)
     this.max_quantity = Math.min(this.sel_nft.balance, max_per_user)
 

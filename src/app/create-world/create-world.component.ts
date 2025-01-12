@@ -127,22 +127,28 @@ export class CreateWorldComponent implements OnInit {
     }
 
 
-    $$("Initialisation de la carte avec ",this.zone)
-    this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
-    initializeMap(this, this.zone, this.zone.center, "")
-      .on("moveend", (event: L.LeafletEvent) => {
-        this.update_zone()
-      })
-      .on("zoomend", (event: L.LeafletEvent) => {
-        this.update_zone()
-      })
-      .on("click", (event: any) => {
-        this.dropzone=event.latlng
-        this.show_menu=!this.show_menu
-      })
+    try{
+      $$("Initialisation de la carte avec ",this.zone)
+      this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
+      initializeMap(this, this.zone, this.zone.center, "")
+        .on("moveend", (event: L.LeafletEvent) => {
+          this.update_zone()
+        })
+        .on("zoomend", (event: L.LeafletEvent) => {
+          this.update_zone()
+        })
+        .on("click", (event: any) => {
+          this.dropzone=event.latlng
+          this.show_menu=!this.show_menu
+        })
 
+
+    }catch (e) {
+
+    }
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()
+
   }
 
 

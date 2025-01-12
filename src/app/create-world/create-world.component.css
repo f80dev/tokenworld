@@ -3,6 +3,10 @@ table,tr {
   padding: 10px;
 }
 
+mat-slide-toggle {
+  margin: 10px;
+}
+
 td {
   text-align: center;
 }

@@ -23,7 +23,7 @@ import {InputComponent} from './input/input.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit,AfterViewInit {
+export class AppComponent implements OnInit {
 
   title = 'tokemonworld';
   router=inject(Router)
@@ -40,8 +40,17 @@ export class AppComponent implements OnInit,AfterViewInit {
     this.user.logout()
   }
 
-  async ngAfterViewInit() {
-    setTimeout(async ()=>{
+
+
+  async login() {
+    await this.user.login(this)
+    localStorage.setItem("address",this.user.address)
+  }
+
+
+
+  async ngOnInit() {
+
       let params:any=await getParams(this.routes)
       this.user.network=params.network || environment.networks[0].value
       this.user.address=params.address || ""
@@ -60,19 +69,6 @@ export class AppComponent implements OnInit,AfterViewInit {
         this.router.navigate(["games"],{queryParams:{autoconnect:true,game:params.game || localStorage.getItem("selected_game")}})
       }
 
-    })
-
-  }
-
-
-  async login() {
-    await this.user.login(this)
-    localStorage.setItem("address",this.user.address)
-  }
-
-
-
-  async ngOnInit() {
 
   }
 

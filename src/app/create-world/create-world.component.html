@@ -1,23 +1,36 @@
 <div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
   <app-hourglass [message]="message"></app-hourglass>
+  <app-tuto label="Define your gaming zone with the map"></app-tuto>
   <br>
   <img src="https://tokemon.f80.fr/assets/under_construction.png"
        style="width:50%;max-width: 300px;">
 </div>
 
 
-<div *ngIf="message==''" class="mainform" style="text-align: center;">
-  <h6>Game Zone</h6>
-  <mat-icon  (click)="recenter()"
-             title="Geoloc"
-             class="icon-button">
-    pin_drop
-  </mat-icon>
-
-  <br>
+<div class="mainform" style="text-align: center;" *ngIf="message==''">
 
 
-  <div id="map" class="map_style" style="pointer-events: all;" ></div>
+  <table><tr style="width: 100%;">
+    <td style="text-align: right;width:50%;">
+      <app-input label="Game's title" value_type="text" style="display: inline-block;"
+                 [value]="title" (valueChange)="title=$event"></app-input>
+    </td>
+    <td style="text-align: left;">
+      <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+    </td>
+  </tr></table>
+
+
+  <div class="map_style" style="pointer-events: all;margin:-20px;">
+    <div id="map" class="map_style" style="pointer-events: all;" ></div>
+    <mat-icon  (click)="recenter()"
+               title="Geoloc"
+               style="position: absolute;right: 5px;top: 12px;display: block;z-index: 10;"
+               class="icon-button">
+      pin_drop
+    </mat-icon>
+  </div>
+
   <br>
   <div class="mat-label" *ngIf="!show_menu">
     Click on map to add entrance and exit
@@ -37,15 +50,6 @@
   </button>
 
 
-  <table><tr style="width: 100%;">
-    <td style="text-align: right;width:50%;">
-      <app-input label="Game's title" value_type="text" style="display: inline-block;"
-                 [value]="title" (valueChange)="title=$event"></app-input>
-    </td>
-    <td style="text-align: left;">
-      <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
-    </td>
-  </tr></table>
 
   <br><br>
 
@@ -70,7 +74,7 @@
       <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
       <app-input label="PV bank" help="" style="width:90%;" value_type="slider" [min]="1" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
       <mat-slide-toggle [(ngModel)]="use_geoloc">Use Geolocalisation</mat-slide-toggle>
-      <mat-slide-toggle [(ngModel)]="tokemon_vision">Vision by tokemon</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
       <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
       <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
@@ -91,27 +95,26 @@
     <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
-      <app-input label="Use localisation" help="" value_type="boolean" [value]="real" (valueChange)="real=$event"></app-input><br>
       <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
 
       <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
 
-      <mat-tab-group>
-        <mat-tab label="YAML">
-          <div class="code_yaml" [innerHTML]="yaml_content">
-          </div>
-          <br>
-          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>
+<!--      <mat-tab-group>-->
+<!--        <mat-tab label="YAML">-->
+<!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
+<!--          </div>-->
+<!--          <br>-->
+<!--          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>-->
 
-        </mat-tab>
-        <mat-tab label="Command line">
-          <div class="code_yaml" [innerHTML]="script_content">
-          </div>
-          <br>
-          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>
+<!--        </mat-tab>-->
+<!--        <mat-tab label="Command line">-->
+<!--          <div class="code_yaml" [innerHTML]="script_content">-->
+<!--          </div>-->
+<!--          <br>-->
+<!--          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>-->
 
-        </mat-tab>
-      </mat-tab-group>
+<!--        </mat-tab>-->
+<!--      </mat-tab-group>-->
 
 
     </mat-expansion-panel>

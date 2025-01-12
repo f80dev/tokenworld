@@ -195,7 +195,7 @@ export class UserService {
   init_game(game:any){
       this.game=game
       this.center_map=cartesianToPolar(center_of(game.ne,game.sw))
-      $$("Sélection de la partie ",this.game)
+      $$("Sélection de la partie ",game)
   }
 
 

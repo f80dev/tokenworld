@@ -3,7 +3,7 @@
   <app-hourglass [message]="message">
   </app-hourglass>
 
-  <div id="menu">
+  <div id="menu" style="margin:20px;">
     <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">Show closed game</mat-slide-toggle>
     <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">Show only my game</mat-slide-toggle>
   </div>

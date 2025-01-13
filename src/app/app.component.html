@@ -1,3 +1,5 @@
+
+
 <router-outlet></router-outlet>
 
 <mat-toolbar *ngIf="user.game" color="primary" class="bottom-toolbar">
@@ -15,8 +17,8 @@
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
 
 <!--  <button mat-icon-button (click)="open_build()" title="Créer un tokemon"><mat-icon>camera</mat-icon></button>-->
-  <button mat-icon-button (click)="create_world()" ><mat-icon>build</mat-icon></button>
-  <button mat-icon-button (click)="open_games()" ><mat-icon>casino</mat-icon></button>
+  <button mat-icon-button (click)="create_world()"><mat-icon>build</mat-icon></button>
+  <button mat-icon-button (click)="open_games()"><mat-icon>casino</mat-icon></button>
   <button mat-icon-button (click)="go_settings()" title="Settings"><mat-icon>settings</mat-icon></button>
   <button mat-icon-button (click)="go_mytokemons()" title="My Tokemons"><mat-icon>list</mat-icon></button>
 

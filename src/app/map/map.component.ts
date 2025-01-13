@@ -27,6 +27,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
+import {SplashComponent} from '../splash/splash.component';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -43,7 +44,8 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     InputComponent,
     MatSlider,
     MatSliderThumb,
-    HourglassComponent
+    HourglassComponent,
+    SplashComponent
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'

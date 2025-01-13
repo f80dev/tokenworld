@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {$$, getParams, showMessage} from '../../tools';
+import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -62,7 +62,8 @@ export class GamesComponent implements OnInit {
     await this.refresh()
 
     let params:any=await getParams(this.routes)
-    let autoconnect:boolean=(params.hasOwnProperty("autoconnect") && params.autoconnect=='true')
+    $$("Ouverture des parties avec ",params)
+    let autoconnect:boolean=(params.autoconnect=="true")
     let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
     if(game_id>this.games.length)game_id=0
 
@@ -91,10 +92,11 @@ export class GamesComponent implements OnInit {
             this.quit()
           }
         }
-
       }
     }
   }
+
+
 
   quit(redirect="map"){
     if(this.user.game)localStorage.setItem("selected_game",String(this.user.game.id))
@@ -126,6 +128,7 @@ export class GamesComponent implements OnInit {
     this.refresh()
   }
 
+
   async stacking(game: any) {
     await this.user.login(this,"","",true)
     let max_amount=await _prompt(this,"Max amount per tokemon","","","number","Send","Cancel",false)
@@ -134,9 +137,14 @@ export class GamesComponent implements OnInit {
     showMessage(this,"Stacking sended")
   }
 
-  share_map(game: any) {
-    this.clipboard.copy(environment.appli+"/games?autoconnect=true&game="+game.id)
-    showMessage(this,"Link in clipboard")
+  async share_map(game: any) {
+    let message=await _prompt(this,"Introduction message","Catch some NFT around you with this game","","text","Share","Cancel",false)
+    if(message!=""){
+      let params={autoconnect:true,game:game.id,message:message}
+      this.clipboard.copy(environment.appli+"/games?"+setParams(params))
+      showMessage(this,"Link in clipboard")
+    }
+
   }
 
   create_game() {

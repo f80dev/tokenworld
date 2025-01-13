@@ -15,6 +15,7 @@ import {CreateWorldComponent} from './create-world/create-world.component';
 import {GamesComponent} from './games/games.component';
 import {MytokemonsComponent} from './mytokemons/mytokemons.component';
 import {FaucetComponent} from './faucet/faucet.component';
+import {IntroComponent} from './intro/intro.component';
 
 
 export const routes: Routes = [
@@ -33,5 +34,6 @@ export const routes: Routes = [
   { path: 'capture', component: CaptureComponent},
   { path: 'map', component: MapComponent},
   { path: 'settings', component: SettingsComponent},
-  { path: '', component: MapComponent},
+  { path: 'intro', component: IntroComponent},
+  { path: '', component: IntroComponent},
 ]

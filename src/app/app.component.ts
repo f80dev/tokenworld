@@ -45,35 +45,20 @@ export class AppComponent implements OnInit {
   async login() {
     await this.user.login(this)
     localStorage.setItem("address",this.user.address)
+    this.show_intro=false
   }
 
 
 
   async ngOnInit() {
 
-      let params:any=await getParams(this.routes)
-      this.user.network=params.network || environment.networks[0].value
-      this.user.address=params.address || ""
-      this.user.login(this,"","",false)
-
-
-      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
-
-      if(params.hasOwnProperty("signature")){
-        this.user.signature=params.signature
-        this.user.address=params.address
-      }
-      this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-
-      if(!params.hasOwnProperty("debug")){
-        this.router.navigate(["games"],{queryParams:{autoconnect:true,game:params.game || localStorage.getItem("selected_game")}})
-      }
-
 
   }
 
 
   protected readonly environment = environment;
+  show_intro=true
+  message: string=""
 
 
   test() {
@@ -93,10 +78,6 @@ export class AppComponent implements OnInit {
     this.router.navigate(["admin"])
   }
 
-
-  open_build() {
-    this.router.navigate(["build"])
-  }
 
 
   create_world() {

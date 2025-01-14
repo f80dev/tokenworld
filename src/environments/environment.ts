@@ -74,5 +74,6 @@ export const environment = {
     "elrond-mainnet":"https://xspotlight.com/",
   },
   gaz_limit:  100000000n,
-  gaz_by_nft: 9000000n
+  gaz_by_nft: 9000000n,
+  max_gaz:70000000n
 }

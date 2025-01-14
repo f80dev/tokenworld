@@ -4,6 +4,8 @@ import {$$, getParams} from '../../tools';
 import {environment} from '../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatButton} from '@angular/material/button';
+import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-intro',
@@ -40,7 +42,8 @@ export class IntroComponent implements OnInit {
   user=inject(UserService)
   router=inject(Router)
   routes=inject(ActivatedRoute)
-
+  dialog=inject(MatDialog)
+  api=inject(ApiService)
 
 
   async login() {

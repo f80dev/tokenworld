@@ -2,8 +2,6 @@
      style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 0;">
 </div>
 
-<app-splash description="Bienvenue dans Tokemons.<br>Attraper des NFTs autour de vousintro"></app-splash>
-
 <div class="image-container"
      *ngIf="message.length==0 && user.game && user.game.url!='map'">
 
@@ -21,7 +19,10 @@
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
-    <button mat-raised-button *ngIf="!start_move" (click)="open_drop()"><mat-icon>download</mat-icon>Tokemon</button>
+    <button mat-raised-button *ngIf="!start_move"
+            style="width: 90px;"
+            title="Drop some NFT as tokemon on this game zone"
+            (click)="open_drop()"><mat-icon>download</mat-icon>Drop</button>
 
     <mat-icon  (click)="move_tokemon()"
                *ngIf="(selected_tokemon && selected_tokemon.owner==user.idx) || start_move"

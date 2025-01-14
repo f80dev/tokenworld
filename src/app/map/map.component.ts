@@ -27,7 +27,6 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {SplashComponent} from '../splash/splash.component';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -44,8 +43,7 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     InputComponent,
     MatSlider,
     MatSliderThumb,
-    HourglassComponent,
-    SplashComponent
+    HourglassComponent
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
@@ -55,9 +53,6 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   marker_line: Polyline<any, any> | null=null
   private tokemon_to_move: any;
 
-  ngOnDestroy(): void {
-      clearInterval(this.geoloc_autorefresh)
-  }
 
   router=inject(Router)
   geolocService=inject(GeolocService)
@@ -82,6 +77,10 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   geoloc_autorefresh: any
   message: string=""
 
+  ngOnDestroy(): void {
+    clearInterval(this.geoloc_autorefresh)
+  }
+
 
   async init_map(){
     $$("Initialisation de la carte principal")
@@ -95,6 +94,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map);
       //this.map.setMaxBounds(new LatLngBounds(ne,sw))
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
+      showMessage(this,"Welcome in the "+this.user.game.title)
     }
 
     initializeMap(this,this.user.game)
@@ -124,12 +124,14 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
   async ngAfterViewInit() {
     setTimeout(async ()=>{
-      if(this.user && this.user.game)await this.init_map()
-
-      this.geoloc_autorefresh=setInterval(()=>{
-        this.user.geoloc(this.geolocService,this.me_marker)
-
-      },30000)
+      if(this.user && this.user.game){
+        await this.init_map()
+        this.geoloc_autorefresh=setInterval(()=>{
+          this.user.geoloc(this.geolocService,this.me_marker)
+        },30000)
+      }else{
+        this.router.navigate(["games"],{queryParams:{autoconnect:true}})
+      }
     },500)
   }
 
@@ -146,12 +148,8 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       var southWest = bounds.getNorthWest();
       var northEast = bounds.getNorthEast();
       var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
-      if(this.user.address){
-        let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng},"","")
-        this.router.navigate(["drop"],{queryParams:{p:position}})
-      } else {
-        this.router.navigate(["login"],{queryParams:{message:"You must be connected to select the token to drop",redirectTo:"drop"}});
-      }
+      let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,game_id:this.user.game!.id},"","")
+      this.router.navigate(["drop"],{queryParams:{p:position}})
     }
   }
 

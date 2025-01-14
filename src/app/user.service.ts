@@ -192,10 +192,29 @@ export class UserService {
 
 
 
-  init_game(game:any){
-      this.game=game
-      this.center_map=cartesianToPolar(center_of(game.ne,game.sw))
-      $$("Sélection de la partie ",game)
+  async init_game(game:Game | Number){
+    if(game instanceof Game) {
+      this.game = game
+    }else{
+      let rc=await this.open_game(game)
+      if(rc)this.game=rc
+    }
+    if(this.game){
+      this.center_map=cartesianToPolar(center_of(this.game!.ne,this.game!.sw))
+      $$("Sélection de la partie ",this.game)
+    }
+  }
+
+
+  open_game(id:Number) : Promise<Game | null> {
+    return new Promise(async (resolve) => {
+      for (let g of await this.extract_games(true, false)) {
+        if (g.id == id) {
+          resolve(g);
+        }
+      }
+      resolve(null);
+    })
   }
 
 

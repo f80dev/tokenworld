@@ -42,7 +42,7 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
 })
-export class DropComponent implements AfterViewInit, OnChanges {
+export class DropComponent implements AfterViewInit {
 
   lifepoint: number = 0;
   name = "";
@@ -71,21 +71,25 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
 
   async ngAfterViewInit() {
-    await this.user.init_balance(this.api)
-    this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
-
     let params: any = await getParams(this.routes)
-    this.user.center_map = new LatLng(params.lat, params.lng)
-    this.map = L.map('map')
+    this.user.login(this)
+    if(this.user){
+      this.user.init_game(params.game_id)
 
-    $$("Drop sur les coordonnées ", this.user.center_map)
-    await this.user.login(this, "You must be connected to drop any NFT", "", false)
+      await this.user.init_balance(this.api)
+      this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
+
+      this.user.center_map = new LatLng(params.lat, params.lng)
+      this.map = L.map('map')
+
+      $$("Drop sur les coordonnées ", this.user.center_map)
+      await this.user.login(this, "You must be connected to drop any NFT", "", false)
+    }else{
+      this.router.navigate(["games"])
+    }
+
   }
 
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.sel_nft) this.name = this.sel_nft.collection
-  }
 
 
   async drop() {
@@ -136,6 +140,7 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       let tokens = []
       if (this.lifepoint > 0) {
+
         tokens.push(TokenTransfer.fungibleFromAmount(token, this.lifepoint * this.quantity, 18))
         $$("Transfert de " + tokens[0].amount + " " + tokens[0].token)
       }
@@ -143,7 +148,9 @@ export class DropComponent implements AfterViewInit, OnChanges {
 
       try {
         let gas_to_drop = environment.gaz_limit + environment.gaz_by_nft * BigInt(this.quantity);
-        $$("Gas to transaction ",gas_to_drop)
+        if(gas_to_drop>environment.max_gaz)gas_to_drop=environment.max_gaz
+        $$("Gas to transaction ",Number(gas_to_drop))
+        $$("Dropping avec les arguments ",args)
         let rc: any = await send_transaction_with_transfers(this.user.provider, "drop", args, this.user, tokens, gas_to_drop)
         $$("Resultat du drop ", rc)
         if (rc.returnMessage != "ok") {

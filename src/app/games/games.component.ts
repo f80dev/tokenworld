@@ -18,6 +18,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {ApiService} from '../api.service';
+import {GeolocService} from '../geoloc.service';
 
 @Component({
   selector: 'app-games',
@@ -53,6 +54,8 @@ export class GamesComponent implements OnInit {
   show_my_games=false;
   message="";
   nfts: any[]=[]
+  geolocService=inject(GeolocService)
+  show_closed_zone: boolean = false;
 
 
 
@@ -151,5 +154,9 @@ export class GamesComponent implements OnInit {
       this.nfts=[]
     }
 
+  }
+
+  async update_closed_zone() {
+    await this.user.geoloc(this.geolocService)
   }
 }

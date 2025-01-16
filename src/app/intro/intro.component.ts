@@ -22,7 +22,7 @@ export class IntroComponent implements OnInit {
     let params:any=await getParams(this.routes)
     $$("Ouverture de l'application avec les parametres ",params)
 
-    this.message=params.message || ""
+    this.message=params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
 
     this.user.network=params.network || environment.networks[0].value
 
@@ -33,7 +33,6 @@ export class IntroComponent implements OnInit {
       this.user.address=params.address
     }
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-
 
   }
 
@@ -57,4 +56,7 @@ export class IntroComponent implements OnInit {
     }
   }
 
+  available_zone() {
+    this.router.navigate(["games"])
+  }
 }

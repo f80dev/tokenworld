@@ -123,6 +123,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async ngAfterViewInit() {
+    this.user.login(this)
     if(this.user && this.user.game){
       await this.init_map()
       this.geoloc_autorefresh=setInterval(()=>{

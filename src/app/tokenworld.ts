@@ -58,6 +58,7 @@ export class Game {
   tokemon_view=true
   n_players=0
   n_tokemons=0
+  nfts:string[]=[]
 }
 
 

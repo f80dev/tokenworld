@@ -229,11 +229,12 @@ export class UserService {
           }
         }
       }
-      debugger
+
       for(let i=0;i<rc.length;i++){
         let infos=await this.query("get_game_infos",[rc[i].id])
         rc[i].n_players=infos.n_players
         rc[i].n_tokemons=infos.n_tokemons
+        rc[i].nfts=infos.nfts
       }
       resolve(rc)
     })

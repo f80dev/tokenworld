@@ -61,7 +61,10 @@ export class ApiService {
       url = "/api/" + url;
       url = this.server_nfluent + url.replace("//", "/").replace("/api/api/", "/api/")
     }
-    if (cacheDelayInSec == 0) return this.httpClient.get<any>(url + "?" + param).pipe(retry(2), timeout(_timeout), catchError(this.handleError))
+    if (cacheDelayInSec == 0) {
+      $$("Appel de " + url + "?" + param)
+      return this.httpClient.get<any>(url + "?" + param).pipe(retry(2), timeout(_timeout), catchError(this.handleError))
+    }
 
     let cache_id = hashCode(url + "?" + param).toString(16)
     this.refreshCacheIfNeeded(cache_id, cacheDelayInSec)

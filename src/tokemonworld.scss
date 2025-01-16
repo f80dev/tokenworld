@@ -64,6 +64,15 @@ a:active { text-decoration: none; color: gray; }
   margin: 10px;
 }
 
+.small-vignette {
+  position: relative;
+  max-width: 75px;
+  max-height: 75px;
+  width: 50%;
+  cursor: pointer;
+  margin: 3px;
+}
+
 .panel {
   margin: 10px;
 }

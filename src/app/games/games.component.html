@@ -13,7 +13,7 @@
     <tr>
       <th>Games</th>
       <th>State</th>
-      <th>Commandes</th>
+      <th *ngIf="user.isConnected(true)">Commandes</th>
       <th>Play</th>
     </tr>
     <tr style="width:100%" *ngFor="let game of games">
@@ -24,10 +24,19 @@
       </td>
       <td>
         {{game.n_players}} players<br>
-        {{game.n_tokemons}} tokemons<br>
+        {{game.n_tokemons}} tokemons
+        <mat-icon title="See the NFTs hide in the world"
+                  (click)="show_nfts(game)"
+                  class="icon-button">visibility</mat-icon>
+
+        <div *ngIf="nfts.length>0">
+          <img *ngFor="let nft of nfts" [src]="nft.media[0].originalUrl"
+               class="small-vignette">
+
+        </div>
 
       </td>
-      <td>
+      <td *ngIf="user.isConnected(true)">
         <div *ngIf="game.owner==user.idx && !game.closed">
           <button mat-raised-button (click)="close_map(game)">Close</button>
           <button mat-raised-button (click)="stacking(game)">AirDrop</button>

@@ -6,7 +6,7 @@ import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {cartesianToPolar, center_of} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {send_transaction} from '../mvx';
+import {get_nft, send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
@@ -17,6 +17,7 @@ import {GameComponent} from '../game/game.component';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-games',
@@ -45,9 +46,13 @@ export class GamesComponent implements OnInit {
   dialog=inject(MatDialog)
   router=inject(Router)
   clipboard=inject(Clipboard)
+  api=inject(ApiService)
+
+
   show_closed_games=false;
   show_my_games=false;
   message="";
+  nfts: any[]=[]
 
 
 
@@ -135,5 +140,16 @@ export class GamesComponent implements OnInit {
   async update_only_mygame() {
     await this.user.login(this,"","",true)
     this.refresh()
+  }
+
+  async show_nfts(game: any) {
+    if(this.nfts.length==0){
+      for(let nft of game.nfts){
+        this.nfts.push(await get_nft(nft+"-01",this.api,this.user.network))
+      }
+    }else{
+      this.nfts=[]
+    }
+
   }
 }

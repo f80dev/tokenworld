@@ -1,3 +1,4 @@
+
 export const abi={
   "buildInfo": {
     "rustc": {
@@ -777,6 +778,10 @@ export const abi={
         {
           "name": "n_players",
           "type": "u32"
+        },
+        {
+          "name": "nfts",
+          "type": "List<TokenIdentifier>"
         }
       ]
     },

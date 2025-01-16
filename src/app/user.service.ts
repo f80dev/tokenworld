@@ -192,8 +192,8 @@ export class UserService {
 
 
 
-  async init_game(game:Game | Number){
-    if(game instanceof Game) {
+  async init_game(game:any){
+    if(typeof game!="number") {
       this.game = game
     }else{
       let rc=await this.open_game(game)
@@ -207,9 +207,10 @@ export class UserService {
 
 
   open_game(id:Number) : Promise<Game | null> {
+    //si id=0 on retourne le premier game ouvert
     return new Promise(async (resolve) => {
       for (let g of await this.extract_games(true, false)) {
-        if (g.id == id) {
+        if (g.id == id || id==0) {
           resolve(g);
         }
       }
@@ -227,6 +228,12 @@ export class UserService {
             rc.push(game)
           }
         }
+      }
+      debugger
+      for(let i=0;i<rc.length;i++){
+        let infos=await this.query("get_game_infos",[rc[i].id])
+        rc[i].n_players=infos.n_players
+        rc[i].n_tokemons=infos.n_tokemons
       }
       resolve(rc)
     })

@@ -123,16 +123,15 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async ngAfterViewInit() {
-    setTimeout(async ()=>{
-      if(this.user && this.user.game){
-        await this.init_map()
-        this.geoloc_autorefresh=setInterval(()=>{
-          this.user.geoloc(this.geolocService,this.me_marker)
-        },30000)
-      }else{
-        this.router.navigate(["games"],{queryParams:{autoconnect:true}})
-      }
-    },500)
+    if(this.user && this.user.game){
+      await this.init_map()
+      this.geoloc_autorefresh=setInterval(()=>{
+        this.user.geoloc(this.geolocService,this.me_marker)
+      },30000)
+    }else{
+      $$("user n'a pas sélectionné de map ",this.user)
+      this.router.navigate(["games"],{queryParams:{autoconnect:true}})
+    }
   }
 
 

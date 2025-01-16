@@ -74,7 +74,7 @@ export class DropComponent implements AfterViewInit {
     let params: any = await getParams(this.routes)
     this.user.login(this)
     if(this.user){
-      this.user.init_game(params.game_id)
+      this.user.init_game(Number(params.game_id))
 
       await this.user.init_balance(this.api)
       this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))

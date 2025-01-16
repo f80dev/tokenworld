@@ -56,6 +56,8 @@ export class Game {
   use_geoloc=false
   owner: number=0
   tokemon_view=true
+  n_players=0
+  n_tokemons=0
 }
 
 

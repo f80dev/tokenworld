@@ -12,6 +12,7 @@
   <table style="width: 100%;" *ngIf="message.length==0">
     <tr>
       <th>Games</th>
+      <th>State</th>
       <th>Commandes</th>
       <th>Play</th>
     </tr>
@@ -19,6 +20,11 @@
       <td style="text-align: left;">
         <app-game [game]="game">
         </app-game>
+
+      </td>
+      <td>
+        {{game.n_players}} players<br>
+        {{game.n_tokemons}} tokemons<br>
 
       </td>
       <td>

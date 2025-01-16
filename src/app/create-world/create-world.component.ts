@@ -110,6 +110,7 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de onInit, initialisation de zone ",this.zone)
 
     let params:any=await getParams(this.routes)
+    this.user.login(this)
 
     if(params.hasOwnProperty("zone")) {
       this.zone = params.zone

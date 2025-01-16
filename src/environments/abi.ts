@@ -285,6 +285,21 @@ export const abi={
       ]
     },
     {
+      "name": "get_game_infos",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "GameInfo"
+        }
+      ]
+    },
+    {
       "name": "airdrop",
       "mutability": "mutable",
       "payableInTokens": [
@@ -501,10 +516,6 @@ export const abi={
       "name": "fight",
       "mutability": "mutable",
       "inputs": [
-        {
-          "name": "game_id",
-          "type": "u32"
-        },
         {
           "name": "t1_id",
           "type": "u32"
@@ -756,6 +767,19 @@ export const abi={
         }
       ]
     },
+    "GameInfo": {
+      "type": "struct",
+      "fields": [
+        {
+          "name": "n_tokemons",
+          "type": "u32"
+        },
+        {
+          "name": "n_players",
+          "type": "u32"
+        }
+      ]
+    },
     "Point": {
       "type": "struct",
       "fields": [
@@ -828,3 +852,4 @@ export const abi={
     }
   }
 }
+

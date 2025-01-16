@@ -64,34 +64,15 @@ export class GamesComponent implements OnInit {
     let params:any=await getParams(this.routes)
     $$("Ouverture des parties avec ",params)
     let autoconnect:boolean=(params.autoconnect=="true")
-    let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
-    if(game_id>this.games.length)game_id=0
 
     if(autoconnect){
-      if(game_id>0 && this.games[game_id-1].closed){
-        game_id=0
-        showMessage(this,"This game is closed")
-      }
-
-      if(game_id>0){
-        this.user.init_game(this.games[game_id-1])
+      let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
+      let game=await this.user.open_game(game_id)
+      if(game){
+        this.user.init_game(game)
         this.quit()
-      }else {
-        let i = 0
-        while (i < this.games.length && this.games[i].closed) {
-          i++
-        }
-
-        if(i==this.games.length){
-          this.quit("create")
-        }else{
-          if (this.games[i].closed) {
-            this.quit("map")
-          } else {
-            this.user.init_game(this.games[i])
-            this.quit()
-          }
-        }
+      }else{
+        this.quit("create")
       }
     }
   }

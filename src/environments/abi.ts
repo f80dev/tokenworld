@@ -782,6 +782,10 @@ export const abi={
         {
           "name": "nfts",
           "type": "List<TokenIdentifier>"
+        },
+        {
+          "name": "nonce",
+          "type": "List<u64>"
         }
       ]
     },
@@ -857,5 +861,3 @@ export const abi={
     }
   }
 }
-
-

@@ -235,6 +235,9 @@ export class UserService {
         let infos=await this.query("get_game_infos",[rc[i].id])
         rc[i].n_players=infos.n_players
         rc[i].n_tokemons=infos.n_tokemons
+        for(let k=0;k<infos.nfts.length;k++){
+          rc[i].nfts.push(infos.nfts[k]+"-"+infos.nonce[k].toString(16))
+        }
         rc[i].nfts=infos.nfts
         rc[i].previews=[]
       }

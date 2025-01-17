@@ -6,6 +6,11 @@
        style="width:50%;max-width: 300px;">
 </div>
 
+<button mat-raised-button
+        *ngIf="message!='' && device.isMobile()"
+        (click)="open_xportal()">
+  Basculer sur xPortal
+</button>
 
 <div class="mainform" style="text-align: center;" *ngIf="message==''">
 
@@ -72,21 +77,19 @@
     <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-      <app-input label="PV bank" help="" style="width:90%;" value_type="slider" [min]="1" [max]="1000" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
       <mat-slide-toggle [(ngModel)]="use_geoloc">Use Geolocalisation</mat-slide-toggle>
       <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
-      <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
-      <app-input label="Max players" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
-      <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
-      <app-input label="Min visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
-      <app-input label="Max visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+      <br>
+      <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
+      <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
+      <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
 
-      <app-input label="Max distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
+      <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
 
 
 <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-      <app-input label="Min loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
-      <app-input label="Max loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
+      <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
+      <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
 
 
     </mat-expansion-panel>
@@ -95,11 +98,19 @@
     <br>
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+      <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
+      <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
+
       <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
 
       <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
+      <br>
+      <app-input label="Initial HP for stacking"
+                 style="width:90%;max-width: 100%;" value_type="slider"
+                 [min]="1" [max]="Math.min(hp_balance,100000)" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
 
-<!--      <mat-tab-group>-->
+
+      <!--      <mat-tab-group>-->
 <!--        <mat-tab label="YAML">-->
 <!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
 <!--          </div>-->

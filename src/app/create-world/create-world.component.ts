@@ -23,6 +23,8 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {TutoComponent} from '../tuto/tuto.component';
 import {MatIcon} from '@angular/material/icon';
+import {eval_direct_url_xportal} from '../../crypto';
+import {DeviceService} from '../device.service';
 
 @Component({
   selector: 'app-create-world',
@@ -54,6 +56,7 @@ export class CreateWorldComponent implements OnInit {
   geolocService=inject(GeolocService)
   dialog=inject(MatDialog)
   api=inject(ApiService)
+  device=inject(DeviceService)
 
   grid=20
   quota=20
@@ -86,6 +89,7 @@ export class CreateWorldComponent implements OnInit {
   n_degrees=8
   min_pv: number=0
   max_pv: number=100
+  hp_balance=0
   use_geoloc=false;
   max_per_user: number = 30;
   tokemon_vision: boolean=true;
@@ -122,7 +126,8 @@ export class CreateWorldComponent implements OnInit {
     }
 
     await this.user.init_balance(this.api)
-    if(this.user.get_balance(this.user.get_default_token())<1){
+    this.hp_balance=this.user.get_balance(this.user.get_default_token())
+    if(this.hp_balance<1){
       showMessage(this,"You need almost 1 "+this.user.get_default_token()+" in your wallet")
       if(this.user.game)this.quit(this.user.game)
     }
@@ -156,6 +161,10 @@ export class CreateWorldComponent implements OnInit {
   quit(game:any){
     this.user.init_game(game)
     this.router.navigate( ["map"])
+  }
+
+  open_xportal() {
+    open(eval_direct_url_xportal(this.user.provider.uri))
   }
 
 
@@ -267,4 +276,6 @@ export class CreateWorldComponent implements OnInit {
     let pos=await this.user.geoloc(this.geolocService)
     this.map.setView(pos)
   }
+
+  protected readonly Math = Math;
 }

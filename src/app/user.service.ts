@@ -6,7 +6,7 @@ import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
-import {cartesianToPolar, center_of, Game, polarToCartesian} from './tokenworld';
+import {cartesianToPolar, center_of, distance, Game, polarToCartesian} from './tokenworld';
 
 @Injectable({
   providedIn: 'root'
@@ -219,12 +219,13 @@ export class UserService {
   }
 
 
-  extract_games(opened=true,closed=true,user_filter=0) : Promise<Game[]> {
+  extract_games(opened=true,closed=true,user_filter=0,pos=new LatLng(0,0)) : Promise<Game[]> {
     let rc:Game[] = [];
     return new Promise(async (resolve) => {
       for (let game of await this.query("games", [])) {
         if(game.closed && closed || !game.closed && opened) {
           if(user_filter==0 || game.owner==user_filter){
+            game.score=pos.lat==0 && pos.lng==0 ? 0 : 10000/distance(pos,cartesianToPolar(center_of(game.ne,game.sw)))
             rc.push(game)
           }
         }
@@ -235,6 +236,7 @@ export class UserService {
         rc[i].n_players=infos.n_players
         rc[i].n_tokemons=infos.n_tokemons
         rc[i].nfts=infos.nfts
+        rc[i].previews=[]
       }
       resolve(rc)
     })

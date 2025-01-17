@@ -6,7 +6,7 @@
   <div id="menu" style="margin:20px;">
     <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">Show closed game</mat-slide-toggle>
     <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">Show only my game</mat-slide-toggle>
-    <mat-slide-toggle [(ngModel)]="show_closed_zone" (ngModelChange)="update_closed_zone()">Show closed zone</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">Show nearest zone</mat-slide-toggle>
   </div>
 
 
@@ -27,11 +27,12 @@
         {{game.n_players}} players<br>
         {{game.n_tokemons}} tokemons
         <mat-icon title="See the NFTs hide in the world"
+                  *ngIf="game.nfts!.length>0"
                   (click)="show_nfts(game)"
                   class="icon-button">visibility</mat-icon>
 
-        <div *ngIf="nfts.length>0">
-          <img *ngFor="let nft of nfts" [src]="nft.media[0].originalUrl"
+        <div *ngIf="game && game.previews && game.previews.length>0">
+          <img *ngFor="let src of game.previews" [src]="src"
                class="small-vignette">
 
         </div>

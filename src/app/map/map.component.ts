@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnChanges, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, inject, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {
   LatLng,
@@ -48,7 +48,7 @@ export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
-export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
+export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   start_move: LatLng | null=null
   marker_line: Polyline<any, any> | null=null
   private tokemon_to_move: any;
@@ -62,7 +62,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   clipboard=inject(Clipboard)
   api=inject(ApiService)
 
-  private map!: L.Map
+  map: L.Map | null = null
   markers:L.Marker[]=[]
 
   center: any;
@@ -84,32 +84,42 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
   async init_map(){
     $$("Initialisation de la carte principal")
+    try{
+      this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
 
-    this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
+    }catch (e) {
+
+    }
+    $$("Fin d'initialisation de la carte")
     let zoom=this.user.zoom || 16
 
     if(this.user.game){
       let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
-      L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map);
+      L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map!);
       //this.map.setMaxBounds(new LatLngBounds(ne,sw))
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
       showMessage(this,"Welcome in the "+this.user.game.title)
     }
 
     initializeMap(this,this.user.game)
-      .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map.getZoom()})
-      .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
-      .on("mousemove",(event:L.LeafletEvent)=>this.mousemove(event))
-      .on("keypress",(event:L.LeafletKeyboardEvent)=>{
-        //https://leafletjs.com/reference.html#keyboardevent
-        if(event.originalEvent.key=="c"){
-          //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
-          let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-          this.clipboard.copy(pos.x+","+pos.y)
-          showMessage(this,"Position copied")
-        }
-      })
+
+    if(this.map){
+      this.map
+        .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map!.getZoom()})
+        .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
+        .on("mousemove",(event:L.LeafletEvent)=>this.mousemove(event))
+        .on("keypress",(event:L.LeafletKeyboardEvent)=>{
+          //https://leafletjs.com/reference.html#keyboardevent
+          if(event.originalEvent.key=="c"){
+            //let origin=latLonToCartesian(this.map.getBounds().getNorthEast().lat,this.map.getBounds().getNorthEast().lng,this.map.getZoom())
+            let pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+            this.clipboard.copy(pos.x+","+pos.y)
+            showMessage(this,"Position copied")
+          }
+        })
+
+    }
 
     await this.user.geoloc(this.geolocService,this.me_marker)
     this.user.center_map=
@@ -117,15 +127,15 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
         ? new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
         : new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
 
-    this.map.setView(this.user.center_map,zoom);
+    this.map!.setView(this.user.center_map,zoom);
 
   }
 
 
-  async ngAfterViewInit() {
+  async ngOnInit() {
     this.user.login(this)
     if(this.user && this.user.game){
-      await this.init_map()
+      setTimeout(async ()=>{await this.init_map()},500)
       this.geoloc_autorefresh=setInterval(()=>{
         this.user.geoloc(this.geolocService,this.me_marker)
       },30000)
@@ -144,10 +154,10 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     if(message!=''){
       showMessage(this,message)
     }else{
-      let bounds=this.map.getBounds()
+      let bounds=this.map!.getBounds()
       var southWest = bounds.getNorthWest();
       var northEast = bounds.getNorthEast();
-      var distance = (this.user.visibility/screen.availWidth)*this.map.distance(southWest, northEast)
+      var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
       let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,game_id:this.user.game!.id},"","")
       this.router.navigate(["drop"],{queryParams:{p:position}})
     }
@@ -173,7 +183,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     marker.bindTooltip(label).openTooltip()
     marker.on("mouseover", (event) => {this.mouseover(event)})
     marker.on("dblclick", (event) => {this.select_nft(event)})
-    marker.addTo(this.map)
+    marker.addTo(this.map!)
     return marker
   }
 
@@ -182,7 +192,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
   remove_markers_from_map() {
     $$("Suppression des marker de la map")
     for(let m of this.markers){
-      m.removeFrom(this.map)
+      m.removeFrom(this.map!)
     }
   }
 
@@ -233,7 +243,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async select_nft(event: LeafletMouseEvent) {
-    this.map.setView(event.latlng)
+    this.map!.setView(event.latlng)
   }
 
 
@@ -263,14 +273,17 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
 
   async refresh() {
-    this.user.zone={
-      NE: this.map.getBounds().getNorthEast(),
-      SW: this.map.getBounds().getSouthWest(),
-      zoom:this.map.getZoom(),
-      center:this.map.getCenter()
+    if(this.map){
+      this.user.zone={
+        NE: this.map.getBounds().getNorthEast(),
+        SW: this.map.getBounds().getSouthWest(),
+        zoom:this.map.getZoom(),
+        center:this.map.getCenter()
+      }
+      this.add_tokemon_to_markers()
+      this.layer?.redraw()
     }
-    this.add_tokemon_to_markers()
-    this.layer?.redraw()
+
   }
 
 
@@ -302,7 +315,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
     {
       this.user.center_map=await this.user.geoloc(this.geolocService)
     }
-    this.map.setView(this.user.center_map,this.map.getZoom())
+    this.map!.setView(this.user.center_map,this.map!.getZoom())
     this.movemap(null)
   }
 
@@ -319,7 +332,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
       }else{
         this.user.center_map=new LatLng(Number(r.split(",")[0]),Number(r.split(",")[1]))
       }
-      this.map.setView(this.user.center_map)
+      this.map!.setView(this.user.center_map)
       this.movemap({target:this.user.center_map})
     }catch (e){
     }
@@ -368,7 +381,7 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
       this.start_move=null
       this.tokemon_to_move=null
-      this.marker_line?.removeFrom(this.map)
+      this.marker_line?.removeFrom(this.map!)
       this.marker_line==null
     }
 
@@ -387,10 +400,10 @@ export class MapComponent implements OnChanges,AfterViewInit,OnDestroy  {
 
   private mousemove(event: LeafletEvent) {
     if(this.start_move){
-      if(!this.marker_line){
-        this.marker_line=L.polyline([this.start_move,this.user.center_map],{color:'black'}).addTo(this.map)
+      if(!this.marker_line && this.map){
+        this.marker_line=L.polyline([this.start_move,this.user.center_map],{color:'black'}).addTo(this.map!)
       }else{
-        this.marker_line.setLatLngs([this.start_move,this.user.center_map])
+        this.marker_line!.setLatLngs([this.start_move,this.user.center_map])
       }
 
     }

@@ -59,6 +59,9 @@ export class Game {
   n_players=0
   n_tokemons=0
   nfts:string[]=[]
+  score=0
+  previews:string[]=[]
+  closed:boolean=false
 }
 
 

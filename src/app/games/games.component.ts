@@ -4,7 +4,7 @@ import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {cartesianToPolar, center_of} from '../tokenworld';
+import {cartesianToPolar, center_of, distance, Game} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {get_nft, send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
@@ -19,6 +19,7 @@ import {FormsModule} from '@angular/forms';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {ApiService} from '../api.service';
 import {GeolocService} from '../geoloc.service';
+import {LatLng} from 'leaflet';
 
 @Component({
   selector: 'app-games',
@@ -40,55 +41,53 @@ import {GeolocService} from '../geoloc.service';
   styleUrl: './games.component.css'
 })
 export class GamesComponent implements OnInit {
-  games: any[]=[];
-  user=inject(UserService)
-  toast=inject(MatSnackBar)
-  routes=inject(ActivatedRoute)
-  dialog=inject(MatDialog)
-  router=inject(Router)
-  clipboard=inject(Clipboard)
-  api=inject(ApiService)
+  games: Game[] = [];
+  user = inject(UserService)
+  toast = inject(MatSnackBar)
+  routes = inject(ActivatedRoute)
+  dialog = inject(MatDialog)
+  router = inject(Router)
+  clipboard = inject(Clipboard)
+  api = inject(ApiService)
 
 
-  show_closed_games=false;
-  show_my_games=false;
-  message="";
-  nfts: any[]=[]
-  geolocService=inject(GeolocService)
-  show_closed_zone: boolean = false;
+  show_closed_games = false;
+  show_my_games = false;
+  message = "";
+  geolocService = inject(GeolocService)
+  show_nearest_zone: boolean = false;
 
 
-
-
-  async refresh(){
-    let owner_filter=this.show_my_games ? this.user.idx : 0
-    this.games=await this.user.extract_games(true,this.show_closed_games,owner_filter)
+  async refresh() {
+    let owner_filter = this.show_my_games ? this.user.idx : 0
+    let pos=this.show_nearest_zone ? await this.user.geoloc(this.geolocService) : new LatLng(0,0)
+    this.games = await this.user.extract_games(true, this.show_closed_games, owner_filter,pos)
+    this.games.sort((a, b) => a.score - b.score)
   }
 
 
   async ngOnInit() {
     await this.refresh()
 
-    let params:any=await getParams(this.routes)
-    $$("Ouverture des parties avec ",params)
-    let autoconnect:boolean=(params.autoconnect=="true")
+    let params: any = await getParams(this.routes)
+    $$("Ouverture des parties avec ", params)
+    let autoconnect: boolean = (params.autoconnect == "true")
 
-    if(autoconnect){
-      let game_id=params.hasOwnProperty("game") ? Number(params.game) : 0
-      let game=await this.user.open_game(game_id)
-      if(game){
+    if (autoconnect) {
+      let game_id = params.hasOwnProperty("game") ? Number(params.game) : 0
+      let game = await this.user.open_game(game_id)
+      if (game) {
         this.user.init_game(game)
         this.quit()
-      }else{
+      } else {
         this.quit("create")
       }
     }
   }
 
 
-
-  quit(redirect="map"){
-    if(this.user.game)localStorage.setItem("selected_game",String(this.user.game.id))
+  quit(redirect = "map") {
+    if (this.user.game) localStorage.setItem("selected_game", String(this.user.game.id))
     this.router.navigate([redirect])
   }
 
@@ -99,18 +98,19 @@ export class GamesComponent implements OnInit {
   }
 
   see_map(game: any) {
-    let center=cartesianToPolar(center_of(game.sw,game.ne))
-    open("https://maps.google.com/maps/@"+center.lat+","+center.lng+",12z","maps")
+    let center = cartesianToPolar(center_of(game.sw, game.ne))
+    open("https://maps.google.com/maps/@" + center.lat + "," + center.lng + ",12z", "maps")
   }
 
+
   async close_map(game: any) {
-    await this.user.login(this,"","",true)
-    $$("Fermeture de ",game)
-    let args=[game.id]
-    wait_message(this,"Closing")
-    try{
-      let result=await send_transaction(this.user.provider,"close_game",this.user.address,args,this.user.get_sc_address())
-    }catch (e:any){
+    await this.user.login(this, "", "", true)
+    $$("Fermeture de ", game)
+    let args = [game.id]
+    wait_message(this, "Closing")
+    try {
+      let result = await send_transaction(this.user.provider, "close_game", this.user.address, args, this.user.get_sc_address())
+    } catch (e: any) {
 
     }
     wait_message(this)
@@ -119,19 +119,19 @@ export class GamesComponent implements OnInit {
 
 
   async stacking(game: any) {
-    await this.user.login(this,"","",true)
-    let max_amount=await _prompt(this,"Max amount per tokemon","","","number","Send","Cancel",false)
-    let args=[game.id,Number(max_amount)]
-    let result=await send_transaction(this.user.provider,"staking",this.user.address,args,this.user.get_sc_address())
-    showMessage(this,"Stacking sended")
+    await this.user.login(this, "", "", true)
+    let max_amount = await _prompt(this, "Max amount per tokemon", "", "", "number", "Send", "Cancel", false)
+    let args = [game.id, Number(max_amount)]
+    let result = await send_transaction(this.user.provider, "staking", this.user.address, args, this.user.get_sc_address())
+    showMessage(this, "Stacking sended")
   }
 
   async share_map(game: any) {
-    let message=await _prompt(this,"Introduction message","Catch some NFT around you with this game","","text","Share","Cancel",false)
-    if(message!=""){
-      let params={autoconnect:true,game:game.id,message:message}
-      this.clipboard.copy(environment.appli+"/games?"+setParams(params))
-      showMessage(this,"Link in clipboard")
+    let message = await _prompt(this, "Introduction message", "Catch some NFT around you with this game", "", "text", "Share", "Cancel", false)
+    if (message != "") {
+      let params = {autoconnect: true, game: game.id, message: message}
+      this.clipboard.copy(environment.appli + "/games?" + setParams(params))
+      showMessage(this, "Link in clipboard")
     }
 
   }
@@ -141,22 +141,21 @@ export class GamesComponent implements OnInit {
   }
 
   async update_only_mygame() {
-    await this.user.login(this,"","",true)
+    await this.user.login(this, "", "", true)
     this.refresh()
   }
 
-  async show_nfts(game: any) {
-    if(this.nfts.length==0){
-      for(let nft of game.nfts){
-        this.nfts.push(await get_nft(nft+"-01",this.api,this.user.network))
+
+  async show_nfts(game: Game) {
+    if (!game.previews || game.previews.length == 0) {
+      for (let identifier of game.nfts) {
+        let nft:any=await get_nft(identifier + "-01", this.api, this.user.network)
+        game.previews.push(nft.media[0].originalUrl)
       }
-    }else{
-      this.nfts=[]
+    } else {
+      game.previews = []
     }
-
   }
 
-  async update_closed_zone() {
-    await this.user.geoloc(this.geolocService)
-  }
+
 }

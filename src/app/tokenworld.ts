@@ -62,6 +62,7 @@ export class Game {
   score=0
   previews:string[]=[]
   closed:boolean=false
+  bbox:string=""
 }
 
 
@@ -149,7 +150,8 @@ export function distance(p1:LatLng, p2:LatLng,R=6371000): number {
 }
 
 
-export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),title="me",size=30){
+export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),
+                         title="me",size=30){
   if(icon=='')return null
   return L.marker(pos,{
     icon:L.icon({

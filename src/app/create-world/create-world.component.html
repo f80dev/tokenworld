@@ -25,9 +25,22 @@
     </td>
   </tr></table>
 
+  <button mat-raised-button (click)="to_add='entrance'" *ngIf="zone.entrance && zone.entrance.x==0">
+    Add entrance
+  </button>
+  <button mat-raised-button (click)="to_add='exit'" *ngIf="zone.exit && zone.exit.x==0">
+    Add exit
+  </button>
 
-  <div class="map_style" style="pointer-events: all;margin:-20px;">
-    <div id="map" class="map_style" style="pointer-events: all;" ></div>
+  <button mat-raised-button
+          *ngIf="zone && zone.entranc && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
+    Remove Gates
+  </button>
+  <br>
+
+
+  <div class="map_style" style="pointer-events: all;">
+    <div id="map" class="map_style" style="pointer-events: all;" [style.cursor]="to_add.length>0 ? 'crosshair' : 'pointer'" ></div>
     <mat-icon  (click)="recenter()"
                title="Geoloc"
                style="position: absolute;right: 5px;top: 12px;display: block;z-index: 10;"
@@ -37,28 +50,9 @@
   </div>
 
   <br>
-  <div class="mat-label" *ngIf="!show_menu">
-    Click on map to add entrance and exit
-  </div>
-
-  <br>
-  <div *ngIf="show_menu" style="height: 50px">
-    Choose to put an entrance gate or an exit gate on the map
-    <br>
-    <button mat-raised-button (click)="drop_pt('entrance')">Entrance</button>
-    <button mat-raised-button (click)="drop_pt('exit')">Exit</button>
-  </div>
-  <br>
-  <button mat-raised-button
-          *ngIf="zone && zone.entrance && !show_menu && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
-    Remove Gates
-  </button>
 
 
-
-  <br><br>
-
-  <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -50px;" *ngIf="zone">
+  <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -10px;" *ngIf="zone">
 
     <div *ngIf="!real">
       <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>

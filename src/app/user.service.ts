@@ -226,6 +226,9 @@ export class UserService {
         if(game.closed && closed || !game.closed && opened) {
           if(user_filter==0 || game.owner==user_filter){
             game.score=pos.lat==0 && pos.lng==0 ? 0 : 10000/distance(pos,cartesianToPolar(center_of(game.ne,game.sw)))
+            let ne=cartesianToPolar(game.ne,environment.scale_factor,environment.translate_factor)
+            let sw=cartesianToPolar(game.sw,environment.scale_factor,environment.translate_factor)
+            game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
             rc.push(game)
           }
         }
@@ -235,10 +238,10 @@ export class UserService {
         let infos=await this.query("get_game_infos",[rc[i].id])
         rc[i].n_players=infos.n_players
         rc[i].n_tokemons=infos.n_tokemons
+        rc[i].nfts=[]
         for(let k=0;k<infos.nfts.length;k++){
-          rc[i].nfts.push(infos.nfts[k]+"-"+infos.nonce[k].toString(16))
+          rc[i].nfts.push(infos.nfts[k]+"-"+(infos.nonce[k]<10 ? "0"+infos.nonce[k].toString(16) : infos.nonce[k].toString(16)))
         }
-        rc[i].nfts=infos.nfts
         rc[i].previews=[]
       }
       resolve(rc)

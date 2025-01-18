@@ -12,12 +12,14 @@
 
   <table style="width: 100%;" *ngIf="message.length==0">
     <tr>
-      <th>Games</th>
-      <th>State</th>
-      <th *ngIf="user.isConnected(true)">Commandes</th>
-      <th>Play</th>
+      <th></th>
+      <th>In game</th>
+      <th *ngIf="user.isConnected(true)">As master</th>
+      <th>Command</th>
     </tr>
-    <tr style="width:100%" *ngFor="let game of games">
+
+    <tr style="width:100%;padding:10px;" *ngFor="let game of games">
+
       <td style="text-align: left;">
         <app-game [game]="game">
         </app-game>

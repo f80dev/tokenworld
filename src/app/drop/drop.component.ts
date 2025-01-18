@@ -105,7 +105,11 @@ export class DropComponent implements AfterViewInit {
       await this.user.login(this, "You must be connected to drop any NFT", "", true)
       //$$("Authentification ",this.user.provider)
 
-      let pos = polarToCartesian(this.user.center_map, environment.scale_factor, environment.translate_factor)
+      let pos = polarToCartesian(
+        new LatLng(this.user.center_map.lat+environment.offset_lat,this.user.center_map.lng+environment.offset_lng),
+        environment.scale_factor, environment.translate_factor
+      )
+
       $$("Ajout d'un tokemon en ", pos)
       //la rue martel se trouve : "lat":48.874360147130226,"lng":2.3535713553428654
 

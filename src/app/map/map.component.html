@@ -15,7 +15,7 @@
 
 <app-hourglass [message]="message"></app-hourglass>
 
-<div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center" *ngIf="message.length==0">
+<div style="position: fixed;left:0;top:0;height:40px;width: 100vw;text-align: center" *ngIf="message.length==0" [style.cursor]="message.length==0 ? 'pointer' : 'hourglass'">
   <div class="toolbox" *ngIf="user">
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 

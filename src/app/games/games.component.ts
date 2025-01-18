@@ -20,6 +20,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {ApiService} from '../api.service';
 import {GeolocService} from '../geoloc.service';
 import {LatLng} from 'leaflet';
+import {SafePipe} from '../safe.pipe';
 
 @Component({
   selector: 'app-games',
@@ -35,7 +36,8 @@ import {LatLng} from 'leaflet';
     GameComponent,
     MatSlideToggle,
     FormsModule,
-    HourglassComponent
+    HourglassComponent,
+    SafePipe
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'
@@ -98,8 +100,7 @@ export class GamesComponent implements OnInit {
   }
 
   see_map(game: any) {
-    let center = cartesianToPolar(center_of(game.sw, game.ne))
-    open("https://maps.google.com/maps/@" + center.lat + "," + center.lng + ",12z", "maps")
+    open("https://www.google.com/maps/@?api=1&map_action=map&bbox="+game.bbox, "maps")
   }
 
 
@@ -149,7 +150,7 @@ export class GamesComponent implements OnInit {
   async show_nfts(game: Game) {
     if (!game.previews || game.previews.length == 0) {
       for (let identifier of game.nfts) {
-        let nft:any=await get_nft(identifier + "-01", this.api, this.user.network)
+        let nft:any=await get_nft(identifier, this.api, this.user.network)
         game.previews.push(nft.media[0].originalUrl)
       }
     } else {

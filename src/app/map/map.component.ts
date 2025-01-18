@@ -53,7 +53,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   marker_line: Polyline<any, any> | null=null
   private tokemon_to_move: any;
 
-
   router=inject(Router)
   geolocService=inject(GeolocService)
   user=inject(UserService)
@@ -91,7 +90,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
     }
     $$("Fin d'initialisation de la carte")
-    let zoom=this.user.zoom || 16
+    let zoom=16
 
     if(this.user.game){
       let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
@@ -277,6 +276,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       this.user.zone={
         NE: this.map.getBounds().getNorthEast(),
         SW: this.map.getBounds().getSouthWest(),
+        entrance:new Point3D(0,0,0),
+        exit: new Point3D(0,0,0),
         zoom:this.map.getZoom(),
         center:this.map.getCenter()
       }
@@ -371,7 +372,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
       try{
         wait_message(this,"Moving ...")
-        let rc=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+        let rc:any=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+        showMessage(this,rc.returnMessage)
         this.refresh()
         wait_message(this)
       }catch (e:any) {

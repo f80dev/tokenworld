@@ -62,6 +62,8 @@ export class CreateWorldComponent implements OnInit {
   quota=20
   fee=5
   zone:any= {
+    entrance:new Point3D(0,0,0),
+    exit:new Point3D(0,0,0),
     min_distance: 1,
     max_distance: 10,
     n_degrees: 8,
@@ -78,7 +80,6 @@ export class CreateWorldComponent implements OnInit {
   title="Mon titre"
   real: boolean=true
   message: string=""
-  show_menu: boolean=false
   dropzone: LatLng=new LatLng(0,0)
   private exit_marker: null | Marker<any>=null
   private entrance_marker: null | Marker<any>=null
@@ -93,6 +94,7 @@ export class CreateWorldComponent implements OnInit {
   use_geoloc=false;
   max_per_user: number = 30;
   tokemon_vision: boolean=true;
+  to_add=""
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -145,12 +147,11 @@ export class CreateWorldComponent implements OnInit {
         })
         .on("click", (event: any) => {
           this.dropzone=event.latlng
-          this.show_menu=!this.show_menu
+          if(this.to_add!=''){
+            this.drop_pt(this.to_add)
+          }
         })
-
-
     }catch (e) {
-
     }
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()
@@ -258,12 +259,13 @@ export class CreateWorldComponent implements OnInit {
       }
 
     }
-    this.show_menu=false
+
+    this.to_add=""
   }
 
   remove_gate() {
-    this.zone.entrance=null
-    this.zone.exit=null
+    this.zone.entrance=new Point3D(0,0,0)
+    this.zone.exit=new Point3D(0,0,0)
 
     this.entrance_marker?.removeFrom(this.map)
     this.entrance_marker=null

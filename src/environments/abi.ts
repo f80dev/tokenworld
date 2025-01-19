@@ -221,6 +221,10 @@ export const abi={
         {
           "name": "tokemon_view",
           "type": "bool"
+        },
+        {
+          "name": "cost_to_move",
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -691,6 +695,10 @@ export const abi={
           "type": "Point"
         },
         {
+          "name": "cost_to_move",
+          "type": "u32"
+        },
+        {
           "name": "grid_size",
           "type": "u64"
         },
@@ -861,3 +869,4 @@ export const abi={
     }
   }
 }
+

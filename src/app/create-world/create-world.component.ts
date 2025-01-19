@@ -210,7 +210,7 @@ export class CreateWorldComponent implements OnInit {
       this.min_pv,this.max_pv,this.max_per_user,
       this.max_player,
       this.turns,
-      this.use_geoloc,this.tokemon_vision
+      this.use_geoloc,this.tokemon_vision,this.cost_to_move
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
@@ -280,4 +280,5 @@ export class CreateWorldComponent implements OnInit {
   }
 
   protected readonly Math = Math;
+  cost_to_move: number=0
 }

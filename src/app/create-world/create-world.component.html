@@ -96,6 +96,9 @@
       <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
 
       <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
+      <app-input label="Cost to move" help=""
+                 unity="PV/km"
+                 value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
 
       <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
       <br>

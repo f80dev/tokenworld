@@ -4,7 +4,7 @@ import {environment} from '../environments/environment';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
-import {$$} from '../tools';
+import {$$, setParams} from '../tools';
 
 export class Tokemon {
   id: number = 0;
@@ -206,3 +206,7 @@ export function initializeMap(vm:any,zone:any,
   return vm.map
 }
 
+export function share_game(game:Game,message="") : string {
+  let params = {autoconnect: true, game: game.id, message: message}
+  return environment.appli + "/intro/?" + setParams(params)
+}

@@ -18,22 +18,23 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './intro.component.css'
 })
 export class IntroComponent implements OnInit {
+  private params: any;
+
 
   async ngOnInit() {
-    let params:any=await getParams(this.routes)
-    $$("Ouverture de l'application avec les parametres ",params)
+    this.params=await getParams(this.routes)
+    $$("Ouverture de l'application avec les parametres ",this.params)
 
-    this.message=params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
+    this.message=this.params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
 
-    this.user.network=params.network || environment.networks[0].value
 
     $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 
-    if(params.hasOwnProperty("signature")){
-      this.user.signature=params.signature
-      this.user.address=params.address
+    if(this.params.hasOwnProperty("signature")){
+      this.user.signature=this.params.signature
+      this.user.address=this.params.address
     }
-    this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
+
 
   }
 
@@ -58,6 +59,6 @@ export class IntroComponent implements OnInit {
   }
 
   available_zone() {
-    this.router.navigate(["games"])
+    this.router.navigate(["games"],{queryParams:this.params})
   }
 }

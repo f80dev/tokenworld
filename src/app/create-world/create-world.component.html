@@ -1,135 +1,144 @@
-<div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
-  <app-hourglass [message]="message"></app-hourglass>
-  <app-tuto label="Define your gaming zone with the map"></app-tuto>
-  <br>
-  <img src="https://tokemon.f80.fr/assets/under_construction.png"
-       style="width:50%;max-width: 300px;">
-</div>
+<div class="mainform" style="text-align: center;">
 
-<button mat-raised-button
-        *ngIf="message!='' && device.isMobile()"
-        (click)="open_xportal()">
-  Basculer sur xPortal
-</button>
-
-<div class="mainform" style="text-align: center;" *ngIf="message==''">
-
-
-  <table><tr style="width: 100%;">
-    <td style="text-align: right;width:50%;">
-      <app-input label="Game's title" value_type="text" style="display: inline-block;"
-                 [value]="title" (valueChange)="title=$event"></app-input>
-    </td>
-    <td style="text-align: left;">
-      <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
-    </td>
-  </tr></table>
-
-  <button mat-raised-button (click)="to_add='entrance'" *ngIf="zone.entrance && zone.entrance.x==0">
-    Add entrance
-  </button>
-  <button mat-raised-button (click)="to_add='exit'" *ngIf="zone.exit && zone.exit.x==0">
-    Add exit
-  </button>
+  <div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
+    <app-hourglass [message]="message"></app-hourglass>
+    <app-tuto label="Define your gaming zone with the map"></app-tuto>
+    <br>
+    <img src="https://tokemon.f80.fr/assets/under_construction.png"
+         style="width:50%;max-width: 300px;">
+  </div>
 
   <button mat-raised-button
-          *ngIf="zone && zone.entranc && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
-    Remove Gates
+          *ngIf="message!='' && device.isMobile()"
+          (click)="open_xportal()">
+    Basculer sur xPortal
   </button>
-  <br>
+
+  <div *ngIf="message=='' && link_to_share.length==0">
 
 
-  <div class="map_style" style="pointer-events: all;">
-    <div id="map" class="map_style" style="pointer-events: all;" [style.cursor]="to_add.length>0 ? 'crosshair' : 'pointer'" ></div>
-    <mat-icon  (click)="recenter()"
-               title="Geoloc"
-               style="position: absolute;right: 5px;top: 12px;display: block;z-index: 10;"
-               class="icon-button">
-      pin_drop
-    </mat-icon>
-  </div>
+    <table><tr style="width: 100%;">
+      <td style="text-align: right;width:50%;">
+        <app-input label="Game's title" value_type="text" style="display: inline-block;"
+                   [value]="title" (valueChange)="title=$event"></app-input>
+      </td>
+      <td style="text-align: left;">
+        <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+      </td>
+    </tr></table>
 
-  <br>
+    <button mat-raised-button (click)="to_add='entrance'" *ngIf="zone.entrance && zone.entrance.x==0">
+      Add entrance
+    </button>
+    <button mat-raised-button (click)="to_add='exit'" *ngIf="zone.exit && zone.exit.x==0">
+      Add exit
+    </button>
+
+    <button mat-raised-button
+            *ngIf="zone && zone.entranc && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
+      Remove Gates
+    </button>
+    <br>
 
 
-  <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -10px;" *ngIf="zone">
-
-    <div *ngIf="!real">
-      <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
-      <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
+    <div class="map_style" style="pointer-events: all;">
+      <div id="map" class="map_style" style="pointer-events: all;" [style.cursor]="to_add.length>0 ? 'crosshair' : 'pointer'" ></div>
+      <mat-icon  (click)="recenter()"
+                 title="Geoloc"
+                 style="position: absolute;right: 5px;top: 12px;display: block;z-index: 10;"
+                 class="icon-button">
+        pin_drop
+      </mat-icon>
     </div>
 
-    <!--            <table>&ndash;&gt;-->
-    <!--          <tr>-->
-    <!--            <td>Limits</td>-->
-    <!--            <td>-->
-    <!--              {{zone.NE.lat | number:"1.0-3"}},{{zone.NE.lng | number:"1.0-3"}} - -->
-    <!--              {{zone.SW.lat | number:"1.0-3"}},{{zone.SW.lng | number:"1.0-3"}}-->
-    <!--            </td>-->
-    <!--          </tr>-->
-    <!--        </table>-->
     <br>
-    <mat-expansion-panel class="panel">
-      <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-      <mat-slide-toggle [(ngModel)]="use_geoloc">Use Geolocalisation</mat-slide-toggle>
-      <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+
+
+    <div style="max-width: 800px;display: inline-block;text-align: center;width:90%;margin-top: -10px;" *ngIf="zone">
+
+      <div *ngIf="!real">
+        <app-input label="Grid Size" help="" value_type="number" [value]="grid" (valueChange)="grid=$event"></app-input><br>
+        <app-input label="Localisation de la carte" help="" value_type="text" [value]="zone.url" (valueChange)="zone.url=$event"></app-input><br>
+      </div>
+
+      <!--            <table>&ndash;&gt;-->
+      <!--          <tr>-->
+      <!--            <td>Limits</td>-->
+      <!--            <td>-->
+      <!--              {{zone.NE.lat | number:"1.0-3"}},{{zone.NE.lng | number:"1.0-3"}} - -->
+      <!--              {{zone.SW.lat | number:"1.0-3"}},{{zone.SW.lng | number:"1.0-3"}}-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--        </table>-->
       <br>
-      <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
-      <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
-      <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+      <mat-expansion-panel class="panel">
+        <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
+        <mat-slide-toggle [(ngModel)]="use_geoloc">Use Geolocalisation</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+        <br>
+        <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
+        <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
+        <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
 
-      <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
-
-
-<!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-      <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
-      <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
-
-
-    </mat-expansion-panel>
+        <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
 
 
-    <br>
-    <mat-expansion-panel class="panel">
-      <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
-      <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
-      <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
+        <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
+        <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
+        <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
 
-      <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
-      <app-input label="Cost to move" help=""
-                 unity="PV/km"
-                 value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
 
-      <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
+      </mat-expansion-panel>
+
+
       <br>
-      <app-input label="Initial HP for stacking"
-                 style="width:90%;max-width: 100%;" value_type="slider"
-                 [min]="0" [max]="Math.min(hp_balance,100000)" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
+      <mat-expansion-panel class="panel">
+        <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+        <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
+        <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
+
+        <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
+        <app-input label="Cost to move" help=""
+                   unity="PV/km"
+                   value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
+
+        <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
+        <br>
+        <app-input label="Initial HP for stacking"
+                   style="width:90%;max-width: 100%;" value_type="slider"
+                   [min]="0" [max]="Math.min(hp_balance,100000)" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
 
 
-      <!--      <mat-tab-group>-->
-<!--        <mat-tab label="YAML">-->
-<!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
-<!--          </div>-->
-<!--          <br>-->
-<!--          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>-->
+        <!--      <mat-tab-group>-->
+        <!--        <mat-tab label="YAML">-->
+        <!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
+        <!--          </div>-->
+        <!--          <br>-->
+        <!--          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>-->
 
-<!--        </mat-tab>-->
-<!--        <mat-tab label="Command line">-->
-<!--          <div class="code_yaml" [innerHTML]="script_content">-->
-<!--          </div>-->
-<!--          <br>-->
-<!--          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>-->
+        <!--        </mat-tab>-->
+        <!--        <mat-tab label="Command line">-->
+        <!--          <div class="code_yaml" [innerHTML]="script_content">-->
+        <!--          </div>-->
+        <!--          <br>-->
+        <!--          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>-->
 
-<!--        </mat-tab>-->
-<!--      </mat-tab-group>-->
+        <!--        </mat-tab>-->
+        <!--      </mat-tab-group>-->
 
 
-    </mat-expansion-panel>
-
+      </mat-expansion-panel>
+    </div>
 
   </div>
 
+  <div *ngIf="link_to_share.length>0">
+    <h4>Your game zone is available</h4>
+    <br>
+    {{link_to_share}}&nbsp;
+    <button mat-raised-button (click)="share()"><mat-icon>share</mat-icon>Copy</button>
+    <br>
+    <button mat-raised-button (click)="enter_game()">Enter</button>
+  </div>
 
 </div>
-

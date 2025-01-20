@@ -32,9 +32,6 @@ export class AppComponent implements OnInit {
   routes=inject(ActivatedRoute)
   toast=inject(MatSnackBar)
 
-  go(route: string) {
-    this.router.navigate([route])
-  }
 
   logout() {
     this.user.logout()
@@ -51,8 +48,8 @@ export class AppComponent implements OnInit {
 
 
   async ngOnInit() {
-
-
+    this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
+    this.user.network=environment.networks[0].value
   }
 
 

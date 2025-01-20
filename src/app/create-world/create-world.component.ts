@@ -5,7 +5,16 @@ import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
-import {add_icon, cartesianToPolar, center_of, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
+import {
+  add_icon,
+  cartesianToPolar,
+  center_of,
+  Game,
+  initializeMap,
+  Point3D,
+  polarToCartesian,
+  share_game
+} from '../tokenworld';
 import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -95,6 +104,7 @@ export class CreateWorldComponent implements OnInit {
   max_per_user: number = 30;
   tokemon_vision: boolean=true;
   to_add=""
+   created_game: Game | null=null
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -223,8 +233,8 @@ export class CreateWorldComponent implements OnInit {
       wait_message(this)
 
       let games=await this.user.extract_games()
-      this.quit(games[games.length-1])
-
+      this.created_game=games[games.length-1]
+      this.link_to_share=share_game(this.created_game,"Join my game to find NFT")
     } catch (e) {
       showError(this, e)
       wait_message(this)
@@ -280,6 +290,16 @@ export class CreateWorldComponent implements OnInit {
     this.map.setView(pos)
   }
 
+  enter_game(){
+    this.quit(this.created_game)
+  }
+
   protected readonly Math = Math;
   cost_to_move: number=0
+  link_to_share: string = "";
+
+  share() {
+    this.clipboard.copy(share_game(this.created_game!,"Catch some NFT in my gaming zone"))
+    showMessage(this,"Link in your clipboard")
+  }
 }

@@ -4,7 +4,7 @@ import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {cartesianToPolar, center_of, distance, Game} from '../tokenworld';
+import {cartesianToPolar, center_of, distance, Game, share_game} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {get_nft, send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
@@ -130,8 +130,7 @@ export class GamesComponent implements OnInit {
   async share_map(game: any) {
     let message = await _prompt(this, "Introduction message", "Catch some NFT around you with this game", "", "text", "Share", "Cancel", false)
     if (message != "") {
-      let params = {autoconnect: true, game: game.id, message: message}
-      this.clipboard.copy(environment.appli + "/games?" + setParams(params))
+      this.clipboard.copy(share_game(game,message))
       showMessage(this, "Link in clipboard")
     }
 

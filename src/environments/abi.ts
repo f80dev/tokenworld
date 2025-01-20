@@ -248,6 +248,20 @@ export const abi={
       ]
     },
     {
+      "name": "fund_game",
+      "mutability": "mutable",
+      "payableInTokens": [
+        "*"
+      ],
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        }
+      ],
+      "outputs": []
+    },
+    {
       "name": "add_user",
       "mutability": "readonly",
       "inputs": [
@@ -869,4 +883,3 @@ export const abi={
     }
   }
 }
-

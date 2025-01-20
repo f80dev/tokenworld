@@ -76,7 +76,7 @@ export class CreateWorldComponent implements OnInit {
   turns=0
   map!: L.Map
   args: any;
-  lifepoint=1;
+  lifepoint=0;
   title="Mon titre"
   real: boolean=true
   message: string=""
@@ -214,11 +214,19 @@ export class CreateWorldComponent implements OnInit {
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
-    let tokens=[]
+
     try {
       wait_message(this,"Your world is under construction  ...")
-      tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
-      await send_transaction_with_transfers(this.user.provider,"add_game",this.args,this.user,tokens)
+      let game_id:any=await send_transaction(this.user.provider,"add_game",this.args,this.user,this.user.get_sc_address())
+
+      if(this.lifepoint>0){
+        let tokens=[]
+        debugger
+        tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
+        let args=[game_id.result]
+        await send_transaction_with_transfers(this.user.provider,"fund_game",args,this.user,tokens)
+      }
+
       wait_message(this)
 
       let games=await this.user.extract_games()

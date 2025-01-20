@@ -9,51 +9,58 @@
     <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">Show nearest zone</mat-slide-toggle>
   </div>
 
+  <div *ngIf="message.length==0">
 
-  <table style="width: 100%;" *ngIf="message.length==0">
-    <tr>
-      <th></th>
-      <th>In game</th>
-      <th *ngIf="user.isConnected(true)">As master</th>
-      <th>Command</th>
-    </tr>
+  </div>
+  <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
+    <mat-expansion-panel-header>{{game.title}}</mat-expansion-panel-header>
+    <table style="width: 100%;" >
+      <tr>
+        <th></th>
+        <th>In game</th>
+        <th *ngIf="user.isConnected(true)">As master</th>
+        <th>Command</th>
+      </tr>
 
-    <tr style="width:100%;padding:10px;" *ngFor="let game of games">
+      <tr >
+        <td style="text-align: left;">
+          <app-game [game]="game">
+          </app-game>
+        </td>
+        <td>
+          {{game.n_players}} players<br>
+          {{game.n_tokemons}} tokemons
+          <mat-icon title="See the NFTs hide in the world"
+                    *ngIf="game.nfts!.length>0"
+                    (click)="show_nfts(game)"
+                    class="icon-button">visibility</mat-icon>
 
-      <td style="text-align: left;">
-        <app-game [game]="game">
-        </app-game>
+          <div *ngIf="game && game.previews && game.previews.length>0">
+            <img *ngFor="let src of game.previews" [src]="src"
+                 class="small-vignette">
 
-      </td>
-      <td>
-        {{game.n_players}} players<br>
-        {{game.n_tokemons}} tokemons
-        <mat-icon title="See the NFTs hide in the world"
-                  *ngIf="game.nfts!.length>0"
-                  (click)="show_nfts(game)"
-                  class="icon-button">visibility</mat-icon>
+          </div>
 
-        <div *ngIf="game && game.previews && game.previews.length>0">
-          <img *ngFor="let src of game.previews" [src]="src"
-               class="small-vignette">
+        </td>
+        <td *ngIf="user.isConnected(true)">
+          <div *ngIf="game.owner==user.idx && !game.closed">
+            <button mat-raised-button (click)="close_map(game)">Close</button>
+            <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+          </div>
 
-        </div>
+        </td>
+        <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
+          <button mat-raised-button title="Select this game" class="color-warm mat-headline-5" *ngIf="!game.closed" (click)="select(game)" color="PLAY">
+            Enter
+          </button>
+          <mat-icon (click)="see_map(game)" class="icon-button" title="See the map">map</mat-icon>
+          <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
+        </td>
+      </tr>
+    </table>
 
-      </td>
-      <td *ngIf="user.isConnected(true)">
-        <div *ngIf="game.owner==user.idx && !game.closed">
-          <button mat-raised-button (click)="close_map(game)">Close</button>
-          <button mat-raised-button (click)="stacking(game)">AirDrop</button>
-        </div>
+  </mat-expansion-panel>
 
-      </td>
-      <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
-        <button mat-raised-button *ngIf="!game.closed" (click)="select(game)">Select</button>
-        <mat-icon (click)="see_map(game)" class="icon-button" title="See the map">map</mat-icon>
-        <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
-      </td>
-    </tr>
-  </table>
 
   <br><br>
   <button mat-raised-button (click)="create_game()">Create Game</button>

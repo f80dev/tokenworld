@@ -570,20 +570,26 @@ export function base64ToArrayBuffer(base64:string) : ArrayBuffer {
 
 
 export function $$(s: string, obj: any= null) {
-  console.log("");
   if(environment.production)return;
-  if((s!=null && s.startsWith("!"))){
-    //debugger
+
+  try{
+    if((s!=null && s.startsWith("!"))){
+      //debugger
+    }
+    const lg = new Date().getHours() + ':' + new Date().getMinutes() + ' -> ' + s;
+    if (obj != null) {
+      obj = JSON.stringify(obj).replace(",",",\n");
+    } else {
+      obj = '';
+    }
+    console.log("");
+    console.log(lg + ' ' + obj);
+    if (lg.indexOf('!!') > -1) {alert(lg); }
+
+  }catch(e:any){
+    console.log("Exception interne: "+e.message)
   }
-  const lg = new Date().getHours() + ':' + new Date().getMinutes() + ' -> ' + s;
-  if (obj != null) {
-    obj = JSON.stringify(obj).replace(",",",\n");
-  } else {
-    obj = '';
   }
-  console.log(lg + ' ' + obj);
-  if (lg.indexOf('!!') > -1) {alert(lg); }
-}
 
 
 export function copyAchievements(clp:Clipboard,to_copy:string) {

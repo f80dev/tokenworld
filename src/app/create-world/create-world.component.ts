@@ -116,7 +116,7 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de onInit, initialisation de zone ",this.zone)
 
     let params:any=await getParams(this.routes)
-    this.user.login(this)
+    await this.user.login(this)
 
     if(params.hasOwnProperty("zone")) {
       this.zone = params.zone
@@ -129,11 +129,6 @@ export class CreateWorldComponent implements OnInit {
 
     await this.user.init_balance(this.api)
     this.hp_balance=this.user.get_balance(this.user.get_default_token())
-    if(this.hp_balance<1){
-      showMessage(this,"You need almost 1 "+this.user.get_default_token()+" in your wallet")
-      if(this.user.game)this.quit(this.user.game)
-    }
-
 
     try{
       $$("Initialisation de la carte avec ",this.zone)
@@ -217,12 +212,10 @@ export class CreateWorldComponent implements OnInit {
 
     try {
       wait_message(this,"Your world is under construction  ...")
-      let game_id:any=await send_transaction(this.user.provider,"add_game",this.args,this.user,this.user.get_sc_address())
-
+      let game_id:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
       if(this.lifepoint>0){
-        let tokens=[]
-        debugger
-        tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18))
+        let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
+
         let args=[game_id.result]
         await send_transaction_with_transfers(this.user.provider,"fund_game",args,this.user,tokens)
       }

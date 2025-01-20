@@ -6,11 +6,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../api.service';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-intro',
   imports: [
-    MatButton
+    MatButton,MatIcon
   ],
   standalone:true,
   templateUrl: './intro.component.html',

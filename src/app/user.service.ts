@@ -86,15 +86,20 @@ export class UserService {
   }
 
 
-  geoloc(geolocService:any,marker:L.Marker | null=null) : Promise<LatLng> {
+  geoloc(geolocService:any,marker:L.Marker | null=null,accuracy_limit=10000) : Promise<LatLng> {
     return new Promise(async (resolve, reject) => {
       try{
-        this.loc=await geolocService.getCurrentPosition()
-        $$("GéoLocalisation en ",this.loc)
-        $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
-        let position=new LatLng(this.loc.coords.latitude,this.loc.coords.longitude)
-        if(marker)marker.setLatLng(position)
-        resolve(position)
+        let loc=await geolocService.getCurrentPosition()
+        if(loc.accuracy<accuracy_limit){
+          this.loc=loc
+          $$("GéoLocalisation en ",this.loc)
+          $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
+          let position=new LatLng(this.loc.coords.latitude,this.loc.coords.longitude)
+          if(marker)marker.setLatLng(position)
+          resolve(position)
+        }else{
+          reject()
+        }
       }catch (e){
         reject()
       }

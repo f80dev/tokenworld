@@ -34,11 +34,13 @@ export class WalletComponent implements OnChanges {
   @Output() selectChanged = new EventEmitter()
   @Output() listChanged = new EventEmitter()
 
-  @Input() size="200px"
+  @Input() size="100px"
   @Input() message: string=""
   account: any;
   @Input() selected=false;
   tokens: string[] = [];
+
+
 
   async refresh(){
     this.nfts=[]
@@ -61,8 +63,9 @@ export class WalletComponent implements OnChanges {
       await this.user.init_balance(this.api)
       this.tokens=Object.keys(this.user.tokens)
     }
-
   }
+
+
 
 
   select(nft: any) {
@@ -76,6 +79,8 @@ export class WalletComponent implements OnChanges {
       this.refresh()
     }
   }
+
+
 
   select_esdt($event:any) {
     this.selectChanged.emit($event)

@@ -5,10 +5,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {WalletComponent} from '../wallet/wallet.component';
 import {NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
-import {get_nft, query, send_transaction_with_transfers} from '../mvx';
-import {abi} from '../../environments/abi';
+import {get_nft, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, Tokemon} from '../tokenworld';
+import {cartesianToPolar} from '../tokenworld';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
@@ -75,7 +74,6 @@ export class SettingsComponent implements OnInit {
     this.refresh();
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
     }
-
 
 
 

@@ -1,7 +1,9 @@
 <div class="mainform" style="text-align: center;">
   <app-hourglass [message]="message"></app-hourglass>
-  <app-wallet [address]="user.address" show="coin"></app-wallet>
+  <app-wallet [address]="user.address" show="coin,nft"></app-wallet>
   <br>
+
+
 
   <mat-expansion-panel *ngIf="tokemons.length>0">
     <mat-expansion-panel-header>Your tokemons</mat-expansion-panel-header>

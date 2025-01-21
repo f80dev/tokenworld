@@ -3,7 +3,7 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnChanges,
+  OnChanges, OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
@@ -29,7 +29,7 @@ export function toNFT(nft:any) : any {
   templateUrl: './tokemon.component.html',
   styleUrl: './tokemon.component.css'
 })
-export class TokemonComponent implements OnChanges {
+export class TokemonComponent implements OnChanges,OnInit {
 
   clipboard=inject(Clipboard)
 
@@ -40,6 +40,12 @@ export class TokemonComponent implements OnChanges {
   nft: any
   api=inject(ApiService)
   @Input() label_pv="HP";
+  size_box: string="200px"
+
+  ngOnInit(): void {
+    this.size_box=Math.round(Number(this.size.replace("px",""))*1.5) + "px"
+  }
+
 
   async ngOnChanges(changes: SimpleChanges) {
     if(changes.hasOwnProperty("item")){

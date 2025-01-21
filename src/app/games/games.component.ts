@@ -21,6 +21,7 @@ import {ApiService} from '../api.service';
 import {GeolocService} from '../geoloc.service';
 import {LatLng} from 'leaflet';
 import {SafePipe} from '../safe.pipe';
+import {NgNavigatorShareService} from 'ng-navigator-share';
 
 @Component({
   selector: 'app-games',
@@ -51,6 +52,8 @@ export class GamesComponent implements OnInit {
   router = inject(Router)
   clipboard = inject(Clipboard)
   api = inject(ApiService)
+  ngNavigatorShareService=inject(NgNavigatorShareService)
+
 
 
   show_closed_games = false;
@@ -131,6 +134,15 @@ export class GamesComponent implements OnInit {
     let message = await _prompt(this, "Introduction message", "Catch some NFT around you with this game", "", "text", "Share", "Cancel", false)
     if (message != "") {
       this.clipboard.copy(share_game(game,message))
+      this.ngNavigatorShareService.share({
+        title: "Join me in "+game.title+" gaming zone",
+        text: message,
+        url: share_game(game,message)
+      })
+        .then( (response) => {console.log(response);},()=>{
+        })
+        .catch( (error) => {
+        });
       showMessage(this, "Link in clipboard")
     }
 

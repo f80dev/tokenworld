@@ -12,7 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {environment} from '../../environments/environment';
-import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {GameComponent} from '../game/game.component';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
@@ -38,7 +38,8 @@ import {NgNavigatorShareService} from 'ng-navigator-share';
     MatSlideToggle,
     FormsModule,
     HourglassComponent,
-    SafePipe
+    SafePipe,
+    MatAccordion
   ],
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'

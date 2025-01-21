@@ -9,7 +9,7 @@
     <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">Show nearest zone</mat-slide-toggle>
   </div>
 
-  <div *ngIf="message.length==0">
+  <mat-accordion *ngIf="message.length==0">
     <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
       <mat-expansion-panel-header>{{game.title}}</mat-expansion-panel-header>
       <table style="width: 100%;" >
@@ -58,7 +58,7 @@
       </table>
 
     </mat-expansion-panel>
-  </div>
+  </mat-accordion>
 
 
 

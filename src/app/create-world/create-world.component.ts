@@ -219,24 +219,23 @@ export class CreateWorldComponent implements OnInit {
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
-
     try {
       wait_message(this,"Your world is under construction  ...")
-      let game_id:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
-      if(this.lifepoint>0){
-        let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
-
-        let args=[game_id.result]
-        await send_transaction_with_transfers(this.user.provider,"fund_game",args,this.user,tokens)
+      let rc:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
+      if(rc.returnMessage!="ok"){
+        showMessage(this,rc.returnMessage)
+        wait_message(this)
+      }else{
+        if(this.lifepoint>0){
+          let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
+          rc=await send_transaction_with_transfers(this.user.provider,"fund_game",[rc.result],this.user,tokens)
+        }
+        wait_message(this)
+        let games=await this.user.extract_games()
+        this.created_game=games[games.length-1]
+        this.link_to_share=share_game(this.created_game,"Join my game to find NFT")
       }
-
-      wait_message(this)
-
-      let games=await this.user.extract_games()
-      this.created_game=games[games.length-1]
-      this.link_to_share=share_game(this.created_game,"Join my game to find NFT")
-    } catch (e) {
-      showError(this, e)
+    } catch (e:any) {
       wait_message(this)
     }
 

@@ -7,10 +7,10 @@ import {
   Marker, Point, Polyline,
   TileLayer
 } from 'leaflet';
-import {$$, setParams, showMessage} from '../../tools';
+import {$$, setParams, showError, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
+import {cartesianToPolar, center_of, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -85,9 +85,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     $$("Initialisation de la carte principal")
     try{
       this.map=L.map('map',{ keyboard:true,scrollWheelZoom:true})
-
     }catch (e) {
-
+      showError(this,e)
     }
     $$("Fin d'initialisation de la carte")
     let zoom=16
@@ -96,6 +95,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let ne=cartesianToPolar(this.user.game.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
       L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map!);
+
       //this.map.setMaxBounds(new LatLngBounds(ne,sw))
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
       showMessage(this,"Welcome in the "+this.user.game.title)
@@ -117,17 +117,19 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
             showMessage(this,"Position copied")
           }
         })
-
     }
 
-    await this.user.geoloc(this.geolocService,this.me_marker)
-    this.user.center_map=
-      localStorage.getItem("last_position_lat")
-        ? new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
-        : new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+    if(this.user.game?.use_geoloc){
+      await this.user.geoloc(this.geolocService,this.me_marker)
+      this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+    } else {
+      this.user.center_map=
+        localStorage.getItem("last_position_lat")
+          ? new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+          : cartesianToPolar(center_of(this.user.game!.ne,this.user.game!.sw))
+    }
 
     this.map!.setView(this.user.center_map,zoom);
-
   }
 
 
@@ -304,6 +306,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   async recenter() {
     if(!this.user.game?.use_geoloc){
+      showMessage(this,"Map on the gaming zone")
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)
@@ -314,6 +317,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     }
     else
     {
+      showMessage(this,"Center of the map on your location")
       this.user.center_map=await this.user.geoloc(this.geolocService)
     }
     this.map!.setView(this.user.center_map,this.map!.getZoom())

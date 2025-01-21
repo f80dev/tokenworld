@@ -14,7 +14,6 @@ html {
     ),
     density: -1
   ));
-  --mat-sys-primary: #6750a4;
 }
 
 
@@ -130,3 +129,7 @@ a:active { text-decoration: none; color: gray; }
   display: block;
 }
 
+.smalltext {
+  font-size: small;
+  font-weight: lighter;
+}

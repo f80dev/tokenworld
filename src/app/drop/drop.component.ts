@@ -2,7 +2,7 @@ import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from
 import {BigUIntValue, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {create_transaction, send_transaction_with_transfers} from '../mvx';
+import {create_transaction, network_config, send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -151,8 +151,11 @@ export class DropComponent implements AfterViewInit {
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier, this.sel_nft.nonce, this.quantity))
 
       try {
-        let gas_to_drop = environment.gaz_limit + environment.gaz_by_nft * BigInt(this.quantity);
-        if(gas_to_drop>environment.max_gaz)gas_to_drop=environment.max_gaz
+        let gas_to_drop = environment.gaz_for_transaction + environment.gaz_by_nft * BigInt(this.quantity);
+        if(gas_to_drop>environment.max_gaz){
+          showMessage(this,"Quantity is too high for one transaction")
+          return
+        }
         $$("Gas to transaction ",Number(gas_to_drop))
         $$("Dropping avec les arguments ",args)
         let rc: any = await send_transaction_with_transfers(this.user.provider, "drop", args, this.user, tokens, gas_to_drop)

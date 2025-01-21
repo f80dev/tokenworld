@@ -49,7 +49,7 @@
           </td>
           <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
             <button mat-raised-button title="Select this game" class="color-warm mat-headline-5" *ngIf="!game.closed" (click)="select(game)" color="PLAY">
-              Enter
+              <mat-icon>play</mat-icon>Enter
             </button>
             <mat-icon (click)="see_map(game)" class="icon-button" title="See the map">map</mat-icon>
             <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>

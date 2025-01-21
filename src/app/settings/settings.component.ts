@@ -14,7 +14,7 @@ import {HourglassComponent, wait_message} from '../hourglass/hourglass.component
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
-import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
 
 @Component({
@@ -33,7 +33,8 @@ import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
     MatExpansionPanelHeader,
     MatTabGroup,
     MatTab,
-    MatTabHeader
+    MatTabHeader,
+    MatAccordion
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'

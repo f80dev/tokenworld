@@ -139,6 +139,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       setTimeout(async ()=>{await this.init_map()},500)
       this.geoloc_autorefresh=setInterval(()=>{
         this.user.geoloc(this.geolocService,this.me_marker)
+        this.refresh()
       },environment.geoloc_interval)
     }else{
       $$("user n'a pas sélectionné de map ",this.user)

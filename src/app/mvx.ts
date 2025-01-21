@@ -1,6 +1,6 @@
 import {
-  Address, BytesValue, findEventsByFirstTopic,
-  SmartContractTransactionsFactory, Token,
+  Address, BytesValue,
+  SmartContractTransactionsFactory,
   TokenTransfer, Transaction,
   TransactionsFactoryConfig
 } from "@multiversx/sdk-core/out";
@@ -35,6 +35,13 @@ export async function mvx_api(url:string,params:string,api:any,network="devnet")
       }
     })
   })
+}
+
+export function network_config(network="") : Promise<any> {
+  let prefix=network.indexOf("devnet")>-1 ? "devnet-" : ""
+  const apiNetworkProvider = new ApiNetworkProvider("https://"+prefix+"api.multiversx.com", { clientName: "multiversx-your-client-name" });
+  let rc=apiNetworkProvider.getNetworkConfig();
+  return rc
 }
 
 

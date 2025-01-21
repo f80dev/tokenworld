@@ -73,8 +73,8 @@ export const environment = {
     "elrond-devnet":"https://devnet.xspotlight.com/",
     "elrond-mainnet":"https://xspotlight.com/",
   },
-  gaz_limit:  100000000n,
-  gaz_by_nft: 20000000n,
-  max_gaz:    800000000n,
-  geoloc_interval: 5000,
+  gaz_for_transaction:  300000000n,
+  gaz_by_nft: 10000000n,
+  max_gaz:    700000000n,
+  geoloc_interval: 10000,
 }

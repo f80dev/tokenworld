@@ -2,8 +2,8 @@
   <h5 *ngIf="message.length>0">{{message}}</h5>
   <div style="display: inline-block;width: 90%;">
     <h4>Your coins</h4>
-    <table style="display:inline-block;margin-top:-10px;">
-      <tr *ngFor="let k of tokens">
+    <table style="display:inline-block;margin-top:-10px;min-width: 350px">
+      <tr *ngFor="let k of tokens" style="width: 100%;">
         <td style="text-align: right;">
 
           <button *ngIf="selected"  mat-icon-button (click)="select_esdt(user.tokens[k])">

@@ -22,19 +22,19 @@ export class IntroComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.params=await getParams(this.routes)
-    $$("Ouverture de l'application avec les parametres ",this.params)
+    setTimeout(async ()=>{
+      this.params=await getParams(this.routes)
+      $$("Ouverture de l'application avec les parametres ",this.params)
 
-    this.message=this.params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
+      this.message=this.params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
 
+      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 
-    $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
-
-    if(this.params.hasOwnProperty("signature")){
-      this.user.signature=this.params.signature
-      this.user.address=this.params.address
-    }
-
+      if(this.params.hasOwnProperty("signature")){
+        this.user.signature=this.params.signature
+        this.user.address=this.params.address
+      }
+    },50)
 
   }
 

@@ -76,6 +76,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   geoloc_autorefresh: any
   message: string=""
   old_pos: LatLng = new LatLng(0,0)
+  last_tokemon_list: any[]=[]
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -133,6 +134,36 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     this.map!.setView(this.user.center_map,zoom);
   }
 
+  async refresh_geoloc(){
+    try{
+      let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
+      if(distance(new_pos,this.old_pos)>10){
+        this.old_pos=new_pos
+        this.refresh()
+
+        this.me_marker!.addTo(this.map!)
+      }
+    }catch (e:any){
+      this.me_marker!.removeFrom(this.map!)
+    }
+  }
+
+
+
+  showNotification() {
+    if (Notification.permission === "granted") {
+      new Notification("There is a tokemon", {body: "There is a tokemon"});
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification("There is a tokemon", {body: "There is a tokemon"});
+        }
+      });
+    }
+  }
+
+
+
 
   async ngOnInit() {
     this.user.login(this)
@@ -140,19 +171,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       setTimeout(async ()=>{
         await this.init_map()
         this.refresh()
+        this.refresh_geoloc()
       },500)
-      this.geoloc_autorefresh=setInterval(async ()=>{
-        try{
-          let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
-          if(distance(new_pos,this.old_pos)>10){
-            this.old_pos=new_pos
-            this.refresh()
-          }
-        }catch (e:any){
-
-        }
-
-      },environment.geoloc_interval)
+      this.geoloc_autorefresh=setInterval(async ()=>{this.refresh_geoloc()},environment.geoloc_interval)
     }else{
       $$("user n'a pas sélectionné de map ",this.user)
       this.router.navigate(["games"],{queryParams:{autoconnect:true}})
@@ -233,6 +254,11 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           this.user.tokemons = await this.user.query("show_nfts",  args);
         }
 
+        if(this.user.tokemons.length>this.last_tokemon_list.length){
+          this.showNotification()
+        }
+        this.last_tokemon_list=this.user.tokemons
+
         $$("Chargement de " + this.user.tokemons.length + " tokemons")
         $$("Liste des tokemons ",this.user.tokemons)
 
@@ -252,6 +278,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           }
         }
       }
+
     })
   }
 
@@ -296,7 +323,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         zoom:this.map.getZoom(),
         center:this.map.getCenter()
       }
-      this.add_tokemon_to_markers()
+      await this.add_tokemon_to_markers()
       this.layer?.redraw()
     }
 

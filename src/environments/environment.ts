@@ -75,7 +75,7 @@ export const environment = {
   },
   gaz_for_transaction:  300000000n,
   gaz_by_nft: 10000000n,
-  max_gaz:    700000000n,
+  max_gaz:    600000000n,
   geoloc_interval: 10000,
   accuracy_limit: 50
 }

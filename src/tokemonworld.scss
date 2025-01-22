@@ -2,12 +2,11 @@
 
 
 html {
-  color-scheme: light dark;
+  color-scheme: dark;
   @include mat.theme((
     color: mat.$cyan-palette,
     typography: (
       plain-family: Roboto,
-      brand-family: Open Sans,
       bold-weight: 500,
       medium-weight: 300,
       regular-weight: 100,
@@ -65,9 +64,10 @@ a:active { text-decoration: none; color: gray; }
 
 .small-vignette {
   position: relative;
-  max-width: 75px;
-  max-height: 75px;
-  width: 50%;
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  object-fit: cover;
   cursor: pointer;
   margin: 3px;
 }

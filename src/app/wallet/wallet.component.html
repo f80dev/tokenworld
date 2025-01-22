@@ -3,7 +3,7 @@
   <div style="display: inline-block;width: 90%;">
     <h4 *ngIf="tokens.length>0">Your coins</h4>
     <table style="display:inline-block;margin-top:-10px;min-width: 350px">
-      <tr *ngFor="let k of tokens" style="width: 100%;">
+      <tr *ngFor="let k of tokens" style="width: 100%;padding: 10px;">
         <td style="text-align: right;">
 
           <button *ngIf="selected"  mat-icon-button (click)="select_esdt(user.tokens[k])">
@@ -12,7 +12,7 @@
 
         </td>
         <td style="text-align: left;" [title]="user.tokens[k].identifier">
-          <img src="./assets/coin.png" style="width: 40px;height:40px;margin-bottom: -15px;">
+          <img src="./assets/coin.png" style="width: 30px;height:30px;margin-bottom: -10px;">
           {{user.tokens[k].name}}
         </td>
         <td style="text-align: right;width:50%;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
@@ -23,7 +23,7 @@
 
   <br>
 
-  <div *ngIf="show.indexOf('nft')>-1">
+  <div *ngIf="show.indexOf('nft')>-1" style="margin-top: -15px;">
     <h5>Your NFTs</h5>
     <app-tokemon *ngFor="let nft of nfts"
                  [item]="nft"

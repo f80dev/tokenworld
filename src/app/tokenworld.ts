@@ -202,6 +202,8 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
     vm.me_marker=add_icon(vm.map,meIcon,center)
+    vm.me_marker.removeFrom(vm.map)
+
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)
 
   }

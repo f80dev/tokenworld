@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
 import {MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {DecimalPipe, NgIf} from "@angular/common";
@@ -7,8 +7,6 @@ import {$$, getParams, showError, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   add_icon,
-  cartesianToPolar,
-  center_of,
   Game,
   initializeMap,
   Point3D,

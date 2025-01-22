@@ -90,7 +90,7 @@ export class UserService {
     return new Promise(async (resolve, reject) => {
       try{
         let loc=await geolocService.getCurrentPosition()
-        if(loc.accuracy<accuracy_limit){
+        if(loc.coords.accuracy<accuracy_limit){
           this.loc=loc
           $$("GéoLocalisation en ",this.loc)
           $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
@@ -98,6 +98,7 @@ export class UserService {
           if(marker)marker.setLatLng(position)
           resolve(position)
         }else{
+          $$("précision insufisante ",loc.coords.accuracy)
           reject()
         }
       }catch (e){

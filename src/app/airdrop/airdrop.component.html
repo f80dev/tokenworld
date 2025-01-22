@@ -6,6 +6,7 @@
 
   <div *ngIf="message.length==0">
     <app-wallet show="coin" [selected]="true"
+                *ngIf="!sel_coin"
                 style="display: inline-block;width:600px;"
                 message="Select a coin to drop"
                 [address]="user.address"
@@ -14,7 +15,7 @@
     <br>
 
     <div [style.display]="!sel_coin && message.length>0 ? 'none' : 'inline-block'">
-
+      <h4 *ngIf="sel_coin">AirDrop of {{sel_coin.name}}</h4>
       <app-input
         *ngIf="sel_coin"
         value_type="slider" [value]="amount_to_drop"
@@ -35,6 +36,7 @@
              [style.margin-left]="-visibility*ech/2+'px'" >
         </div>
       </div>
+      <br>
 
       <app-input value_type="slide" [min]="0" [max]="max_distance"
                  *ngIf="sel_coin"
@@ -48,6 +50,5 @@
     </div>
 
   </div>
-
 
 </div>

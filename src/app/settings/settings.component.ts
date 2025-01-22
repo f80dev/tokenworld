@@ -7,7 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar} from '../tokenworld';
+import {cartesianToPolar, Tokemon} from '../tokenworld';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
@@ -43,7 +43,6 @@ export class SettingsComponent implements OnInit {
   router=inject(Router)
   user=inject(UserService)
   dialog=inject(MatDialog)
-  tokemons:any[]=[]
 
   api=inject(ApiService)
   sel_to_reload: any;
@@ -52,26 +51,24 @@ export class SettingsComponent implements OnInit {
   message: string=""
   sc_settings: any
 
+  tokemons: Tokemon[] = [];
+
 
   async refresh(){
     this.tokemons=[]
-    let idx=Number(await this.user.query("get_idx_address",[this.user.address]))
-
-    let id=0
-    for(let tokemon of await this.user.query("tokemons",[])){
-      id++
-      tokemon.coords=cartesianToPolar(tokemon,1,environment.scale_factor)
-      tokemon.id=id
+    let rc:any=await this.user.query("show_all_my_nfts",[this.user.game!.id,this.user.address])
+    for(let tokemon of rc){
       let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
       tokemon.content=await get_nft(identifier,this.api,this.user.network)
-      if(tokemon.owner==idx)this.tokemons.push(tokemon)
+      this.tokemons.push(tokemon)
     }
+
     this.sc_settings=await this.user.query("map");
   }
 
 
   async ngOnInit() {
-    if(!this.user.isConnected())await this.user.login(this)
+    await this.user.login(this,"","",true)
     this.refresh();
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
     }

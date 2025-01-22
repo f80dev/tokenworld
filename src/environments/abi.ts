@@ -601,11 +601,15 @@ export const abi={
     },
     {
       "name": "show_all_my_nfts",
-      "mutability": "mutable",
+      "mutability": "readonly",
       "inputs": [
         {
           "name": "game_id",
           "type": "u32"
+        },
+        {
+          "name": "caller",
+          "type": "Address"
         }
       ],
       "outputs": [

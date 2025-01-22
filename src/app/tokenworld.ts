@@ -10,13 +10,15 @@ export class Tokemon {
   id: number = 0;
   name: string = "";
   owner: number = 0;
+  game: number = 0;
   nft: string = "";
   nonce: number = 0;
   pv: number = 0;
-  x: number = 0;
-  y: number = 0;
-  z: number = 0;
-  mode: number = 0;
+  content:any={url:""}
+  x: number = 0
+  y: number = 0
+  z: number = 0
+  mode: number = 0
   visibility: number = 0;
 }
 

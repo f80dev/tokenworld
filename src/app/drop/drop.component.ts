@@ -154,6 +154,7 @@ export class DropComponent implements AfterViewInit {
         let gas_to_drop = environment.gaz_for_transaction + environment.gaz_by_nft * BigInt(this.quantity);
         if(gas_to_drop>environment.max_gaz){
           showMessage(this,"Quantity is too high for one transaction")
+          wait_message(this)
           return
         }
         $$("Gas to transaction ",Number(gas_to_drop))

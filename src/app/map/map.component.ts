@@ -75,7 +75,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   me_marker: Marker | undefined
   geoloc_autorefresh: any
   message: string=""
-  old_pos: LatLng | null = null
+  old_pos: LatLng = new LatLng(0,0)
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -137,16 +137,19 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async ngOnInit() {
     this.user.login(this)
     if(this.user && this.user.game){
-      setTimeout(async ()=>{await this.init_map()},500)
+      setTimeout(async ()=>{
+        await this.init_map()
+        this.refresh()
+      },500)
       this.geoloc_autorefresh=setInterval(async ()=>{
         try{
           let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
-          if(this.old_pos!=new_pos){
+          if(distance(new_pos,this.old_pos)>10){
             this.old_pos=new_pos
             this.refresh()
           }
         }catch (e:any){
-          $$("Pas assez de précision")
+
         }
 
       },environment.geoloc_interval)
@@ -361,7 +364,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   open_airdrop() {
-    let obj={lat:this.user.center_map?.lat,lng:this.user.center_map?.lng}
+    let obj={game_id:this.user.game!.id,lat:this.user.center_map?.lat,lng:this.user.center_map?.lng}
     this.router.navigate(["airdrop"],{queryParams:{p:setParams(obj,"","")}})
   }
 

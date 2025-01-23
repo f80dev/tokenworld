@@ -71,23 +71,24 @@ export class DropComponent implements AfterViewInit {
 
 
   async ngAfterViewInit() {
-    let params: any = await getParams(this.routes)
-    this.user.login(this)
-    if(this.user){
-      this.user.init_game(Number(params.game_id))
+    setTimeout(async ()=>{
+      let params: any = await getParams(this.routes)
+      if(this.user){
+        this.user.login(this,"","",true)
+        this.user.init_game(this.user.open_game(Number(params.game_id)))
 
-      await this.user.init_balance(this.api)
-      this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
+        await this.user.init_balance(this.api)
+        this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
 
-      this.user.center_map = new LatLng(params.lat, params.lng)
-      this.map = L.map('map')
+        this.user.center_map = new LatLng(params.lat, params.lng)
+        this.map = L.map('map')
 
-      $$("Drop sur les coordonnées ", this.user.center_map)
-      await this.user.login(this, "You must be connected to drop any NFT", "", false)
-    }else{
-      this.router.navigate(["games"])
-    }
-
+        $$("Drop sur les coordonnées ", this.user.center_map)
+        await this.user.login(this, "You must be connected to drop any NFT", "", false)
+      }else{
+        this.router.navigate(["games"])
+      }
+    },50)
   }
 
 

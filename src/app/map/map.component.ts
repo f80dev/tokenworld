@@ -103,7 +103,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       $$("Entrée dans "+this.user.game.title)
     }
 
-    initializeMap(this,this.user.game)
+    let icon=this.user.game?.use_geoloc ? "https://tokemon.f80.fr/assets/icons/person.png" : "https://tokemon.f80.fr/assets/icons/target.png"
+    initializeMap(this,this.user.game,this.user.center_map,icon)
     if(this.map){
       this.map
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map!.getZoom()})

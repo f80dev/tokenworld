@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 
 
   async login() {
-    await this.user.login(this)
+    await this.user.login(this,"","",true)
     localStorage.setItem("address",this.user.address)
     this.show_intro=false
   }

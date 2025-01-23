@@ -12,7 +12,7 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
-import {showError} from '../../tools';
+import {setParams, showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
@@ -101,5 +101,13 @@ export class SettingsComponent implements OnInit {
       showError(this, e)
       wait_message(this)
     }
+  }
+
+  on_select($event: any) {
+    if(this.user.game){
+      let obj={game_id:this.user.game.id,lat:0,lng:0,nft:$event.identifier}
+      this.router.navigate(["drop"],{queryParams:{p:setParams(obj,"","")}})
+    }
+
   }
 }

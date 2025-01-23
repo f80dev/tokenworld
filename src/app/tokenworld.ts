@@ -191,9 +191,9 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://toke
 
 export function initializeMap(vm:any,zone:any,
                               center:LatLng=new LatLng(0,0),
-                              meIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
+                              centerIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
                               entranceIcon="https://tokemon.f80.fr/assets/icons/entrance.png",
-                              exitIcon="https://tokemon.f80.fr/assets/icons/exit.png") {
+                              exitIcon="https://tokemon.f80.fr/assets/icons/exit.png") : L.Map {
 
   if(vm.map && zone){
     if(zone.url=="map" || zone.url=="")zone.zoom=2;
@@ -201,8 +201,10 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
-    vm.me_marker=add_icon(vm.map,meIcon,center)
-    vm.me_marker.removeFrom(vm.map)
+    if(centerIcon.length>0){
+      vm.me_marker=add_icon(vm.map,centerIcon,center)
+      vm.me_marker.removeFrom(vm.map)
+    }
 
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)
 

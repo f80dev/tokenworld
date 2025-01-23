@@ -4,11 +4,24 @@
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>My Wallet</mat-expansion-panel-header>
-      <app-wallet [address]="user.address" show="coin,nft"></app-wallet>
+      <app-wallet [address]="user.address" show="coin,nft" (selectChanged)="on_select($event)"></app-wallet>
     </mat-expansion-panel>
 
     <mat-expansion-panel *ngIf="tokemons.length>0">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
+      <div *ngIf="sel_to_reload" style="width:80%;display: inline-block;max-width: 600px;margin-top:50px;">
+
+        <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
+                   *ngIf="max_pv_loading>0"
+                   label="Vitality to inject" unity="PV"
+                   (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
+
+        <br>
+
+        <button mat-raised-button (click)="send()">Send</button>
+      </div>
+
+      <br>
       <table>
         <tr>
           <th>Visual</th>
@@ -32,16 +45,5 @@
 
   </mat-accordion>
 
-    <div *ngIf="sel_to_reload" style="width:80%;display: inline-block;max-width: 600px;margin-top:50px;">
-
-    <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
-               *ngIf="max_pv_loading>0"
-               label="Vitality to inject" unity="PV"
-               (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
-
-    <br>
-
-    <button mat-raised-button (click)="send()">Send</button>
-  </div>
 
 </div>

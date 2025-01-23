@@ -104,7 +104,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     }
 
     initializeMap(this,this.user.game)
-
     if(this.map){
       this.map
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map!.getZoom()})
@@ -170,7 +169,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     if(this.user && this.user.game){
       setTimeout(async ()=>{
         await this.init_map()
-        this.refresh()
         this.refresh_geoloc()
       },500)
       this.geoloc_autorefresh=setInterval(async ()=>{this.refresh_geoloc()},environment.geoloc_interval)

@@ -61,7 +61,7 @@ export const environment = {
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqj76s0k7yp4nuszpu24jnujka4a56y7l7835sjgyy35",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqwdg95xmtvg4dpm7ndpnvf7g8qmmcg6vk835sk68dmk",
     "elrond-mainnet":""
   },
 
@@ -73,7 +73,7 @@ export const environment = {
     "elrond-devnet":"https://devnet.xspotlight.com/",
     "elrond-mainnet":"https://xspotlight.com/",
   },
-  gaz_for_transaction:  300000000n,
+  gaz_for_transaction:  200000000n,
   gaz_by_nft: 10000000n,
   max_gaz:    600000000n,
   geoloc_interval: 10000,

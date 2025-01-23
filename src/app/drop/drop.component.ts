@@ -2,12 +2,12 @@ import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from
 import {BigUIntValue, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {create_transaction, network_config, send_transaction_with_transfers} from '../mvx';
+import {create_transaction, get_nft, network_config, send_transaction_with_transfers} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {environment} from '../../environments/environment';
-import {initializeMap, Point3D, polarToCartesian} from '../tokenworld';
+import {add_icon, initializeMap, Point3D, polarToCartesian} from '../tokenworld';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {MatDialog} from '@angular/material/dialog';
@@ -74,17 +74,26 @@ export class DropComponent implements AfterViewInit {
     setTimeout(async ()=>{
       let params: any = await getParams(this.routes)
       if(this.user){
-        this.user.login(this,"","",true)
-        this.user.init_game(this.user.open_game(Number(params.game_id)))
+        await this.user.login(this, "You must be connected to drop any NFT", "", false)
+        this.user.init_game(await this.user.open_game(Number(params.game_id)))
 
         await this.user.init_balance(this.api)
         this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
 
-        this.user.center_map = new LatLng(params.lat, params.lng)
-        this.map = L.map('map')
 
-        $$("Drop sur les coordonnées ", this.user.center_map)
-        await this.user.login(this, "You must be connected to drop any NFT", "", false)
+        if(params.lat==0 && params.lng==0){
+          this.random_location=true;
+        }else{
+          this.user.center_map = new LatLng(params.lat, params.lng)
+          this.map = L.map('map')
+          $$("Drop sur les coordonnées ", this.user.center_map)
+        }
+
+        if(params.hasOwnProperty("nft")){
+          let nft=await get_nft(params.nft,this.api,this.user.network)
+          this.diffusion=0
+          this.on_select(nft)
+        }
       }else{
         this.router.navigate(["games"])
       }
@@ -119,8 +128,8 @@ export class DropComponent implements AfterViewInit {
 
       if (this.random_location || this.diffusion > 0) {
         pos = new Point3D(0, 0, 0)
-        p1 = pos //new Point3D(this.user.game.ne.x,this.user.game.ne.y,this.user.game.ne.z)
-        p2 = pos //new Point3D(this.user.game.sw.x,this.user.game.sw.y,this.user.game.sw.z)
+        p1 = pos
+        p2 = pos
       }
 
       if (this.diffusion > 0) {
@@ -145,14 +154,13 @@ export class DropComponent implements AfterViewInit {
 
       let tokens = []
       if (this.lifepoint > 0) {
-
         tokens.push(TokenTransfer.fungibleFromAmount(token, this.lifepoint * this.quantity, 18))
         $$("Transfert de " + tokens[0].amount + " " + tokens[0].token)
       }
       tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier, this.sel_nft.nonce, this.quantity))
 
       try {
-        let gas_to_drop = environment.gaz_for_transaction + environment.gaz_by_nft * BigInt(this.quantity);
+        let gas_to_drop = environment.max_gaz //environment.gaz_for_transaction + environment.gaz_by_nft * BigInt(this.quantity);
         if(gas_to_drop>environment.max_gaz){
           showMessage(this,"Quantity is too high for one transaction")
           wait_message(this)
@@ -186,7 +194,7 @@ export class DropComponent implements AfterViewInit {
   }
 
 
-  on_select($event: any) {
+  async on_select($event: any) {
     $$("Selection du NFT ", $event)
     this.sel_nft = $event
     this.name = $event.name
@@ -194,18 +202,16 @@ export class DropComponent implements AfterViewInit {
     this.max_quantity = Math.min(this.sel_nft.balance, max_per_user)
 
     let pos = this.user.center_map
-    initializeMap(this, this.user.game, pos, 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
-      .on("zoomend", (event: L.LeafletEvent) => {
-        // let b=this.map.getBounds()
-        // let distance_in_meters=this.map.distance(b.getNorthWest(),b.getSouthEast())
-        // let distance_in_pixel=Math.sqrt(300*300+300+300)
-        // this.ech=distance_in_meters!=0 ? distance_in_pixel/distance_in_meters : 1
-        // this.max_distance=distance_in_meters
-      })
-    setTimeout(() => {
-      this.user.visibility = this.user.game!.min_visibility
-      this.map.setView(pos, this.user.zoom || 16);
-    }, 50)
+    if(this.map){
+      initializeMap(this, this.user.game, pos, 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+
+      setTimeout(() => {
+        add_icon(this.map,'https://tokemon.f80.fr/assets/icons/target.png',this.user.center_map,"dropping point")
+        this.user.visibility = this.user.game!.min_visibility
+        this.map.setView(pos, this.user.zoom || 16);
+      }, 50)
+    }
+
   }
 
 

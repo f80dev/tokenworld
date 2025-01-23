@@ -108,6 +108,7 @@ export class CreateWorldComponent implements OnInit {
     this.zone.zoom = this.map.getZoom()
     this.zone.NE = this.map.getBounds().getNorthEast()
     this.zone.SW = this.map.getBounds().getSouthWest()
+    $$("Mise a jour de la zone ",this.zone)
   }
 
 
@@ -141,20 +142,19 @@ export class CreateWorldComponent implements OnInit {
     try{
       $$("Initialisation de la carte avec ",this.zone)
       this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
-      initializeMap(this, this.zone, this.zone.center, "")
-        .on("moveend", (event: L.LeafletEvent) => {
-          this.update_zone()
-        })
-        .on("zoomend", (event: L.LeafletEvent) => {
-          this.update_zone()
-        })
-        .on("click", (event: any) => {
-          this.dropzone=event.latlng
-          if(this.to_add!=''){
-            this.drop_pt(this.to_add)
-          }
-        })
+      initializeMap(this, this.zone, this.zone.center, "");
+      if(this.map){
+        $$("Positionnement des evenements")
+        this.map
+          .on("moveend", (event: L.LeafletEvent) => {this.update_zone()})
+          .on("zoomend", (event: L.LeafletEvent) => {this.update_zone()})
+          .on("click", (event: any) => {
+            this.dropzone=event.latlng
+            if(this.to_add!=''){this.drop_pt(this.to_add)}
+          })
+      }
     }catch (e) {
+      $$("Error ",e)
     }
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()

@@ -811,7 +811,7 @@ export const abi={
         },
         {
           "name": "nonce",
-          "type": "List<u64>"
+          "type": "List<u32>"
         }
       ]
     },
@@ -853,7 +853,7 @@ export const abi={
         },
         {
           "name": "nonce",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "pv",
@@ -873,7 +873,7 @@ export const abi={
         },
         {
           "name": "amount",
-          "type": "u64"
+          "type": "BigUint"
         },
         {
           "name": "visibility",

@@ -103,8 +103,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       $$("Entrée dans "+this.user.game.title)
     }
 
-    let icon=this.user.game?.use_geoloc ? "https://tokemon.f80.fr/assets/icons/person.png" : "https://tokemon.f80.fr/assets/icons/target.png"
-    initializeMap(this,this.user.game,this.user.center_map,icon)
+
+    initializeMap(this,this.user.game,this.user.center_map,"https://tokemon.f80.fr/assets/icons/person.png")
     if(this.map){
       this.map
         .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map!.getZoom()})
@@ -164,7 +164,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
 
-
   async ngOnInit() {
     this.user.login(this)
     if(this.user && this.user.game){
@@ -183,7 +182,15 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async open_drop() {
     let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
-
+    if(this.user.game?.use_geoloc){
+      try{
+        this.user.center_map=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
+        this.map?.setView(this.user.center_map,this.user.zoom)
+      }catch (e) {
+        showMessage(this,"Localisation failed, drop cancel")
+        return
+      }
+    }
     let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
     if(message!=''){
       showMessage(this,message)
@@ -193,7 +200,10 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       var northEast = bounds.getNorthEast();
       var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
       let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,game_id:this.user.game!.id},"","")
-      this.router.navigate(["drop"],{queryParams:{p:position}})
+      setTimeout(()=>{
+        this.router.navigate(["drop"],{queryParams:{p:position}})
+      },200)
+
     }
   }
 

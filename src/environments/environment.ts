@@ -57,11 +57,11 @@ export const environment = {
     }
   },
 
-  scale_factor:100,
-  translate_factor:1000000000,
+  scale_factor:1,
+  translate_factor:500000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqwdg95xmtvg4dpm7ndpnvf7g8qmmcg6vk835sk68dmk",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqzgu7fy6tjwuryc3vzdjscvq0hcsq4tf6835s4h9nvr",
     "elrond-mainnet":""
   },
 
@@ -76,6 +76,5 @@ export const environment = {
   gaz_for_transaction:  200000000n,
   gaz_by_nft: 10000000n,
   max_gaz:    600000000n,
-  geoloc_interval: 10000,
-  accuracy_limit: 50
+  geoloc_interval: 20000
 }

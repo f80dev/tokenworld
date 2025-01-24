@@ -24,7 +24,7 @@
 
   <br>
 
-  <mat-slide-toggle *ngIf="sel_nft && message.length==0" (toggleChange)="diffusion=0;"
+  <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
                     [(ngModel)]="random_location">Everywhere in the game zone</mat-slide-toggle>
 
   <br>

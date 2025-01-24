@@ -89,6 +89,7 @@ export class UserService {
   geoloc(geolocService:any,marker:L.Marker | null=null,accuracy_limit=10000) : Promise<LatLng> {
     return new Promise(async (resolve, reject) => {
       try{
+        $$("Demande de localisation")
         let loc=await geolocService.getCurrentPosition()
         if(loc.coords.accuracy<accuracy_limit){
           this.loc=loc
@@ -235,6 +236,7 @@ export class UserService {
             let ne=cartesianToPolar(game.ne,environment.scale_factor,environment.translate_factor)
             let sw=cartesianToPolar(game.sw,environment.scale_factor,environment.translate_factor)
             game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
+            game.min_distance_to_refresh_map=Math.max(distance(ne,sw)/10000,20)
             rc.push(game)
           }
         }

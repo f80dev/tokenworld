@@ -74,7 +74,8 @@
       <br>
       <mat-expansion-panel class="panel">
         <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-        <mat-slide-toggle [(ngModel)]="use_geoloc">Use Geolocalisation</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="geoloc_to_drop">Geoloc to drop</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="geoloc_to_catch">Geoloc to catch</mat-slide-toggle>
         <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
         <br>
         <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
@@ -104,6 +105,7 @@
                    value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
 
         <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
+        <app-input label="Min distance for GPS location" help="" value_type="number" [value]="min_distance_for_gps" (valueChange)="min_distance_for_gps=$event"></app-input>
         <br>
         <app-input label="Initial HP for stacking"
                    style="width:90%;max-width: 100%;" value_type="slider"

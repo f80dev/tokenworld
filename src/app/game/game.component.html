@@ -1,7 +1,8 @@
 <div *ngIf="game" style="display: inline-block; ">
   <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
   Max HP/user: {{game!.max_per_user}}
-  <div *ngIf="game!.use_geoloc">Move by GPS</div>
+  <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
+  <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
   <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div>
   <br>
   <ng-content></ng-content>

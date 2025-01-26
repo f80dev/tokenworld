@@ -10,11 +10,11 @@ export const abi={
     },
     "contractCrate": {
       "name": "tokemonworld",
-      "version": "0.0.0"
+      "version": "0.0.1"
     },
     "framework": {
       "name": "multiversx-sc",
-      "version": "0.53.2"
+      "version": "0.56.0"
     }
   },
   "docs": [
@@ -26,10 +26,6 @@ export const abi={
       {
         "name": "fee",
         "type": "u64"
-      },
-      {
-        "name": "scale_factor",
-        "type": "u32"
       },
       {
         "name": "max_games_per_user",
@@ -116,7 +112,7 @@ export const abi={
         },
         {
           "name": "grid_size",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "quota",
@@ -124,51 +120,51 @@ export const abi={
         },
         {
           "name": "entrance_x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "entrance_y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "entrance_z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "exit_x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "exit_y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "exit_z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "ne_x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "ne_y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "ne_z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "sw_x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "sw_y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "sw_z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "move_min",
@@ -196,11 +192,11 @@ export const abi={
         },
         {
           "name": "min_pv",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "max_pv",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "max_per_user",
@@ -215,7 +211,11 @@ export const abi={
           "type": "u16"
         },
         {
-          "name": "use_geoloc",
+          "name": "geoloc_to_catch",
+          "type": "bool"
+        },
+        {
+          "name": "geoloc_to_drop",
           "type": "bool"
         },
         {
@@ -225,6 +225,10 @@ export const abi={
         {
           "name": "cost_to_move",
           "type": "u32"
+        },
+        {
+          "name": "gps_tolerance",
+          "type": "u16"
         }
       ],
       "outputs": [
@@ -262,21 +266,6 @@ export const abi={
       "outputs": []
     },
     {
-      "name": "add_user",
-      "mutability": "readonly",
-      "inputs": [
-        {
-          "name": "addr",
-          "type": "Address"
-        }
-      ],
-      "outputs": [
-        {
-          "type": "u32"
-        }
-      ]
-    },
-    {
       "name": "can_drop",
       "mutability": "readonly",
       "inputs": [
@@ -286,15 +275,15 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -331,19 +320,19 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "visibility",
-          "type": "u64"
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -400,15 +389,15 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "with_attack",
@@ -479,39 +468,39 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "x1",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y1",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z1",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "x2",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y2",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z2",
-          "type": "u64"
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -567,15 +556,15 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -634,7 +623,8 @@ export const abi={
       ],
       "outputs": [
         {
-          "type": "List<Tokemon>"
+          "type": "variadic<Tokemon>",
+          "multi_result": true
         }
       ]
     },
@@ -648,15 +638,15 @@ export const abi={
         },
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -718,7 +708,7 @@ export const abi={
         },
         {
           "name": "grid_size",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "quota",
@@ -731,10 +721,6 @@ export const abi={
         {
           "name": "exit",
           "type": "Point"
-        },
-        {
-          "name": "use_geoloc",
-          "type": "bool"
         },
         {
           "name": "url",
@@ -750,11 +736,11 @@ export const abi={
         },
         {
           "name": "min_pv",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "max_pv",
-          "type": "u16"
+          "type": "u32"
         },
         {
           "name": "max_player",
@@ -781,16 +767,28 @@ export const abi={
           "type": "BigUint"
         },
         {
-          "name": "closed",
-          "type": "bool"
-        },
-        {
           "name": "max_per_user",
           "type": "u16"
         },
         {
           "name": "tokemon_view",
           "type": "bool"
+        },
+        {
+          "name": "closed",
+          "type": "bool"
+        },
+        {
+          "name": "geoloc_to_drop",
+          "type": "bool"
+        },
+        {
+          "name": "geoloc_to_catch",
+          "type": "bool"
+        },
+        {
+          "name": "gps_tolerance",
+          "type": "u16"
         }
       ]
     },
@@ -820,15 +818,15 @@ export const abi={
       "fields": [
         {
           "name": "x",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "y",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "z",
-          "type": "u64"
+          "type": "u32"
         }
       ]
     },
@@ -864,7 +862,7 @@ export const abi={
           "type": "Point"
         },
         {
-          "name": "mode",
+          "name": "state",
           "type": "u8"
         },
         {

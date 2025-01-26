@@ -55,7 +55,8 @@ export class Game {
   min_distance=10
   max_distance=100
   n_degrees=8
-  use_geoloc=false
+  geoloc_to_drop=false
+  geoloc_to_catch=false
   owner: number=0
   tokemon_view=true
   n_players=0
@@ -65,6 +66,8 @@ export class Game {
   previews:string[]=[]
   closed:boolean=false
   bbox:string=""
+  gps_tolerance=100
+  min_distance_to_refresh_map=50
 }
 
 

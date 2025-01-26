@@ -121,7 +121,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         })
     }
 
-    if(this.user.game?.use_geoloc){
+    if(this.user.game?.geoloc_to_drop){
       await this.user.geoloc(this.geolocService,this.me_marker)
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     } else {
@@ -136,14 +136,19 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   async refresh_geoloc(){
     try{
-      let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
-      if(distance(new_pos,this.old_pos)>10){
+      let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game!.gps_tolerance)
+      if(distance(new_pos,this.old_pos)>this.user.game!.min_distance_to_refresh_map){
+        $$("Refresh car distance parcouru supérieure à ",this.user.game!.min_distance_to_refresh_map)
         this.old_pos=new_pos
         this.refresh()
-
         this.me_marker!.addTo(this.map!)
       }
     }catch (e:any){
+      if(this.old_pos.lat==0 && this.old_pos.lng==0){
+        this.remove_markers_from_map()
+        this.old_pos=new LatLng(0,0)
+      }
+      $$("Précision insuffisante")
       this.me_marker!.removeFrom(this.map!)
     }
   }
@@ -182,11 +187,12 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async open_drop() {
     let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
-    if(this.user.game?.use_geoloc){
+    if(this.user.game?.geoloc_to_drop){
       try{
-        this.user.center_map=await this.user.geoloc(this.geolocService,this.me_marker,environment.accuracy_limit)
+        this.user.center_map=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game.gps_tolerance)
         this.map?.setView(this.user.center_map,this.user.zoom)
       }catch (e) {
+        $$("Impossible de drop par manque de précision du GPS")
         showMessage(this,"Localisation failed, drop cancel")
         return
       }
@@ -241,16 +247,26 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
-  async add_tokemon_to_markers() {
+  async add_tokemon_to_markers(center:LatLng) {
     return new Promise(async (resolve,reject) => {
 
-      if(this.user.center_map && this.user.game) {
+      if(this.user.game) {
 
         this.remove_markers_from_map()
         this.markers=[]
 
-        let pos = polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
-        if(this.user.game.use_geoloc)pos=polarToCartesian(await this.user.geoloc(this.geolocService),environment.scale_factor,environment.translate_factor)
+        let pos = polarToCartesian(center,environment.scale_factor,environment.translate_factor)
+        // if(this.user.game.geoloc_to_catch){
+        //   try{
+        //     let polar_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game.gps_tolerance)
+        //     pos=polarToCartesian(polar_pos,environment.scale_factor,environment.translate_factor)
+        //   }catch (e){
+        //     $$("Impossible de montre les tokemons par manque de précision GPS")
+        //     showMessage(this,"GPS position unavailable")
+        //     return
+        //   }
+        //
+        // }
         $$("Evaluation de la position de reference ",pos)
 
         if(this.user.game.tokemon_view){
@@ -322,17 +338,18 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
-  async refresh() {
+  async refresh(center: LatLng | null=null) {
     if(this.map){
+      if(!center){center=this.map.getCenter();}
       this.user.zone={
         NE: this.map.getBounds().getNorthEast(),
         SW: this.map.getBounds().getSouthWest(),
         entrance:new Point3D(0,0,0),
         exit: new Point3D(0,0,0),
         zoom:this.map.getZoom(),
-        center:this.map.getCenter()
+        center:center
       }
-      await this.add_tokemon_to_markers()
+      await this.add_tokemon_to_markers(center)
       this.layer?.redraw()
     }
 
@@ -354,7 +371,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async recenter() {
-    if(!this.user.game?.use_geoloc){
+    if(!this.user.game?.geoloc_to_catch && !this.user.game?.geoloc_to_drop ){
       showMessage(this,"Map on the gaming zone")
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
@@ -377,7 +394,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async moveto() {
     try{
       let r="0"
-      if(!this.user.game?.use_geoloc){
+      if(!this.user.game?.geoloc_to_catch){
         let _default=this.user.center_map ? this.user.center_map.lat+","+this.user.center_map.lng : ""
         r=await _prompt(this,"Se déplacer loin",_default,"Enter your GPS coordinates","text","Déplacer","Annuler",false)
       }

@@ -98,7 +98,7 @@ export class CreateWorldComponent implements OnInit {
   min_pv: number=0
   max_pv: number=100
   hp_balance=0
-  use_geoloc=false;
+
   max_per_user: number = 30;
   tokemon_vision: boolean=true;
   to_add=""
@@ -213,7 +213,13 @@ export class CreateWorldComponent implements OnInit {
       this.min_pv,this.max_pv,this.max_per_user,
       this.max_player,
       this.turns,
-      this.use_geoloc,this.tokemon_vision,this.cost_to_move
+
+      this.geoloc_to_catch,
+      this.geoloc_to_drop,
+      this.tokemon_vision,
+
+      this.cost_to_move,
+      this.min_distance_for_gps
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
@@ -225,6 +231,7 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
       }else{
         if(this.lifepoint>0){
+          debugger
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
           rc=await send_transaction_with_transfers(this.user.provider,"fund_game",[rc.result],this.user,tokens)
         }
@@ -271,6 +278,9 @@ export class CreateWorldComponent implements OnInit {
     this.to_add=""
   }
 
+
+
+
   remove_gate() {
     this.zone.entrance=new Point3D(0,0,0)
     this.zone.exit=new Point3D(0,0,0)
@@ -294,6 +304,10 @@ export class CreateWorldComponent implements OnInit {
   protected readonly Math = Math;
   cost_to_move: number=0
   link_to_share: string = "";
+  min_distance_for_gps=50
+  geoloc_to_drop=false
+  geoloc_to_catch=false
+
 
   share() {
     this.clipboard.copy(share_game(this.created_game!,"Catch some NFT in my gaming zone"))

@@ -72,65 +72,70 @@
       <!--          </tr>-->
       <!--        </table>-->
       <br>
-      <mat-expansion-panel class="panel">
-        <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-        <mat-slide-toggle [(ngModel)]="geoloc_to_drop">Geoloc to drop</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="geoloc_to_catch">Geoloc to catch</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+      <mat-accordion>
+        <mat-expansion-panel class="panel">
+          <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_drop">Geoloc to drop</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_catch">Geoloc to catch</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+          <br>
+          <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
+          <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
+          <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+
+          <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
+
+
+          <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
+          <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
+          <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
+
+
+        </mat-expansion-panel>
+
+
         <br>
-        <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
-        <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
-        <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+        <mat-expansion-panel class="panel">
+          <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
+          <mat-slide-toggle [(ngModel)]="user_visibility">User set visibility</mat-slide-toggle><br>
 
-        <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
+          <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
+          <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
 
+          <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
+          <app-input label="Cost to move" help=""
+                     unity="PV/km"
+                     value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
 
-        <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-        <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
-        <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
-
-
-      </mat-expansion-panel>
-
-
-      <br>
-      <mat-expansion-panel class="panel">
-        <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
-        <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
-        <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
-
-        <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
-        <app-input label="Cost to move" help=""
-                   unity="PV/km"
-                   value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
-
-        <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
-        <app-input label="Min distance for GPS location" help="" value_type="number" [value]="min_distance_for_gps" (valueChange)="min_distance_for_gps=$event"></app-input>
-        <br>
-        <app-input label="Initial HP for stacking"
-                   style="width:90%;max-width: 100%;" value_type="slider"
-                   [min]="0" [max]="Math.min(hp_balance,100000)" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
+          <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
+          <app-input label="Min distance for GPS location" help="" value_type="number" [value]="min_distance_for_gps" (valueChange)="min_distance_for_gps=$event"></app-input>
+          <br>
+          <app-input label="Initial HP for stacking"
+                     style="width:90%;max-width: 100%;" value_type="slider"
+                     [min]="0" [max]="Math.min(hp_balance,100000)" [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
 
 
-        <!--      <mat-tab-group>-->
-        <!--        <mat-tab label="YAML">-->
-        <!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
-        <!--          </div>-->
-        <!--          <br>-->
-        <!--          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>-->
+          <!--      <mat-tab-group>-->
+          <!--        <mat-tab label="YAML">-->
+          <!--          <div class="code_yaml" [innerHTML]="yaml_content">-->
+          <!--          </div>-->
+          <!--          <br>-->
+          <!--          <button mat-raised-button (click)="copy(yaml_content)">Copy YAML</button>-->
 
-        <!--        </mat-tab>-->
-        <!--        <mat-tab label="Command line">-->
-        <!--          <div class="code_yaml" [innerHTML]="script_content">-->
-        <!--          </div>-->
-        <!--          <br>-->
-        <!--          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>-->
+          <!--        </mat-tab>-->
+          <!--        <mat-tab label="Command line">-->
+          <!--          <div class="code_yaml" [innerHTML]="script_content">-->
+          <!--          </div>-->
+          <!--          <br>-->
+          <!--          <button mat-raised-button (click)="copy(script_content)">Copy Script</button>-->
 
-        <!--        </mat-tab>-->
-        <!--      </mat-tab-group>-->
+          <!--        </mat-tab>-->
+          <!--      </mat-tab-group>-->
 
 
-      </mat-expansion-panel>
+        </mat-expansion-panel>
+      </mat-accordion>
+
     </div>
 
   </div>

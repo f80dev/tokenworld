@@ -46,6 +46,8 @@ export class DropComponent implements AfterViewInit {
 
   lifepoint: number = 0;
   name = "";
+  ech: number=1
+
 
   api = inject(ApiService)
   routes = inject(ActivatedRoute)
@@ -77,6 +79,7 @@ export class DropComponent implements AfterViewInit {
         await this.user.login(this, "You must be connected to drop any NFT", "", false)
         this.user.init_game(await this.user.open_game(Number(params.game_id)))
 
+        this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
         await this.user.init_balance(this.api)
         this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
 
@@ -109,6 +112,7 @@ export class DropComponent implements AfterViewInit {
         showMessage(this, "3 characters required for the name")
         return
       }
+
       this.visibility = Math.max(this.visibility, Number(this.user.game.min_visibility))
       this.visibility = Math.min(this.visibility, Number(this.user.game.max_visibility))
 
@@ -144,8 +148,11 @@ export class DropComponent implements AfterViewInit {
         )
       }
 
-      let visibility = Math.round((Number(this.user.game.min_visibility) + Number(this.user.game.max_visibility)) / 2)
-      let args = [this.user.game.id, this.name, visibility, pos.x, pos.y, pos.z, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z]
+      if(!this.user.game.user_visibility){
+        this.visibility= Math.round((Number(this.user.game.min_visibility) + Number(this.user.game.max_visibility)) / 2)
+      }
+
+      let args = [this.user.game.id, this.name,this.visibility*environment.scale_factor, pos.x, pos.y, pos.z, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z]
       $$("drop de " + this.name + " de visibilité " + this.user.visibility + " à la position ", pos)
       $$("Zone NE ", p1)
       $$("Zone SW ", p2)
@@ -252,4 +259,14 @@ export class DropComponent implements AfterViewInit {
     }
   }
 
+  check_visibility() {
+    if(this.user.game){
+      if(this.visibility>Number(this.user.game?.max_visibility) || this.visibility<Number(this.user.game?.min_visibility)){
+        this.visibility=(Number(this.user.game.min_visibility)+Number(this.user.game.max_visibility))/2
+        showMessage(this,"visibility must be set between "+this.user.game?.min_visibility+" and "+this.user.game?.max_visibility+" meters")
+      }
+    }
+  }
+
+  protected readonly environment = environment;
 }

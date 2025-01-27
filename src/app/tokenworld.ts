@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
 import {$$, setParams} from '../tools';
+import {ApiService} from './api.service';
 
 export class Tokemon {
   id: number = 0;
@@ -57,6 +58,7 @@ export class Game {
   n_degrees=8
   geoloc_to_drop=false
   geoloc_to_catch=false
+  user_visibility=true
   owner: number=0
   tokemon_view=true
   n_players=0
@@ -215,7 +217,26 @@ export function initializeMap(vm:any,zone:any,
   return vm.map
 }
 
-export function share_game(game:Game,message="") : string {
-  let params = {autoconnect: true, game: game.id, message: message}
-  return environment.appli + "/intro/?" + setParams(params)
+export function share_game(api:ApiService,game:Game,message="") : Promise<string> {
+  return new Promise((resolve, reject) => {
+    let params = {autoconnect: true, game: game.id, message: message}
+    let url="https://is.gd/create.php?format=simple&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
+    api._get(url).subscribe({
+      next:(r:any)=> {
+        $$("Récupération de l'url de partage de la game")
+        resolve(r);
+        },
+      error:(err:any)=>{
+        $$("Error de raccourcissement ",err)
+        reject(err)
+      }
+    })
+  })
+}
+
+export function is_in(pt:LatLng,zone:Game) : boolean {
+  let ne=cartesianToPolar(zone.ne,environment.scale_factor,environment.translate_factor)
+  let sw=cartesianToPolar(zone.sw,environment.scale_factor,environment.translate_factor)
+
+  return pt.lat>Math.min(ne.lat,sw.lat) && pt.lng>Math.min(ne.lng,sw.lng) && pt.lat<Math.max(ne.lat,sw.lat) && pt.lng<Math.max(ne.lng,sw.lng)
 }

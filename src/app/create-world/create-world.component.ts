@@ -1,5 +1,5 @@
 import { Component, inject, OnInit} from '@angular/core';
-import {MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {DecimalPipe, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
@@ -49,7 +49,8 @@ import {DeviceService} from '../device.service';
     MatSlideToggle,
     FormsModule,
     TutoComponent,
-    MatIcon
+    MatIcon,
+    MatAccordion
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -209,7 +210,8 @@ export class CreateWorldComponent implements OnInit {
       this.min_distance*environment.scale_factor, this.max_distance*environment.scale_factor,this.n_degrees,
 
       "map",
-      this.min_visibility*environment.scale_factor,this.max_visibility*environment.scale_factor,
+
+      this.min_visibility*environment.scale_factor, this.max_visibility*environment.scale_factor,
       this.min_pv,this.max_pv,this.max_per_user,
       this.max_player,
       this.turns,
@@ -217,6 +219,7 @@ export class CreateWorldComponent implements OnInit {
       this.geoloc_to_catch,
       this.geoloc_to_drop,
       this.tokemon_vision,
+      this.user_visibility,
 
       this.cost_to_move,
       this.min_distance_for_gps
@@ -238,7 +241,7 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
         let games=await this.user.extract_games()
         this.created_game=games[games.length-1]
-        this.link_to_share=share_game(this.created_game,"Join my game to find NFT")
+        this.link_to_share=await share_game(this.api,this.created_game,"Join my game to find NFT with Tokemon World")
       }
     } catch (e:any) {
       wait_message(this)
@@ -307,10 +310,11 @@ export class CreateWorldComponent implements OnInit {
   min_distance_for_gps=50
   geoloc_to_drop=false
   geoloc_to_catch=false
+  user_visibility: boolean = true;
 
 
-  share() {
-    this.clipboard.copy(share_game(this.created_game!,"Catch some NFT in my gaming zone"))
+  async share() {
+    this.clipboard.copy(await share_game(this.api,this.created_game!,"Catch some NFT in my gaming zone"))
     showMessage(this,"Link in your clipboard")
   }
 }

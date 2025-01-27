@@ -10,7 +10,16 @@ import {
 import {$$, setParams, showError, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, center_of, distance, initializeMap, Point3D, polarToCartesian, Tokemon} from '../tokenworld';
+import {
+  cartesianToPolar,
+  center_of,
+  distance,
+  initializeMap,
+  is_in,
+  Point3D,
+  polarToCartesian,
+  Tokemon
+} from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -122,13 +131,15 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     }
 
     if(this.user.game?.geoloc_to_drop){
+      $$("La partie utilise la géoloc donc on centre la carte sur la geoloc")
       await this.user.geoloc(this.geolocService,this.me_marker)
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     } else {
-      this.user.center_map=
-        localStorage.getItem("last_position_lat")
-          ? new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
-          : cartesianToPolar(center_of(this.user.game!.ne,this.user.game!.sw))
+      $$("La partie ne repose pas sur la géoloc donc on se positionne sur la derniere position si elle est dans la partie")
+      this.user.center_map=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+      if(!is_in(this.user.center_map,this.user.game!)) {
+        this.recenter()
+      }
     }
 
     this.map!.setView(this.user.center_map,zoom);

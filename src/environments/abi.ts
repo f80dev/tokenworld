@@ -223,6 +223,10 @@ export const abi={
           "type": "bool"
         },
         {
+          "name": "user_visibility",
+          "type": "bool"
+        },
+        {
           "name": "cost_to_move",
           "type": "u32"
         },
@@ -784,6 +788,10 @@ export const abi={
         },
         {
           "name": "geoloc_to_catch",
+          "type": "bool"
+        },
+        {
+          "name": "user_visibility",
           "type": "bool"
         },
         {

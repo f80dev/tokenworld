@@ -43,20 +43,18 @@ export class SettingsComponent implements OnInit {
   router=inject(Router)
   user=inject(UserService)
   dialog=inject(MatDialog)
-
   api=inject(ApiService)
   sel_to_reload: any;
   max_pv_loading: number=0
   lifepoint: number=1
   message: string=""
   sc_settings: any
-
   tokemons: Tokemon[] = [];
 
 
   async refresh(){
     this.tokemons=[]
-    let rc:any=await this.user.query("show_all_my_nfts",[this.user.game!.id,this.user.address])
+    let rc:any=await this.user.query("show_all_my_nfts",[0,this.user.address])
     for(let tokemon of rc){
       let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
       tokemon.content=await get_nft(identifier,this.api,this.user.network)
@@ -81,9 +79,13 @@ export class SettingsComponent implements OnInit {
   }
 
 
+
+
   open_reload(nft: any) {
     this.sel_to_reload=nft
   }
+
+
 
 
 
@@ -103,11 +105,14 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+
+
+
   on_select($event: any) {
     if(this.user.game){
       let obj={game_id:this.user.game.id,lat:0,lng:0,nft:$event.identifier}
       this.router.navigate(["drop"],{queryParams:{p:setParams(obj,"","")}})
     }
-
   }
+
 }

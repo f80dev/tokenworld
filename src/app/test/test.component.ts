@@ -27,18 +27,17 @@ export class TestComponent implements OnInit {
 
 
   user=inject(UserService)
-
-
-
-
-
+  api=inject(ApiService)
+  url: string=""
 
 
   async ngOnInit() {
-    this.user.network="devnet"
-    let config=await network_config()
-    $$("Config ",config)
+    debugger
+    this.api._get("https://is.gd/create.php","format=simple&url=www.example.com").subscribe((res:any)=>{
+      debugger
+      this.url=res.url
+    })
   }
 
-  api=inject(ApiService)
+
 }

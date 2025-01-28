@@ -10,14 +10,21 @@ table {
   margin: 10px;
 }
 
+button {
+  width: 150px;
+}
+
 mat-expansion-panel {
   width:94%;
-  padding: 10px;
-  margin: 3%;
+  display: inline-block;
+  max-width: 1000px;
+  margin: 2%;
   margin-top: 5px;
   margin-bottom: 10px;
 }
 
 mat-expansion-panel-header {
-  font-size: xx-large;
+  font-size: large;
+  height: 55px !important;
+  display: flex;
 }

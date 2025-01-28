@@ -226,7 +226,7 @@ export function initializeMap(vm:any,zone:any,
 
 
 export async function share_game(vm:any,game: any,default_message="") {
-  let message = await _prompt(vm, "Write a introduction message for the players",
+  let message = await _prompt(vm, "Write an introduction message for the players",
     default_message, "", "memo", "Share", "Cancel", false)
   if (message != "") {
     let params = {autoconnect: true, game: game.id, message: message}

@@ -4,9 +4,10 @@ import {environment} from '../environments/environment';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
-import {$$, setParams} from '../tools';
+import {$$, setParams, showMessage} from '../tools';
 import {ApiService} from './api.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {_prompt} from './prompt/prompt.component';
 
 export class Tokemon {
   id: number = 0;
@@ -171,6 +172,8 @@ export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),
   }).addTo(map)
 }
 
+
+
 export async function hashMessage(message: string) {
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -195,6 +198,8 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://toke
   }
 }
 
+
+
 export function initializeMap(vm:any,zone:any,
                               center:LatLng=new LatLng(0,0),
                               centerIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
@@ -218,11 +223,28 @@ export function initializeMap(vm:any,zone:any,
   return vm.map
 }
 
-export function share_game(game:Game,message="") : Promise<string> {
-  return new Promise(async (resolve, reject) => {
+
+
+export async function share_game(vm:any,game: any,default_message="") {
+  let message = await _prompt(vm, "Write a introduction message for the players",
+    default_message, "", "memo", "Share", "Cancel", false)
+  if (message != "") {
     let params = {autoconnect: true, game: game.id, message: message}
-    let url="https://is.gd/create.php?format=json&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
-    $$("Appel de "+url+" pour raccourcir https://localhost:4200/intro/?" + setParams(params))
+    $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
+    let short_url=await url_shorter( environment.appli + "/intro/?" + setParams(params),message)
+    await vm.ngNavigatorShareService.share({
+      title: "Join me in "+game.title+" gaming zone",
+      text: message,
+      url: short_url
+    })
+    showMessage(vm, "Link in clipboard")
+  }
+}
+
+
+export function url_shorter(url_to_short:string,message="") : Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    let url="https://is.gd/create.php?format=json&url="+encodeURIComponent(url_to_short)
     let r=await fetch(url,{mode:'cors'});
     let resp:any=await r.json()
     $$("Récupération de l'url de partage de la game ",resp)

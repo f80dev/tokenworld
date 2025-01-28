@@ -11,13 +11,21 @@
 
   <mat-accordion *ngIf="message.length==0">
     <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
-      <mat-expansion-panel-header>{{game.title}}</mat-expansion-panel-header>
+      <mat-expansion-panel-header style="height:35px;">
+
+          <mat-icon *ngIf="!game.closed" (click)="select(game)"
+                    title="Play to this game"
+                    class="icon-button"
+                    style="font-size: x-large;margin-top: -6px;margin-left: -8px;margin-right: 10px;">play_circle</mat-icon>
+
+        {{game.title}}
+
+      </mat-expansion-panel-header>
       <table style="width: 100%;" >
         <tr>
           <th></th>
           <th>In game</th>
           <th *ngIf="user.isConnected(true)">As master</th>
-          <th>Command</th>
         </tr>
 
         <tr>
@@ -47,11 +55,7 @@
 
           </td>
           <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
-            <button mat-raised-button title="Select this game" class="color-warm mat-headline-5" *ngIf="!game.closed" (click)="select(game)" color="PLAY">
-              <mat-icon>play</mat-icon>Enter
-            </button>
 
-            <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
           </td>
         </tr>
       </table>

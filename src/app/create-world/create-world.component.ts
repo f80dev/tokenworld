@@ -32,6 +32,7 @@ import {TutoComponent} from '../tuto/tuto.component';
 import {MatIcon} from '@angular/material/icon';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
+import {NgNavigatorShareService} from 'ng-navigator-share';
 
 @Component({
   selector: 'app-create-world',
@@ -62,6 +63,7 @@ export class CreateWorldComponent implements OnInit {
   user=inject(UserService)
   router=inject(Router)
   geolocService=inject(GeolocService)
+  navigatorShareService=inject(NgNavigatorShareService)
   dialog=inject(MatDialog)
   api=inject(ApiService)
   device=inject(DeviceService)
@@ -101,7 +103,7 @@ export class CreateWorldComponent implements OnInit {
   hp_balance=0
 
   max_per_user: number = 30;
-  tokemon_vision: boolean=true;
+  tokemon_vision: boolean=false;
   to_add=""
    created_game: Game | null=null
 
@@ -241,7 +243,6 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
         let games=await this.user.extract_games()
         this.created_game=games[games.length-1]
-        this.link_to_share=await share_game(this.created_game,"Join my game to find NFT with Tokemon World")
       }
     } catch (e:any) {
       wait_message(this)
@@ -307,12 +308,11 @@ export class CreateWorldComponent implements OnInit {
   link_to_share: string = "";
   min_distance_for_gps=50
   geoloc_to_drop=false
-  geoloc_to_catch=false
-  user_visibility: boolean = true;
+  geoloc_to_catch=true
+  user_visibility: boolean = true
 
 
   async share() {
-    this.clipboard.copy(await share_game(this.created_game!,"Catch some NFT in my gaming zone"))
-    showMessage(this,"Link in your clipboard")
+    share_game(this,this.created_game,"Join my game to find NFT with Tokemon World")
   }
 }

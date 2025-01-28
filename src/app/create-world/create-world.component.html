@@ -20,11 +20,14 @@
 
     <table><tr style="width: 100%;">
       <td style="text-align: right;width:50%;">
-        <app-input label="Game's title" value_type="text" style="display: inline-block;"
+        <app-input label="Game's title" value_type="text" style="display: inline-block;min-width:200px;"
                    [value]="title" (valueChange)="title=$event"></app-input>
       </td>
       <td style="text-align: left;">
-        <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+        <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;font-size: large;" (click)="create_game()">
+          <mat-icon>build</mat-icon>
+          Build your world
+        </button>
       </td>
     </tr></table>
 
@@ -83,8 +86,8 @@
       <mat-accordion>
         <mat-expansion-panel class="panel">
           <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_drop">Geoloc to drop</mat-slide-toggle>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_catch">Geoloc to catch</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_drop" title="Player can drop tokemon only at real location">Geoloc to drop</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_catch" title="Player can catch tokemon around their real location">Geoloc to catch</mat-slide-toggle>
           <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
           <br>
           <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>

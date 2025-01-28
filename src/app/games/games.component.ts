@@ -128,23 +128,7 @@ export class GamesComponent implements OnInit {
   }
 
   async share_map(game: any) {
-    let message = await _prompt(this, "Write a introduction message for the players",
-      "Catch some NFT around you with this game", "", "memo", "Share", "Cancel", false)
-    if (message != "") {
-      let short_url=await share_game(game,message)
-      this.clipboard.copy(short_url)
-      this.ngNavigatorShareService.share({
-        title: "Join me in "+game.title+" gaming zone",
-        text: message,
-        url: short_url
-      })
-        .then( (response) => {console.log(response);},()=>{
-        })
-        .catch( (error) => {
-        });
-      showMessage(this, "Link in clipboard")
-    }
-
+    await share_game(this,game)
   }
 
   create_game() {

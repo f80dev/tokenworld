@@ -3,6 +3,12 @@
     <mat-icon>map</mat-icon>
     See map
   </button>
+  <button mat-raised-button (click)="share_map(game)"   title="See the zone on a map">
+    <mat-icon>share</mat-icon>
+    Invite player
+  </button>
+
+  <br>
   <br>
 
   Max HP/user: {{game!.max_per_user}}<br>

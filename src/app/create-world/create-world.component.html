@@ -31,14 +31,22 @@
     <button mat-raised-button (click)="to_add='entrance'" *ngIf="zone.entrance && zone.entrance.x==0">
       Add entrance
     </button>
+
+    <button mat-raised-button
+            *ngIf="zone && zone.entrance && (zone.entrance!.x!=0 || zone.entrance!.y!=0)" (click)="remove_entrance()">
+      Remove Entrance
+    </button>
+
     <button mat-raised-button (click)="to_add='exit'" *ngIf="zone.exit && zone.exit.x==0">
       Add exit
     </button>
 
     <button mat-raised-button
-            *ngIf="zone && zone.entranc && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
-      Remove Gates
+            *ngIf="zone && zone.exit && (zone.exit!.x!=0 || zone.exit!.y!=0)" (click)="remove_exit()">
+      Remove Exit
     </button>
+
+
     <br>
 
 

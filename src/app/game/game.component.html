@@ -1,12 +1,28 @@
-<div *ngIf="game" style="display: inline-block; ">
-  <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
-  Max HP/user: {{game!.max_per_user}}
+<div *ngIf="game" style="display: inline-block;font-size: small;">
+  <button mat-raised-button (click)="see_map(game)"  title="See the zone on a map">
+    <mat-icon>map</mat-icon>
+    See map
+  </button>
+  <br>
+
+  Max HP/user: {{game!.max_per_user}}<br>
+
+
   <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
   <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
-  <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div>
-  <mat-expansion-panel>
+  <br>
+
+  <mat-expansion-panel style="max-width: 350px;">
     <mat-expansion-panel-header>Details</mat-expansion-panel-header>
-    Visibility : {{game!.min_visibility/environment.scale_factor}} and {{game!.min_visibility/environment.scale_factor}}
+    <div style="font-size: small;">
+      <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div><br>
+
+      <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
+
+      Visibility : {{game!.min_visibility/environment.scale_factor}} and {{game!.max_visibility/environment.scale_factor}}<br>
+      Move : {{game!.min_distance/environment.scale_factor}} and {{game!.max_distance/environment.scale_factor}}
+    </div>
+
   </mat-expansion-panel>
   <br>
   <ng-content></ng-content>

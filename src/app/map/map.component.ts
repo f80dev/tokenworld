@@ -78,6 +78,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   map_left=0
   map_top=0
+  show_help=false
   selected_marker: L.Marker | null=null
   selected_tokemon: any | null = null
   to_attack: any | null = null
@@ -86,6 +87,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   message: string=""
   old_pos: LatLng = new LatLng(0,0)
   last_tokemon_list: any[]=[]
+  help_message: string=""
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -145,22 +147,26 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     this.map!.setView(this.user.center_map,zoom);
   }
 
+
+
   async refresh_geoloc(){
-    try{
-      let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game!.gps_tolerance)
-      if(distance(new_pos,this.old_pos)>this.user.game!.min_distance_to_refresh_map){
-        $$("Refresh car distance parcouru supérieure à ",this.user.game!.min_distance_to_refresh_map)
-        this.old_pos=new_pos
-        this.refresh()
-        this.me_marker!.addTo(this.map!)
+    if(this.user.game && this.user.game?.geoloc_to_catch){
+      try{
+        let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game!.gps_tolerance)
+        if(distance(new_pos,this.old_pos)>this.user.game!.min_distance_to_refresh_map){
+          $$("Refresh car distance parcouru supérieure à ",this.user.game!.min_distance_to_refresh_map)
+          this.old_pos=new_pos
+          this.refresh()
+          this.me_marker!.addTo(this.map!)
+        }
+      }catch (e:any){
+        if(this.old_pos.lat==0 && this.old_pos.lng==0){
+          this.remove_markers_from_map()
+          this.old_pos=new LatLng(0,0)
+        }
+        $$("Précision insuffisante")
+        this.me_marker!.removeFrom(this.map!)
       }
-    }catch (e:any){
-      if(this.old_pos.lat==0 && this.old_pos.lng==0){
-        this.remove_markers_from_map()
-        this.old_pos=new LatLng(0,0)
-      }
-      $$("Précision insuffisante")
-      this.me_marker!.removeFrom(this.map!)
     }
   }
 
@@ -267,27 +273,20 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         this.markers=[]
 
         let pos = polarToCartesian(center,environment.scale_factor,environment.translate_factor)
-        // if(this.user.game.geoloc_to_catch){
-        //   try{
-        //     let polar_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game.gps_tolerance)
-        //     pos=polarToCartesian(polar_pos,environment.scale_factor,environment.translate_factor)
-        //   }catch (e){
-        //     $$("Impossible de montre les tokemons par manque de précision GPS")
-        //     showMessage(this,"GPS position unavailable")
-        //     return
-        //   }
-        //
-        // }
         $$("Evaluation de la position de reference ",pos)
 
         if(this.user.game.tokemon_view){
           let args = [this.user.game.id,this.user.address]
           $$("Chargement des tokemons vu par les tokemons de l'utilisateur ",args)
           this.user.tokemons = await this.user.query("show_tokemon_by_tokemon",  args);
+          if(this.user.tokemons.length==0)this.help_message="Drop some tokemons to see other tokemons"
         }else{
           let args = [this.user.game.id, pos.x, pos.y,pos.z]
           $$("Chargement des tokemons autour de la position de reference ",args)
           this.user.tokemons = await this.user.query("show_nfts",  args);
+          if(this.user.tokemons.length==0){
+            this.help_message=this.user.game.geoloc_to_catch ? "Move to find some tokemons in the games" : "Move the target to find some tokemons"
+          }
         }
 
         if(this.user.tokemons.length>this.last_tokemon_list.length){

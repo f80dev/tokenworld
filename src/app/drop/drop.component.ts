@@ -113,8 +113,6 @@ export class DropComponent implements AfterViewInit {
         return
       }
 
-      this.visibility = Math.max(this.visibility, Number(this.user.game.min_visibility))
-      this.visibility = Math.min(this.visibility, Number(this.user.game.max_visibility))
 
       await this.user.login(this, "You must be connected to drop any NFT", "", true)
       //$$("Authentification ",this.user.provider)
@@ -251,6 +249,16 @@ export class DropComponent implements AfterViewInit {
     open(eval_direct_url_xportal(this.user.provider.uri))
   }
 
+  update_occurence(){
+    if(this.user.game){
+      debugger
+      if(this.quantity>this.user.game.max_per_user || this.quantity>this.sel_nft.quantity){
+        showMessage(this,'Quantity is too high')
+        this.quantity=1
+      }
+    }
+  }
+
   update_nfts($event: any) {
     this.nfts = $event
     if (this.nfts.length == 0 && !this.user.strong) {
@@ -261,8 +269,8 @@ export class DropComponent implements AfterViewInit {
 
   check_visibility() {
     if(this.user.game){
-      if(this.visibility>Number(this.user.game?.max_visibility) || this.visibility<Number(this.user.game?.min_visibility)){
-        this.visibility=(Number(this.user.game.min_visibility)+Number(this.user.game.max_visibility))/2
+      if(this.visibility>Number(this.user.game?.max_visibility)/environment.scale_factor || this.visibility<Number(this.user.game?.min_visibility)/environment.scale_factor){
+        this.visibility=(Number(this.user.game.min_visibility)+Number(this.user.game.max_visibility))/environment.scale_factor/2
         showMessage(this,"visibility must be set between "+this.user.game?.min_visibility+" and "+this.user.game?.max_visibility+" meters")
       }
     }

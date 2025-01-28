@@ -221,12 +221,12 @@ export function initializeMap(vm:any,zone:any,
 export function share_game(game:Game,message="") : Promise<string> {
   return new Promise(async (resolve, reject) => {
     let params = {autoconnect: true, game: game.id, message: message}
-    let url="https://is.gd/create.php?format=simple&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
-    $$("Appel de "+url)
-    let r=await fetch(url,{mode:'no-cors'});
-    let short_url=await r.text()
-    $$("Récupération de l'url de partage de la game "+short_url)
-    resolve(short_url);
+    let url="https://is.gd/create.php?format=json&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
+    $$("Appel de "+url+" pour raccourcir https://localhost:4200/intro/?" + setParams(params))
+    let r=await fetch(url,{mode:'cors'});
+    let resp:any=await r.json()
+    $$("Récupération de l'url de partage de la game ",resp)
+    resolve(resp.shorturl);
     })
 }
 

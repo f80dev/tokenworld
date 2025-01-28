@@ -102,9 +102,6 @@ export class GamesComponent implements OnInit {
     this.quit()
   }
 
-  see_map(game: any) {
-    open("https://www.google.com/maps/@?api=1&map_action=map&bbox="+game.bbox, "maps")
-  }
 
 
   async close_map(game: any) {
@@ -131,7 +128,8 @@ export class GamesComponent implements OnInit {
   }
 
   async share_map(game: any) {
-    let message = await _prompt(this, "Introduction message", "Catch some NFT around you with this game", "", "text", "Share", "Cancel", false)
+    let message = await _prompt(this, "Write a introduction message for the players",
+      "Catch some NFT around you with this game", "", "memo", "Share", "Cancel", false)
     if (message != "") {
       let short_url=await share_game(game,message)
       this.clipboard.copy(short_url)

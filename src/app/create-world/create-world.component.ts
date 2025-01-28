@@ -275,25 +275,23 @@ export class CreateWorldComponent implements OnInit {
       }else{
         this.exit_marker.setLatLng(this.dropzone)
       }
-
     }
-
     this.to_add=""
   }
 
 
-
-
-  remove_gate() {
+  remove_entrance() {
     this.zone.entrance=new Point3D(0,0,0)
-    this.zone.exit=new Point3D(0,0,0)
-
     this.entrance_marker?.removeFrom(this.map)
     this.entrance_marker=null
+  }
 
+  remove_exit() {
+    this.zone.exit=new Point3D(0,0,0)
     this.exit_marker?.removeFrom(this.map)
     this.exit_marker=null
   }
+
 
   async recenter() {
     let pos=await this.user.geoloc(this.geolocService)

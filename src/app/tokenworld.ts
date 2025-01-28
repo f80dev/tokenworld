@@ -218,26 +218,16 @@ export function initializeMap(vm:any,zone:any,
   return vm.map
 }
 
-export function share_game(api:HttpClient,game:Game,message="") : Promise<string> {
-  return new Promise((resolve, reject) => {
+export function share_game(game:Game,message="") : Promise<string> {
+  return new Promise(async (resolve, reject) => {
     let params = {autoconnect: true, game: game.id, message: message}
     let url="https://is.gd/create.php?format=simple&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
-    let headers=new HttpHeaders({
-      'Access-Control-Allow-Origin':'*',
-      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+    $$("Appel de "+url)
+    let r=await fetch(url,{mode:'no-cors'});
+    let short_url=await r.text()
+    $$("Récupération de l'url de partage de la game "+short_url)
+    resolve(short_url);
     })
-    api.get(url,{headers:headers}).subscribe({
-      next:(r:any)=> {
-        $$("Récupération de l'url de partage de la game")
-        resolve(r);
-        },
-      error:(err:any)=>{
-        $$("Error de raccourcissement ",err)
-        reject(err)
-      }
-    })
-  })
 }
 
 export function is_in(pt:LatLng,zone:Game) : boolean {

@@ -241,7 +241,7 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
         let games=await this.user.extract_games()
         this.created_game=games[games.length-1]
-        this.link_to_share=await share_game(this.api.httpClient,this.created_game,"Join my game to find NFT with Tokemon World")
+        this.link_to_share=await share_game(this.created_game,"Join my game to find NFT with Tokemon World")
       }
     } catch (e:any) {
       wait_message(this)
@@ -314,7 +314,7 @@ export class CreateWorldComponent implements OnInit {
 
 
   async share() {
-    this.clipboard.copy(await share_game(this.api.httpClient,this.created_game!,"Catch some NFT in my gaming zone"))
+    this.clipboard.copy(await share_game(this.created_game!,"Catch some NFT in my gaming zone"))
     showMessage(this,"Link in your clipboard")
   }
 }

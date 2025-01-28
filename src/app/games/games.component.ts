@@ -2,16 +2,15 @@ import {Component, inject, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {$$, getParams, setParams, showMessage} from '../../tools';
+import {$$, getParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {cartesianToPolar, center_of, distance, Game, share_game} from '../tokenworld';
+import {Game, share_game} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {get_nft, send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {environment} from '../../environments/environment';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {GameComponent} from '../game/game.component';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -134,7 +133,7 @@ export class GamesComponent implements OnInit {
   async share_map(game: any) {
     let message = await _prompt(this, "Introduction message", "Catch some NFT around you with this game", "", "text", "Share", "Cancel", false)
     if (message != "") {
-      let short_url=await share_game(this.api.httpClient,game,message)
+      let short_url=await share_game(game,message)
       this.clipboard.copy(short_url)
       this.ngNavigatorShareService.share({
         title: "Join me in "+game.title+" gaming zone",

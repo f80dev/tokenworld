@@ -6,6 +6,7 @@ import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
 import {$$, setParams} from '../tools';
 import {ApiService} from './api.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 export class Tokemon {
   id: number = 0;
@@ -217,11 +218,16 @@ export function initializeMap(vm:any,zone:any,
   return vm.map
 }
 
-export function share_game(api:ApiService,game:Game,message="") : Promise<string> {
+export function share_game(api:HttpClient,game:Game,message="") : Promise<string> {
   return new Promise((resolve, reject) => {
     let params = {autoconnect: true, game: game.id, message: message}
     let url="https://is.gd/create.php?format=simple&url="+encodeURIComponent(environment.appli + "/intro/?" + setParams(params))
-    api._get(url).subscribe({
+    let headers=new HttpHeaders({
+      'Access-Control-Allow-Origin':'*',
+      'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+    })
+    api.get(url,{headers:headers}).subscribe({
       next:(r:any)=> {
         $$("Récupération de l'url de partage de la game")
         resolve(r);

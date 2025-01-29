@@ -156,7 +156,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         if(distance(new_pos,this.old_pos)>this.user.game!.min_distance_to_refresh_map){
           $$("Refresh car distance parcouru supérieure à ",this.user.game!.min_distance_to_refresh_map)
           this.old_pos=new_pos
-          this.refresh()
+          this.refresh(new_pos)
           this.me_marker!.addTo(this.map!)
         }
       }catch (e:any){
@@ -376,7 +376,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
     localStorage.setItem("last_position_lat",String(this.user.center_map.lat))
     localStorage.setItem("last_position_lng",String(this.user.center_map.lng))
-    this.refresh()
+
+    if(!this.user.game?.geoloc_to_catch)this.refresh(this.user.center_map)
   }
 
 

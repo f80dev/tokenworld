@@ -65,7 +65,15 @@ export class GamesComponent implements OnInit {
 
   async refresh() {
     let owner_filter = this.show_my_games ? this.user.idx : 0
-    let pos=this.show_nearest_zone ? await this.user.geoloc(this.geolocService) : new LatLng(0,0)
+    let pos=new LatLng(0,0)
+    if(this.show_nearest_zone){
+      try{
+        pos=await this.user.geoloc(this.geolocService)
+      }catch (e:any){
+        this.show_nearest_zone=false
+      }
+
+    }
     this.games = await this.user.extract_games(true, this.show_closed_games, owner_filter,pos)
     this.games.sort((a, b) => a.score - b.score)
   }
@@ -135,9 +143,14 @@ export class GamesComponent implements OnInit {
     this.quit("create")
   }
 
+
   async update_only_mygame() {
-    await this.user.login(this, "", "", true)
-    this.refresh()
+    try{
+      await this.user.login(this, "", "", true)
+      this.refresh()
+    }catch (e:any){
+      this.show_my_games=false
+    }
   }
 
 

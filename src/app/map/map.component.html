@@ -57,15 +57,15 @@
       </mat-icon>
 
       <mat-icon  (click)="recenter()"
-                 title="Se déplacer"
+                 title="center to the map"
                  class="icon-button">
         pin_drop
       </mat-icon>
 
       <mat-icon  (click)="show_my_tokemon()"
-                 title="Se déplacer"
+                 title="show all my tokemon"
                  class="icon-button">
-        person
+        visibility
       </mat-icon>
 
 
@@ -81,17 +81,23 @@
                  [style.opacity]="user.preview ? 1.0 : 0.4">image
       </mat-icon>
 
+      <mat-icon (click)="show_help=!show_help"
+                *ngIf="help_message.length>0"
+                 class="icon-button">help
+      </mat-icon>
+
     </div>
 
 
 
-<!--    <mat-slider style="display: inline-block;width:50%;max-width: 200px;" [step]="1" [min]="0" [max]="600">-->
-<!--      <input matSliderThumb-->
-<!--             [value]="user.visibility"-->
-<!--             (valueChange)="user.visibility=$event">-->
-<!--    </mat-slider>-->
   </div>
+
+
 </div>
 
+<div class="help-zone mat-elevation-z8" (click)="show_help=false" *ngIf="show_help">
+  <mat-icon>lightbulb</mat-icon>
+  <div>{{help_message}}</div>
+</div>
 
 <img src="https://tokemon.f80.fr/assets/icons/target.png" class="target">

@@ -1,0 +1,8 @@
+{
+  "/shorter/**": {
+    "target": "https://is.gd/create.php",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

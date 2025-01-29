@@ -1,6 +1,6 @@
 <div class="mainform" style="text-align: center;">
 
-  <div *ngIf="message!=''" style="text-align: center;width: 100vw;padding: 50px;">
+  <div *ngIf="message!=''" style="text-align: center;width: 100vw;">
     <app-hourglass [message]="message"></app-hourglass>
     <br>
     <app-tuto label="Define your gaming zone with the map"></app-tuto>
@@ -20,25 +20,41 @@
 
     <table><tr style="width: 100%;">
       <td style="text-align: right;width:50%;">
-        <app-input label="Game's title" value_type="text" style="display: inline-block;"
+        <app-input label="Game's title" value_type="text" style="display: inline-block;min-width:200px;"
                    [value]="title" (valueChange)="title=$event"></app-input>
       </td>
       <td style="text-align: left;">
-        <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;" (click)="create_game()">Build</button>
+        <button *ngIf="message.length==0" mat-raised-button style="margin-top: -20px;font-size: small;" (click)="create_game()">
+          <mat-icon>build</mat-icon>
+          Build your world
+        </button>
       </td>
     </tr></table>
 
-    <button mat-raised-button (click)="to_add='entrance'" *ngIf="zone.entrance && zone.entrance.x==0">
+    <button mat-raised-button (click)="to_add='entrance'"
+            title="Tokemon must be drop in this place"
+            *ngIf="zone.entrance && zone.entrance.x==0">
       Add entrance
     </button>
-    <button mat-raised-button (click)="to_add='exit'" *ngIf="zone.exit && zone.exit.x==0">
+
+    <button mat-raised-button
+            *ngIf="zone && zone.entrance && (zone.entrance!.x!=0 || zone.entrance!.y!=0)" (click)="remove_entrance()">
+      Remove Entrance
+    </button>
+
+    &nbsp;
+    <button mat-raised-button (click)="to_add='exit'"
+            title="Tokemon must be catch in this place"
+            *ngIf="zone.exit && zone.exit.x==0">
       Add exit
     </button>
 
     <button mat-raised-button
-            *ngIf="zone && zone.entranc && (zone.entrance!.x!=0 || zone.exit!.x!=0)" (click)="remove_gate()">
-      Remove Gates
+            *ngIf="zone && zone.exit && (zone.exit!.x!=0 || zone.exit!.y!=0)" (click)="remove_exit()">
+      Remove Exit
     </button>
+
+
     <br>
 
 
@@ -75,20 +91,22 @@
       <mat-accordion>
         <mat-expansion-panel class="panel">
           <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_drop">Geoloc to drop</mat-slide-toggle>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_catch">Geoloc to catch</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_drop" title="Player can drop tokemon only at real location">Geoloc to drop</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_catch" title="Player can catch tokemon around their real location">Geoloc to catch</mat-slide-toggle>
           <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
           <br>
           <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
-          <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
-          <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
-
           <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
 
 
+          <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
+          <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+
+
+
           <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-          <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="LP"></app-input>
-          <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="LP"></app-input>
+          <app-input label="Minimum loading charge" help="" value_type="number" [value]="min_pv" (valueChange)="min_pv=$event" unity="HP"></app-input>
+          <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="HP"></app-input>
 
 
         </mat-expansion-panel>

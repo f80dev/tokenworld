@@ -4,57 +4,60 @@
   </app-hourglass>
 
   <div id="menu" style="margin:20px;" *ngIf="games.length>0">
-    <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">Show closed game</mat-slide-toggle>
-    <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">Show only my game</mat-slide-toggle>
-    <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">Show nearest zone</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">
+      <div class="mat-slide-label">Closed<br>game</div>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">
+      <div class="mat-slide-label">My game</div>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">
+      <div class="mat-slide-label">Nearest<br>game</div>
+    </mat-slide-toggle>
   </div>
 
   <mat-accordion *ngIf="message.length==0">
     <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
-      <mat-expansion-panel-header>{{game.title}}</mat-expansion-panel-header>
-      <table style="width: 100%;" >
-        <tr>
-          <th></th>
-          <th>In game</th>
-          <th *ngIf="user.isConnected(true)">As master</th>
-          <th>Command</th>
-        </tr>
+      <mat-expansion-panel-header>
+          <mat-icon *ngIf="!game.closed" (click)="select(game)"
+                    title="Play to this game"
+                    style="color:cyan;font-size: x-large;margin-bottom: 0;margin-right: 10px;">play_circle</mat-icon>
 
-        <tr >
-          <td style="text-align: left;">
-            <app-game [game]="game">
-            </app-game>
-          </td>
-          <td>
-            {{game.n_players}} players<br>
-            {{game.n_tokemons}} tokemons
-            <mat-icon title="See the NFTs hide in the world"
-                      *ngIf="game.nfts!.length>0"
-                      (click)="show_nfts(game)"
-                      class="icon-button">visibility</mat-icon>
+        {{game.title}}
+      </mat-expansion-panel-header>
 
-            <div *ngIf="game && game.previews && game.previews.length>0">
-              <img *ngFor="let src of game.previews" [src]="src"
-                   class="small-vignette">
-            </div>
+      <div style="width:100%;display: flex;flex-direction: row;justify-content: space-around;">
+        <div style="display: block;">
+          <app-game [game]="game">
+          </app-game>
 
-          </td>
-          <td *ngIf="user.isConnected(true)">
-            <div *ngIf="game.owner==user.idx && !game.closed">
-              <button mat-raised-button (click)="close_map(game)">Close</button>
-              <button mat-raised-button (click)="stacking(game)">AirDrop</button>
-            </div>
+        </div>
 
-          </td>
-          <td style="width:60%;" [style.opacity]="game.closed ? 0.5 : 1.0">
-            <button mat-raised-button title="Select this game" class="color-warm mat-headline-5" *ngIf="!game.closed" (click)="select(game)" color="PLAY">
-              <mat-icon>play</mat-icon>Enter
-            </button>
-            <mat-icon (click)="see_map(game)" class="icon-button" title="See the map">map</mat-icon>
-            <mat-icon (click)="share_map(game)" class="icon-button">share</mat-icon>
-          </td>
-        </tr>
-      </table>
+
+        <mat-expansion-panel style="width: 200px;display: block;" [expanded]="true">
+          <mat-expansion-panel-header>In game</mat-expansion-panel-header>
+          {{game.n_players}} players<br>
+          {{game.n_tokemons}} tokemons
+          <mat-icon title="See the NFTs hide in the world"
+                    *ngIf="game.nfts!.length>0"
+                    (click)="show_nfts(game)"
+                    class="icon-button">visibility</mat-icon>
+
+          <div *ngIf="game && game.previews && game.previews.length>0">
+            <img *ngFor="let src of game.previews" [src]="src"
+                 class="small-vignette">
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
+          <mat-expansion-panel-header>Command</mat-expansion-panel-header>
+          <button mat-raised-button (click)="close_map(game)">Close</button>
+          <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+
+        </mat-expansion-panel>
+
+      </div>
 
     </mat-expansion-panel>
   </mat-accordion>

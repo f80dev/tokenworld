@@ -1,12 +1,10 @@
 
-import {UserService} from './user.service';
 import {environment} from '../environments/environment';
 import * as L from 'leaflet';
 import {baseMapURl} from './map/map.component';
 import {LatLng, Point} from 'leaflet';
 import {$$, setParams, showMessage} from '../tools';
-import {ApiService} from './api.service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+
 import {_prompt} from './prompt/prompt.component';
 
 export class Tokemon {

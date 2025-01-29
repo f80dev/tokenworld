@@ -6,6 +6,7 @@ import {LatLng, Point} from 'leaflet';
 import {$$, setParams, showMessage} from '../tools';
 
 import {_prompt} from './prompt/prompt.component';
+import jsQR from 'jsqr';
 
 export class Tokemon {
   id: number = 0;
@@ -223,20 +224,25 @@ export function initializeMap(vm:any,zone:any,
 
 
 
-export async function share_game(vm:any,game: any,default_message="") {
-  let message = await _prompt(vm, "Write an introduction message for the players",
-    default_message, "", "memo", "Share", "Cancel", false)
-  if (message != "") {
-    let params = {autoconnect: true, game: game.id, message: message}
-    $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
-    let short_url=await url_shorter( environment.appli + "/intro/?" + setParams(params),message)
-    await vm.ngNavigatorShareService.share({
-      title: "Join me in "+game.title+" gaming zone",
-      text: message,
-      url: short_url
-    })
-    showMessage(vm, "Link in clipboard")
-  }
+export function share_game(vm:any,game: any,default_message="") : Promise<{shorturl:string,qrcode:string}> {
+  return new Promise(async (resolve) => {
+    let message = await _prompt(vm, "Write an introduction message for the players",
+      default_message, "", "memo", "Share", "Cancel", false)
+    if (message != "") {
+      let params = {autoconnect: true, game: game.id, message: message}
+      $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
+      let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params),message)
+      let qrcode=""  //TODO a completer pour génrérer le qrcode
+      await vm.ngNavigatorShareService.share({
+        title: "Join me in "+game.title+" gaming zone",
+        text: message,
+        url: short_url
+      })
+      showMessage(vm, "Link in clipboard")
+      resolve({shorturl:short_url,qrcode:qrcode})
+    }
+  })
+
 }
 
 

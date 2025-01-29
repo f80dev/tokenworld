@@ -318,9 +318,11 @@ export class CreateWorldComponent implements OnInit {
   geoloc_to_drop=false
   geoloc_to_catch=true
   user_visibility: boolean = true
+  qrcode=""
 
 
   async share() {
-    share_game(this,this.created_game,"Join my game to find NFT with Tokemon World")
+    let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World")
+    this.qrcode=result.qrcode
   }
 }

@@ -33,7 +33,8 @@ export class GameComponent {
   }
 
 
-  share_map(game: Game) {
-    share_game(this,game)
+  async share_map(game: Game) {
+    let result=await share_game(this,game)
+
   }
 }

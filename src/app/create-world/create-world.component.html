@@ -163,8 +163,10 @@
     <br>
     You can invite people to play<br>
 
-
     <button mat-raised-button (click)="share()"><mat-icon>share</mat-icon>Invite players</button>
+
+    <br>
+    <img [src]="qrcode" *ngIf="qrcode.length>0" style="width: 200px;height:200px;">
 
     <br><br>
     <button mat-raised-button (click)="enter_game()">

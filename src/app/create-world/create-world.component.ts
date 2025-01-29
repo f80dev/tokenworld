@@ -166,8 +166,13 @@ export class CreateWorldComponent implements OnInit {
 
 
   quit(game:any){
-    this.user.init_game(game)
-    this.router.navigate( ["map"])
+    if(!game){
+      this.router.navigate( ["games"])
+    }else{
+      this.user.init_game(game)
+      this.router.navigate( ["map"])
+    }
+
   }
 
   open_xportal() {
@@ -229,6 +234,7 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de la fonction avec les arguments ",this.args)
 
     try {
+      debugger
       wait_message(this,"Your world is under construction  ...")
       let rc:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
       if(rc.returnMessage!="ok"){
@@ -236,15 +242,17 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
       }else{
         if(this.lifepoint>0){
-          debugger
+          $$("Transfert de lifepoint "+this.lifepoint)
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
           rc=await send_transaction_with_transfers(this.user.provider,"fund_game",[rc.result],this.user,tokens)
         }
         wait_message(this)
         let games=await this.user.extract_games()
+        $$("Récupération de "+games.length)
         this.created_game=games[games.length-1]
       }
     } catch (e:any) {
+      showMessage(this,e)
       wait_message(this)
     }
 

@@ -158,16 +158,22 @@
 
   </div>
 
-  <div *ngIf="link_to_share.length>0">
+  <div *ngIf="created_game">
     <h4>Your game zone is available</h4>
     <br>
-    You can invite people to enter, sending this link
-    <br>
-    {{link_to_share}}&nbsp;
-    <button mat-raised-button (click)="share()"><mat-icon>share</mat-icon>Copy</button>
+    You can invite people to play<br>
 
-    <br><br><br>
-    <button mat-raised-button (click)="enter_game()">Enter</button>
+
+    <button mat-raised-button (click)="share()"><mat-icon>share</mat-icon>Invite players</button>
+
+    <br><br>
+    <button mat-raised-button (click)="enter_game()">
+      <mat-icon>play_circle</mat-icon>
+      Enter !
+    </button>
   </div>
+
+  <br>
+  <button mat-raised-button (click)="quit(null)">Cancel</button>
 
 </div>

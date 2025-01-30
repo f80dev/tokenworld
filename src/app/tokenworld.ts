@@ -42,8 +42,8 @@ export class Game {
   title: string=""
   max_per_user=30
   bank=0
-  ne=new Point3D()
-  sw=new Point3D()
+  ne=new Point3D(0,0,0)
+  sw=new Point3D(0,0,0)
   grid=100
   quota=10
   entrance=new Point3D()

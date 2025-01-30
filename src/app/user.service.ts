@@ -207,8 +207,8 @@ export class UserService {
       if(rc)this.game=rc
     }
     if(this.game){
-      this.center_map=cartesianToPolar(center_of(this.game!.ne,this.game!.sw))
-      $$("Sélection de la partie ",this.game)
+      $$("Sélection de la partie ",this.game.title)
+      this.center_map=cartesianToPolar(center_of(this.game.ne,this.game.sw))
     }
   }
 

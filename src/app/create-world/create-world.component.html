@@ -1,13 +1,12 @@
-<div class="mainform" style="text-align: center;">
+<div *ngIf="message!=''" style="text-align: center;width: 100vw;">
+  <app-hourglass [message]="message"></app-hourglass>
+  <br>
+  <app-tuto label="Define your gaming zone with the map"></app-tuto>
+  <br>
+  <img src="https://tokemon.f80.fr/assets/under_construction.png"
+       style="width:50%;max-width: 300px;">
 
-  <div *ngIf="message!=''" style="text-align: center;width: 100vw;">
-    <app-hourglass [message]="message"></app-hourglass>
-    <br>
-    <app-tuto label="Define your gaming zone with the map"></app-tuto>
-    <br>
-    <img src="https://tokemon.f80.fr/assets/under_construction.png"
-         style="width:50%;max-width: 300px;">
-  </div>
+  <br><br>
 
   <button mat-raised-button
           *ngIf="message!='' && device.isMobile()"
@@ -15,7 +14,13 @@
     Basculer sur xPortal
   </button>
 
-  <div *ngIf="message=='' && link_to_share.length==0">
+</div>
+
+
+<div class="mainform" style="text-align: center;">
+
+
+  <div *ngIf="message=='' && !created_game">
 
 
     <table><tr style="width: 100%;">
@@ -176,6 +181,6 @@
   </div>
 
   <br>
-  <button mat-raised-button (click)="quit(null)">Cancel</button>
+  <button mat-raised-button *ngIf="!created_game" (click)="quit(null)">Cancel</button>
 
 </div>

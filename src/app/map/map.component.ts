@@ -204,7 +204,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async open_drop() {
     let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
-    if(this.user.game?.geoloc_to_drop){
+    if(this.user.game?.geoloc_to_drop && this.user.idx!=this.user.game.owner){
       try{
         this.user.center_map=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game.gps_tolerance)
         this.map?.setView(this.user.center_map,this.user.zoom)
@@ -313,9 +313,10 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           }
         }
       }
-
     })
   }
+
+
 
 
   async select_nft(event: LeafletMouseEvent) {
@@ -344,16 +345,16 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   private mouseover(event: LeafletMouseEvent) {
     let nft=event.target.options.alt
-
   }
 
 
   async refresh(center: LatLng | null=null) {
     if(this.map){
+      $$("Refresh de la carte sur ",center)
       if(!center){center=this.map.getCenter();}
       this.user.zone={
-        NE: this.map.getBounds().getNorthEast(),
-        SW: this.map.getBounds().getSouthWest(),
+        ne: this.map.getBounds().getNorthEast(),
+        sw: this.map.getBounds().getSouthWest(),
         entrance:new Point3D(0,0,0),
         exit: new Point3D(0,0,0),
         zoom:this.map.getZoom(),
@@ -381,6 +382,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
+
   async recenter() {
     if(!this.user.game?.geoloc_to_catch && !this.user.game?.geoloc_to_drop ){
       showMessage(this,"Map on the gaming zone")
@@ -400,6 +402,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     this.map!.setView(this.user.center_map,this.map!.getZoom())
     this.movemap(null)
   }
+
 
 
   async moveto() {

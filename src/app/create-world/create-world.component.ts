@@ -1,7 +1,7 @@
 import { Component, inject, OnInit} from '@angular/core';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {DecimalPipe, NgIf} from "@angular/common";
+import {DecimalPipe, Location, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
 import {$$, getParams, showError, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -63,6 +63,7 @@ export class CreateWorldComponent implements OnInit {
   user=inject(UserService)
   router=inject(Router)
   geolocService=inject(GeolocService)
+  location=inject(Location)
   navigatorShareService=inject(NgNavigatorShareService)
   dialog=inject(MatDialog)
   api=inject(ApiService)
@@ -109,8 +110,9 @@ export class CreateWorldComponent implements OnInit {
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
-    this.zone.NE = this.map.getBounds().getNorthEast()
-    this.zone.SW = this.map.getBounds().getSouthWest()
+    this.zone.ne = this.map.getBounds().getNorthEast()
+    this.zone.sw = this.map.getBounds().getSouthWest()
+    this.zone.center=this.user.center_map
     $$("Mise a jour de la zone ",this.zone)
   }
 
@@ -134,6 +136,7 @@ export class CreateWorldComponent implements OnInit {
       this.zone = params.zone
       $$("Récupération de la zone ",this.zone)
     } else {
+      $$("La zone n'est pas en parametre, on localise")
       if(await this.user.geoloc(this.geolocService)){
         this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
       }
@@ -161,19 +164,20 @@ export class CreateWorldComponent implements OnInit {
     }
     this.map.setView(this.zone.center, this.zone.zoom)
     this.update_zone()
-
   }
+
 
 
   quit(game:any){
     if(!game){
-      this.router.navigate( ["games"])
+      this.location.back()
     }else{
       this.user.init_game(game)
       this.router.navigate( ["map"])
     }
-
   }
+
+
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))
@@ -190,8 +194,8 @@ export class CreateWorldComponent implements OnInit {
 
     let entrance = this.zone.entrance && this.zone.entrance.x+this.zone.entrance.y!=0  ? polarToCartesian(this.zone.entrance, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
     let exit =  this.zone.exit && this.zone.exit.y+this.zone.exit.x!=0  ? polarToCartesian(this.zone.exit, environment.scale_factor,environment.translate_factor) : new Point3D(0,0,0)
-    let ne = polarToCartesian(this.zone.NE, environment.scale_factor,environment.translate_factor)
-    let sw = polarToCartesian(this.zone.SW, environment.scale_factor,environment.translate_factor)
+    let ne = polarToCartesian(this.zone.ne, environment.scale_factor,environment.translate_factor)
+    let sw = polarToCartesian(this.zone.sw, environment.scale_factor,environment.translate_factor)
 
     let s = "title: Map de test\nauthor: hhoareau\n"
     s = s + "\nsettings:\n"

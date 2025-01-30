@@ -1,6 +1,6 @@
 {
   "name": "tokemonworld",
-  "version": "0.0.131",
+  "version": "0.0.132",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl true",

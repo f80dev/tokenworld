@@ -50,6 +50,7 @@
 
       <app-input *ngIf="max_quantity>1" value_type="number" [min]="1" [max]="max_quantity"
                  label="Number to drop" unity="NFT" [help]="'limit to '+max_quantity"
+                 (focusout)="update_occurence()"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
       <br>
 
@@ -64,7 +65,7 @@
 
       <app-input *ngIf="quantity>1 && !random_location" value_type="number"
                  label="Distance around target" unity="meters"
-                 (focusout)="update_occurence()"
+                 (focusout)="update_distance()"
                  (valueChange)="diffusion=$event" [value]="diffusion"></app-input>
       <br>
 

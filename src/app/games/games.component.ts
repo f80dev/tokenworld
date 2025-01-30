@@ -87,7 +87,7 @@ export class GamesComponent implements OnInit {
     let autoconnect: boolean = (params.autoconnect == "true")
 
     if (autoconnect) {
-      let game_id = params.hasOwnProperty("game") ? Number(params.game) : 0
+      let game_id = params.hasOwnProperty("game") ? Number(params.game) : Number(localStorage.getItem("selected_game") || "1")
       let game = await this.user.open_game(game_id)
       if (game) {
         this.user.init_game(game)
@@ -107,6 +107,7 @@ export class GamesComponent implements OnInit {
 
   select(game: any) {
     this.user.init_game(game)
+    localStorage.setItem("selected_game", String(this.user.game!.id));
     this.quit()
   }
 

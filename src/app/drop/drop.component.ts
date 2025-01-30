@@ -250,8 +250,7 @@ export class DropComponent implements AfterViewInit {
   }
 
   update_occurence(){
-    if(this.user.game){
-      debugger
+    if(this.user.game && this.user.idx!=this.user.game.owner){
       if(this.quantity>this.user.game.max_per_user || this.quantity>this.sel_nft.quantity){
         showMessage(this,'Quantity is too high')
         this.quantity=1
@@ -277,4 +276,9 @@ export class DropComponent implements AfterViewInit {
   }
 
   protected readonly environment = environment;
+
+  update_distance() {
+    //On ne peut pas lancer loin lorsqu'on est contraint de dropper à côté
+    if(this.user.game?.geoloc_to_drop && this.diffusion>10)this.diffusion=10
+  }
 }

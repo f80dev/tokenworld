@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {
   LatLng,
@@ -12,13 +12,11 @@ import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
 import {
   cartesianToPolar,
-  center_of,
   distance,
   initializeMap,
   is_in,
   Point3D,
   polarToCartesian,
-  Tokemon
 } from '../tokenworld';
 import {UserService} from '../user.service';
 import {Router} from '@angular/router';
@@ -397,7 +395,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     else
     {
       showMessage(this,"Center of the map on your location")
-      this.user.center_map=await this.user.geoloc(this.geolocService)
+      this.refresh_geoloc()
+      this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     }
     this.map!.setView(this.user.center_map,this.map!.getZoom())
     this.movemap(null)

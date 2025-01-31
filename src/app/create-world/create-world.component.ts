@@ -238,7 +238,6 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de la fonction avec les arguments ",this.args)
 
     try {
-      debugger
       wait_message(this,"Your world is under construction  ...")
       let rc:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
       if(rc.returnMessage!="ok"){

@@ -30,6 +30,8 @@ export class IntroComponent implements OnInit {
 
       $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 
+      this.user.network=this.params.network || "elrond-devnet"
+
       if(this.params.hasOwnProperty("signature")){
         this.user.signature=this.params.signature
         this.user.address=this.params.address

@@ -39,7 +39,9 @@
               "leaflet/dist/leaflet.css",
               "src/tokemonworld.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {

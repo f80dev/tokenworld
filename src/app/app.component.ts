@@ -14,6 +14,7 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {InputComponent} from './input/input.component';
+import {ApiService} from './api.service';
 
 
 @Component({
@@ -25,12 +26,14 @@ import {InputComponent} from './input/input.component';
 })
 export class AppComponent implements OnInit {
 
+
   title = 'tokemonworld';
   router=inject(Router)
   dialog=inject(MatDialog)
   user=inject(UserService)
   routes=inject(ActivatedRoute)
   toast=inject(MatSnackBar)
+  api=inject(ApiService)
 
 
   logout() {

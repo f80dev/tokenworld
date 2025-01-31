@@ -34,6 +34,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
+import {SwPush} from '@angular/service-worker';
 
 export const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -60,9 +61,14 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   marker_line: Polyline<any, any> | null=null
   private tokemon_to_move: any;
 
+    readonly vapidKeys={"publicKey":"BMRr6rYJ9YOHdq8GKw2QKXAsYC3Em5bdq2jSW8oxgn8WX2i94oStaXLhuse9lMKZ8SFr89P-jyHtyjCBomFG6-k","privateKey":"lz9N-kcIitF2sP3ClgeVwROuxeGY6pAQDCV7X_aeePY"}
+
+
+
   router=inject(Router)
   geolocService=inject(GeolocService)
   user=inject(UserService)
+  notificationService=inject(SwPush)
   toast=inject(MatSnackBar)
   dialog=inject(MatDialog)
   clipboard=inject(Clipboard)
@@ -86,6 +92,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   old_pos: LatLng = new LatLng(0,0)
   last_tokemon_list: any[]=[]
   help_message: string=""
+  notif: PushSubscription | null=null
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -130,14 +137,16 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         })
     }
 
-    if(this.user.game?.geoloc_to_drop){
+    if(this.user.game?.geoloc_to_catch){
       $$("La partie utilise la géoloc donc on centre la carte sur la geoloc")
       await this.user.geoloc(this.geolocService,this.me_marker)
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     } else {
+
       $$("La partie ne repose pas sur la géoloc donc on se positionne sur la derniere position si elle est dans la partie")
       this.user.center_map=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
       if(!is_in(this.user.center_map,this.user.game!)) {
+        $$("La dernière position n'est pas dans la partie, on recentre sur la partie")
         this.recenter()
       }
     }
@@ -151,11 +160,14 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     if(this.user.game && this.user.game?.geoloc_to_catch){
       try{
         let new_pos=await this.user.geoloc(this.geolocService,this.me_marker,this.user.game!.gps_tolerance)
-        if(distance(new_pos,this.old_pos)>this.user.game!.min_distance_to_refresh_map){
+        let distance_from_last_geoloc=distance(new_pos,this.old_pos)
+        if(distance_from_last_geoloc>this.user.game!.min_distance_to_refresh_map){
           $$("Refresh car distance parcouru supérieure à ",this.user.game!.min_distance_to_refresh_map)
           this.old_pos=new_pos
           this.refresh(new_pos)
           this.me_marker!.addTo(this.map!)
+        }else{
+          $$("Distance depuis la dernière géoloc insuffisante pour un refresh")
         }
       }catch (e:any){
         if(this.old_pos.lat==0 && this.old_pos.lng==0){
@@ -170,15 +182,13 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
 
-  showNotification() {
-    if (Notification.permission === "granted") {
-      new Notification("There is a tokemon", {body: "There is a tokemon"});
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-          new Notification("There is a tokemon", {body: "There is a tokemon"});
-        }
-      });
+  async showNotification() {
+    if(!this.notif){
+      try{
+        this.notif=await this.notificationService.requestSubscription({serverPublicKey:this.vapidKeys.publicKey})
+      }catch(e){
+        $$("Cancel notification")
+      }
     }
   }
 
@@ -398,7 +408,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       this.refresh_geoloc()
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     }
-    this.map!.setView(this.user.center_map,this.map!.getZoom())
+    this.map!.setView(this.user.center_map,this.user.zoom)
     this.movemap(null)
   }
 
@@ -425,7 +435,10 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   open_capture() {
-    this.router.navigate(["capture"],{queryParams:{p:setParams(this.selected_tokemon,"","")}})
+
+    this.router.navigate(["capture"],{queryParams:{p:setParams(
+          {item:this.selected_tokemon,target:polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)}
+          , "","")}})
   }
 
 

@@ -1,4 +1,5 @@
 <div *ngIf="message!=''" style="text-align: center;width: 100vw;">
+  <br>
   <app-hourglass [message]="message"></app-hourglass>
   <br>
   <app-tuto label="Define your gaming zone with the map"></app-tuto>
@@ -167,17 +168,19 @@
     <h4>Your game zone is available</h4>
     <br>
     You can invite people to play<br>
-
-    <button mat-raised-button (click)="share()"><mat-icon>share</mat-icon>Invite players</button>
-
     <br>
     <img [src]="qrcode" *ngIf="qrcode.length>0" style="width: 200px;height:200px;">
 
-    <br><br>
+    <button mat-raised-button (click)="share()">
+      <mat-icon>share</mat-icon>
+      Invite players
+    </button>
+    &nbsp;
     <button mat-raised-button (click)="enter_game()">
       <mat-icon>play_circle</mat-icon>
       Enter !
     </button>
+
   </div>
 
   <br>

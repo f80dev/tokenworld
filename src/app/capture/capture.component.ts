@@ -14,6 +14,7 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {ApiService} from '../api.service';
+import {Point3D, polarToCartesian} from '../tokenworld';
 
 @Component({
   selector: 'app-capture',
@@ -44,11 +45,14 @@ export class CaptureComponent implements OnInit {
   message: string=""
   max_engagment: number=100
   pv_to_engage: number=0
+  target=new Point3D(0,0,0)
 
 
 
   async ngOnInit() {
-    this.item = await getParams(this.routes)
+    let params:any = await getParams(this.routes)
+    this.item=params.item
+    this.target=params.target
     // @ts-ignore
     this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
   }
@@ -60,7 +64,8 @@ export class CaptureComponent implements OnInit {
     if(this.user.game){
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
-        let args=func_name=="take" ? [this.user.game.id,Number(this.item.id)] : [Number(this.item.id)]
+
+        let args=func_name=="take" ? [this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z] : [Number(this.item.id),this.target.x,this.target.y,this.target.z]
         wait_message(this, "Capture in progress")
         let tokens=[]
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))

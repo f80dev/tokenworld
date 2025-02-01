@@ -435,11 +435,14 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   open_capture() {
-
-    this.router.navigate(["capture"],{queryParams:{p:setParams(
-          {item:this.selected_tokemon,target:polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)}
-          , "","")}})
+    let target=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+    this.router.navigate(["capture"],{queryParams:{p:setParams({
+          item:this.selected_tokemon,
+          target:target,
+          game:this.user.game!.id
+        },"","")}})
   }
+
 
 
   open_airdrop() {
@@ -507,22 +510,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     }
   }
 
-  async fight() {
-    if(!this.to_attack){
-      this.to_attack=this.selected_tokemon
-    }else{
-      await this.user.login(this,"Login required to fight","",true);
-      let args=[this.user.game!.id,this.to_attack.id,this.selected_tokemon.id]
-      try{
-        wait_message(this,"Fight ...")
-        let rc=await send_transaction(this.user.provider,"fight",this.user.address,args,this.user.get_sc_address())
-        this.refresh()
-      }catch(e:any){
 
-      }
-      wait_message(this)
-      this.to_attack=null
-    }
-  }
 
 }

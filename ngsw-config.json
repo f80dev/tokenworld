@@ -19,6 +19,15 @@
       }
     },
     {
+      "name": "leaflet-tiles",
+      "installMode": "prefetch",
+      "resources": {
+        "urls": [
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ]
+      }
+    },
+    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",

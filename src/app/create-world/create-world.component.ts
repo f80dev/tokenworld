@@ -94,7 +94,7 @@ export class CreateWorldComponent implements OnInit {
   dropzone: LatLng=new LatLng(0,0)
   private exit_marker: null | Marker<any>=null
   private entrance_marker: null | Marker<any>=null
-  max_visibility=100
+  max_visibility=200
   min_visibility=10
   max_distance=100
   min_distance=1

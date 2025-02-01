@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {getParams, showMessage} from '../../tools';
+import {$$, getParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
@@ -44,7 +44,7 @@ export class CaptureComponent implements OnInit {
 
   message: string=""
   max_engagment: number=100
-  pv_to_engage: number=0
+  pv_to_engage: number=1
   target=new Point3D(0,0,0)
 
 
@@ -53,14 +53,25 @@ export class CaptureComponent implements OnInit {
     let params:any = await getParams(this.routes)
     this.item=params.item
     this.target=params.target
-    // @ts-ignore
-    this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
+    try{
+      await this.user.login(this,"","",true)
+      this.user.init_game(Number(params.game))
+
+      if(this.item.owner!=this.user.idx && this.item.pv>0)this.label="Fight"
+
+      $$("Tentative de capture du tokemon ",this.item)
+
+
+      // @ts-ignore
+      this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
+    }catch (e){
+      this.router.navigate(["map"])
+    }
+
   }
 
 
   async on_capture() {
-    await this.user.login(this,"","",true);
-
     if(this.user.game){
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
@@ -69,6 +80,7 @@ export class CaptureComponent implements OnInit {
         wait_message(this, "Capture in progress")
         let tokens=[]
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
+        $$("Appel de la "+func_name+" with ",args)
         let rc:any = await send_transaction_with_transfers(
           this.user.provider,
           func_name,
@@ -91,12 +103,16 @@ export class CaptureComponent implements OnInit {
   }
 
   update_value($event: any) {
-    this.pv_to_engage=$event
-    this.chance_to_win=1+this.item.pv / this.pv_to_engage
+    this.pv_to_engage=Number($event)
+    let x=this.item.pv
+    let y=this.pv_to_engage
+    let proba=(y+1-(x-1)/2)/y
+    this.chance_to_win=Math.round(Math.max(0,proba)*100)
   }
 
   protected readonly environment = environment;
   lang_pv: string="HP"
+  label: string="Capture"
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))

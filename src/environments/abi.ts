@@ -30,6 +30,10 @@ export const abi={
       {
         "name": "max_games_per_user",
         "type": "u32"
+      },
+      {
+        "name": "seuil_capture",
+        "type": "u32"
       }
     ],
     "outputs": []

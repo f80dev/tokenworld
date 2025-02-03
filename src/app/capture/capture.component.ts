@@ -78,7 +78,7 @@ export class CaptureComponent implements OnInit {
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
 
-        let args=func_name=="take" ? [this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z] : [Number(this.item.id),this.target.x,this.target.y,this.target.z]
+        let args=[this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z]
         wait_message(this, "Capture in progress")
         let tokens=[]
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))

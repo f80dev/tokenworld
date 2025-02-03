@@ -316,7 +316,7 @@ export class CreateWorldComponent implements OnInit {
 
   protected readonly Math = Math;
   cost_to_move: number=0
-  cost_to_fight: number=0
+  cost_to_fight: number=1
   link_to_share: string = "";
   min_distance_for_gps=50
   geoloc_to_drop=false

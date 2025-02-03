@@ -449,6 +449,10 @@ export const abi={
       ],
       "inputs": [
         {
+          "name": "game_id",
+          "type": "u32"
+        },
+        {
           "name": "t_id",
           "type": "u32"
         },
@@ -949,3 +953,4 @@ export const abi={
     }
   }
 }
+

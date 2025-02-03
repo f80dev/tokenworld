@@ -131,7 +131,7 @@ export class AuthentComponent implements OnInit,OnChanges {
   @Input() callback: string="";
 
   strong=false;                     //Niveau d'authentification
-  @Input() size="350px";
+  @Input() size="250px";
   @Input() title=""
 
   qrcode: string="";

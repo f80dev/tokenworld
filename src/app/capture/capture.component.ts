@@ -92,11 +92,11 @@ export class CaptureComponent implements OnInit {
         $$("Resultat ",rc)
         showMessage(this,rc.values[0].owner==this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
         wait_message(this)
-        showMessage(this,rc.returnMessage)
       } catch (e){
         wait_message(this);
+        showMessage(this,"Technical problem, please try again")
       }
-      showMessage(this,"You are the new owner of this NFT")
+
       setTimeout(()=>{this.router.navigate(["map"])})
     }
 

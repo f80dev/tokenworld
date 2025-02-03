@@ -1,11 +1,16 @@
 <div class="mainform" style="text-align: center;font-size: medium;" *ngIf="item">
-  <app-hourglass [message]="message"></app-hourglass>
-  <br>
-  <button mat-raised-button
-          *ngIf="message!='' && device.isMobile()"
-          (click)="open_xportal()">
-    Basculer sur xPortal
-  </button>
+  <div *ngIf="message.length>0">
+    <app-hourglass [message]="message"></app-hourglass>
+    <br>
+    <button mat-raised-button
+            *ngIf="message!='' && device.isMobile()"
+            (click)="open_xportal()">
+      Basculer sur xPortal
+    </button>
+    <br>
+    <img *ngIf="message.length>0" src="./assets/fight1.gif" style="width:200px;height:200px">
+  </div>
+
   <div *ngIf="message.length==0">
     <h3>{{label}} this tokemon ?</h3>
     <app-tokemon [label_pv]="lang_pv"

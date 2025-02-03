@@ -52,7 +52,7 @@ export class GamesComponent implements OnInit {
   router = inject(Router)
   clipboard = inject(Clipboard)
   api = inject(ApiService)
-  ngNavigatorShareService=inject(NgNavigatorShareService)
+  shareService=inject(NgNavigatorShareService)
 
 
 

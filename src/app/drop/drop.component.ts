@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {BigUIntValue, TokenTransfer} from '@multiversx/sdk-core/out';
+import { TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {create_transaction, get_nft, network_config, send_transaction_with_transfers} from '../mvx';

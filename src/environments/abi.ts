@@ -463,7 +463,7 @@ export const abi={
       ],
       "outputs": [
         {
-          "type": "bool"
+          "type": "Tokemon"
         }
       ]
     },

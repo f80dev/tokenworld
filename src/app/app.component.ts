@@ -15,6 +15,9 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {InputComponent} from './input/input.component';
 import {ApiService} from './api.service';
+import {share} from 'rxjs';
+import {share_game} from './tokenworld';
+import {NgNavigatorShareService} from 'ng-navigator-share';
 
 
 @Component({
@@ -34,6 +37,7 @@ export class AppComponent implements OnInit {
   routes=inject(ActivatedRoute)
   toast=inject(MatSnackBar)
   api=inject(ApiService)
+  shareService=inject(NgNavigatorShareService)
 
 
   logout() {
@@ -94,4 +98,9 @@ export class AppComponent implements OnInit {
   go_mytokemons() {
     this.router.navigate(["mytokemons"])
   }
+
+  share_game(){
+    share_game(this,this.user.game,"Find NFT in this game zone")
+  }
+
 }

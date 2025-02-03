@@ -25,7 +25,7 @@ export class GameComponent {
   protected readonly environment = environment;
 
   clipboard=inject(Clipboard)
-  ngNavigatorShareService=inject(NgNavigatorShareService)
+  shareService=inject(NgNavigatorShareService)
   dialog=inject(MatDialog)
 
   see_map(game: any) {

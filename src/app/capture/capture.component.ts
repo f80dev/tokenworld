@@ -87,6 +87,7 @@ export class CaptureComponent implements OnInit {
           args,
           this.user,
           tokens);
+        $$("Resultat ",rc)
         wait_message(this)
         showMessage(this,rc.returnMessage)
       } catch (e){
@@ -104,10 +105,10 @@ export class CaptureComponent implements OnInit {
 
   update_value($event: any) {
     this.pv_to_engage=Number($event)
-    let x=this.item.pv
-    let y=this.pv_to_engage
-    let proba=(y+1-(x-1)/2)/y
-    this.chance_to_win=Math.round(Math.max(0,proba)*100)
+    let y=Number(this.item.pv)
+    let x=this.pv_to_engage
+    let proba=(x)/(y+x)   //(y+1-(x-1)/2)/y
+    this.chance_to_win=Math.round(proba*100.0)
   }
 
   protected readonly environment = environment;

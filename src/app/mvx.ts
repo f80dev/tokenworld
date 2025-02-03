@@ -223,14 +223,15 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
       let sign_transaction=await provider.signTransaction(transaction)
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
 
-      const watcherUsingApi = new TransactionWatcher(apiNetworkProvider);
-      const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(hash);
+      const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider,{patienceMilliseconds:60000}).awaitCompleted(hash);
 
       const converter = new TransactionsConverter();
       const parser = new SmartContractTransactionsOutcomeParser();
 
       const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
       const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+
+      debugger
 
       resolve(parsedOutcome)
     } catch (e:any) {

@@ -226,27 +226,32 @@ export function initializeMap(vm:any,zone:any,
 
 export function share_game(vm:any,game: any,default_message="") : Promise<{shorturl:string,qrcode:string}> {
   return new Promise(async (resolve) => {
-    let message = await _prompt(vm, "Write an introduction message for the players",
-      default_message, "", "memo", "Share", "Cancel", false)
-    if (message != "") {
-      let params = {autoconnect: true, game: game.id, message: message}
-      $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
-      let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params),message)
-      let qrcode=""  //TODO a completer pour génrérer le qrcode
-      await vm.ngNavigatorShareService.share({
+    let message=default_message
+    if(vm.hasOwnProperty("dialog"))message = await _prompt(vm, "Write an introduction message for the players", default_message, "", "memo", "Share", "Cancel", false)
+    let params = {autoconnect: true, game: game.id, message: message}
+    $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
+    let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params))
+    let qrcode=""  //TODO a completer pour génrérer le qrcode
+    if(vm.hasOwnProperty("ngNavigatorShareService")){
+      await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",
         text: message,
         url: short_url
       })
-      showMessage(vm, "Link in clipboard")
-      resolve({shorturl:short_url,qrcode:qrcode})
     }
+    if(vm.hasOwnProperty("clipboard")){
+      vm.clipboard.copy(short_url)
+      showMessage(vm, "Link in clipboard")
+
+    }
+    resolve({shorturl:short_url,qrcode:qrcode})
+
   })
 
 }
 
 
-export function url_shorter(url_to_short:string,message="") : Promise<string> {
+export function url_shorter(url_to_short:string) : Promise<string> {
   return new Promise(async (resolve, reject) => {
     let url="https://is.gd/create.php?format=json&url="+encodeURIComponent(url_to_short)
     let r=await fetch(url,{mode:'cors'});

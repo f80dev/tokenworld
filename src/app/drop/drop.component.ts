@@ -113,6 +113,11 @@ export class DropComponent implements AfterViewInit {
         return
       }
 
+      if(!this.update_occurence()){
+        showMessage(this, "Bad number of tokemon")
+        return
+      }
+
 
       await this.user.login(this, "You must be connected to drop any NFT", "", true)
       //$$("Authentification ",this.user.provider)
@@ -249,13 +254,16 @@ export class DropComponent implements AfterViewInit {
     open(eval_direct_url_xportal(this.user.provider.uri))
   }
 
-  update_occurence(){
-    if(this.user.game && this.user.idx!=this.user.game.owner){
-      if(this.quantity>this.user.game.max_per_user || this.quantity>this.sel_nft.quantity){
+  update_occurence() : boolean {
+    if(this.user.game){
+      if(this.user.idx==this.user.game.owner)return true;
+      if(this.quantity<this.user.game.max_per_user && this.quantity<this.sel_nft.quantity){
+        return true
+      }else{
         showMessage(this,'Quantity is too high')
-        this.quantity=1
       }
     }
+    return false
   }
 
   update_nfts($event: any) {

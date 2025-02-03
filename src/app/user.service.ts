@@ -8,6 +8,8 @@ import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
 import {cartesianToPolar, center_of, distance, Game, polarToCartesian} from './tokenworld';
 import {Location} from '@angular/common';
+import {DeviceService} from './device.service';
+import {Connexion} from '../operation';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class UserService {
   strong: boolean=false
   tokens:any={}
   location=inject(Location)
+  device=inject(DeviceService)
   addr_change = new Subject<string>();
 
   network:string="elrond-devnet"
@@ -26,6 +29,7 @@ export class UserService {
   params:any
   lang="fr"
   nonce:number=0
+
   loc:GeolocationPosition={coords: {
       latitude: 0, longitude: 0,
       accuracy: 0,
@@ -45,6 +49,21 @@ export class UserService {
   idx:number=0
   fee=0;
   zone: any;
+  connexion:Connexion={
+    address: false,
+    direct_connect: false,
+    email: false,
+    extension_wallet: true,
+    google: false,
+    keystore: false,
+    nfluent_wallet_connect: false,
+    on_device: false,
+    private_key: false,
+    wallet_connect: true,
+    web_wallet: false,
+    webcam: false,
+    xAlias: false
+  }
   preview: boolean = false;
 
   constructor() { }
@@ -135,7 +154,8 @@ export class UserService {
           showMessage(vm,"Identification ok")
         } else {
           try{
-            let r:any=await _ask_for_authent(vm,"Authentification",subtitle)
+            if(this.device.isMobile())this.connexion.extension_wallet=false
+            let r:any=await _ask_for_authent(vm,"Authentification",subtitle,this.network,this.connexion)
             await this.authent(r)
             await this.init_idx()
             await this.init_balance(vm.api)

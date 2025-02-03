@@ -229,7 +229,6 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
       const parser = new SmartContractTransactionsOutcomeParser({abi:await create_abi(abi)});
 
       const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
-      debugger
 
       //voir https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html
       const parsedOutcome = parser.parseExecute(

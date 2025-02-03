@@ -1,35 +1,60 @@
-<div *ngIf="game" style="display: inline-block;font-size: small;">
-  <button mat-raised-button (click)="see_map(game)"  title="See the zone on a map">
-    <mat-icon>map</mat-icon>
-    See map
-  </button>
-  <button mat-raised-button (click)="share_map(game)"   title="See the zone on a map">
-    <mat-icon>share</mat-icon>
-    Invite player
-  </button>
+<div *ngIf="game" class="game_container">
+  <div class="game_section">
+    <button mat-raised-button (click)="see_map(game)"  title="See the zone on a map">
+      <mat-icon>map</mat-icon>
+      Game zone on map
+    </button>
+    <button mat-raised-button (click)="share_map(game)"   title="See the zone on a map">
+      <mat-icon>share</mat-icon>
+      Invite player
+    </button>
+    <br>
+    <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
+    <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
 
-  <br>
-  <br>
+  </div>
 
-  Max HP/user: {{game!.max_per_user}}<br>
+  <div class="game_section">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>Details</mat-expansion-panel-header>
+      <div style="font-size: small;">
+        <div>Max HP/user: {{game!.max_per_user}}</div>
+        <div>Fight cost: {{game!.cost_to_fight}} HP</div>
+        <div>Move cost: {{game!.cost_to_move}} HP</div>
+
+        <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div>
+
+        <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
+
+        Visibility : {{game!.min_visibility/environment.scale_factor}} to {{game!.max_visibility/environment.scale_factor}}m<br>
+        Move : {{game!.min_distance/environment.scale_factor}} to {{game!.max_distance/environment.scale_factor}}m
+      </div>
+    </mat-expansion-panel>
+  </div>
 
 
-  <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
-  <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
-  <br>
 
-  <mat-expansion-panel style="max-width: 350px;">
-    <mat-expansion-panel-header>Details</mat-expansion-panel-header>
-    <div style="font-size: small;">
-      <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div><br>
+  <div class="game_section">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>In game</mat-expansion-panel-header>
+      {{game.n_players}} players<br>
+      {{game.n_tokemons}} tokemons
+      <mat-icon title="See the NFTs hide in the world"
+                *ngIf="game.nfts!.length>0"
+                (click)="show_nfts(game)"
+                class="icon-button">visibility</mat-icon>
 
-      <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
+      <div *ngIf="game && game.previews && game.previews.length>0">
+        <img *ngFor="let src of game.previews" [src]="src"
+             class="small-vignette">
+      </div>
+    </mat-expansion-panel>
+  </div>
 
-      Visibility : {{game!.min_visibility/environment.scale_factor}} and {{game!.max_visibility/environment.scale_factor}}<br>
-      Move : {{game!.min_distance/environment.scale_factor}} and {{game!.max_distance/environment.scale_factor}}
-    </div>
 
-  </mat-expansion-panel>
-  <br>
-  <ng-content></ng-content>
+
+  <div>
+    <ng-content></ng-content>
+  </div>
+
 </div>

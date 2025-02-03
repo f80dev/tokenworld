@@ -136,9 +136,6 @@ export class GamesComponent implements OnInit {
     showMessage(this, "Stacking sended")
   }
 
-  async share_map(game: any) {
-    await share_game(this,game)
-  }
 
   create_game() {
     this.quit("create")
@@ -155,16 +152,6 @@ export class GamesComponent implements OnInit {
   }
 
 
-  async show_nfts(game: Game) {
-    if (!game.previews || game.previews.length == 0) {
-      for (let identifier of game.nfts) {
-        let nft:any=await get_nft(identifier, this.api, this.user.network)
-        game.previews.push(nft.media[0].originalUrl)
-      }
-    } else {
-      game.previews = []
-    }
-  }
 
 
 }

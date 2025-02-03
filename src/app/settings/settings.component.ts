@@ -90,7 +90,7 @@ export class SettingsComponent implements OnInit {
 
 
   async send() {
-    wait_message(this, "Dropping ...")
+    wait_message(this, "Funding ...")
     let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
     let tokens=[TokenTransfer.fungibleFromAmount(token,this.lifepoint,18)]
     let args=[this.sel_to_reload.id]
@@ -115,4 +115,5 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+    protected readonly environment = environment;
 }

@@ -23,6 +23,8 @@ button {
 mat-expansion-panel {
   width:94%;
   display: inline-block;
+  font-size: small;
+  text-align: left;
   max-width: 1000px;
   margin: 2%;
   margin-top: 5px;
@@ -30,7 +32,8 @@ mat-expansion-panel {
 }
 
 mat-expansion-panel-header {
-  font-size: large;
   height: 55px !important;
   display: flex;
 }
+
+

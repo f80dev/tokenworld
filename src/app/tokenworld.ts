@@ -69,6 +69,8 @@ export class Game {
   previews:string[]=[]
   closed:boolean=false
   bbox:string=""
+  cost_to_move=0
+  cost_to_fight=1
   gps_tolerance=100
   min_distance_to_refresh_map=50
 }
@@ -232,7 +234,7 @@ export function share_game(vm:any,game: any,default_message="") : Promise<{short
     $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
     let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params))
     let qrcode=""  //TODO a completer pour génrérer le qrcode
-    if(vm.hasOwnProperty("ngNavigatorShareService")){
+    if(vm.hasOwnProperty("shareService")){
       await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",
         text: message,

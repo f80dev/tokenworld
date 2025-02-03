@@ -9,11 +9,12 @@
 
     <mat-expansion-panel *ngIf="tokemons.length>0">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
-      <div *ngIf="sel_to_reload" style="width:80%;display: inline-block;max-width: 600px;margin-top:50px;">
+      <div *ngIf="sel_to_reload" style="width:100%;max-width: 1200px;margin-top:50px;">
 
         <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
                    *ngIf="max_pv_loading>0"
-                   label="Vitality to inject" unity="PV"
+                   style="display:inline-block;width:100%;"
+                   label="Vitality to inject" unity="HP"
                    (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 
         <br>
@@ -26,7 +27,8 @@
         <tr>
           <th>Visual</th>
           <th>Names<br>(Tokemon/NFT)</th>
-          <th>Position</th><th>Visibility (meters)</th><th>PV</th>
+          <th>Position</th><th>Visibility (meters)</th>
+          <th>Health Point (HP)</th>
         </tr>
         <tr *ngFor="let tokemon of tokemons" style="width: 100%;">
           <td><img [src]="tokemon.content.url" style="width: 100px"></td>
@@ -34,7 +36,7 @@
           <td>
             <button mat-icon-button (click)="open_map(tokemon)"><mat-icon>map</mat-icon></button>
           </td>
-          <td>{{tokemon.visibility}}</td>
+          <td>{{tokemon.visibility/environment.scale_factor}}m</td>
           <td>
             {{tokemon.pv}}
             <button mat-raised-button (click)="open_reload(tokemon)" *ngIf="max_pv_loading>0">Reload</button>

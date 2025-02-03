@@ -1,0 +1,22 @@
+
+.game_container {
+  font-size: small;
+  flex-wrap: wrap;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  justify-items: stretch;
+}
+
+.game_section {
+  text-align: left;
+  flex-grow: 1;
+  display: inline-block;
+  font-size: small;
+}
+
+
+mat-expansion-panel {
+  font-size: small;
+  text-align: left;
+}

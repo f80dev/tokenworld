@@ -20,44 +20,23 @@
   <mat-accordion *ngIf="message.length==0">
     <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
       <mat-expansion-panel-header>
-          <mat-icon *ngIf="!game.closed" (click)="select(game)"
-                    title="Play to this game"
-                    style="color:cyan;font-size: x-large;margin-bottom: 0;margin-right: 10px;">play_circle</mat-icon>
+        <mat-icon *ngIf="!game.closed" (click)="select(game)"
+                  title="Play to this game"
+                  style="color:cyan;font-size: x-large;margin-bottom: 0;margin-right: 10px;">play_circle</mat-icon>
 
         {{game.title}}
       </mat-expansion-panel-header>
 
-      <div style="width:100%;display: flex;flex-direction: row;justify-content: space-around;">
-        <div style="display: block;">
-          <app-game [game]="game">
-          </app-game>
+      <app-game [game]="game" style="display: inline-block;width:100%;">
+      </app-game>
 
-        </div>
+      <mat-expansion-panel *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
+        <mat-expansion-panel-header>Command</mat-expansion-panel-header>
+        <button mat-raised-button (click)="close_map(game)">Close</button>
+        <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+      </mat-expansion-panel>
 
 
-        <mat-expansion-panel style="width: 200px;display: block;" [expanded]="true">
-          <mat-expansion-panel-header>In game</mat-expansion-panel-header>
-          {{game.n_players}} players<br>
-          {{game.n_tokemons}} tokemons
-          <mat-icon title="See the NFTs hide in the world"
-                    *ngIf="game.nfts!.length>0"
-                    (click)="show_nfts(game)"
-                    class="icon-button">visibility</mat-icon>
-
-          <div *ngIf="game && game.previews && game.previews.length>0">
-            <img *ngFor="let src of game.previews" [src]="src"
-                 class="small-vignette">
-          </div>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
-          <mat-expansion-panel-header>Command</mat-expansion-panel-header>
-          <button mat-raised-button (click)="close_map(game)">Close</button>
-          <button mat-raised-button (click)="stacking(game)">AirDrop</button>
-
-        </mat-expansion-panel>
-
-      </div>
 
     </mat-expansion-panel>
   </mat-accordion>

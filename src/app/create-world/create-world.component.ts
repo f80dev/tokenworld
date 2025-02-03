@@ -64,7 +64,7 @@ export class CreateWorldComponent implements OnInit {
   router=inject(Router)
   geolocService=inject(GeolocService)
   location=inject(Location)
-  navigatorShareService=inject(NgNavigatorShareService)
+  shareService=inject(NgNavigatorShareService)
   dialog=inject(MatDialog)
   api=inject(ApiService)
   device=inject(DeviceService)
@@ -88,7 +88,7 @@ export class CreateWorldComponent implements OnInit {
   map!: L.Map
   args: any;
   lifepoint=0;
-  title="Mon titre"
+  title="My Game"
   real: boolean=true
   message: string=""
   dropzone: LatLng=new LatLng(0,0)

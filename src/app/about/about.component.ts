@@ -74,4 +74,6 @@ export class AboutComponent implements OnInit {
     clear() {
       deleteAllCookies()
     }
+
+  protected readonly environment = environment;
 }

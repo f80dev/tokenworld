@@ -15,7 +15,6 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {InputComponent} from './input/input.component';
 import {ApiService} from './api.service';
-import {share} from 'rxjs';
 import {share_game} from './tokenworld';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 
@@ -91,6 +90,7 @@ export class AppComponent implements OnInit {
       })
   }
 
+
   open_games() {
     this.router.navigate(["games"],{queryParams:{autoconnect:false}})
   }
@@ -103,4 +103,7 @@ export class AppComponent implements OnInit {
     share_game(this,this.user.game,"Find NFT in this game zone")
   }
 
+  go_about() {
+    this.router.navigate(["about"])
+  }
 }

@@ -25,7 +25,8 @@
   <button *ngIf="user.isConnected(true)" mat-icon-button (click)="logout()" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
   <button *ngIf="!user.isConnected(true)" mat-icon-button (click)="login()" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
 
-  <button mat-icon-button (click)="go_admin()"><mat-icon>science</mat-icon></button>
+  <button mat-icon-button *ngIf="!environment.production" (click)="go_admin()"><mat-icon>science</mat-icon></button>
+  <button mat-icon-button (click)="go_about()"><mat-icon>help</mat-icon></button>
 
 <!--  <button  mat-icon-button (click)="test()"><mat-icon>science</mat-icon></button>-->
 </mat-toolbar>

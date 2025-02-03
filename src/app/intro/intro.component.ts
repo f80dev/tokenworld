@@ -26,7 +26,7 @@ export class IntroComponent implements OnInit {
       this.params=await getParams(this.routes)
       $$("Ouverture de l'application avec les parametres ",this.params)
 
-      this.message=this.params.message || "With Tokemon World you can hide NFTs in the geographic area of ​​your choice and invite your friends to find them."
+      this.message=this.params.message || "With "+environment.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
       $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
 

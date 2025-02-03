@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
 import {query, toAccount, usersigner_from_pem} from "./mvx";
@@ -7,6 +7,7 @@ import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
 import {LatLng} from 'leaflet';
 import {cartesianToPolar, center_of, distance, Game, polarToCartesian} from './tokenworld';
+import {Location} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class UserService {
   provider: any
   strong: boolean=false
   tokens:any={}
+  location=inject(Location)
   addr_change = new Subject<string>();
 
   network:string="elrond-devnet"
@@ -146,6 +148,10 @@ export class UserService {
     })
   }
 
+
+  isProd() {
+
+  }
 
   get_domain(){
     return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"

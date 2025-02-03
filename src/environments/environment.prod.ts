@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   forum: "https://discord.gg/BfC2E2ent",
   mail: "contact@nfluent.io",
   version: require('../../package.json').version + '-dev',

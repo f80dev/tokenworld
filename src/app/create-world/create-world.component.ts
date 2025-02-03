@@ -232,7 +232,7 @@ export class CreateWorldComponent implements OnInit {
       this.tokemon_vision,
       this.user_visibility,
 
-      this.cost_to_move,
+      this.cost_to_move,this.cost_to_fight,
       this.min_distance_for_gps
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
@@ -316,6 +316,7 @@ export class CreateWorldComponent implements OnInit {
 
   protected readonly Math = Math;
   cost_to_move: number=0
+  cost_to_fight: number=0
   link_to_share: string = "";
   min_distance_for_gps=50
   geoloc_to_drop=false

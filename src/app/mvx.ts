@@ -223,15 +223,19 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
       let sign_transaction=await provider.signTransaction(transaction)
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
 
-      const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider,{patienceMilliseconds:60000}).awaitCompleted(hash);
+      const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(hash);
 
       const converter = new TransactionsConverter();
-      const parser = new SmartContractTransactionsOutcomeParser();
+      const parser = new SmartContractTransactionsOutcomeParser({abi:await create_abi(abi)});
 
       const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
-      const parsedOutcome = parser.parseDeploy({ transactionOutcome });
-
       debugger
+
+      //voir https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html
+      const parsedOutcome = parser.parseExecute(
+        { transactionOutcome:transactionOutcome,function:function_name }
+      );
+
 
       resolve(parsedOutcome)
     } catch (e:any) {
@@ -339,6 +343,7 @@ export async function send_transaction(provider:any,function_name:string,sender_
       });
     }
 
+
     if(_type.startsWith("Fungible")){
       let _t=TokenTransfer.fungibleFromAmount(token,value,18)
       transaction = factory.createTransactionForExecute({
@@ -393,10 +398,10 @@ export async function send_transaction(provider:any,function_name:string,sender_
         const transactionOnNetworkUsingApi = await watcherUsingApi.awaitCompleted(hash);
 
         const converter = new TransactionsConverter();
-        const parser = new SmartContractTransactionsOutcomeParser();
+        const parser = new SmartContractTransactionsOutcomeParser({ abi:await create_abi(_abi)});
 
         const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
-        const parsedOutcome = parser.parseDeploy({ transactionOutcome });
+        const parsedOutcome = parser.parseExecute({transactionOutcome: transactionOutcome ,function: function_name});
 
         const [event] = gatherAllEvents(transactionOutcome);
 

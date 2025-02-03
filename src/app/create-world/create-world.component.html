@@ -128,8 +128,12 @@
 
           <app-input label="Max tokemons per user" help="" value_type="number" [value]="max_per_user" (valueChange)="max_per_user=$event"></app-input>
           <app-input label="Cost to move" help=""
-                     unity="PV/km"
+                     unity="HP/km"
                      value_type="number" [value]="cost_to_move" (valueChange)="cost_to_move=$event"></app-input>
+
+          <app-input label="Cost to fight" help="For each fight, tokemon loose some HP"
+                     unity="HP"
+                     value_type="number" [value]="cost_to_fight" (valueChange)="cost_to_fight=$event"></app-input>
 
           <app-input label="Min distance to move" help="" value_type="number" [value]="min_distance" (valueChange)="min_distance=$event"></app-input>
           <app-input label="Min distance for GPS location" help="" value_type="number" [value]="min_distance_for_gps" (valueChange)="min_distance_for_gps=$event"></app-input>

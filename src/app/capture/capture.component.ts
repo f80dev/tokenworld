@@ -15,6 +15,7 @@ import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {ApiService} from '../api.service';
 import {Point3D, polarToCartesian} from '../tokenworld';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-capture',
@@ -37,6 +38,7 @@ export class CaptureComponent implements OnInit {
   chance_to_win: number=1
 
   dialog=inject(MatDialog)
+  toast=inject(MatSnackBar)
   routes = inject(ActivatedRoute)
   user = inject(UserService)
   router=inject(Router)
@@ -88,6 +90,7 @@ export class CaptureComponent implements OnInit {
           this.user,
           tokens);
         $$("Resultat ",rc)
+        showMessage(this,rc.values[0].owner==this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
         wait_message(this)
         showMessage(this,rc.returnMessage)
       } catch (e){

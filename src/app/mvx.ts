@@ -135,12 +135,7 @@ export function toAccount(addr:string,network:string=DEVNET) : Promise<AccountOn
       reject(e)
     }
   })
-
 }
-
-
-
-
 
 
 export function usersigner_from_pem(pemText:string) : UserSigner {
@@ -198,9 +193,7 @@ export function create_transaction(function_name:string,args:any[],
       tokenTransfers:tokens_to_transfer
     });
     resolve(transaction)
-
   })
-
 }
 
 
@@ -218,27 +211,29 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
     await user.refresh()
     transaction.nonce=BigInt(user.account.nonce)
 
-
     try{
       let sign_transaction=await provider.signTransaction(transaction)
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
 
       const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(hash);
 
+      debugger
       const converter = new TransactionsConverter();
       const parser = new SmartContractTransactionsOutcomeParser({abi:await create_abi(abi)});
 
+
       const transactionOutcome = converter.transactionOnNetworkToOutcome(transactionOnNetworkUsingApi);
-
-      //voir https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html
-      const parsedOutcome = parser.parseExecute(
-        { transactionOutcome:transactionOutcome,function:function_name }
-      );
-
-
-      resolve(parsedOutcome)
+      if(transactionOutcome.directSmartContractCallOutcome.returnCode!="ok"){
+        reject({message:transactionOutcome.directSmartContractCallOutcome.returnCode})
+      }else{
+        //voir https://multiversx.github.io/mx-sdk-js-core/v13/classes/SmartContractTransactionsOutcomeParser.html
+        const parsedOutcome = parser.parseExecute(
+          { transactionOutcome:transactionOutcome,function:function_name }
+        );
+        $$("Resultat transaction ",parsedOutcome)
+        resolve(parsedOutcome)
+      }
     } catch (e:any) {
-      console.log(e)
       reject(e.message)
     }
   })

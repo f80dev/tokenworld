@@ -109,7 +109,6 @@ export class DropComponent implements AfterViewInit {
 
   async drop() {
     if (this.user.game) {
-
       if (this.name.length < 3) {
         showMessage(this, "3 characters required for the name")
         return
@@ -119,7 +118,6 @@ export class DropComponent implements AfterViewInit {
         showMessage(this, "Bad number of tokemon")
         return
       }
-
 
       await this.user.login(this, "You must be connected to drop any NFT", "", true)
       //$$("Authentification ",this.user.provider)
@@ -181,6 +179,7 @@ export class DropComponent implements AfterViewInit {
         $$("Gas to transaction ",Number(gas_to_drop))
         $$("Dropping avec les arguments ",args)
         let rc: any = await send_transaction_with_transfers(this.user.provider, "drop", args, this.user, tokens, gas_to_drop)
+
         $$("Resultat du drop ", rc)
         if (rc.returnMessage != "ok") {
           showMessage(this, rc.returnMessage)

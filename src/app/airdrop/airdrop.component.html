@@ -1,17 +1,16 @@
 <div class="mainform" style="text-align: center;">
   <app-hourglass [message]="message"></app-hourglass>
-
-
     <app-wallet show="coin" [selected]="true"
                 *ngIf="!sel_coin"
                 style="display: inline-block;width:600px;"
                 message="Select a coin to drop"
+                (onCancel)="quit()"
                 [address]="user.address"
                 (selectChanged)="sel_coin=$event"></app-wallet>
 
     <br>
 
-    <div [style.display]="!sel_coin && message.length>0 ? 'none' : 'inline-block'">
+    <div [style.display]="!sel_coin || message.length>0 ? 'none' : 'inline-block'">
       <h4 *ngIf="sel_coin">AirDrop of {{sel_coin.name}}</h4>
       <app-input
         *ngIf="sel_coin"
@@ -26,7 +25,7 @@
       <br>
 
       <div class="map_style" >
-        <div id="map" style="position: absolute;left:0;width:200px;height:200px;top:0;z-index: 10;"></div>
+        <div id="map" style="position: absolute;left:0;top:0;right:0;bottom:0;z-index: 10;"></div>
         <div class="disk" [style.width]="visibility*ech+'px'"
              [style.height]="visibility*ech+'px'"
              [style.margin-top]="-visibility*ech/2+'px'"

@@ -213,7 +213,7 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl).addTo(vm.map);
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
-    if(centerIcon.length>0 && vm.hasOwnProperty("me_marker")){
+    if(centerIcon.length>0){
       vm.me_marker=add_icon(vm.map,centerIcon,center)
       vm.me_marker.removeFrom(vm.map)
     }

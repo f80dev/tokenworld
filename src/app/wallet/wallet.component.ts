@@ -32,6 +32,7 @@ export class WalletComponent implements OnChanges {
   @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
   @Input() network="elrond-devnet"
   @Output() selectChanged = new EventEmitter()
+  @Output() onCancel = new EventEmitter()
   @Output() listChanged = new EventEmitter()
 
   @Input() size="100px"
@@ -87,4 +88,7 @@ export class WalletComponent implements OnChanges {
   }
 
 
+  cancel() {
+    this.onCancel.emit()
+  }
 }

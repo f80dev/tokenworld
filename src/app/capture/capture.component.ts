@@ -92,7 +92,11 @@ export class CaptureComponent implements OnInit {
           this.user,
           tokens);
         $$("Resultat ",rc)
-        showMessage(this,rc.values[0].owner==this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+        if(func_name=="capture") {
+          showMessage(this, rc.values[0].owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+        }else{
+          showMessage(this,"You take your tokemon in your bag")
+        }
         wait_message(this)
       } catch (e){
         wait_message(this);

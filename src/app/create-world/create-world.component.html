@@ -183,7 +183,12 @@
 
   <div *ngIf="created_game">
     <h4>Your game zone is available</h4>
-    <br>
+    <button mat-raised-button (click)="enter_game()">
+      <mat-icon>play_circle</mat-icon>
+      Enter !
+    </button>
+
+    <br><br>
     You can invite people to play<br>
     <br>
     <img [src]="qrcode" *ngIf="qrcode.length>0" style="width: 200px;height:200px;">
@@ -193,10 +198,6 @@
       Invite players
     </button>
     &nbsp;
-    <button mat-raised-button (click)="enter_game()">
-      <mat-icon>play_circle</mat-icon>
-      Enter !
-    </button>
 
   </div>
 

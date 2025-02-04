@@ -1,32 +1,13 @@
-
-
 <router-outlet></router-outlet>
 
 <mat-toolbar *ngIf="user.game" color="primary" class="bottom-toolbar">
-
-  <div style="display: inline-block;font-size: small;margin-right: 50px;">
-
-<!--    <app-input style="display:inline-block;width:100px" *ngIf="user.show_visibility"-->
-<!--               label="Visibility" (valueChange)="user.visibility=$event"-->
-<!--               value_type="number" [min]="1" [max]="500">-->
-<!--    </app-input>-->
-  </div>
-
-
-
   <button mat-icon-button (click)="open_map()" title="Voir la carte"><mat-icon>map</mat-icon></button>
-
-<!--  <button mat-icon-button (click)="open_build()" title="Créer un tokemon"><mat-icon>camera</mat-icon></button>-->
   <button mat-icon-button (click)="create_world()"><mat-icon>build</mat-icon></button>
   <button mat-icon-button (click)="open_games()"><mat-icon>casino</mat-icon></button>
   <button mat-icon-button (click)="go_settings()" title="Settings"><mat-icon>person</mat-icon></button>
   <button mat-icon-button (click)="share_game()" title="Share this game"><mat-icon>share</mat-icon></button>
-
-  <button *ngIf="user.isConnected(true)" mat-icon-button (click)="logout()" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
-  <button *ngIf="!user.isConnected(true)" mat-icon-button (click)="login()" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
-
-  <button mat-icon-button *ngIf="!environment.production" (click)="go_admin()"><mat-icon>science</mat-icon></button>
+  <button mat-icon-button (click)="logout()" *ngIf="user.isConnected(true)" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
+  <button mat-icon-button (click)="login()" *ngIf="!user.isConnected(true)" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
+  <button mat-icon-button (click)="go_admin()" *ngIf="!environment.production"><mat-icon>science</mat-icon></button>
   <button mat-icon-button (click)="go_about()"><mat-icon>help</mat-icon></button>
-
-<!--  <button  mat-icon-button (click)="test()"><mat-icon>science</mat-icon></button>-->
 </mat-toolbar>

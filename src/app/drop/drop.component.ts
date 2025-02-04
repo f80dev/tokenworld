@@ -70,6 +70,7 @@ export class DropComponent implements AfterViewInit {
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   random_location: boolean = false;
   diffusion = 50
+  max_per_user=1
 
 
   async ngAfterViewInit() {
@@ -78,6 +79,7 @@ export class DropComponent implements AfterViewInit {
       if(this.user){
         await this.user.login(this, "You must be connected to drop any NFT", "", false)
         this.user.init_game(await this.user.open_game(Number(params.game_id)))
+        this.max_per_user = this.user.idx == Number(this.user.game!.owner) ? 100 : (this.user.game?.max_per_user || 1000)
 
         this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
         await this.user.init_balance(this.api)
@@ -205,16 +207,15 @@ export class DropComponent implements AfterViewInit {
 
 
   async on_select($event: any) {
-    $$("Selection du NFT ", $event)
+    $$("Selection du NFT ",$event)
     this.sel_nft = $event
     this.name = $event.name
-    let max_per_user = this.user.idx == Number(this.user.game!.owner) ? 200 : (this.user.game?.max_per_user || 1000)
-    this.max_quantity = Math.min(this.sel_nft.balance, max_per_user)
+
+    this.max_quantity = Math.min(Number(this.sel_nft.balance), Number(this.max_per_user))
 
     let pos = this.user.center_map
     if(this.map){
       initializeMap(this, this.user.game, pos, 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
-
       setTimeout(() => {
         add_icon(this.map,'https://tokemon.f80.fr/assets/icons/target.png',this.user.center_map,"dropping point")
         this.user.visibility = this.user.game!.min_visibility
@@ -257,7 +258,7 @@ export class DropComponent implements AfterViewInit {
   update_occurence() : boolean {
     if(this.user.game){
       if(this.user.idx==this.user.game.owner)return true;
-      if(this.quantity<this.user.game.max_per_user && this.quantity<this.sel_nft.quantity){
+      if(this.quantity<this.user.game.max_per_user && this.quantity<Number(this.sel_nft.balance)){
         return true
       }else{
         showMessage(this,'Quantity is too high')

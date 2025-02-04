@@ -253,6 +253,8 @@ export class CreateWorldComponent implements OnInit {
         let games=await this.user.extract_games()
         $$("Récupération de "+games.length)
         this.created_game=games[games.length-1]
+        let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World",false)
+        this.qrcode=result.qrcode
       }
     } catch (e:any) {
       showMessage(this,e)
@@ -327,6 +329,5 @@ export class CreateWorldComponent implements OnInit {
 
   async share() {
     let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World")
-    this.qrcode=result.qrcode
   }
 }

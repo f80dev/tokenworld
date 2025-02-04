@@ -46,7 +46,7 @@ export class CaptureComponent implements OnInit {
 
   message: string=""
   max_engagment: number=100
-  pv_to_engage: number=1
+  pv_to_engage: number=0
   target=new Point3D(0,0,0)
 
 
@@ -59,10 +59,12 @@ export class CaptureComponent implements OnInit {
       await this.user.login(this,"","",true)
       this.user.init_game(Number(params.game))
 
-      if(this.item.owner!=this.user.idx && this.item.pv>0)this.label="Fight"
+      if(this.item.owner!=this.user.idx && this.item.pv>0){
+        this.label="Fight"
+        this.pv_to_engage=1
+      }
 
       $$("Tentative de capture du tokemon ",this.item)
-
 
       // @ts-ignore
       this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv

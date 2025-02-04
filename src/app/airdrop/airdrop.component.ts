@@ -15,6 +15,8 @@ import {LatLng} from 'leaflet';
 import * as L from 'leaflet';
 import {baseMapURl} from '../map/map.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-airdrop',
@@ -34,7 +36,8 @@ export class AirdropComponent implements AfterViewInit {
   max_distance=1000
   private map!: L.Map
 
-
+  dialog=inject(MatDialog)
+  api=inject(ApiService)
   ech: number=1
   routes=inject(ActivatedRoute)
   sel_coin: any;
@@ -48,17 +51,23 @@ export class AirdropComponent implements AfterViewInit {
 
 
   async ngAfterViewInit() {
-    await this.user.login(this,"","",true)
 
-    let params:any=await getParams(this.routes)
-    this.user.init_game(await this.user.open_game(params.game_id))
-    if(this.user.game?.closed){
-      showMessage(this,this.user.game.title+" is closed")
-      this.router.navigate(["games"])
-    }else{
-      this.user.center_map=new LatLng(params.lat,params.lng)
-      await initializeMap(this,this.user.game,this.user.center_map)
-    }
+    setTimeout(async ()=>{
+      await this.user.login(this,"","",true)
+
+      let params:any=await getParams(this.routes)
+      this.user.init_game(await this.user.open_game(params.game_id))
+
+      if(this.user.game && this.user.game!.closed){
+        showMessage(this,this.user.game.title+" is closed")
+        this.router.navigate(["games"])
+      }else{
+        let pos=new LatLng(params.lat,params.lng)
+
+        initializeMap(this,this.user.game,pos,'https://tokemon.f80.fr/assets/icons/target.png')
+      }
+    },100)
+
 
   }
 

@@ -53,20 +53,22 @@ export class SettingsComponent implements OnInit {
 
 
   async refresh(){
-    this.tokemons=[]
-    let rc:any=await this.user.query("show_all_my_nfts",[0,this.user.address])
-    for(let tokemon of rc){
-      let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
-      tokemon.content=await get_nft(identifier,this.api,this.user.network)
-      this.tokemons.push(tokemon)
-    }
+    if(this.user.isConnected(true)){
+      this.tokemons=[]
+      let rc:any=await this.user.query("show_all_my_nfts",[0,this.user.address])
+      for(let tokemon of rc){
+        let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
+        tokemon.content=await get_nft(identifier,this.api,this.user.network)
+        this.tokemons.push(tokemon)
+      }
 
-    this.sc_settings=await this.user.query("map");
+      this.sc_settings=await this.user.query("map");
+    }
   }
 
 
   async ngOnInit() {
-    await this.user.login(this,"","",true)
+    await this.user.login(this)
     this.refresh();
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
     }
@@ -106,8 +108,6 @@ export class SettingsComponent implements OnInit {
   }
 
 
-
-
   on_select($event: any) {
     if(this.user.game){
       let obj={game_id:this.user.game.id,lat:0,lng:0,nft:$event.identifier}
@@ -115,5 +115,10 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-    protected readonly environment = environment;
+  protected readonly environment = environment;
+
+  async on_open_tokemon_engaged() {
+    await this.user.login(this,"","",true)
+    this.refresh()
+  }
 }

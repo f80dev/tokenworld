@@ -8,7 +8,7 @@
       <app-wallet [address]="user.address" show="coin,nft" (selectChanged)="on_select($event)"></app-wallet>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf="tokemons.length>0">
+    <mat-expansion-panel (expandedChange)="on_open_tokemon_engaged()">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
       <div *ngIf="sel_to_reload" style="width:100%;max-width: 1200px;margin-top:50px;">
 

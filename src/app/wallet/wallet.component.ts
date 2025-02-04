@@ -91,4 +91,10 @@ export class WalletComponent implements OnChanges {
   cancel() {
     this.onCancel.emit()
   }
+
+  create_coin() {
+    let url="https://devnet.usewarp.to/create-token"
+    if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet.","")
+    open(url,"ESDT Creator")
+  }
 }

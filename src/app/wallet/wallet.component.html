@@ -1,7 +1,11 @@
 <div style="width:100%;text-align: center">
   <h5 *ngIf="message.length>0">{{message}}</h5>
   <div style="display: inline-block;width: 90%;">
-    <h4 *ngIf="tokens.length>0">Your coins</h4>
+    <h4 *ngIf="tokens.length>0">
+      Your coins
+      <mat-icon class="icon-button" (click)="create_coin()">add</mat-icon>
+      <mat-icon class="icon-button" (click)="refresh()">refresh</mat-icon>
+    </h4>
     <table style="display:inline-block;margin-top:-10px;min-width: 350px">
       <tr *ngFor="let k of tokens" style="width: 100%;padding: 10px;">
         <td style="text-align: right;">
@@ -18,6 +22,7 @@
         <td style="text-align: right;width:50%;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
       </tr>
     </table>
+
   </div>
   <br>
 

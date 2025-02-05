@@ -39,7 +39,7 @@ export class GameComponent {
 
 
   async share_map(game: Game) {
-    let result=await share_game(this,game)
+    await share_game(this,game,"Join my game on "+environment.appname)
   }
 
   async show_nfts(game: Game) {

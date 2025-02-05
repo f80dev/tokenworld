@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
   create_world() {
     this.router.navigate(["create"],
       {
-        queryParams:{p: setParams({zone:this.user.zone},"","")}
+        queryParams:{p: setParams({lat:this.user.center_map.lat,lng:this.user.center_map.lng,zomm:this.user.zoom},"","")}
       })
   }
 

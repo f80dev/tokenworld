@@ -103,6 +103,7 @@
     <mat-label *ngIf="label.length>0" class="mat-caption">{{label}}</mat-label>
 
     <textarea [placeholder]="placeholder" title="infobull" matInput
+              style="width: 100%;"
               [ngClass]="fontname"
               [(ngModel)]="value"
               [rows]="rows" [cols]="cols" (focusin)="showHelp=true"

@@ -233,7 +233,8 @@ export function share_game(vm:any,game: any,default_message="",share_menu=true) 
     let params = {autoconnect: true, game: game.id, message: message}
     $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
     let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params))
-    let qrcode=""  //TODO a completer pour génrérer le qrcode
+    let qrcode=jsQR(new Uint8ClampedArray(new TextEncoder().encode(short_url)),200,200)  //TODO a completer pour génrérer le qrcode
+    debugger
     if(vm.hasOwnProperty("shareService") && share_menu){
       await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",
@@ -245,7 +246,7 @@ export function share_game(vm:any,game: any,default_message="",share_menu=true) 
       vm.clipboard.copy(short_url)
       showMessage(vm, "Link in clipboard")
     }
-    resolve({shorturl:short_url,qrcode:qrcode})
+    resolve({shorturl:short_url,qrcode:qrcode!.data})
 
   })
 

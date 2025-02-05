@@ -77,7 +77,8 @@ export class DropComponent implements AfterViewInit {
     setTimeout(async ()=>{
       let params: any = await getParams(this.routes)
       if(this.user){
-        await this.user.login(this, "You must be connected to drop any NFT", "", false)
+        await this.user.login(this, "You must be connected to drop any NFT","",false,0.01,"To drop a tokemon in game you must have some egld")
+
         this.user.init_game(await this.user.open_game(Number(params.game_id)))
         this.max_per_user = this.user.idx == Number(this.user.game!.owner) ? 100 : (this.user.game?.max_per_user || 1000)
 

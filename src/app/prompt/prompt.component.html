@@ -1,6 +1,6 @@
 <div class="app-prompt">
   <div mat-dialog-title style="margin-bottom: 10px !important;width:100%;text-align: center;">{{data.title}}</div>
-  <div mat-dialog-content>
+  <div mat-dialog-content style="width: 100%;">
     <p *ngIf="_type!='list' && data && data.question &&  !data.question?.startsWith('http') && !data.question?.startsWith('./') && !data.question?.startsWith('html:')"
        style="font-size: medium;width:100%;text-align: center;color: darkgray">
       {{data.question}}
@@ -25,17 +25,17 @@
     </div>
 
 
-    <div *ngIf="!data.onlyConfirm && !data.options">
-
+    <div *ngIf="!data.onlyConfirm && !data.options" style="width: 100%;">
 
         <app-input *ngIf="_type!='memo' && _type!='list'" id="txtPrompt" [value_type]="_type"
                    [max]="_max" [min]="_min"
+                   style="display: inline-block;width: 100%;"
                    [value]="data.result" (valueChange)="data.result=$event"
                    [placeholder]="data.placeholder"
                    (keypress)="onEnter($event)"></app-input>
         <!--        <mat-icon *ngIf="data.emojis" matSuffix (click)="showEmoji=!showEmoji">emoji_emotions</mat-icon>-->
 
-        <app-input *ngIf="_type=='memo'"
+        <app-input *ngIf="_type=='memo'" style="display: inline-block;width: 100%;"
                    [rows]="data.n_rows || 3"
                    value_type="memo"
                    [maxlength]="_max.toString()" [value]="data.result"

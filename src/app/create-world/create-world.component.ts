@@ -118,7 +118,6 @@ export class CreateWorldComponent implements OnInit {
 
 
   async ngOnInit() {
-
     this.zone={
       map:"map",
       zoom:16,
@@ -130,16 +129,21 @@ export class CreateWorldComponent implements OnInit {
     $$("Appel de onInit, initialisation de zone ",this.zone)
 
     let params:any=await getParams(this.routes)
-    await this.user.login(this)
+    await this.user.login(this,"","",false,0.02,"To create a game your must have some egld")
 
     if(params.hasOwnProperty("zone")) {
       this.zone = params.zone
       $$("Récupération de la zone ",this.zone)
     } else {
-      $$("La zone n'est pas en parametre, on localise")
-      if(await this.user.geoloc(this.geolocService)){
-        this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+      if(params.hasOwnProperty("lat") && params.hasOwnProperty("lng")){
+        this.zone.center=new LatLng(params.lat,params.lng)
+      }else{
+        $$("La zone n'est pas en parametre, on localise")
+        if(await this.user.geoloc(this.geolocService)){
+          this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+        }
       }
+
     }
 
     await this.user.init_balance(this.api)

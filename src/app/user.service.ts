@@ -24,7 +24,7 @@ export class UserService {
   device=inject(DeviceService)
   addr_change = new Subject<string>();
 
-  network:string="elrond-devnet"
+  network:string=environment.network || "elrond-devnet"
   params:any
   lang="fr"
   nonce:number=0
@@ -136,7 +136,6 @@ export class UserService {
 
   login(vm: any,subtitle="",pem_file="",strong=false,required_balance=0,message_balance="") {
     return new Promise(async (resolve, reject) => {
-      debugger
       if(!this.address)this.address=localStorage.getItem("address") || ""
       await this.init_idx()
 
@@ -165,8 +164,6 @@ export class UserService {
           showMessage(vm,"Identification ok")
         } else {
           try{
-            debugger
-
             if(this.device.isMobile())this.connexion.extension_wallet=false
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle,this.network,this.connexion)
             await this.authent(r)

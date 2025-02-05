@@ -214,6 +214,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   async open_drop() {
     let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
     if(this.user.game?.geoloc_to_drop && this.user.idx!=this.user.game.owner){
       try{
@@ -225,8 +226,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         return
       }
     }
+
     let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
-    if(message!=''){
+    if(message!='' && this.user.game!.owner!=this.user.idx){
       showMessage(this,message)
     }else{
       let bounds=this.map!.getBounds()
@@ -397,7 +399,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async recenter() {
-    if(!this.user.game?.geoloc_to_catch && !this.user.game?.geoloc_to_drop ){
+    if(!is_in(this.user.center_map,this.user.game!)){
       showMessage(this,"Map on the gaming zone")
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)

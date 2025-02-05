@@ -217,7 +217,6 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
 
       const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(hash);
 
-      debugger
       const converter = new TransactionsConverter();
       const parser = new SmartContractTransactionsOutcomeParser({abi:await create_abi(abi)});
 

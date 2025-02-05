@@ -9,16 +9,12 @@
       Invite player
     </button>
     <br>
-
-    <div *ngIf="game.n_players>0">{{game.n_players}} players</div>
-    <div *ngIf="game.n_tokemons>0">
-      {{game.n_tokemons}} tokemons
+    <br>
+      {{game.n_players}} players / {{game.n_tokemons}} tokemons
       <mat-icon title="See the NFTs hide in the world"
-                *ngIf="game.nfts!.length>0"
+                *ngIf="game.n_tokemons>0 && game.nfts!.length>0"
                 (click)="show_nfts(game)"
                 class="icon-button">visibility</mat-icon>
-
-    </div>
 
 
     <div *ngIf="game && game.previews && game.previews.length>0">
@@ -40,6 +36,9 @@
 
         <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div>
 
+        <div *ngIf="game!.entrance.x+game!.entrance.y+game!.entrance.z!=0">Fix Entrance</div>
+        <div *ngIf="game!.exit.x+game!.exit.y+game!.exit.z!=0">Fix Exit</div>
+
         <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
 
         Visibility : {{game!.min_visibility/environment.scale_factor}} to {{game!.max_visibility/environment.scale_factor}}m<br>
@@ -48,11 +47,6 @@
     </mat-expansion-panel>
   </div>
 
-
-
-
-  <div>
-    <ng-content></ng-content>
-  </div>
+  <ng-content class="game_section"></ng-content>
 
 </div>

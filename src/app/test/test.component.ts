@@ -32,9 +32,7 @@ export class TestComponent implements OnInit {
 
 
   async ngOnInit() {
-    debugger
     this.api._get("https://is.gd/create.php","format=simple&url=www.example.com").subscribe((res:any)=>{
-      debugger
       this.url=res.url
     })
   }

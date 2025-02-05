@@ -5,7 +5,7 @@
   <button mat-icon-button (click)="create_world()"><mat-icon>build</mat-icon></button>
   <button mat-icon-button (click)="open_games()"><mat-icon>casino</mat-icon></button>
   <button mat-icon-button (click)="go_settings()" title="Settings"><mat-icon>person</mat-icon></button>
-  <button mat-icon-button (click)="share_game()" title="Share this game"><mat-icon>share</mat-icon></button>
+  <button mat-icon-button (click)="share_game()" *ngIf="user.game" title="Share this game"><mat-icon>share</mat-icon></button>
   <button mat-icon-button (click)="logout()" *ngIf="user.isConnected(true)" title="Se déconnecter"><mat-icon>logout</mat-icon></button>
   <button mat-icon-button (click)="login()" *ngIf="!user.isConnected(true)" title="Se connecter à la blockchain"><mat-icon>login</mat-icon></button>
   <button mat-icon-button (click)="go_admin()" *ngIf="!environment.production"><mat-icon>science</mat-icon></button>

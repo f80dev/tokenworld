@@ -10,6 +10,7 @@ export const environment = {
     {label: "MultiversX", value: "elrond-mainnet"},
     {label: "MultiversX Test v2", value: "elrond-devnet2"},
   ],
+  network:"elrond-devnet",
   storage:"github",
   visual: "./assets/tokemon_logo.png",
   logo: "./assets/tokemon_logo.png",
@@ -63,7 +64,7 @@ export const environment = {
 
   contract_addr:{
     "elrond-devnet":"erd1qqqqqqqqqqqqqpgql6kvh5m3677s7t3tq53muvuwa9gt99aw835s5v7t6z",
-    "elrond-mainnet":""
+    "elrond-mainnet":"erd1qqqqqqqqqqqqqpgquhyjp5yaxjlmawkmvnl6v7kr89fsznzy835sq94u4x"
   },
 
   website: "https://af10.fr",

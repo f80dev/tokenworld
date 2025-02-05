@@ -263,6 +263,7 @@ export function url_shorter(url_to_short:string) : Promise<string> {
     })
 }
 
+//tag in_the_game in_game
 export function is_in(pt:LatLng,zone:Game) : boolean {
   let ne=cartesianToPolar(zone.ne,environment.scale_factor,environment.translate_factor)
   let sw=cartesianToPolar(zone.sw,environment.scale_factor,environment.translate_factor)

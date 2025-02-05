@@ -53,9 +53,22 @@ export class AppComponent implements OnInit {
 
 
 
+
+
   async ngOnInit() {
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
-    this.user.network=environment.networks[0].value
+
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      const worker = new Worker(new URL('./app.worker', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      worker.postMessage('hello');
+    } else {
+      // Web workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
   }
 
 
@@ -86,12 +99,16 @@ export class AppComponent implements OnInit {
   create_world() {
     this.router.navigate(["create"],
       {
-        queryParams:{p: setParams({lat:this.user.center_map.lat,lng:this.user.center_map.lng,zomm:this.user.zoom},"","")}
+        queryParams:{p: setParams({
+            lat:this.user.center_map.lat,
+            lng:this.user.center_map.lng,
+            zoom:Math.round(this.user.zoom/1.6)},"","")}
       })
   }
 
 
   open_games() {
+    this.user.game=undefined
     this.router.navigate(["games"],{queryParams:{autoconnect:false}})
   }
 

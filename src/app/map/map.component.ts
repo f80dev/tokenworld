@@ -183,13 +183,15 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async showNotification() {
-    if(!this.notif){
-      try{
-        this.notif=await this.notificationService.requestSubscription({serverPublicKey:this.vapidKeys.publicKey})
-      }catch(e){
-        $$("Cancel notification")
-      }
-    }
+    navigator.vibrate(200)
+    // let notif=new Notification("New Notification!",{
+    //   "data": {
+    //     "onActionClick": {
+    //       "default": {"operation": "openWindow", "url": "foo"}
+    //     }
+    //   }
+    // })
+    // this.notificationService.notificationClicks.subscribe({action:""next})
   }
 
 

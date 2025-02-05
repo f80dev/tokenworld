@@ -11,7 +11,7 @@ import {environment} from "../../environments/environment";
   selector: 'app-upload-file',
   standalone:true,
   imports: [
-    NgStyle, NgIf,
+    NgIf,
     MatIcon, MatIconButton, MatButton
   ],
   templateUrl: './upload-file.component.html',

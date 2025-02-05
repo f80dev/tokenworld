@@ -25,7 +25,6 @@ export class UserService {
   addr_change = new Subject<string>();
 
   network:string="elrond-devnet"
-  balance=0
   params:any
   lang="fr"
   nonce:number=0
@@ -65,6 +64,7 @@ export class UserService {
     xAlias: false
   }
   preview: boolean = false;
+  balance: number=0
 
   constructor() { }
 
@@ -134,12 +134,17 @@ export class UserService {
 
 
 
-  login(vm: any,subtitle="",pem_file="",strong=false) {
+  login(vm: any,subtitle="",pem_file="",strong=false,required_balance=0,message_balance="") {
     return new Promise(async (resolve, reject) => {
+      debugger
       if(!this.address)this.address=localStorage.getItem("address") || ""
       await this.init_idx()
 
       if(this.isConnected(strong)){
+        await this.init_balance(vm.api)
+
+        if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
+        if(this.device.isMobile())this.connexion.extension_wallet=false
         resolve(true)
       }else{
         if(pem_file.length>0){
@@ -153,15 +158,23 @@ export class UserService {
           await this.authent(r)
           await this.init_balance(vm.api)
           await this.init_idx()
+
+          if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
+
           resolve(r)
           showMessage(vm,"Identification ok")
         } else {
           try{
+            debugger
+
             if(this.device.isMobile())this.connexion.extension_wallet=false
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle,this.network,this.connexion)
             await this.authent(r)
             await this.init_idx()
             await this.init_balance(vm.api)
+
+            if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
+
             resolve(r)
           }catch (e){
             reject()
@@ -195,7 +208,8 @@ export class UserService {
 
       let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
       let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""
-      tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:this.account.balance})
+      tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:Number(this.account.balance)})
+      this.balance=Number(this.account.balance)/1e18
 
       for(let t of tokens){
         this.tokens[t.identifier]=t

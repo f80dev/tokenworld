@@ -1,9 +1,12 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {UserService} from '../user.service';
 import {ApiService} from '../api.service';
 import {addParseSpanInfo} from '@angular/compiler-cli/src/ngtsc/typecheck/src/diagnostics';
 import {send_transaction} from '../mvx';
+import {getParams, showMessage} from '../../tools';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-faucet',
@@ -14,12 +17,37 @@ import {send_transaction} from '../mvx';
   templateUrl: './faucet.component.html',
   styleUrl: './faucet.component.css'
 })
-export class FaucetComponent {
+export class FaucetComponent implements OnInit {
 
   user=inject(UserService)
   api=inject(ApiService)
+  routes=inject(ActivatedRoute)
+  router=inject(Router)
+  message=""
+  toast=inject(MatSnackBar)
+
+
+
+  async  ngOnInit() {
+    let params:any=await getParams(this.routes)
+    this.message=params.message
+    this.user.login(this)
+  }
+
+
 
   async refund() {
-    await this.user.login(this,"","",false)
+    let url="https://devnet-wallet.multiversx.com"
+    if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet-","")
+
+    showMessage(this,"Connect to your wallet to buy some egld to pay fee transaction")
+    setTimeout(()=>{
+      open(url,"faucet")
+    },1000)
+
+  }
+
+  cancel() {
+    this.router.navigate(["intro"])
   }
 }

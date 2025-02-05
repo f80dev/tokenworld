@@ -183,7 +183,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async showNotification() {
-    navigator.vibrate(200)
+    navigator.vibrate(1000)
+
     // let notif=new Notification("New Notification!",{
     //   "data": {
     //     "onActionClick": {
@@ -378,8 +379,10 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   private movemap(event: any) {
-    if(event)this.user.center_map = event.target.getCenter()
-    $$("Positionnement de la carte sur ",this.user.center_map)
+    if(event){
+      this.user.center_map = event.target.getCenter()
+      $$("Positionnement de la carte sur ",this.user.center_map)
+    }
 
     this.selected_marker=this.get_closest_tokemon_from(this.user.center_map,environment.seuil_capture)
     this.selected_tokemon=this.selected_marker?.options.alt

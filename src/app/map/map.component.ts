@@ -32,7 +32,7 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
-import {get_nft, send_transaction} from '../mvx';
+import {get_nft, level, send_transaction} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {SwPush} from '@angular/service-worker';
 
@@ -518,5 +518,5 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
-
+  protected readonly level = level;
 }

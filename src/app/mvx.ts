@@ -196,6 +196,10 @@ export function create_transaction(function_name:string,args:any[],
   })
 }
 
+export function level(lv=1) : boolean {
+  return environment.ihm_level>=lv
+}
+
 
 export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],
                                                 user:UserService,tokens_to_transfer: TokenTransfer[],

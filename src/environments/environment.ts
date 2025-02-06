@@ -3,6 +3,7 @@ export const environment = {
   forum: "https://discord.gg/BfC2E2ent",
   mail: "contact@nfluent.io",
   version: require('../../package.json').version + '-dev',
+  ihm_level:1,
   appname: "TOKEMON World",
   server: "http://localhost:5000",
   networks: [

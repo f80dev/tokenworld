@@ -20,7 +20,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {BytesValue, StringType, StringValue, TokenIdentifierValue, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import * as L from 'leaflet';
-import {send_transaction, send_transaction_with_transfers} from '../mvx';
+import {level, send_transaction, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
 import {LatLng, Marker, point} from 'leaflet';
@@ -127,7 +127,7 @@ export class CreateWorldComponent implements OnInit {
       zoom:params.zoom || this.user.zoom || 14,
       entrance:new Point3D(0,0,0),
       exit: new Point3D(0,0,0),
-      center:new LatLng(params.lat,params.lng),
+      center:new LatLng(params.lat || 0,params.lng || 0),
       title:"mon titre"
     }
     $$("Appel de onInit, initialisation de zone ",this.zone)
@@ -336,4 +336,6 @@ export class CreateWorldComponent implements OnInit {
   async share() {
     let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World")
   }
+
+  protected readonly level = level;
 }

@@ -30,7 +30,7 @@ export class WalletComponent implements OnChanges {
   nfts: any[] = []
   @Input() address=""
   @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
-  @Input() network="elrond-devnet"
+  @Input() network=environment.network || "elrond-devnet"
   @Output() selectChanged = new EventEmitter()
   @Output() onCancel = new EventEmitter()
   @Output() listChanged = new EventEmitter()

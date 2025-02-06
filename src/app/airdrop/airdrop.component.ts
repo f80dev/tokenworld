@@ -89,8 +89,8 @@ export class AirdropComponent implements AfterViewInit {
 
       try {
         let tx = await send_transaction_with_transfers(
-          this.user.provider,"airdrop",
-          args,this.user,
+          this.user,"airdrop",
+          args,
           tokens,environment.max_gaz)
         wait_message(this)
         this.quit()

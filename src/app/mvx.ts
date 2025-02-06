@@ -201,8 +201,8 @@ export function level(lv=1) : boolean {
 }
 
 
-export function send_transaction_with_transfers(provider:any,function_name:string,args:any[],
-                                                user:UserService,tokens_to_transfer: TokenTransfer[],
+export function send_transaction_with_transfers(user:UserService,function_name:string,args:any[],
+                                                tokens_to_transfer: TokenTransfer[],
                                                 gasLimit=50000000n, contract_addr="") {
   return new Promise(async (resolve, reject) => {
     if(!user || !user.network)reject(false);
@@ -216,7 +216,7 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
     transaction.nonce=BigInt(user.account.nonce)
 
     try{
-      let sign_transaction=await provider.signTransaction(transaction)
+      let sign_transaction=await user.provider.signTransaction(transaction)
       let hash=await apiNetworkProvider.sendTransaction(sign_transaction)
 
       const transactionOnNetworkUsingApi = await new TransactionWatcher(apiNetworkProvider).awaitCompleted(hash);
@@ -274,23 +274,24 @@ export function send_transaction_with_transfers(provider:any,function_name:strin
 
 
 
-export async function send_transaction(provider:any,function_name:string,sender_addr:string,
-                                       args:any,contract_addr:string,
+export async function send_transaction(user:UserService,function_name:string,
+                                       args:any,contract_addr:string="",
                                        token="",nonce=0,value=0,_abi:any=abi,
                                        _type: string="",gasLimit=50000000n) {
   //envoi d'une transaction
 
   return new Promise(async (resolve, reject) => {
 
-    if(!provider){
+    if(contract_addr=="")contract_addr=user.get_sc_address()
+    if(!user.provider){
       reject("Impossible de determiner l'envoyeur")
     }
 
     let user_signer=null
-    if(typeof(provider)=="object" && provider.hasOwnProperty("file")){provider=atob(provider.file.split("base64,")[1])}
-    if(typeof(provider)=="string"){
-      user_signer=UserSigner.fromPem(provider)
-      sender_addr=user_signer.getAddress().bech32()
+    if(typeof(user.provider)=="object" && user.provider.hasOwnProperty("file")){user.provider=atob(user.provider.file.split("base64,")[1])}
+    if(typeof(user.provider)=="string"){
+      user_signer=UserSigner.fromPem(user.provider)
+      user.address=user_signer.getAddress().bech32()
     }
 
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
@@ -303,7 +304,7 @@ export async function send_transaction(provider:any,function_name:string,sender_
 
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#signing-objects
 
-    let sender=Address.fromBech32(sender_addr);
+    let sender=Address.fromBech32(user.address);
     let _sender=await apiNetworkProvider.getAccount(sender)
 
     // const pemText = await promises.readFile("../wallet/user1.pem", { encoding: "utf8" });
@@ -375,7 +376,7 @@ export async function send_transaction(provider:any,function_name:string,sender_
 
       let sign_transaction
       if(!user_signer){
-        sign_transaction=await provider.signTransaction(transaction)
+        sign_transaction=await user.provider.signTransaction(transaction)
       }else{
         transaction.signature=await user_signer.sign(transaction.serializeForSigning())
         sign_transaction=transaction

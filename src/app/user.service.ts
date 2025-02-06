@@ -182,15 +182,11 @@ export class UserService {
   }
 
 
-  isProd() {
-
-  }
-
   get_domain(){
     return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
   }
 
-   refresh(){
+  refresh(){
     return new Promise(async (resolve)=>{
       this.account=await toAccount(this.address,this.get_domain())
       resolve(this.account)

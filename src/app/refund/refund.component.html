@@ -1,0 +1,14 @@
+<div class="mainform">
+  <app-wallet [network]="user.network" show="coin"
+              *ngIf="coin"
+              (selectChanged)="sel_coin($event)">
+  </app-wallet>
+
+  <br>
+  <app-input [value]="amount" value_type="slide" label="Amount to load in tokemon"
+             (valueChange)="amount=$event"></app-input>
+
+  <br>
+
+  <button mat-raised-button (click)="send()">Send</button>
+</div>

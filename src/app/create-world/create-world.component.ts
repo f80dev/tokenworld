@@ -33,6 +33,7 @@ import {MatIcon} from '@angular/material/icon';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {NgNavigatorShareService} from 'ng-navigator-share';
+import {QRCodeComponent} from 'angularx-qrcode';
 
 @Component({
   selector: 'app-create-world',
@@ -51,7 +52,8 @@ import {NgNavigatorShareService} from 'ng-navigator-share';
     FormsModule,
     TutoComponent,
     MatIcon,
-    MatAccordion
+    MatAccordion,
+    QRCodeComponent
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -120,7 +122,8 @@ export class CreateWorldComponent implements OnInit {
   async ngOnInit() {
 
     let params:any=await getParams(this.routes)
-    await this.user.login(this,"","",false,0.02,"To create a game your must have some egld")
+    await this.user.login(this,"","",false,0.02,
+      "To create a game your must have some egld")
 
     this.zone={
       map:"map",
@@ -136,7 +139,7 @@ export class CreateWorldComponent implements OnInit {
     if(params.hasOwnProperty("zone")) {
       this.zone = params.zone
       $$("Récupération de la zone ",this.zone)
-    } else {
+    }else{
       if(params.hasOwnProperty("lat") && params.hasOwnProperty("lng")){
         this.zone.center=new LatLng(params.lat,params.lng)
       }else{
@@ -145,7 +148,6 @@ export class CreateWorldComponent implements OnInit {
           this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
         }
       }
-
     }
 
     await this.user.init_balance(this.api)
@@ -245,22 +247,20 @@ export class CreateWorldComponent implements OnInit {
 
     try {
       wait_message(this,"Your world is under construction  ...")
-      let rc:any=await send_transaction(this.user.provider,"add_game",this.user.address,this.args,this.user.get_sc_address())
+      let rc:any=await send_transaction(this.user,"add_game",this.args)
       if(rc.returnMessage!="ok"){
         showMessage(this,rc.returnMessage)
         wait_message(this)
       }else{
+        this.created_game=rc.values[0]
         if(this.lifepoint>0){
           $$("Transfert de lifepoint "+this.lifepoint)
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
-          rc=await send_transaction_with_transfers(this.user.provider,"fund_game",[rc.result],this.user,tokens)
+          rc=await send_transaction_with_transfers(this.user,"fund_game",[rc.result],tokens)
         }
         wait_message(this)
-        let games=await this.user.extract_games()
-        $$("Récupération de "+games.length)
-        this.created_game=games[games.length-1]
-        let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World",false)
-        this.qrcode=result.qrcode
+        let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World",false,false)
+        this.qrcode=result.shorturl
       }
     } catch (e:any) {
       showMessage(this,e)
@@ -338,4 +338,8 @@ export class CreateWorldComponent implements OnInit {
   }
 
   protected readonly level = level;
+
+  open_game(url: string) {
+    open(url,"new_game")
+  }
 }

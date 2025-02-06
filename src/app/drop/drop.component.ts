@@ -179,7 +179,7 @@ export class DropComponent implements AfterViewInit {
         }
         $$("Gas to transaction ",Number(gas_to_drop))
         $$("Dropping avec les arguments ",args)
-        let rc: any = await send_transaction_with_transfers(this.user.provider, "drop", args, this.user, tokens, gas_to_drop)
+        let rc: any = await send_transaction_with_transfers(this.user, "drop", args, tokens, gas_to_drop)
 
         $$("Resultat du drop ", rc)
         if (rc.returnMessage != "ok") {

@@ -22,10 +22,9 @@ export class IntroComponent implements OnInit {
 
 
   async ngOnInit() {
-    setTimeout(async ()=>{
       this.params=await getParams(this.routes)
       $$("Ouverture de l'application avec les parametres ",this.params)
-
+      debugger
       this.message=this.params.message || "With "+environment.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
       $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
@@ -36,7 +35,6 @@ export class IntroComponent implements OnInit {
         this.user.signature=this.params.signature
         this.user.address=this.params.address
       }
-    },50)
 
   }
 

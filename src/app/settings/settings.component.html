@@ -10,24 +10,6 @@
 
     <mat-expansion-panel (expandedChange)="on_open_tokemon_engaged()">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
-      <div *ngIf="sel_to_reload" style="width:100%;max-width: 1200px;margin-top:50px;">
-        <app-input value_type="list"
-                   label="Token to inject"
-                   [options]="token_list"
-                   (valueChange)="sel_token=$event" [value]="sel_token"></app-input>
-
-        <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
-                   *ngIf="sel_token"
-                   style="display:inline-block;width:100%;"
-                   [unity]="sel_token.label"
-                   (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
-
-        <br>
-
-        <button mat-raised-button (click)="send()">Send</button>
-      </div>
-
-      <br>
       <table>
         <tr>
           <th>Visual</th>

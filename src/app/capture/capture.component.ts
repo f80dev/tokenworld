@@ -86,10 +86,9 @@ export class CaptureComponent implements OnInit {
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
         $$("Appel de la "+func_name+" with ",args)
         let rc:any = await send_transaction_with_transfers(
-          this.user.provider,
+          this.user,
           func_name,
           args,
-          this.user,
           tokens);
         $$("Resultat ",rc)
         if(func_name=="capture") {
@@ -126,5 +125,9 @@ export class CaptureComponent implements OnInit {
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))
+  }
+
+  refund() {
+    this.router.navigate(["refund"],{queryParams:{token:this.item}})
   }
 }

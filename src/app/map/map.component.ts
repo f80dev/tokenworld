@@ -232,9 +232,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       showMessage(this,message)
     }else{
       let bounds=this.map!.getBounds()
-      var southWest = bounds.getNorthWest();
-      var northEast = bounds.getNorthEast();
-      var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
+      let southWest = bounds.getNorthWest();
+      let northEast = bounds.getNorthEast();
+      //var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
       let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,game_id:this.user.game!.id},"","")
       setTimeout(()=>{
         this.router.navigate(["drop"],{queryParams:{p:position}})
@@ -408,9 +408,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let center_lat=(ne.lat+sw.lat)/2
       let center_lng=(ne.lng+sw.lng)/2
       this.user.center_map=new L.LatLng(center_lat,center_lng)
-    }
-    else
-    {
+    }else{
       showMessage(this,"Center of the map on your location")
       this.refresh_geoloc()
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
@@ -478,7 +476,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
       try{
         wait_message(this,"Moving ...")
-        let rc:any=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+        let rc:any=await send_transaction(this.user,"move_tokemon",args)
         showMessage(this,rc.returnMessage)
         this.refresh()
         wait_message(this)
@@ -500,8 +498,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     await this.user.login(this,"Se connecter pour voir l'ensemble des tokemons","",true)
     if(this.user.game){
         let results:any=await send_transaction(
-        this.user.provider,"show_all_my_nfts",
-        this.user.address,[this.user.game.id],this.user.get_sc_address())
+        this.user,"show_all_my_nfts",[this.user.game.id])
         $$("Récupération de ",results.length)
     }
   }

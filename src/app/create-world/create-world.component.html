@@ -191,7 +191,14 @@
     <br><br>
     You can invite people to play<br>
     <br>
-    <img [src]="qrcode" *ngIf="qrcode.length>0" style="width: 200px;height:200px;">
+
+    <qrcode [qrdata]="qrcode" [width]="200"
+            (click)="open_game(qrcode)"
+            style="cursor:pointer;"
+            [errorCorrectionLevel]="'M'"
+            *ngIf="qrcode.length>0"></qrcode>
+
+    <br>
 
     <button mat-raised-button (click)="share()">
       <mat-icon>share</mat-icon>

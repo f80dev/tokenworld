@@ -70,10 +70,6 @@ export class SettingsComponent implements OnInit {
   async ngOnInit() {
     await this.user.login(this)
     await this.user.init_balance(this.api)
-    for(let t of Object.values(this.user.tokens)){
-      let _t:any=t
-      this.token_list.push({label:_t.name,value:_t.identifier})
-    }
     this.refresh()
     this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
   }
@@ -89,7 +85,7 @@ export class SettingsComponent implements OnInit {
 
 
   open_reload(nft: any) {
-    this.sel_to_reload=nft
+    this.router.navigate(["refund"],{queryParams:{token:nft}})
   }
 
 
@@ -101,7 +97,7 @@ export class SettingsComponent implements OnInit {
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {
-      await send_transaction_with_transfers(this.user.provider,"reloading",args,this.user,tokens)
+      await send_transaction_with_transfers(this.user,"reloading",args,tokens)
       this.refresh()
       wait_message(this)
     } catch (e) {
@@ -119,8 +115,6 @@ export class SettingsComponent implements OnInit {
   }
 
   protected readonly environment = environment;
-  token_list: any[] = [];
-  sel_token:any={}
 
   async on_open_tokemon_engaged() {
     await this.user.login(this,"","",true)

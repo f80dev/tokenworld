@@ -22,8 +22,9 @@ export class IntroComponent implements OnInit {
 
 
   async ngOnInit() {
-      this.params=await getParams(this.routes)
-      $$("Ouverture de l'application avec les parametres ",this.params)
+    debugger
+    this.params=await getParams(this.routes)
+      $$("Ouverture de la page intro avec les parametres ",this.params)
       debugger
       this.message=this.params.message || "With "+environment.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 

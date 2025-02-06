@@ -134,12 +134,15 @@ export class UserService {
 
 
 
-  login(vm: any,subtitle="",pem_file="",strong=false,required_balance=0,message_balance="") {
+  login(vm: any,subtitle="",pem_file="",strong=false,
+        required_balance=0,message_balance="",
+        silence_mode=false) {
     return new Promise(async (resolve, reject) => {
       if(!this.address)this.address=localStorage.getItem("address") || ""
       await this.init_idx()
 
-      if(this.isConnected(strong)){
+
+      if(this.isConnected(strong) || silence_mode){
         await this.init_balance(vm.api)
 
         if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})

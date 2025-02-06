@@ -76,9 +76,8 @@ export class CaptureComponent implements OnInit {
 
 
   async on_capture() {
-    let captured_tokemon:any
+    let captured_tokemon:any=null
     if(this.user.game){
-
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
 
@@ -131,7 +130,9 @@ export class CaptureComponent implements OnInit {
     open(eval_direct_url_xportal(this.user.provider.uri))
   }
 
-  refund() {
-    this.router.navigate(["refund"],{queryParams:{p:setParams({token:this.item},"","")}})
+  refund(revitalize:boolean) {
+    let coin_to_use=this.user.get_default_token()
+    let args: any=revitalize ? {token:this.item,coin:coin_to_use} : {token:this.item}
+    this.router.navigate(["refund"],{queryParams:{p:setParams(args,"","")}})
   }
 }

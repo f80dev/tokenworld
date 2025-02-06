@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {$$, getParams, showMessage} from '../../tools';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from '../user.service';
 import {WalletComponent} from '../wallet/wallet.component';
@@ -32,6 +32,7 @@ export class RefundComponent implements OnInit{
   user=inject(UserService)
   api=inject(ApiService)
   location=inject(Location)
+  router=inject(Router)
 
   sel_token: any=null
   coin: any=null
@@ -40,15 +41,19 @@ export class RefundComponent implements OnInit{
   message: string=""
 
   async ngOnInit() {
+    this.user.login(this)
+    await this.user.init_balance(this.api)
+
     let params:any=await getParams(this.routes)
     this.sel_token=params.token
-    this.coin=params.coin
-    this.user.login(this)
+    debugger
+    if(params.hasOwnProperty("coin")){
+      this.sel_coin(this.user.tokens[params.coin])
+    }
   }
 
   async sel_coin($event: any) {
     this.coin=$event
-    this.user.init_balance(this.api)
     if(Number(this.coin.balance/1e18)>1000)this.type_control="number"
   }
 
@@ -58,7 +63,11 @@ export class RefundComponent implements OnInit{
     let tokens:TokenTransfer[]=[TokenTransfer.fungibleFromAmount(this.coin.identifier,this.amount,18)]
     wait_message(this,"Loading your tokemon")
     try{
-      await send_transaction_with_transfers(this.user,"add_to_bag",args,tokens)
+      await send_transaction_with_transfers(
+        this.user,
+        this.coin.identifier==this.user.get_default_token() ? "reloading" : "add_to_bag",
+        args,
+        tokens)
       wait_message(this)
       showMessage(this,"Your tokemon is loaded")
       this.quit()
@@ -73,6 +82,6 @@ export class RefundComponent implements OnInit{
   }
 
   quit() {
-    this.location.back()
+    this.router.navigate(["map"])
   }
 }

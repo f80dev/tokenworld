@@ -92,7 +92,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   old_pos: LatLng = new LatLng(0,0)
   last_tokemon_list: any[]=[]
   help_message: string=""
-  notif: PushSubscription | null=null
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -200,6 +199,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async ngOnInit() {
+    this.user.login(this,"","",false,0,"",true)
     if(this.user && this.user.game){
       setTimeout(async ()=>{
         await this.init_map()
@@ -210,6 +210,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       $$("user n'a pas sélectionné de map ",this.user)
       this.router.navigate(["games"],{queryParams:{autoconnect:false}})
     }
+
   }
 
 

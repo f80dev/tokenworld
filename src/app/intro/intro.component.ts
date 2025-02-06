@@ -18,12 +18,11 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './intro.component.css'
 })
 export class IntroComponent implements OnInit {
-  private params: any;
-
+  params: any;
 
   async ngOnInit() {
-    debugger
-    this.params=await getParams(this.routes)
+    setTimeout(async ()=>{
+      this.params=await getParams(this.routes)
       $$("Ouverture de la page intro avec les parametres ",this.params)
       debugger
       this.message=this.params.message || "With "+environment.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
@@ -36,7 +35,7 @@ export class IntroComponent implements OnInit {
         this.user.signature=this.params.signature
         this.user.address=this.params.address
       }
-
+    },100)
   }
 
   message: string=""

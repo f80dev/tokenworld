@@ -21,7 +21,8 @@
     </app-tokemon>
     <br>
 
-    <button mat-raised-button *ngIf="item.owner==user.idx" (click)="refund()">Loading</button>
+    <button mat-raised-button *ngIf="item.owner==user.idx"
+            (click)="refund()">Loading</button>
 
     <app-input  *ngIf="item.pv>0 && item.owner!=user.idx"
                 value_type="slider" [value]="pv_to_engage"

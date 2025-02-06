@@ -84,6 +84,7 @@ export class WalletComponent implements OnChanges {
 
 
   select_esdt($event:any) {
+    $event.balance=Number($event.balance)
     this.selectChanged.emit($event)
   }
 

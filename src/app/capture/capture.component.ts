@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {$$, getParams, showMessage} from '../../tools';
+import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
@@ -132,6 +132,6 @@ export class CaptureComponent implements OnInit {
   }
 
   refund() {
-    this.router.navigate(["refund"],{queryParams:{token:this.item}})
+    this.router.navigate(["refund"],{queryParams:{p:setParams({token:this.item},"","")}})
   }
 }

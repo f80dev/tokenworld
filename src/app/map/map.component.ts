@@ -139,8 +139,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
     if(this.user.game?.geoloc_to_catch){
       $$("La partie utilise la géoloc donc on centre la carte sur la geoloc")
-      await this.user.geoloc(this.geolocService,this.me_marker)
-      this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+      this.refresh_geoloc()
+      this.recenter()
     } else {
 
       $$("La partie ne repose pas sur la géoloc donc on se positionne sur la derniere position si elle est dans la partie")
@@ -174,6 +174,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           this.remove_markers_from_map()
           this.old_pos=new LatLng(0,0)
         }
+        this.help_message="Not enought accuracy to show tokemons around. Activate your GPS"
+        showMessage(this,this.help_message)
         $$("Précision insuffisante")
         this.me_marker!.removeFrom(this.map!)
       }
@@ -198,7 +200,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async ngOnInit() {
-    this.user.login(this)
     if(this.user && this.user.game){
       setTimeout(async ()=>{
         await this.init_map()
@@ -207,7 +208,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       this.geoloc_autorefresh=setInterval(async ()=>{this.refresh_geoloc()},environment.geoloc_interval)
     }else{
       $$("user n'a pas sélectionné de map ",this.user)
-      this.router.navigate(["games"],{queryParams:{autoconnect:true}})
+      this.router.navigate(["games"],{queryParams:{autoconnect:false}})
     }
   }
 

@@ -34,6 +34,7 @@ import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {QRCodeComponent} from 'angularx-qrcode';
+import {MatLabel} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-create-world',
@@ -53,7 +54,8 @@ import {QRCodeComponent} from 'angularx-qrcode';
     TutoComponent,
     MatIcon,
     MatAccordion,
-    QRCodeComponent
+    QRCodeComponent,
+    MatLabel
   ],
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
@@ -144,8 +146,10 @@ export class CreateWorldComponent implements OnInit {
         this.zone.center=new LatLng(params.lat,params.lng)
       }else{
         $$("La zone n'est pas en parametre, on localise")
-        if(await this.user.geoloc(this.geolocService)){
+        if(await this.user.geoloc(this.geolocService,null,1000000)){
           this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+        }else{
+          this.zone.center=new LatLng(48,2)
         }
       }
     }

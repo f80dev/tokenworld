@@ -234,7 +234,7 @@ export function share_game(vm:any,game: any,default_message="",
     let params = {autoconnect: true, game: game.id, message: message}
     $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
 
-    let short_url =await url_shorter( environment.appli + "/intro/?" + setParams(params))
+    let short_url =await url_shorter( environment.appli + "/?" + setParams(params))
     if(vm.hasOwnProperty("shareService") && share_menu){
       await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",

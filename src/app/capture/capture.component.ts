@@ -14,7 +14,7 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {ApiService} from '../api.service';
-import {Point3D, polarToCartesian} from '../tokenworld';
+import {cartesianToPolar, Point3D, polarToCartesian} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -76,7 +76,9 @@ export class CaptureComponent implements OnInit {
 
 
   async on_capture() {
+    let captured_tokemon:any
     if(this.user.game){
+
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
 
@@ -91,18 +93,20 @@ export class CaptureComponent implements OnInit {
           args,
           tokens);
         $$("Resultat ",rc)
+        captured_tokemon=rc.values[0]
         if(func_name=="capture") {
-          showMessage(this, rc.values[0].owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+          showMessage(this, captured_tokemon.owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
         }else{
           showMessage(this,"You take your tokemon in your bag")
         }
-        wait_message(this)
       } catch (e){
-        wait_message(this);
         showMessage(this,"Technical problem, please try again")
       }
-
-      setTimeout(()=>{this.router.navigate(["map"])})
+      wait_message(this);
+      setTimeout(()=>{
+        let pos=cartesianToPolar(captured_tokemon.position,environment.scale_factor,environment.translate_factor)
+        this.user.center_map=pos
+        this.router.navigate(["map"],{queryParams:{center:pos}})},1500)
     }
 
   }

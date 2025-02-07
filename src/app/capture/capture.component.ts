@@ -48,6 +48,7 @@ export class CaptureComponent implements OnInit {
   max_engagment: number=100
   pv_to_engage: number=0
   target=new Point3D(0,0,0)
+  bags: any[]=[];
 
 
 
@@ -56,7 +57,10 @@ export class CaptureComponent implements OnInit {
     this.item=params.item
     this.target=params.target
     try{
-      await this.user.login(this,"","",true)
+
+      this.bags=await this.user.query("get_tokemon_bags",[this.item.id])
+
+      await this.user.login(this,"","",true,0.01,"You must buy some egld to pay fee for fight or capture tokemon")
       this.user.init_game(Number(params.game))
 
       if(this.item.owner!=this.user.idx && this.item.pv>0){
@@ -82,7 +86,7 @@ export class CaptureComponent implements OnInit {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
 
         let args=[this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z]
-        wait_message(this, "Capture in progress")
+        wait_message(this, func_name=='capture' ? "Fighting ... " : "Capturing ...")
         let tokens=[]
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
         $$("Appel de la "+func_name+" with ",args)
@@ -105,9 +109,7 @@ export class CaptureComponent implements OnInit {
       setTimeout(()=>{
         debugger
         let pos=cartesianToPolar(captured_tokemon.position,environment.scale_factor,environment.translate_factor)
-        this.user.center_map=pos
-        this.user.zoom=16
-        this.router.navigate(["map"],{queryParams:{center:pos,zoom:this.user.zoom}})},1500)
+        this.router.navigate(["map"],{queryParams:{lat:pos.lat,lng:pos.lng,zoom:18}})},1500)
     }
 
   }

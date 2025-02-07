@@ -16,7 +16,7 @@
   <br>
 
   <app-input [value]="amount" [value_type]="type_control"
-             width="80%"
+             style="display: inline-block;width:80%;margin:10%;"
              *ngIf="coin"
              [unity]="coin.name"
              [min]="0" [max]="coin.balance/1e18"
@@ -24,6 +24,9 @@
              (valueChange)="amount=$event"></app-input>
 
   <br>
-  <button mat-raised-button *ngIf="coin" (click)="cancel()">Cancel</button>
-  <button mat-raised-button (click)="send()">Send</button>
+  <div *ngIf="coin">
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button (click)="send()">Send</button>
+  </div>
+
 </div>

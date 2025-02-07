@@ -35,7 +35,7 @@ export class FaucetComponent implements OnInit {
 
 
   async refund() {
-    let url="https://devnet-wallet.multiversx.com"
+    let url="https://devnet-wallet.multiversx.com/unlock"
     if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet-","")
 
     showMessage(this,"Connect to your wallet to buy some egld to pay fee transaction")

@@ -8,10 +8,11 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import {NgIf} from '@angular/common';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
+import {UserService} from '../user.service';
 
 
 export function toNFT(nft:any) : any {
@@ -24,7 +25,9 @@ export function toNFT(nft:any) : any {
   standalone: true,
   imports: [
     NgIf,
-    MatIcon
+    MatIcon,
+    NgForOf,
+    DecimalPipe
   ],
   templateUrl: './tokemon.component.html',
   styleUrl: './tokemon.component.css'
@@ -32,10 +35,13 @@ export function toNFT(nft:any) : any {
 export class TokemonComponent implements OnChanges,OnInit {
 
   clipboard=inject(Clipboard)
+  user=inject(UserService)
 
   @Input() network="elrond-devnet"
   @Input() item:any
-  @Input() size="200px"
+  @Input() bags:any[]=[]
+  @Input() height="300px"
+  @Input() width="200px"
   @Output() select = new EventEmitter()
   nft: any
   api=inject(ApiService)
@@ -43,7 +49,7 @@ export class TokemonComponent implements OnChanges,OnInit {
   size_box: string="200px"
 
   ngOnInit(): void {
-    this.size_box=Math.round(Number(this.size.replace("px",""))*1.5) + "px"
+    this.size_box=Math.round(Number(this.width.replace("px",""))*1.5) + "px"
   }
 
 
@@ -61,5 +67,11 @@ export class TokemonComponent implements OnChanges,OnInit {
 
   on_select() {
     this.select.emit({item:this.item,nft:this.nft})
+  }
+
+  open_coin(coin:any) {
+    let url="https://devnet-explorer.multiversx.com/tokens/"+coin
+    if(!this.user.isDevnet())url=url.replace("devnet-","")
+    open(url,"Explorer")
   }
 }

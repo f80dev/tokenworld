@@ -9,7 +9,7 @@
     </button>
     <br>
     <img *ngIf="pv_to_engage>0"
-         src="./assets/fight1.gif"
+         src="./assets/fight2.gif"
          style="width:200px;height:200px;margin-top: 40px;">
   </div>
 
@@ -17,6 +17,7 @@
     <h3>{{label}} this tokemon ?</h3>
     <app-tokemon [label_pv]="lang_pv"
                  [item]="item"
+                 [bags]="bags"
                  [network]="user.network">
     </app-tokemon>
     <br>

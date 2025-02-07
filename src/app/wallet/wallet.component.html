@@ -32,7 +32,7 @@
     <h5>Your NFTs</h5>
     <app-tokemon *ngFor="let nft of nfts"
                  [item]="nft"
-                 [size]="size"
+                 [height]="size"
                  (select)="select(nft)">
     </app-tokemon>
 

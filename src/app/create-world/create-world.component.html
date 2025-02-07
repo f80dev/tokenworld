@@ -84,7 +84,7 @@
           <mat-slide-toggle *ngIf="level(2)" [(ngModel)]="tokemon_vision"
                             title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
 
-          <br>
+          <br><br>
 
           <app-input label="Maximum players in the game" help="" unity="players"
                      value_type="number" [value]="max_player"
@@ -229,7 +229,7 @@
 
   </div>
 
-  <br>
+
   <button mat-raised-button *ngIf="!created_game" (click)="quit(null)">Cancel</button>
 
 </div>

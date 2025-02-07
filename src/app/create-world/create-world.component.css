@@ -7,6 +7,12 @@ mat-slide-toggle {
   margin: 10px;
 }
 
+app-input {
+  width: 200px;
+  display: inline-block;
+  margin: 2px;
+}
+
 td {
   text-align: center;
 }

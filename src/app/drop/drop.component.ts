@@ -187,7 +187,6 @@ export class DropComponent implements AfterViewInit {
         } else {
           showMessage(this, "Tokemons on the map")
           setTimeout(() => {
-            debugger
             if(Number(rc.values[0])==1)this.user.zoom=18
             this.quit()
           }, 500)

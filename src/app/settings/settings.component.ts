@@ -71,7 +71,10 @@ export class SettingsComponent implements OnInit {
     await this.user.login(this)
     await this.user.init_balance(this.api)
     this.refresh()
-    this.max_pv_loading=Number(this.user.tokens[this.user.get_default_token()]/1e18)
+    debugger
+    if(this.user.tokens.hasOwnProperty(this.user.get_default_token())){
+      this.max_pv_loading=Number(this.user.tokens[this.user.get_default_token()].balance/1e18)
+    }
   }
 
 

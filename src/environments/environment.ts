@@ -27,8 +27,8 @@ export const environment = {
   transfer_page:"https://t.f80.fr",
 
 
-  offset_lat:-0.00017,
-  offset_lng:0.00010,
+  offset_lat:0,
+  offset_lng:0,
   render_server: "https://api.f80.fr:9876",
   fee: 10,
   style:"promptmarket.css",
@@ -64,7 +64,7 @@ export const environment = {
   translate_factor:1000000000,
 
   contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqvy5uhe5ax24jnv5d5hn72e5fpq3g4klp835swe5cxg",
+    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqkgtlh3s3x97x77e65me5a9uwk3084j9z835sem0a9j",
     "elrond-mainnet":"erd1qqqqqqqqqqqqqpgq7kggqwgrs4jpl8gxa5vs4vu8trdkktcv835sq6mngv"
   },
 

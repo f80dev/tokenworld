@@ -295,4 +295,7 @@ export class UserService {
     })
   }
 
+  isDevnet() {
+    return this.network.indexOf("devnet")>-1
+  }
 }

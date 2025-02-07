@@ -46,7 +46,7 @@ export class RefundComponent implements OnInit{
 
     let params:any=await getParams(this.routes)
     this.sel_token=params.token
-    debugger
+
     if(params.hasOwnProperty("coin")){
       this.sel_coin(this.user.tokens[params.coin])
     }
@@ -61,7 +61,7 @@ export class RefundComponent implements OnInit{
     await this.user.login(this,"","",true,0.01,"")
     let args=[this.sel_token.id]
     let tokens:TokenTransfer[]=[TokenTransfer.fungibleFromAmount(this.coin.identifier,this.amount,18)]
-    wait_message(this,"Loading your tokemon")
+    wait_message(this,"Loading your tokemon bag with "+this.amount+" of "+this.coin.name)
     try{
       await send_transaction_with_transfers(
         this.user,

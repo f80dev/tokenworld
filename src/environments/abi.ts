@@ -294,6 +294,21 @@ export const abi={
       "outputs": []
     },
     {
+      "name": "get_tokemon_bags",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "tokemon_id",
+          "type": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "List<TokemonBag>"
+        }
+      ]
+    },
+    {
       "name": "can_drop",
       "mutability": "readonly",
       "inputs": [
@@ -980,4 +995,3 @@ export const abi={
     }
   }
 }
-

@@ -23,7 +23,17 @@
           <td>{{tokemon.visibility/environment.scale_factor}} m</td>
           <td>
             {{tokemon.pv}} HP
-            <button mat-raised-button (click)="open_reload(tokemon)" *ngIf="max_pv_loading>0">Reload</button>
+            <button mat-raised-button (click)="open_reload(tokemon,user.get_default_token())"
+                    title="Add HP to your tokemon"
+                    *ngIf="max_pv_loading>0">
+              Revitalize
+            </button>
+
+            <button mat-raised-button (click)="open_reload(tokemon,null)"
+                    title="Add some token to the bag of your tokemon">
+              Loading
+            </button>
+
           </td>
         </tr>
       </table>

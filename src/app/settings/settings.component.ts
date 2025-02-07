@@ -71,7 +71,7 @@ export class SettingsComponent implements OnInit {
     await this.user.login(this)
     await this.user.init_balance(this.api)
     this.refresh()
-    this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
+    this.max_pv_loading=Number(this.user.tokens[this.user.get_default_token()]/1e18)
   }
 
 
@@ -84,8 +84,9 @@ export class SettingsComponent implements OnInit {
 
 
 
-  open_reload(nft: any) {
-    this.router.navigate(["refund"],{queryParams:{token:nft}})
+  open_reload(nft: any,coin:any) {
+    this.router.navigate(["refund"],
+      {queryParams:{p:setParams({token:nft,coin:coin},"","")}})
   }
 
 

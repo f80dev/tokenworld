@@ -3,7 +3,7 @@ import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from "@angular
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {DecimalPipe, Location, NgIf} from "@angular/common";
 import {InputComponent} from '../input/input.component';
-import {$$, getParams, showError, showMessage} from '../../tools';
+import {$$, getParams, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   add_icon,
@@ -17,13 +17,13 @@ import {environment} from '../../environments/environment';
 import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {BytesValue, StringType, StringValue, TokenIdentifierValue, TokenTransfer} from '@multiversx/sdk-core/out';
+import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import * as L from 'leaflet';
 import {level, send_transaction, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
-import {LatLng, Marker, point} from 'leaflet';
+import {LatLng, Marker} from 'leaflet';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../api.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -111,6 +111,7 @@ export class CreateWorldComponent implements OnInit {
   tokemon_vision: boolean=false;
   to_add=""
    created_game: Game | null=null
+  max_to_engage=100;
 
   update_zone(){
     this.zone.zoom = this.map.getZoom()
@@ -197,7 +198,13 @@ export class CreateWorldComponent implements OnInit {
 
 
   async create_game() {
-    await this.user.login(this,"Authentification required to create a new game","",true)
+    if(this.max_to_engage<this.max_per_user){
+      showMessage(this,"Maximum engagement must be inferior to maximum HP per user")
+      return
+    }
+
+    await this.user.login(this,"Authentification required to create a new game","",true,0.01)
+
     $$("Login user ",this.user)
 
     $$("Creation d'une partie avec ",this.zone)
@@ -245,7 +252,8 @@ export class CreateWorldComponent implements OnInit {
       this.user_visibility,
 
       this.cost_to_move,this.cost_to_fight,
-      this.min_distance_for_gps
+      this.min_distance_for_gps,
+      this.max_to_engage
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 

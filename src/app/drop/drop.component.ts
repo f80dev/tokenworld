@@ -69,7 +69,7 @@ export class DropComponent implements AfterViewInit {
   visibility = 30
   //Envoi d'un NFT : https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#single-nft-transfer
   random_location: boolean = false;
-  diffusion = 50
+  diffusion = 0
   max_per_user=1
 
 
@@ -187,6 +187,8 @@ export class DropComponent implements AfterViewInit {
         } else {
           showMessage(this, "Tokemons on the map")
           setTimeout(() => {
+            debugger
+            if(Number(rc.values[0])==1)this.user.zoom=18
             this.quit()
           }, 500)
         }
@@ -202,7 +204,7 @@ export class DropComponent implements AfterViewInit {
 
   quit() {
     this.sel_nft = null
-    this.router.navigate(["map"])
+    this.router.navigate(["map"],{queryParams:{lat:this.user.center_map.lat,lng:this.user.center_map.lng,zoom:this.user.zoom}})
   }
 
 

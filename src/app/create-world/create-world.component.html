@@ -81,26 +81,32 @@
             <div class="mat-slide-label">Catch tokemon around<br>your GPS position</div>
           </mat-slide-toggle>
 
-          <mat-slide-toggle *ngIf="level(2)" [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+          <mat-slide-toggle *ngIf="level(2)" [(ngModel)]="tokemon_vision"
+                            title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+
           <br>
-          <app-input label="Maximum players in the game" help=""
-                     unity="players"
-                     value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
 
-          <app-input label="Maximum distance to move" *ngIf="level(2)"
-                     unity="m"
-                     help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
+          <app-input label="Maximum players in the game" help="" unity="players"
+                     value_type="number" [value]="max_player"
+                     (valueChange)="max_player=$event"></app-input>
 
-          <app-input label="Maximum visibility" help=""
-                     unity="m"
-                     value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+          <app-input label="Maximum distance to move" *ngIf="level(2)" unity="m"
+                     help="" value_type="number" [value]="max_distance"
+                     (valueChange)="max_distance=$event"></app-input>
 
+          <app-input label="Maximum visibility" help="" unity="m"
+                     value_type="number" [value]="max_visibility"
+                     (valueChange)="max_visibility=$event"></app-input>
 
 
           <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-          <app-input label="Maximum HP per tokemon"
-                     unity="HP"
-                     help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="HP"></app-input>
+          <app-input label="Maximum HP per tokemon" unity="HP"
+                     help="" value_type="number" [value]="max_pv"
+                     (valueChange)="max_pv=$event" unity="HP"></app-input>
+
+          <app-input label="Maximum engagement" unity="HP"
+                     help="" value_type="number" [value]="max_to_engage"
+                     (valueChange)="max_to_engage=$event" unity="HP"></app-input>
 
 
         </mat-expansion-panel>

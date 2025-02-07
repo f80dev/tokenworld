@@ -7,7 +7,7 @@ import {
   Marker, Point, Polyline,
   TileLayer
 } from 'leaflet';
-import {$$, setParams, showError, showMessage} from '../../tools';
+import {$$, getParams, setParams, showError, showMessage} from '../../tools';
 import {GeolocService} from '../geoloc.service';
 import {environment} from '../../environments/environment';
 import {
@@ -19,7 +19,7 @@ import {
   polarToCartesian,
 } from '../tokenworld';
 import {UserService} from '../user.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -79,6 +79,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   center: any;
   private layer: TileLayer | undefined
+  routes=inject(ActivatedRoute)
 
   map_left=0
   map_top=0
@@ -114,7 +115,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let sw=cartesianToPolar(this.user.game.sw,environment.scale_factor,environment.translate_factor)
       L.rectangle(new LatLngBounds(sw,ne),{fillColor:"grey",color:"grey"}).addTo(this.map!);
 
-      //this.map.setMaxBounds(new LatLngBounds(ne,sw))
       $$("Positionnement d'une limite ",{ne:ne,sw:sw})
       $$("Entrée dans "+this.user.game.title)
     }
@@ -123,7 +123,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     initializeMap(this,this.user.game,this.user.center_map,"https://tokemon.f80.fr/assets/icons/person.png")
     if(this.map){
       this.map
-        .on("zoom",(event:L.LeafletEvent)=>{this.user.zoom=this.map!.getZoom()})
+        .on("zoom",(event:L.LeafletEvent)=>{
+          this.user.zoom=this.map!.getZoom()
+        })
         .on("moveend",(event:L.LeafletEvent)=>this.movemap(event))
         .on("mousemove",(event:L.LeafletEvent)=>this.mousemove(event))
         .on("keypress",(event:L.LeafletKeyboardEvent)=>{
@@ -144,7 +146,14 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     } else {
 
       $$("La partie ne repose pas sur la géoloc donc on se positionne sur la derniere position si elle est dans la partie")
-      this.user.center_map=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+      let params:any=await getParams(this.routes)
+      if(params.lng && params.lat){
+        this.user.center_map=new LatLng(params.lat,params.lng)
+      }else{
+        this.user.center_map=new LatLng(Number(localStorage.getItem("last_position_lat") || "0"),Number(localStorage.getItem("last_position_lng") || "0"))
+      }
+      if(params.zoom)zoom=params.zoom
+
       if(!is_in(this.user.center_map,this.user.game!)) {
         $$("La dernière position n'est pas dans la partie, on recentre sur la partie")
         this.recenter()

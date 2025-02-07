@@ -24,7 +24,6 @@ export class IntroComponent implements OnInit {
     setTimeout(async ()=>{
       this.params=await getParams(this.routes)
       $$("Ouverture de la page intro avec les parametres ",this.params)
-      debugger
       this.message=this.params.message || "With "+environment.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
       $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())

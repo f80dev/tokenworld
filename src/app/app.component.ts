@@ -97,12 +97,13 @@ export class AppComponent implements OnInit {
 
 
   create_world() {
+    let zoom=Math.round(Math.max(this.user.zoom*2,16))
     this.router.navigate(["create"],
       {
         queryParams:{p: setParams({
             lat:this.user.center_map.lat,
             lng:this.user.center_map.lng,
-            zoom:Math.round(this.user.zoom/1.6)},"","")}
+            zoom:zoom},"","")}
       })
   }
 

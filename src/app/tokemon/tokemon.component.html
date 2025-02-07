@@ -1,21 +1,22 @@
-<div *ngIf="item" class="vignette" [style.width]="width" [style.height]="height" >
+<div *ngIf="item" class="vignette" [style.width]="width" [style.height]="height" (click)="on_select()">
 
   <div style="display: flex;justify-content: space-between;width: 100%;">
-    <div>
-      <mat-icon (click)="copy_ref()"
-                [title]="item.identifier || item.nft">content_copy</mat-icon>
-      {{nft?.name}}
+    <div style="display: inline-flex;text-align: center;">
+      <mat-icon (click)="open_nft()"
+                [title]="item.identifier || item.nft">visibility</mat-icon>
+      {{nft?.name.toUpperCase()}}
     </div>
     <div style="flex-grow: 1;"></div>
     <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>
   </div>
 
 
-  <div *ngIf="nft" style="cursor: pointer;width:90%;display: inline-block;margin:5%;">
-    <img [src]="nft.url" (click)="on_select()" style="object-fit: cover;width:100%;height: 100%;">
+  <div *ngIf="nft" style="cmax-width:90%;max-height:80%;display: inline-block;margin:5%;">
+    <img [src]="nft.url"  style="object-fit: cover;width:100%;height: 100%;">
   </div>
 
-  <table style="font-size: x-small;width:80%;display: inline-block;">
+
+  <table style="font-size: x-small;width:80%;display: inline-block;" *ngIf="bags.length>0">
     <tr *ngFor="let bag of bags" style="width: 100%;">
       <td>{{bag.coin}}</td>
       <td>{{bag.amount/1e18 | number:"1.0-3"}}</td>

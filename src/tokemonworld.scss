@@ -34,6 +34,17 @@ a:active { text-decoration: none; color: gray; }
   color: #23aca7;
 }
 
+.small-icon-button {
+  border-radius: 40%;
+  cursor:pointer;
+  margin:2px;
+  margin-bottom:-2px;
+  background-color: #121212;
+  font-size:x-large;
+  color: #23aca7;
+}
+
+
 .mat-slide-label {
   font-size: small;
   line-height: 90%;

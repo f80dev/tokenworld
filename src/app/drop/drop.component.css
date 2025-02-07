@@ -7,6 +7,11 @@ button {
   margin: 10px;
 }
 
+app-input {
+  width: 170px;
+  margin: 10px;
+}
+
 .zone_input {
   width:100%;
   display: flex;

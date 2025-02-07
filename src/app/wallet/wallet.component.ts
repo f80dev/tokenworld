@@ -35,7 +35,9 @@ export class WalletComponent implements OnChanges {
   @Output() onCancel = new EventEmitter()
   @Output() listChanged = new EventEmitter()
 
-  @Input() size="100px"
+  @Input() width="150px"
+  @Input() height="200px"
+
   @Input() message: string=""
   account: any;
   @Input() selected=false;

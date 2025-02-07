@@ -7,6 +7,11 @@
   </button>
 
   <div *ngIf="sel_nft && message.length==0" class="zone_input" >
+
+    <app-input value_type="text"
+               label="Tokemon's name" help="Min length of 3 characters"
+               (valueChange)="name=$event" [value]="name"></app-input>
+
     <button mat-raised-button
             (click)="drop()"
             title="Drop here">Drop !</button>
@@ -14,18 +19,15 @@
     <button mat-raised-button
             (click)="sel_nft=null"
             title="Cancel">Cancel</button>
-    <br>
 
-    <app-input value_type="text"
-               label="Tokemon's name" help="Min length of 3 characters"
-               (valueChange)="name=$event" [value]="name"></app-input>
 
   </div>
 
   <br>
 
   <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
-                    [(ngModel)]="random_location">Everywhere in the game zone</mat-slide-toggle>
+                    style="margin-bottom: 5px;"
+                    [(ngModel)]="random_location">Everywhere in the game aera</mat-slide-toggle>
 
   <br>
   <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
@@ -45,6 +47,7 @@
                 (listChanged)="update_nfts($event)"
                 (selectChanged)="on_select($event)">
     </app-wallet>
+    <br>
 
     <div class="zone_input" *ngIf="sel_nft">
 
@@ -56,7 +59,7 @@
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"
                  [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
                  label="Visibility" unity="meters"
-                 [help]="'between '+user.game.min_visibility/environment.scale_factor+' and '+user.game.max_visibility/environment.scale_factor"
+                 [help]="'From '+user.game.min_visibility/environment.scale_factor+' to '+user.game.max_visibility/environment.scale_factor"
                  (focusout)="check_visibility()"
                  (valueChange)="this.visibility=$event" [value]="visibility"></app-input>
 
@@ -67,7 +70,7 @@
                  (valueChange)="diffusion=$event" [value]="diffusion"></app-input>
 
       <app-input value_type="number" [min]="0" [max]="max_pv_loading"
-                 *ngIf="max_pv_loading>0" [help]="'Maximum'+max_pv_loading"
+                 *ngIf="max_pv_loading>0" [help]="'From 0 to '+max_pv_loading"
                  label="Vitality to inject" unity="PV"
                  (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
 

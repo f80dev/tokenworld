@@ -1,7 +1,10 @@
 mat-expansion-panel {
   max-width: 1200px;
-  width: 100%;
+  width: 96%;
   display: inline-block;
+  margin: 2%;
+  margin-left: -20px;
+  font-size: small;
 }
 
 table {

@@ -1,8 +1,10 @@
-<app-hourglass [message]="message"></app-hourglass>
+<div style="text-align: center;width: 100%" *ngIf="message.length>0">
+  <app-hourglass [message]="message" style="marging-top:50px;"></app-hourglass>
+  <br>
+  <img src="./assets/loading.gif" style="width: 60%;max-width: 500px;">
+</div>
 
 <div class="mainform" *ngIf="message.length==0">
-
-
   <app-wallet [network]="user.network"
               [address]="user.address"
               message="Select a coin to load in your tokemon"
@@ -15,8 +17,12 @@
 
   <br>
 
+
+  <br>
+
   <app-input [value]="amount" [value_type]="type_control"
-             style="display: inline-block;width:80%;margin:10%;"
+             [style.width]="type_control=='number' ? '250px' : '80%'"
+             style="display: inline-block;margin:10%;"
              *ngIf="coin"
              [unity]="coin.name"
              [min]="0" [max]="coin.balance/1e18"

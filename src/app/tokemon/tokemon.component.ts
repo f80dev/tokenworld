@@ -74,4 +74,10 @@ export class TokemonComponent implements OnChanges,OnInit {
     if(!this.user.isDevnet())url=url.replace("devnet-","")
     open(url,"Explorer")
   }
+
+  open_nft() {
+    let url="https://devnet.xspotlight.com/nfts/"+this.nft.identifier
+    if(!this.user.isDevnet())url=url.replace("devnet.","")
+    open(url,"Spotlight")
+  }
 }

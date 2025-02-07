@@ -24,7 +24,7 @@ export class UserService {
   device=inject(DeviceService)
   addr_change = new Subject<string>();
 
-  network:string="elrond-devnet"
+  network:string=environment.network || "elrond-devnet"
   params:any
   lang="fr"
   nonce:number=0
@@ -134,13 +134,15 @@ export class UserService {
 
 
 
-  login(vm: any,subtitle="",pem_file="",strong=false,required_balance=0,message_balance="") {
+  login(vm: any,subtitle="",pem_file="",strong=false,
+        required_balance=0,message_balance="",
+        silence_mode=false) {
     return new Promise(async (resolve, reject) => {
-      debugger
       if(!this.address)this.address=localStorage.getItem("address") || ""
       await this.init_idx()
 
-      if(this.isConnected(strong)){
+
+      if(this.isConnected(strong) || silence_mode){
         await this.init_balance(vm.api)
 
         if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
@@ -165,8 +167,6 @@ export class UserService {
           showMessage(vm,"Identification ok")
         } else {
           try{
-            debugger
-
             if(this.device.isMobile())this.connexion.extension_wallet=false
             let r:any=await _ask_for_authent(vm,"Authentification",subtitle,this.network,this.connexion)
             await this.authent(r)
@@ -185,15 +185,11 @@ export class UserService {
   }
 
 
-  isProd() {
-
-  }
-
   get_domain(){
     return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
   }
 
-   refresh(){
+  refresh(){
     return new Promise(async (resolve)=>{
       this.account=await toAccount(this.address,this.get_domain())
       resolve(this.account)

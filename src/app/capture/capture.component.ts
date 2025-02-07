@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {$$, getParams, showMessage} from '../../tools';
+import {$$, getParams, setParams, showMessage} from '../../tools';
 import {MatButton} from '@angular/material/button';
 import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
@@ -14,7 +14,7 @@ import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {eval_direct_url_xportal} from '../../crypto';
 import {DeviceService} from '../device.service';
 import {ApiService} from '../api.service';
-import {Point3D, polarToCartesian} from '../tokenworld';
+import {cartesianToPolar, Point3D, polarToCartesian} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -76,6 +76,7 @@ export class CaptureComponent implements OnInit {
 
 
   async on_capture() {
+    let captured_tokemon:any=null
     if(this.user.game){
       try {
         let func_name=this.pv_to_engage>0 ? "capture" : "take"
@@ -86,24 +87,27 @@ export class CaptureComponent implements OnInit {
         if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
         $$("Appel de la "+func_name+" with ",args)
         let rc:any = await send_transaction_with_transfers(
-          this.user.provider,
+          this.user,
           func_name,
           args,
-          this.user,
           tokens);
         $$("Resultat ",rc)
+        captured_tokemon=rc.values[0]
         if(func_name=="capture") {
-          showMessage(this, rc.values[0].owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+          showMessage(this, captured_tokemon.owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
         }else{
           showMessage(this,"You take your tokemon in your bag")
         }
-        wait_message(this)
       } catch (e){
-        wait_message(this);
         showMessage(this,"Technical problem, please try again")
       }
-
-      setTimeout(()=>{this.router.navigate(["map"])})
+      wait_message(this);
+      setTimeout(()=>{
+        debugger
+        let pos=cartesianToPolar(captured_tokemon.position,environment.scale_factor,environment.translate_factor)
+        this.user.center_map=pos
+        this.user.zoom=16
+        this.router.navigate(["map"],{queryParams:{center:pos,zoom:this.user.zoom}})},1500)
     }
 
   }
@@ -126,5 +130,11 @@ export class CaptureComponent implements OnInit {
 
   open_xportal() {
     open(eval_direct_url_xportal(this.user.provider.uri))
+  }
+
+  refund(revitalize:boolean) {
+    let coin_to_use=this.user.get_default_token()
+    let args: any=revitalize ? {token:this.item,coin:coin_to_use} : {token:this.item}
+    this.router.navigate(["refund"],{queryParams:{p:setParams(args,"","")}})
   }
 }

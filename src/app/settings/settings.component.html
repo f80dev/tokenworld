@@ -10,37 +10,30 @@
 
     <mat-expansion-panel (expandedChange)="on_open_tokemon_engaged()">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
-      <div *ngIf="sel_to_reload" style="width:100%;max-width: 1200px;margin-top:50px;">
-
-        <app-input value_type="slide" [min]="1" [max]="max_pv_loading"
-                   *ngIf="max_pv_loading>0"
-                   style="display:inline-block;width:100%;"
-                   label="Vitality to inject" unity="HP"
-                   (valueChange)="lifepoint=$event" [value]="lifepoint"></app-input>
-
-        <br>
-
-        <button mat-raised-button (click)="send()">Send</button>
-      </div>
-
-      <br>
       <table>
         <tr>
           <th>Visual</th>
           <th>Names<br>(Tokemon/NFT)</th>
-          <th>Position</th><th>Visibility (meters)</th>
+          <th>Visibility</th>
           <th>Health Point (HP)</th>
         </tr>
         <tr *ngFor="let tokemon of tokemons" style="width: 100%;">
-          <td><img [src]="tokemon.content.url" style="width: 100px"></td>
+          <td><img [src]="tokemon.content.url" style="width: 70px"></td>
           <td>{{tokemon.name}} / {{tokemon.content.name}}</td>
+          <td>{{tokemon.visibility/environment.scale_factor}} m</td>
           <td>
-            <button mat-icon-button (click)="open_map(tokemon)"><mat-icon>map</mat-icon></button>
-          </td>
-          <td>{{tokemon.visibility/environment.scale_factor}}m</td>
-          <td>
-            {{tokemon.pv}}
-            <button mat-raised-button (click)="open_reload(tokemon)" *ngIf="max_pv_loading>0">Reload</button>
+            {{tokemon.pv}} HP
+            <button mat-raised-button (click)="open_reload(tokemon,user.get_default_token())"
+                    title="Add HP to your tokemon"
+                    *ngIf="max_pv_loading>0">
+              Revitalize
+            </button>
+
+            <button mat-raised-button (click)="open_reload(tokemon,null)"
+                    title="Add some token to the bag of your tokemon">
+              Loading
+            </button>
+
           </td>
         </tr>
       </table>

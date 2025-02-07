@@ -15,6 +15,7 @@ import {CreateWorldComponent} from './create-world/create-world.component';
 import {GamesComponent} from './games/games.component';
 import {FaucetComponent} from './faucet/faucet.component';
 import {IntroComponent} from './intro/intro.component';
+import {RefundComponent} from './refund/refund.component';
 
 
 export const routes: Routes = [
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'drop', component: DropComponent},
   { path: 'games', component: GamesComponent},
   { path: 'faucet', component: FaucetComponent},
+  { path: 'refund', component: RefundComponent},
   { path: 'airdrop', component: AirdropComponent},
   { path: 'create', component: CreateWorldComponent},
   { path: 'capture', component: CaptureComponent},

@@ -23,7 +23,6 @@
 
   <div *ngIf="message=='' && !created_game">
 
-
     <table><tr style="width: 100%;">
       <td style="text-align: right;width:55%;">
         <app-input label="Game title" value_type="text"
@@ -38,6 +37,7 @@
       </td>
     </tr></table>
 
+    <h5>Move map to set the gaming aera</h5>
     <div class="map_style" style="pointer-events: all;margin-top:-15px;">
       <div id="map" class="map_style" style="pointer-events: all;"
            title="Game zone to play"
@@ -73,59 +73,75 @@
       <mat-accordion>
         <mat-expansion-panel class="panel">
           <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_drop" title="Player can drop tokemon only at real location">Geoloc to drop</mat-slide-toggle>
-          <mat-slide-toggle [(ngModel)]="geoloc_to_catch" title="Player can catch tokemon around their real location">Geoloc to catch</mat-slide-toggle>
-          <mat-slide-toggle [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="geoloc_to_drop" title="Player can drop tokemon only at real location">
+            <div class="mat-slide-label">Drop tokemon<br>on GPS position</div>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle [(ngModel)]="geoloc_to_catch" title="Player can catch tokemon around their real location">
+            <div class="mat-slide-label">Catch tokemon around<br>your GPS position</div>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle *ngIf="level(2)" [(ngModel)]="tokemon_vision" title="Only your tokemons on the game can see other tokemons">Vision by tokemon</mat-slide-toggle>
           <br>
-          <app-input label="Maximum players in the game" help="" value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
-          <app-input label="Maximum distance to move" help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
+          <app-input label="Maximum players in the game" help=""
+                     unity="players"
+                     value_type="number" [value]="max_player" (valueChange)="max_player=$event"></app-input>
 
+          <app-input label="Maximum distance to move" *ngIf="level(2)"
+                     unity="m"
+                     help="" value_type="number" [value]="max_distance" (valueChange)="max_distance=$event"></app-input>
 
-          <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
-          <app-input label="Maximum visibility" help="" value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
+          <app-input label="Maximum visibility" help=""
+                     unity="m"
+                     value_type="number" [value]="max_visibility" (valueChange)="max_visibility=$event"></app-input>
 
 
 
           <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
-          <app-input label="Maximum loading charge" help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="HP"></app-input>
+          <app-input label="Maximum HP per tokemon"
+                     unity="HP"
+                     help="" value_type="number" [value]="max_pv" (valueChange)="max_pv=$event" unity="HP"></app-input>
 
 
         </mat-expansion-panel>
 
 
         <br>
-        <mat-expansion-panel class="panel">
+        <mat-expansion-panel class="panel" *ngIf="level(2)">
           <mat-expansion-panel-header>Advanced</mat-expansion-panel-header>
 
+          <div *ngIf="level(2)">
+            <button mat-raised-button (click)="to_add='entrance'"
+                    title="Tokemon must be drop in this place"
+                    *ngIf="zone.entrance && zone.entrance.x==0">
+              Add entrance
+            </button>
 
-          <button mat-raised-button (click)="to_add='entrance'"
-                  title="Tokemon must be drop in this place"
-                  *ngIf="zone.entrance && zone.entrance.x==0">
-            Add entrance
-          </button>
+            <button mat-raised-button
+                    *ngIf="zone && zone.entrance && (zone.entrance!.x!=0 || zone.entrance!.y!=0)" (click)="remove_entrance()">
+              Remove Entrance
+            </button>
 
-          <button mat-raised-button
-                  *ngIf="zone && zone.entrance && (zone.entrance!.x!=0 || zone.entrance!.y!=0)" (click)="remove_entrance()">
-            Remove Entrance
-          </button>
+            &nbsp;
+            <button mat-raised-button (click)="to_add='exit'"
+                    title="Tokemon must be catch in this place"
+                    *ngIf="zone.exit && zone.exit.x==0">
+              Add exit
+            </button>
 
-          &nbsp;
-          <button mat-raised-button (click)="to_add='exit'"
-                  title="Tokemon must be catch in this place"
-                  *ngIf="zone.exit && zone.exit.x==0">
-            Add exit
-          </button>
+            <button mat-raised-button
+                    *ngIf="zone && zone.exit && (zone.exit!.x!=0 || zone.exit!.y!=0)" (click)="remove_exit()">
+              Remove Exit
+            </button>
+            <br>
+            <br>
 
-          <button mat-raised-button
-                  *ngIf="zone && zone.exit && (zone.exit!.x!=0 || zone.exit!.y!=0)" (click)="remove_exit()">
-            Remove Exit
-          </button>
-          <br>
-          <br>
+          </div>
 
 
+          <mat-slide-toggle *ngIf="level(2)" [(ngModel)]="user_visibility">User set visibility</mat-slide-toggle><br>
 
-          <mat-slide-toggle [(ngModel)]="user_visibility">User set visibility</mat-slide-toggle><br>
+          <app-input label="Mininimum visibility" help="" value_type="number" [value]="min_visibility" (valueChange)="min_visibility=$event"></app-input>
 
           <app-input label="Quota" help="" value_type="number" [value]="quota" (valueChange)="quota=$event"></app-input>
           <app-input label="Turns" help="" value_type="number" [value]="turns" (valueChange)="turns=$event"></app-input>
@@ -191,13 +207,19 @@
     <br><br>
     You can invite people to play<br>
     <br>
-    <img [src]="qrcode" *ngIf="qrcode.length>0" style="width: 200px;height:200px;">
+
+    <qrcode [qrdata]="qrcode" [width]="200"
+            (click)="open_game(qrcode)"
+            style="cursor:pointer;"
+            [errorCorrectionLevel]="'M'"
+            *ngIf="qrcode.length>0"></qrcode>
+
+    <br>
 
     <button mat-raised-button (click)="share()">
       <mat-icon>share</mat-icon>
       Invite players
     </button>
-    &nbsp;
 
   </div>
 

@@ -69,9 +69,10 @@ export class SettingsComponent implements OnInit {
 
   async ngOnInit() {
     await this.user.login(this)
-    this.refresh();
-    this.max_pv_loading=Math.round(this.user.get_balance(this.user.get_default_token()))
-    }
+    await this.user.init_balance(this.api)
+    this.refresh()
+    this.max_pv_loading=Number(this.user.tokens[this.user.get_default_token()]/1e18)
+  }
 
 
 
@@ -83,11 +84,10 @@ export class SettingsComponent implements OnInit {
 
 
 
-  open_reload(nft: any) {
-    this.sel_to_reload=nft
+  open_reload(nft: any,coin:any) {
+    this.router.navigate(["refund"],
+      {queryParams:{p:setParams({token:nft,coin:coin},"","")}})
   }
-
-
 
 
 
@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit {
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {
-      await send_transaction_with_transfers(this.user.provider,"reloading",args,this.user,tokens)
+      await send_transaction_with_transfers(this.user,"reloading",args,tokens)
       this.refresh()
       wait_message(this)
     } catch (e) {

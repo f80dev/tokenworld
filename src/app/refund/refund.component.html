@@ -1,0 +1,29 @@
+<app-hourglass [message]="message"></app-hourglass>
+
+<div class="mainform" *ngIf="message.length==0">
+
+
+  <app-wallet [network]="user.network"
+              [address]="user.address"
+              message="Select a coin to load in your tokemon"
+              [selected]="true"
+              show="coin"
+              *ngIf="!coin"
+              (onCancel)="quit()"
+              (selectChanged)="sel_coin($event)">
+  </app-wallet>
+
+  <br>
+
+  <app-input [value]="amount" [value_type]="type_control"
+             width="80%"
+             *ngIf="coin"
+             [unity]="coin.name"
+             [min]="0" [max]="coin.balance/1e18"
+             label="Amount to load in tokemon"
+             (valueChange)="amount=$event"></app-input>
+
+  <br>
+  <button mat-raised-button *ngIf="coin" (click)="cancel()">Cancel</button>
+  <button mat-raised-button (click)="send()">Send</button>
+</div>

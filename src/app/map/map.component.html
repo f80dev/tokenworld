@@ -6,7 +6,7 @@
      *ngIf="message.length==0 && user.game && user.game.url!='map'">
 
   <mat-icon (click)="zoom_in()" class="button-map" style="top:0;">add_circle</mat-icon>
-   <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
+  <mat-icon (click)="zoom_out()" class="button-map"  style="top:20px;">remove_circle</mat-icon>
 
   <img class="image-map"
        [style.transform]="'translate(' + map_left + 'px, ' + map_top + 'px) scale(' + user.zoom + ')'"
@@ -32,7 +32,7 @@
     </mat-icon>
 
 
-        <div *ngIf="!start_move && !to_attack" style="display: inline-block;">
+    <div *ngIf="!start_move && !to_attack" style="display: inline-block;">
       <mat-icon  (click)="open_capture()"
                  *ngIf="selected_tokemon && (selected_tokemon.owner==user.idx || selected_tokemon.pv==0)"
                  title="Capture the tokemon"
@@ -49,12 +49,13 @@
       </mat-icon>
 
       <mat-icon  (click)="recenter()"
-                 title="center to the map"
+                 title="center map on the game"
                  class="icon-button">
         pin_drop
       </mat-icon>
 
       <mat-icon  (click)="show_my_tokemon()"
+                 *ngIf="level(2)"
                  title="show all my tokemon"
                  class="icon-button">
         visibility
@@ -75,7 +76,7 @@
 
       <mat-icon (click)="show_help=!show_help"
                 *ngIf="help_message.length>0"
-                 class="icon-button">help
+                class="icon-button">help
       </mat-icon>
 
     </div>
@@ -88,7 +89,7 @@
 </div>
 
 <div class="help-zone mat-elevation-z8" (click)="show_help=false" *ngIf="show_help">
-  <mat-icon>lightbulb</mat-icon>
+  <mat-icon style="margin-right: 15px;">lightbulb</mat-icon>
   <div>{{help_message}}</div>
 </div>
 

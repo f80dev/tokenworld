@@ -32,7 +32,7 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
-import {get_nft, send_transaction} from '../mvx';
+import {get_nft, level, send_transaction} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {SwPush} from '@angular/service-worker';
 
@@ -92,7 +92,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   old_pos: LatLng = new LatLng(0,0)
   last_tokemon_list: any[]=[]
   help_message: string=""
-  notif: PushSubscription | null=null
+  message_counter: number=0;
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -139,8 +139,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
     if(this.user.game?.geoloc_to_catch){
       $$("La partie utilise la géoloc donc on centre la carte sur la geoloc")
-      await this.user.geoloc(this.geolocService,this.me_marker)
-      this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+      this.refresh_geoloc()
+      this.recenter()
     } else {
 
       $$("La partie ne repose pas sur la géoloc donc on se positionne sur la derniere position si elle est dans la partie")
@@ -174,6 +174,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           this.remove_markers_from_map()
           this.old_pos=new LatLng(0,0)
         }
+        this.help_message="Not enought accuracy to show tokemons around. Activate your GPS"
+        this.message_counter=this.message_counter+1
+        if(this.message_counter % 10==0)showMessage(this,this.help_message)
         $$("Précision insuffisante")
         this.me_marker!.removeFrom(this.map!)
       }
@@ -198,7 +201,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async ngOnInit() {
-    this.user.login(this)
+    this.user.login(this,"","",false,0,"",true)
     if(this.user && this.user.game){
       setTimeout(async ()=>{
         await this.init_map()
@@ -207,13 +210,14 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       this.geoloc_autorefresh=setInterval(async ()=>{this.refresh_geoloc()},environment.geoloc_interval)
     }else{
       $$("user n'a pas sélectionné de map ",this.user)
-      this.router.navigate(["games"],{queryParams:{autoconnect:true}})
+      this.router.navigate(["games"],{queryParams:{autoconnect:false}})
     }
   }
 
 
   async open_drop() {
     let drop_pos=polarToCartesian(this.user.center_map,environment.scale_factor,environment.translate_factor)
+
     //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13#encoding-a-custom-type
     if(this.user.game?.geoloc_to_drop && this.user.idx!=this.user.game.owner){
       try{
@@ -225,14 +229,15 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         return
       }
     }
+
     let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
-    if(message!=''){
+    if(message!='' && this.user.game!.owner!=this.user.idx){
       showMessage(this,message)
     }else{
       let bounds=this.map!.getBounds()
-      var southWest = bounds.getNorthWest();
-      var northEast = bounds.getNorthEast();
-      var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
+      let southWest = bounds.getNorthWest();
+      let northEast = bounds.getNorthEast();
+      //var distance = (this.user.visibility/screen.availWidth)*this.map!.distance(southWest, northEast)
       let position=setParams({lat:this.user.center_map?.lat,lng:this.user.center_map?.lng,game_id:this.user.game!.id},"","")
       setTimeout(()=>{
         this.router.navigate(["drop"],{queryParams:{p:position}})
@@ -397,7 +402,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async recenter() {
-    if(!this.user.game?.geoloc_to_catch && !this.user.game?.geoloc_to_drop ){
+    if(!is_in(this.user.center_map,this.user.game!)){
       showMessage(this,"Map on the gaming zone")
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
@@ -406,9 +411,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let center_lat=(ne.lat+sw.lat)/2
       let center_lng=(ne.lng+sw.lng)/2
       this.user.center_map=new L.LatLng(center_lat,center_lng)
-    }
-    else
-    {
+    }else{
       showMessage(this,"Center of the map on your location")
       this.refresh_geoloc()
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
@@ -476,7 +479,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
       try{
         wait_message(this,"Moving ...")
-        let rc:any=await send_transaction(this.user.provider,"move_tokemon",this.user.address,args,this.user.get_sc_address())
+        let rc:any=await send_transaction(this.user,"move_tokemon",args)
         showMessage(this,rc.returnMessage)
         this.refresh()
         wait_message(this)
@@ -498,8 +501,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     await this.user.login(this,"Se connecter pour voir l'ensemble des tokemons","",true)
     if(this.user.game){
         let results:any=await send_transaction(
-        this.user.provider,"show_all_my_nfts",
-        this.user.address,[this.user.game.id],this.user.get_sc_address())
+        this.user,"show_all_my_nfts",[this.user.game.id])
         $$("Récupération de ",results.length)
     }
   }
@@ -516,5 +518,5 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
-
+  protected readonly level = level;
 }

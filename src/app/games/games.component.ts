@@ -119,7 +119,7 @@ export class GamesComponent implements OnInit {
     let args = [game.id]
     wait_message(this, "Closing")
     try {
-      let result = await send_transaction(this.user.provider, "close_game", this.user.address, args, this.user.get_sc_address())
+      let result = await send_transaction(this.user, "close_game", args)
     } catch (e: any) {
 
     }
@@ -132,7 +132,7 @@ export class GamesComponent implements OnInit {
     await this.user.login(this, "", "", true)
     let max_amount = await _prompt(this, "Max amount per tokemon", "", "", "number", "Send", "Cancel", false)
     let args = [game.id, Number(max_amount)]
-    let result = await send_transaction(this.user.provider, "staking", this.user.address, args, this.user.get_sc_address())
+    let result = await send_transaction(this.user, "staking", args)
     showMessage(this, "Stacking sended")
   }
 

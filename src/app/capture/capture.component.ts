@@ -103,9 +103,11 @@ export class CaptureComponent implements OnInit {
       }
       wait_message(this);
       setTimeout(()=>{
+        debugger
         let pos=cartesianToPolar(captured_tokemon.position,environment.scale_factor,environment.translate_factor)
         this.user.center_map=pos
-        this.router.navigate(["map"],{queryParams:{center:pos}})},1500)
+        this.user.zoom=16
+        this.router.navigate(["map"],{queryParams:{center:pos,zoom:this.user.zoom}})},1500)
     }
 
   }

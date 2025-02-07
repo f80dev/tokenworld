@@ -92,6 +92,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   old_pos: LatLng = new LatLng(0,0)
   last_tokemon_list: any[]=[]
   help_message: string=""
+  message_counter: number=0;
 
   ngOnDestroy(): void {
     clearInterval(this.geoloc_autorefresh)
@@ -174,7 +175,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           this.old_pos=new LatLng(0,0)
         }
         this.help_message="Not enought accuracy to show tokemons around. Activate your GPS"
-        showMessage(this,this.help_message)
+        this.message_counter=this.message_counter+1
+        if(this.message_counter % 10==0)showMessage(this,this.help_message)
         $$("Précision insuffisante")
         this.me_marker!.removeFrom(this.map!)
       }
@@ -210,7 +212,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       $$("user n'a pas sélectionné de map ",this.user)
       this.router.navigate(["games"],{queryParams:{autoconnect:false}})
     }
-
   }
 
 

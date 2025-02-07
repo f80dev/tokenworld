@@ -2,8 +2,6 @@ import {Component, inject, OnInit} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {UserService} from '../user.service';
 import {ApiService} from '../api.service';
-import {addParseSpanInfo} from '@angular/compiler-cli/src/ngtsc/typecheck/src/diagnostics';
-import {send_transaction} from '../mvx';
 import {getParams, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';

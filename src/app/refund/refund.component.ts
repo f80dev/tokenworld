@@ -11,6 +11,8 @@ import {MatButton} from '@angular/material/button';
 import {Location, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
+import {eval_direct_url_xportal} from '../../crypto';
+import {DeviceService} from '../device.service';
 
 @Component({
   selector: 'app-refund',
@@ -33,6 +35,7 @@ export class RefundComponent implements OnInit{
   api=inject(ApiService)
   location=inject(Location)
   router=inject(Router)
+  device=inject(DeviceService)
 
   sel_token: any=null
   coin: any=null
@@ -84,4 +87,9 @@ export class RefundComponent implements OnInit{
   quit() {
     this.router.navigate(["map"])
   }
+
+  open_xportal() {
+    open(eval_direct_url_xportal(this.user.provider.uri))
+  }
+
 }

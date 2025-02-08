@@ -16,6 +16,7 @@ import {abi} from '../environments/abi';
 import {environment} from '../environments/environment';
 import {utf8ToHex} from '@multiversx/sdk-core/out/utils.codec';
 import {gatherAllEvents} from '@multiversx/sdk-core/out/transactionsOutcomeParsers/resources';
+import {settings} from '../environments/settings';
 
 export const DEVNET="https://devnet-api.multiversx.com"
 export const MAINNET="https://api.multiversx.com"
@@ -181,7 +182,7 @@ export function create_transaction(function_name:string,args:any[],
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
-    if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? environment.contract_addr["elrond-devnet"] : environment.contract_addr["elrond-mainnet"]
+    if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? settings.contract_addr["elrond-devnet"] : settings.contract_addr["elrond-mainnet"]
     let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
 
     let transaction=factory.createTransactionForExecute({
@@ -197,7 +198,7 @@ export function create_transaction(function_name:string,args:any[],
 }
 
 export function level(lv=1) : boolean {
-  return environment.ihm_level>=lv
+  return settings.ihm_level>=lv
 }
 
 

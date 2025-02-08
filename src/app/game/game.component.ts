@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {get_nft} from '../mvx';
 import {ApiService} from '../api.service';
 import {UserService} from '../user.service';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-game',
@@ -39,7 +40,7 @@ export class GameComponent {
 
 
   async share_map(game: Game) {
-    await share_game(this,game,"Join my game on "+environment.appname)
+    await share_game(this,game,"Join my game on "+settings.appname)
   }
 
   async show_nfts(game: Game) {

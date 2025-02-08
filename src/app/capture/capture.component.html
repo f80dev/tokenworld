@@ -1,16 +1,20 @@
 <div class="mainform" style="text-align: center;font-size: medium;" *ngIf="item">
   <div *ngIf="message.length>0">
+    <br>
     <app-hourglass [message]="message"></app-hourglass>
+    <br>
+    <img *ngIf="pv_to_engage>0"
+         src="./assets/fight2.gif"
+         style="width:60%;margin-top: 40px;">
+
+    <br>
     <br>
     <button mat-raised-button
             *ngIf="device.isMobile()"
             (click)="open_xportal()">
       Basculer sur xPortal
     </button>
-    <br>
-    <img *ngIf="pv_to_engage>0"
-         src="./assets/fight2.gif"
-         style="width:60%;margin-top: 40px;">
+
   </div>
 
   <div *ngIf="message.length==0">
@@ -20,8 +24,8 @@
                  [bags]="bags"
                  [network]="user.network">
     </app-tokemon>
-    <br>
 
+    <br>
 
     <app-input  *ngIf="item.pv>0 && item.owner!=user.idx"
                 value_type="slider" [value]="pv_to_engage"

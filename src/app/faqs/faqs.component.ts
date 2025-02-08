@@ -5,6 +5,7 @@ import {NetworkService} from "../network.service";
 import {environment} from "../../environments/environment";
 import {getParams} from "../../tools";
 import {MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
+import {settings} from '../../environments/settings';
 
 
 export interface FAQ {
@@ -44,8 +45,8 @@ export class FaqsComponent implements AfterContentInit {
         faq.visible = params.hasOwnProperty("open");
 
         for(let i=0;i<5;i++){
-          faq.title=faq.title.replace("{{appname}}",environment.appname);
-          faq.content=faq.content.replace("{{appname}}",environment.appname);
+          faq.title=faq.title.replace("{{appname}}",settings.appname);
+          faq.content=faq.content.replace("{{appname}}",settings.appname);
         }
 
         if(this.filter.length==0 || this.filter.indexOf(faq.index)>-1){

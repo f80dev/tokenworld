@@ -9,6 +9,7 @@ import {NgNavigatorShareService} from "ng-navigator-share";
 import {_prompt} from "../prompt/prompt.component";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-about',
@@ -76,4 +77,5 @@ export class AboutComponent implements OnInit {
     }
 
   protected readonly environment = environment;
+  protected readonly settings = settings;
 }

@@ -193,8 +193,11 @@ export class DropComponent implements AfterViewInit {
         }
         wait_message(this)
 
-      } catch (e) {
-        showError(this, e)
+      } catch (e:any) {
+        if(e.message=="out of gas"){
+          e.message="Transaction too complexe, reduce the number of tokemon to drop"
+        }
+        showMessage(this,e.message)
         wait_message(this)
       }
     }

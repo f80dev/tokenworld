@@ -3,8 +3,8 @@ export const environment = {
   forum: "https://discord.gg/BfC2E2ent",
   mail: "contact@nfluent.io",
   version: require('../../package.json').version + '-dev',
-  ihm_level:1,
-  appname: "TOKEMON World",
+
+
   server: "http://localhost:5000",
   networks: [
     {label: "MultiversX Test", value: "elrond-devnet"},
@@ -63,10 +63,7 @@ export const environment = {
   scale_factor:100,
   translate_factor:1000000000,
 
-  contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqkgtlh3s3x97x77e65me5a9uwk3084j9z835sem0a9j",
-    "elrond-mainnet":"erd1qqqqqqqqqqqqqpgq7kggqwgrs4jpl8gxa5vs4vu8trdkktcv835sq6mngv"
-  },
+
 
   website: "https://af10.fr",
   company:"AF10",

@@ -10,6 +10,7 @@ import {cartesianToPolar, center_of, distance, Game, polarToCartesian} from './t
 import {Location} from '@angular/common';
 import {DeviceService} from './device.service';
 import {Connexion} from '../operation';
+import {settings} from '../environments/settings';
 
 @Injectable({
   providedIn: 'root'
@@ -226,9 +227,9 @@ export class UserService {
 
   get_sc_address() {
     if(this.network.indexOf("devnet")>-1){
-      return environment.contract_addr["elrond-devnet"]
+      return settings.contract_addr["elrond-devnet"]
     }else{
-      return environment.contract_addr["elrond-mainnet"]
+      return settings.contract_addr["elrond-mainnet"]
     }
   }
 

@@ -2,6 +2,12 @@
   <app-hourglass [message]="message" style="marging-top:50px;"></app-hourglass>
   <br>
   <img src="./assets/loading.gif" style="width: 60%;max-width: 500px;">
+  <br><br>
+  <button mat-raised-button
+          *ngIf="message!='' && device.isMobile()"
+          (click)="open_xportal()">
+    Basculer sur xPortal
+  </button>
 </div>
 
 <div class="mainform" *ngIf="message.length==0">

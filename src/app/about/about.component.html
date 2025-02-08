@@ -5,7 +5,7 @@
        *ngIf="user && user.params">{{user.params.appname}}
   </div>
 
-  <h2 class="color-primary" *ngIf="environment.appname">{{environment.appname}}</h2>
+  <h2 class="color-primary" *ngIf="settings.appname">{{settings.appname}}</h2>
   <div>version {{version}}</div>
   <br>
   <img *ngIf="logo!=''" [src]="logo" style="margin: 50px;max-width:300px;max-height:300px;">

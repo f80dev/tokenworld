@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "deploy": "npm version patch && ng build --aot --output-hashing=none --source-map=true --optimization=false --configuration development && gh-pages -d ./dist/tokemonworld --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages -m \"update from gh-pages\"",
-    "deploy-prod": "npm version patch && ng build --aot --output-hashing=none --source-map=false --optimization=true --configuration production && gh-pages -d ./dist/tokemonworld --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages2 -m \"update from gh-pages2\"",
+    "deploy-prod": "npm version patch && ng build --aot --output-hashing=none --source-map=false --optimization=true --configuration production && gh-pages -d ./dist/tokemonworld --repo https://github.com/f80dev/tokenworld.git -f -t true -b gh-pages-prod -m \"update from gh-pages-prod\"",
     "test": "ng test"
   },
   "private": true,

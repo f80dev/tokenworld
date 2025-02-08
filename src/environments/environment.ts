@@ -11,7 +11,6 @@ export const environment = {
     {label: "MultiversX", value: "elrond-mainnet"},
     {label: "MultiversX Test v2", value: "elrond-devnet2"},
   ],
-  network:"elrond-devnet",
   storage:"github",
   visual: "./assets/tokemon_logo.png",
   logo: "./assets/tokemon_logo.png",

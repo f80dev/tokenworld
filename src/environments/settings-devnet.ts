@@ -4,6 +4,6 @@ export const settings={
     "elrond-mainnet":"erd1qqqqqqqqqqqqqpgq7kggqwgrs4jpl8gxa5vs4vu8trdkktcv835sq6mngv"
   },
   ihm_level:2,
-  appname: "TOKEMON World (beta)",
+  appname: "TOKEMON World (devnet)",
   network:"elrond-devnet"
 }

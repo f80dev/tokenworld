@@ -42,7 +42,7 @@ export class AboutComponent implements OnInit {
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
-    apply_params(this,params,environment);
+    apply_params(this,params,settings);
     this.exist_faqs=(params.faqs || environment.faqs || "").length>0
     let env:any=environment
     this.show_admin=env.hasOwnProperty("admin_password")

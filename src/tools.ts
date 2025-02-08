@@ -374,8 +374,8 @@ export function apply_params(vm:any,params:any,env:any={}){
   if(style && vm.hasOwnProperty("style")){
     vm.style.setStyle("theme","./"+style);
   }
-  if(vm.hasOwnProperty("miner") && (params.miner || env.miner)){
-    vm.miner = newCryptoKey("","","",params.miner || env.miner)
+  if(vm.hasOwnProperty("miner") && (params.miner)){
+    vm.miner = newCryptoKey("","","",params.miner)
   }
 
   if(vm.hasOwnProperty("user")){

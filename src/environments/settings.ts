@@ -5,5 +5,5 @@ export const settings={
   },
   ihm_level:2,
   appname: "TOKEMON World (beta)",
-  network:"elrond-devnet"
+  network: "elrond-devnet"
 }

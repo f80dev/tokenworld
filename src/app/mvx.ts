@@ -108,11 +108,6 @@ export async function create_abi(abi_content:any,api:any=null): Promise<AbiRegis
   })
 }
 
-export function get_smartcontract_address(env:any,user:UserService) : string {
-  if(!user)return "elrond-devnet"
-  return env.contract_addr.hasOwnProperty(user.network) ? env.contract_addr[user.network] || "elrond-devnet" : "elrond-devnet"
-}
-
 
 export function address_from_pem(pemText:string) : string {
   return UserSigner.fromPem(pemText).getAddress().bech32()

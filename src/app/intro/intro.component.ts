@@ -1,7 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {UserService} from '../user.service';
 import {$$, getParams} from '../../tools';
-import {environment} from '../../environments/environment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';

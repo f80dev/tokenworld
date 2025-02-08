@@ -65,6 +65,29 @@
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             },
+            "devnet": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/settings.ts",
+                  "with": "src/environments/settings-devnet.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5000kB",
+                  "maximumError": "10MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "200kB",
+                  "maximumError": "400kB"
+                }
+              ],
+              "outputHashing": "all",
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,

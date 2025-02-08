@@ -6,6 +6,7 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {MatIcon} from '@angular/material/icon';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-wallet',
@@ -30,7 +31,7 @@ export class WalletComponent implements OnChanges {
   nfts: any[] = []
   @Input() address=""
   @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
-  @Input() network=environment.network || "elrond-devnet"
+  @Input() network=settings.network || "elrond-devnet"
   @Output() selectChanged = new EventEmitter()
   @Output() onCancel = new EventEmitter()
   @Output() listChanged = new EventEmitter()

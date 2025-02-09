@@ -70,6 +70,10 @@
                 {
                   "replace": "src/environments/settings.ts",
                   "with": "src/environments/settings-devnet.ts"
+                },
+                {
+                  "replace": "src/CNAME",
+                  "with": "src/CNAME_devnet"
                 }
               ],
               "budgets": [

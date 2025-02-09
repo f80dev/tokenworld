@@ -1,4 +1,4 @@
-git commit -a -m "commit pour publication"
+git commit -a -m "commit pour publication beta"
 copy ./src/CNAME_beta ./src/CNAME
 call npm version patch
 call ng build --aot --output-hashing=none --source-map=true --optimization=false --configuration development

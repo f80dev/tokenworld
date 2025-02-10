@@ -2,6 +2,7 @@ export const settings={
   contract_addr:"erd1qqqqqqqqqqqqqpgqh9hjlapf4p7dsvgj77x3kzzrq9wh759g835scc4vw5",
   ihm_level:1,
   appname: "TOKEMON World (beta)",
+  appli:"https://devnet.tokemon.f80.fr",
   network: "elrond-devnet"
 }
 

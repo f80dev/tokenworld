@@ -29,6 +29,7 @@ import {MatButton} from "@angular/material/button";
 import {XALIAS_PROVIDER_DEVNET, XALIAS_PROVIDER_MAINNET} from "@multiversx/sdk-web-wallet-provider/out";
 import {eval_direct_url_xportal} from "../../crypto";
 import {QRCodeComponent} from 'angularx-qrcode';
+import {settings} from '../../environments/settings';
 
 //Installation de @multiversx/sdk-wallet-connect-provider via yarn add @multiversx/sdk-wallet-connect-provider
 
@@ -185,7 +186,7 @@ export class AuthentComponent implements OnInit,OnChanges {
       //   }
       // });
 
-      if (isLocal(environment.appli) && this.showAccesCode && this.autoconnect_for_localhost) {
+      if (isLocal(settings.appli) && this.showAccesCode && this.autoconnect_for_localhost) {
         this.onauthent.emit({address: ADDR_ADMIN,provider:this.provider,strong:true,encrypted:"",url_direct_xportal_connect:this.url_xportal_direct_connect});
       }
     }
@@ -299,7 +300,7 @@ export class AuthentComponent implements OnInit,OnChanges {
 
   open_wallet() {
     if(this.network.indexOf("elrond")>-1) {
-      let callback_url=environment.appli + this._location.path().split("?")[0];
+      let callback_url=settings.appli + this._location.path().split("?")[0];
       // let url_wallet=this.network.indexOf("devnet")==-1 ? WALLET_PROVIDER_MAINNET : WALLET_PROVIDER_DEVNET;
       // new WalletProvider(url_wallet).login({
       //   callbackUrl:callback_url

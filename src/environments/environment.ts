@@ -22,7 +22,6 @@ export const environment = {
   token_market: "https://tokemon.f80.fr/faucet",
   max_file_size:50000000,
   shorter_service:"",
-  appli:"https://tokemon.f80.fr",
   transfer_page:"https://t.f80.fr",
 
 

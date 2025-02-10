@@ -48,14 +48,6 @@ export class AboutComponent implements OnInit {
     this.show_admin=env.hasOwnProperty("admin_password")
   }
 
-  open_share() {
-    this.ngShare.share({
-      title:this.user.params.appname,
-      text:this.user.params.claim,
-      url:this.router.url
-    })
-  }
-
   open_faqs() {
     this.router.navigate(["faqs"])
   }

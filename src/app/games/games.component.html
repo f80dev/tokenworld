@@ -1,10 +1,10 @@
 <div class="mainform" style="text-align: center;">
 
-  <h5>Select a game or create one</h5>
+  <h3>Select a game or create one</h3>
   <app-hourglass [message]="message">
   </app-hourglass>
 
-  <div id="menu" style="display:flex;justify-content: space-between;width: 90%;margin:5%;"
+  <div id="menu" style="margin:1%;display:inline-flex;justify-content: space-between;max-width:600px;width: 90%;;"
        *ngIf="games.length>0 || show_my_games">
     <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">
       <div class="mat-slide-label">Include<br>closed game</div>
@@ -18,6 +18,7 @@
       <div class="mat-slide-label">Sort by<br>Nearest game</div>
     </mat-slide-toggle>
   </div>
+  <br>
 
   <mat-accordion *ngIf="message.length==0">
     <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1" (afterExpand)="load_hp_stock_from_game(game)">

@@ -153,7 +153,7 @@ export class GamesComponent implements OnInit {
 
 
   async load_hp_stock_from_game(game: Game) {
-    let idx=this.games.indexOf(game)
-    this.games[idx].bank=Number(await this.user.query("stocks",[game.id]))
+    //let idx=this.games.indexOf(game)
+    //this.games[idx].bank=Number(await this.user.query("stocks",[game.id]))
   }
 }

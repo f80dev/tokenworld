@@ -273,6 +273,7 @@ export class UserService {
             let sw=cartesianToPolar(game.sw,environment.scale_factor,environment.translate_factor)
             game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
             game.min_distance_to_refresh_map=Math.max(distance(ne,sw)/10000,20)
+            game.bank=Number(await this.query("stocks", [game.id]))
             rc.push(game)
           }
         }

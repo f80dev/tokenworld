@@ -103,7 +103,7 @@ export class UserService {
 
 
   query(func:string,args:any[]=[]){
-    $$("Appel de la fonction "+func+" avec les arguments ",args)
+    $$("Appel de la fonction "+func+" du smart contract "+this.get_sc_address()+" avec les arguments ",args)
     let rc=query(func, args, this.get_domain(), this.get_sc_address())
     //$$("Réponse ",rc)
     return rc
@@ -226,11 +226,7 @@ export class UserService {
   }
 
   get_sc_address() {
-    if(this.network.indexOf("devnet")>-1){
-      return settings.contract_addr["elrond-devnet"]
-    }else{
-      return settings.contract_addr["elrond-mainnet"]
-    }
+    return settings.contract_addr
   }
 
   get_default_token() {

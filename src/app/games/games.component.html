@@ -4,17 +4,18 @@
   <app-hourglass [message]="message">
   </app-hourglass>
 
-  <div id="menu" style="margin:20px;" *ngIf="games.length>0">
+  <div id="menu" style="display:flex;justify-content: space-between;width: 90%;margin:5%;"
+       *ngIf="games.length>0 || show_my_games">
     <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">
-      <div class="mat-slide-label">Closed<br>game</div>
+      <div class="mat-slide-label">Include<br>closed game</div>
     </mat-slide-toggle>
 
     <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">
-      <div class="mat-slide-label">My game</div>
+      <div class="mat-slide-label">Show only<br>my games</div>
     </mat-slide-toggle>
 
     <mat-slide-toggle [(ngModel)]="show_nearest_zone" (ngModelChange)="refresh()">
-      <div class="mat-slide-label">Nearest<br>game</div>
+      <div class="mat-slide-label">Sort by<br>Nearest game</div>
     </mat-slide-toggle>
   </div>
 

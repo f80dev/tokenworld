@@ -177,7 +177,7 @@ export function create_transaction(function_name:string,args:any[],
     const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
     let factory = new SmartContractTransactionsFactory({config: factoryConfig,abi:await create_abi(abi)});
     const apiNetworkProvider = new ApiNetworkProvider(user.network.indexOf("devnet")>-1 ? DEVNET : MAINNET);
-    if(contract_addr=="")contract_addr=user.network.indexOf("devnet")>1 ? settings.contract_addr["elrond-devnet"] : settings.contract_addr["elrond-mainnet"]
+    if(contract_addr=="")contract_addr=user.get_sc_address()
     let _sender=await apiNetworkProvider.getAccount(Address.fromBech32(user.address))
 
     let transaction=factory.createTransactionForExecute({

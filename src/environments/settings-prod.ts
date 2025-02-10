@@ -1,8 +1,5 @@
 export const settings={
-  contract_addr:{
-    "elrond-devnet":"erd1qqqqqqqqqqqqqpgqxyuemwd9eflmcdpusd53g2lz67hqfhwt835stv5sw4",
-    "elrond-mainnet":"erd1qqqqqqqqqqqqqpgq7kggqwgrs4jpl8gxa5vs4vu8trdkktcv835sq6mngv"
-  },
+  contract_addr:"",
   ihm_level:1,
   appname: "TOKEMON World",
   network:"elrond-mainnet"

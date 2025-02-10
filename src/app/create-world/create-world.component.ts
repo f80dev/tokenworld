@@ -253,7 +253,8 @@ export class CreateWorldComponent implements OnInit {
 
       this.cost_to_move,this.cost_to_fight,
       this.min_distance_for_gps,
-      this.max_to_engage
+      this.max_to_engage,
+      this.attacker_part,this.defender_part
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
@@ -350,6 +351,8 @@ export class CreateWorldComponent implements OnInit {
   }
 
   protected readonly level = level;
+  attacker_part: number = 30;
+  defender_part: number = 30;
 
   open_game(url: string) {
     open(url,"new_game")

@@ -177,6 +177,16 @@
                      [min]="0" [max]="Math.min(hp_balance,100000)"
                      [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
 
+          <app-input label="Attacker HP part"
+                     [min]="0" [max]="100"
+                     style="width:90%;max-width: 100%;" value_type="slider"
+                     [value]="attacker_part" (valueChange)="attacker_part=$event"></app-input>
+
+          <app-input label="Defender HP part"
+                     [min]="0" [max]="100"
+                     style="width:90%;max-width: 100%;" value_type="slider"
+                     [value]="defender_part" (valueChange)="defender_part=$event"></app-input>
+
 
           <!--      <mat-tab-group>-->
           <!--        <mat-tab label="YAML">-->
@@ -210,7 +220,7 @@
       Enter !
     </button>
 
-    <br><br>
+    <br><br><br><br>
     You can invite people to play<br>
     <br>
 

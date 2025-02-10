@@ -4,7 +4,9 @@
       <mat-icon>map</mat-icon>
       Game zone
     </button>
-    <button mat-raised-button (click)="share_map(game)"   title="See the zone on a map">
+    <button mat-raised-button
+            *ngIf="!game.closed"
+            (click)="share_map(game)"   title="See the zone on a map">
       <mat-icon>share</mat-icon>
       Invite player
     </button>

@@ -24,14 +24,24 @@
            class="small-vignette">
     </div>
 
+    <div *ngIf="game!.bank>0">HP bank: {{game!.bank/1e18 | number:"1.0-3"}} HP</div>
+    <div *ngIf="game!.welcome_pack>0">Welcome pack : {{game!.welcome_pack}} HP</div>
+
   </div>
 
   <div class="game_section">
     <mat-expansion-panel>
       <mat-expansion-panel-header>Details</mat-expansion-panel-header>
-      <div style="font-size: small;">
+      <div style="font-size: x-small;">
         <div>Max HP/user: {{game!.max_per_user}}</div>
+
+        <br>
         <div>Fight cost: {{game!.cost_to_fight}} HP</div>
+        When you lose fight<br>
+         - You recover {{game.attacker_part}}% of the HP engagement<br>
+         - The defender get {{game.defender_part}}% of the HP engagement<br>
+        <br>
+
         <div>Move cost: {{game!.cost_to_move}} HP</div>
         <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
         <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
@@ -41,10 +51,12 @@
         <div *ngIf="game!.entrance.x+game!.entrance.y+game!.entrance.z!=0">Fix Entrance</div>
         <div *ngIf="game!.exit.x+game!.exit.y+game!.exit.z!=0">Fix Exit</div>
 
-        <div *ngIf="game!.bank>0">bank: {{game!.bank/1e18}} LP</div>
+
 
         Visibility : {{game!.min_visibility/environment.scale_factor}} to {{game!.max_visibility/environment.scale_factor}}m<br>
         Move : {{game!.min_distance/environment.scale_factor}} to {{game!.max_distance/environment.scale_factor}}m
+
+
       </div>
     </mat-expansion-panel>
   </div>

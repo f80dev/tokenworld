@@ -71,7 +71,7 @@ export class CaptureComponent implements OnInit {
       $$("Tentative de capture du tokemon ",this.item)
 
       // @ts-ignore
-      this.lang_pv=environment.dictionnary[this.user.lang || "fr"].pv
+      this.lang_pv=environment.dictionnary[this.user.lang || "en"].pv
     }catch (e){
       this.router.navigate(["map"])
     }

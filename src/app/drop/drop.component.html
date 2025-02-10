@@ -1,10 +1,19 @@
 <div class="mainform" style="text-align: center;padding: 5px;">
-  <app-hourglass [message]="message"></app-hourglass><br>
-  <button mat-raised-button
-          *ngIf="message!='' && device.isMobile()"
-          (click)="open_xportal()">
-    Basculer sur xPortal
-  </button>
+
+  <div *ngIf="message.length>0">
+    <app-hourglass [message]="message"></app-hourglass><br>
+    <br>
+    <img src="./assets/dropping.gif" style="width: 300px;">
+    <br><br><br>
+    <button mat-raised-button
+            *ngIf="message!='' && device.isMobile()"
+            (click)="open_xportal()">
+      Basculer sur xPortal
+    </button>
+
+  </div>
+
+
 
   <div *ngIf="sel_nft && message.length==0" class="zone_input" >
 

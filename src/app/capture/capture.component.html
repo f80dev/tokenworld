@@ -26,21 +26,26 @@
     </app-tokemon>
 
     <br>
-
-    <app-input  *ngIf="item.pv>0 && item.owner!=user.idx"
-                value_type="slider" [value]="pv_to_engage"
-                (valueChange)="update_value($event)"
-                style="width:300px;display: inline-block;"
-                [unity]="lang_pv"
-                [min]="0" [max]="max_engagment"
-                [label]="lang_pv+' to engage'">
-    </app-input>
-
     <br>
+
     <div *ngIf="item.pv>0 && item.owner!=user.idx">
+      You have {{user.tokens[user.get_default_token()].balance / 1e18 | number:"1.0-3"}} HP<br>
+      <app-input
+        value_type="slider" [value]="pv_to_engage"
+        (valueChange)="update_value($event)"
+        style="width:300px;display: inline-block;"
+        [unity]="lang_pv"
+        [min]="0" [max]="max_engagment"
+        [label]="lang_pv+' to engage'">
+      </app-input>
+
+
+      <br>
       <h4 *ngIf="pv_to_engage==0">No chance to win</h4>
       <h4 *ngIf="pv_to_engage>0">You have {{chance_to_win}}% chance of winning</h4>
+
     </div>
+
 
       <button mat-raised-button *ngIf="item.owner==user.idx"
               (click)="refund(true)">Revitalize</button>

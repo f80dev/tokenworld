@@ -12,7 +12,7 @@
         <td style="text-align: left;font-size: small;" *ngIf="selected">
           <mat-icon class="small-icon-button" (click)="select_esdt(user.tokens[k])">arrow_right</mat-icon>
         </td>
-        <td style="text-align: left;font-size: small;width:40%;" [title]="user.tokens[k].identifier">
+        <td style="text-align: left;font-size: small;width:40%;" [title]="user.tokens[k].identifier" [style.font-weight]="strong_token.indexOf(user.tokens[k].identifier)>-1 ? 'bold' : 'normal'" >
           <img src="./assets/coin.png" style="width: 20px;height:20px;margin-bottom: -5px;" *ngIf="!selected">
           {{user.tokens[k].name}}
         </td>

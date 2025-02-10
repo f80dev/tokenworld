@@ -92,6 +92,7 @@ export class CreateWorldComponent implements OnInit {
   map!: L.Map
   args: any;
   lifepoint=0;
+  welcome_pack=0;
   title="My Game"
   real: boolean=true
   message: string=""
@@ -254,7 +255,9 @@ export class CreateWorldComponent implements OnInit {
       this.cost_to_move,this.cost_to_fight,
       this.min_distance_for_gps,
       this.max_to_engage,
-      this.attacker_part,this.defender_part
+      this.attacker_part,this.defender_part,
+
+      this.welcome_pack
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
 
@@ -266,10 +269,10 @@ export class CreateWorldComponent implements OnInit {
         wait_message(this)
       }else{
         this.created_game=rc.values[0]
-        if(this.lifepoint>0){
+        if(this.lifepoint>0 && this.created_game){
           $$("Transfert de lifepoint "+this.lifepoint)
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
-          rc=await send_transaction_with_transfers(this.user,"fund_game",[rc.result],tokens)
+          rc=await send_transaction_with_transfers(this.user,"fund_game",[this.created_game.id],tokens)
         }
         wait_message(this)
         let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World",false,false)
@@ -339,7 +342,7 @@ export class CreateWorldComponent implements OnInit {
   cost_to_move: number=0
   cost_to_fight: number=1
   link_to_share: string = "";
-  min_distance_for_gps=50
+  min_distance_for_gps=100
   geoloc_to_drop=false
   geoloc_to_catch=true
   user_visibility: boolean = true
@@ -351,8 +354,8 @@ export class CreateWorldComponent implements OnInit {
   }
 
   protected readonly level = level;
-  attacker_part: number = 30;
-  defender_part: number = 30;
+  attacker_part: number = 25;
+  defender_part: number = 50;
 
   open_game(url: string) {
     open(url,"new_game")

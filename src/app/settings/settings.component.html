@@ -4,7 +4,11 @@
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>My Wallet</mat-expansion-panel-header>
-      <app-wallet [address]="user.address" show="coin,nft" (selectChanged)="on_select($event)"></app-wallet>
+      <app-wallet [address]="user.address"
+                  show="coin,nft"
+                  [strong_token]="user.get_default_token()"
+                  (selectChanged)="on_select($event)">
+      </app-wallet>
     </mat-expansion-panel>
 
     <mat-expansion-panel (expandedChange)="on_open_tokemon_engaged()">

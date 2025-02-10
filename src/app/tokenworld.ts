@@ -73,6 +73,13 @@ export class Game {
   cost_to_fight=1
   gps_tolerance=100
   min_distance_to_refresh_map=50
+  max_to_engage:number=0
+
+  attacker_part:number=0
+  defender_part:number=0
+
+  welcome_pack=0
+
 }
 
 

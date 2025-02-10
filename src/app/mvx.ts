@@ -12,11 +12,9 @@ import {ApiService} from "./api.service";
 import {UserService} from "./user.service";
 import {Octokit} from "@octokit/rest";
 import {$$, now} from "../tools";
-import {abi} from '../environments/abi';
-import {environment} from '../environments/environment';
 import {utf8ToHex} from '@multiversx/sdk-core/out/utils.codec';
 import {gatherAllEvents} from '@multiversx/sdk-core/out/transactionsOutcomeParsers/resources';
-import {settings} from '../environments/settings';
+import {abi, settings} from '../environments/settings';
 
 export const DEVNET="https://devnet-api.multiversx.com"
 export const MAINNET="https://api.multiversx.com"

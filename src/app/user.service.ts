@@ -229,7 +229,7 @@ export class UserService {
     return settings.contract_addr
   }
 
-  get_default_token() {
+  get_default_token(): string {
     return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
   }
 

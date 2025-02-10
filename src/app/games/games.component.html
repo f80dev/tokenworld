@@ -20,7 +20,7 @@
   </div>
 
   <mat-accordion *ngIf="message.length==0">
-    <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1">
+    <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1" (afterExpand)="load_hp_stock_from_game(game)">
       <mat-expansion-panel-header>
         <mat-icon *ngIf="!game.closed" (click)="select(game)"
                   title="Play to this game"

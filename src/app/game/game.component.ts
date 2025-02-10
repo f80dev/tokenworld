@@ -1,6 +1,6 @@
 import {Component, inject, Input} from '@angular/core';
 import {Game, share_game} from '../tokenworld';
-import {NgForOf, NgIf} from '@angular/common';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {environment} from '../../environments/environment';
 import {MatIcon} from "@angular/material/icon";
@@ -19,7 +19,7 @@ import {settings} from '../../environments/settings';
   standalone: true,
   imports: [
     NgIf,
-    MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatButton, NgForOf
+    MatExpansionPanel, MatExpansionPanelHeader, MatIcon, MatButton, NgForOf, DecimalPipe
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'

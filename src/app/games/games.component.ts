@@ -159,7 +159,15 @@ export class GamesComponent implements OnInit {
 
   async transfer_to_owner(game: Game) {
     wait_message(this,"Transfer all tokemons to owner")
-    let rc=await send_transaction(this.user,"restore_to_owners", [game.id,30])
+    try{
+      let rc:any=await send_transaction(this.user,"restore_to_owners", [game.id,100])
+      if(rc.returnMessage=="ok"){
+        showMessage(this,"Il reste quelques tokemons "+rc.values[0])
+      }
+    }catch(e){
+
+    }
+
     wait_message(this)
   }
 }

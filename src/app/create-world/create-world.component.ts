@@ -148,9 +148,10 @@ export class CreateWorldComponent implements OnInit {
         this.zone.center=new LatLng(params.lat,params.lng)
       }else{
         $$("La zone n'est pas en parametre, on localise")
-        if(await this.user.geoloc(this.geolocService,null,1000000)){
+        try{
+          await this.user.geoloc(this.geolocService,null,1000000)
           this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
-        }else{
+        }catch(e){
           this.zone.center=new LatLng(48,2)
         }
       }

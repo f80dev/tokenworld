@@ -184,9 +184,6 @@
 
           <br>
 
-
-
-
           <app-input label="Attacker HP part"
                      [min]="0" [max]="100"
                      style="width:90%;max-width: 100%;" value_type="slider" unity="%"
@@ -239,7 +236,6 @@
             style="cursor:pointer;"
             [errorCorrectionLevel]="'M'"
             *ngIf="qrcode.length>0"></qrcode>
-
     <br>
 
     <button mat-raised-button (click)="share()">
@@ -250,6 +246,10 @@
   </div>
 
 
-  <button mat-raised-button *ngIf="!created_game" (click)="quit(null)">Cancel</button>
+  <button mat-raised-button
+          *ngIf="!created_game"
+          (click)="quit(null)">
+    Cancel
+  </button>
 
 </div>

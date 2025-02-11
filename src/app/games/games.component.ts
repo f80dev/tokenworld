@@ -115,7 +115,7 @@ export class GamesComponent implements OnInit {
 
   async close_map(game: any) {
     await this.user.login(this, "", "", true)
-    $$("Fermeture de ", game)
+    $$("Fermeture de ",game)
     let args = [game.id]
     wait_message(this, "Closing")
     try {
@@ -155,5 +155,11 @@ export class GamesComponent implements OnInit {
   async load_hp_stock_from_game(game: Game) {
     //let idx=this.games.indexOf(game)
     //this.games[idx].bank=Number(await this.user.query("stocks",[game.id]))
+  }
+
+  async transfer_to_owner(game: Game) {
+    wait_message(this,"Transfer all tokemons to owner")
+    let rc=await send_transaction(this.user,"restore_to_owners", [game.id,30])
+    wait_message(this)
   }
 }

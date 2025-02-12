@@ -142,7 +142,6 @@ export class UserService {
       if(!this.address)this.address=localStorage.getItem("address") || ""
       await this.init_idx()
 
-
       if(this.isConnected(strong) || silence_mode){
         await this.init_balance(vm.api)
 

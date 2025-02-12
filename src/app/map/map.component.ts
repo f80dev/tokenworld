@@ -413,7 +413,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
   async recenter() {
     if(!is_in(this.user.center_map,this.user.game!)){
-      showMessage(this,"Map on the gaming zone")
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)
@@ -423,7 +422,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       this.user.center_map=new L.LatLng(center_lat,center_lng)
     }else{
       showMessage(this,"Center of the map on your location")
-      this.refresh_geoloc()
+      await this.refresh_geoloc()
       this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
     }
     this.map!.setView(this.user.center_map,this.user.zoom)

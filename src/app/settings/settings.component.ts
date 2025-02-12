@@ -128,4 +128,8 @@ export class SettingsComponent implements OnInit {
   }
 
   protected readonly Number = Number;
+
+  open_game(tokemon: Tokemon) {
+    this.router.navigate(["games"],{queryParams:{autoconnect:true,game:tokemon.game}})
+  }
 }

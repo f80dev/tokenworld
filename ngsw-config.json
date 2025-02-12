@@ -21,6 +21,7 @@
     {
       "name": "leaflet-tiles",
       "installMode": "prefetch",
+      "updateMode": "prefetch",
       "resources": {
         "urls": [
           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

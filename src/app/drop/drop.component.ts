@@ -164,7 +164,7 @@ export class DropComponent implements AfterViewInit {
       $$("Zone NE ", p1)
       $$("Zone SW ", p2)
       let token = this.user.network.indexOf("devnet") > -1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
-      wait_message(this, "Dropping your NFT to the game as the new Tokemon "+this.name+" ...")
+      wait_message(this, "Dropping your NFT to the game as a new tokemon called '"+this.name+"' with "+this.lifepoint+" HP")
 
       let tokens = []
       if (this.lifepoint > 0) {

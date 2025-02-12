@@ -116,6 +116,21 @@
                      (valueChange)="max_to_engage=$event" unity="HP"></app-input>
 
 
+          <br>
+
+          <button mat-raised-button (click)="login()">More HP</button>
+          <app-input label="Initial Health Point (HP) stock for players"
+                     style="width:90%;max-width: 100%;" value_type="slider"
+                     [min]="0" [max]="Math.min(hp_balance,100000)" unity="HP"
+                     [value]="lifepoint" (valueChange)="update_bank($event)"></app-input>
+
+          <app-input [label]="'HP gift for new user in '+settings.appname"
+                     [min]="0" [max]="100"
+                     style="width:90%;max-width: 100%;" value_type="slider" unity="HP"
+                     [value]="welcome_pack" (valueChange)="welcome_pack=$event"></app-input>
+
+
+
         </mat-expansion-panel>
 
 
@@ -178,17 +193,6 @@
           <app-input label="Min distance for GPS location"
                      help="If the GPS accuracy is under this distance, no tokemon are visible"
                      value_type="number" [value]="min_distance_for_gps" (valueChange)="min_distance_for_gps=$event"></app-input>
-          <br>
-          <app-input label="Initial HP for stacking"
-                     style="width:90%;max-width: 100%;" value_type="slider"
-                     [min]="0" [max]="Math.min(hp_balance,100000)"
-                     [value]="lifepoint" (valueChange)="lifepoint=$event"></app-input>
-
-          <app-input label="HP gift for new user"
-                     [min]="0" [max]="100"
-                     style="width:90%;max-width: 100%;" value_type="slider" unity="HP"
-                     [value]="welcome_pack" (valueChange)="welcome_pack=$event"></app-input>
-
           <br>
 
           <app-input label="Attacker HP part"

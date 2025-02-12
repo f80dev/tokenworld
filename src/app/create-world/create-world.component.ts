@@ -35,6 +35,7 @@ import {DeviceService} from '../device.service';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {QRCodeComponent} from 'angularx-qrcode';
 import {MatLabel} from '@angular/material/form-field';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-create-world',
@@ -273,13 +274,15 @@ export class CreateWorldComponent implements OnInit {
         showMessage(this,rc.returnMessage)
         wait_message(this)
       }else{
-        this.created_game=rc.values[0]
-        if(this.lifepoint>0 && this.created_game){
+        let create_game=rc.values[0]
+        if(this.lifepoint>0 && create_game){
+          wait_message(this,"Intialize HP stock with "+this.lifepoint+" HP from your wallet")
           $$("Transfert de lifepoint "+this.lifepoint)
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
-          rc=await send_transaction_with_transfers(this.user,"fund_game",[this.created_game.id],tokens)
+          rc=await send_transaction_with_transfers(this.user,"fund_game",[create_game.id],tokens)
         }
         wait_message(this)
+        this.created_game=create_game
         let result=await share_game(this,this.created_game,"Join my game to find NFT with Tokemon World",false,false)
         this.qrcode=result.shorturl
       }
@@ -364,5 +367,17 @@ export class CreateWorldComponent implements OnInit {
 
   open_game(url: string) {
     open(url,"new_game")
+  }
+
+  protected readonly settings = settings;
+
+  async update_bank($event: any) {
+    this.lifepoint=$event
+  }
+
+  async login() {
+    await this.user.login(this,"","",true,0,"Connect to set your balance of HP")
+    await this.user.init_balance(this.api)
+    this.hp_balance=this.user.get_balance(this.user.get_default_token())
   }
 }

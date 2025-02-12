@@ -25,7 +25,6 @@
     </div>
 
     <div *ngIf="game!.welcome_pack>0">Welcome pack : {{game!.welcome_pack}} HP</div>
-
   </div>
 
   <div class="game_section">
@@ -44,7 +43,7 @@
         <div>Move cost: {{game!.cost_to_move}} HP</div>
         <div *ngIf="game!.geoloc_to_catch">Geoloc to catch</div>
         <div *ngIf="game!.geoloc_to_drop">Geoloc to drop</div>
-        <div *ngIf="game!.bank>0">HP bank: {{game!.bank}} HP</div>
+        <div *ngIf="game!.bank>0">Initial HP Stock: {{game!.bank}} HP</div>
         <div *ngIf="game!.tokemon_view">Visibility by Tokemon</div>
 
         <div *ngIf="game!.entrance.x+game!.entrance.y+game!.entrance.z!=0">Fix Entrance</div>

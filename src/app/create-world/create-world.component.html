@@ -94,18 +94,25 @@
                      help="" value_type="number" [value]="max_distance"
                      (valueChange)="max_distance=$event"></app-input>
 
-          <app-input label="Maximum visibility" help="" unity="m"
+          <app-input label="Maximum visibility"
+                     help="You only see the tokemon around you, visibility define the distance " unity="m"
                      value_type="number" [value]="max_visibility"
                      (valueChange)="max_visibility=$event"></app-input>
 
 
+          <div class="help-label">
+            You can give vitality to the tokemon (HP: Health Point) you create so
+            they can defend themselves against those who want to catch them
+          </div>
+
           <!--      <app-input label="Available direction" help="" value_type="number" [value]="n_degrees" (valueChange)="n_degrees=$event"></app-input>-->
           <app-input label="Maximum HP per tokemon" unity="HP"
-                     help="" value_type="number" [value]="max_pv"
+                     help="Set the maximum HP you can load in a tokemon"
+                     value_type="number" [value]="max_pv"
                      (valueChange)="max_pv=$event" unity="HP"></app-input>
 
-          <app-input label="Maximum engagement" unity="HP"
-                     help="" value_type="number" [value]="max_to_engage"
+          <app-input label="Maximum HP engagement" unity="HP"
+                     help="Set the maximum HP engagement to catch a tokemon" value_type="number" [value]="max_to_engage"
                      (valueChange)="max_to_engage=$event" unity="HP"></app-input>
 
 
@@ -245,7 +252,7 @@
 
   </div>
 
-
+  <br>
   <button mat-raised-button
           *ngIf="!created_game"
           (click)="quit(null)">

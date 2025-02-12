@@ -199,20 +199,24 @@ export class UserService {
 
 
   init_balance(api: ApiService) {
-    return new Promise(async (resolve)=>{
-      if(!this.address)throw new Error("Address not initialize")
-      await this.refresh()
+    return new Promise(async (resolve,reject)=>{
+      if(!this.address){
+        reject("Address not initialize")
+      }else{
+        await this.refresh()
 
-      let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
-      let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""
-      tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:Number(this.account.balance)})
-      this.balance=Number(this.account.balance)/1e18
+        let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
+        let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""
+        tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:Number(this.account.balance)})
+        this.balance=Number(this.account.balance)/1e18
 
-      for(let t of tokens){
-        this.tokens[t.identifier]=t
+        for(let t of tokens){
+          this.tokens[t.identifier]=t
+        }
+
+        resolve(true)
       }
 
-      resolve(true)
     })
   }
 

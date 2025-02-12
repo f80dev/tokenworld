@@ -126,8 +126,7 @@ export class CreateWorldComponent implements OnInit {
   async ngOnInit() {
 
     let params:any=await getParams(this.routes)
-    await this.user.login(this,"","",false,0.02,
-      "To create a game your must have some egld")
+    //await this.user.login(this,"","",false,0.02,"To create a game your must have some egld")
 
     this.zone={
       map:"map",
@@ -153,12 +152,17 @@ export class CreateWorldComponent implements OnInit {
           this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
         }catch(e){
           this.zone.center=new LatLng(48,2)
+          this.zone.zoom=6
         }
       }
     }
 
-    await this.user.init_balance(this.api)
-    this.hp_balance=this.user.get_balance(this.user.get_default_token())
+    try{
+      await this.user.init_balance(this.api)
+      this.hp_balance=this.user.get_balance(this.user.get_default_token())
+    }catch(e){
+      this.hp_balance=100
+    }
 
     try{
       $$("Initialisation de la carte avec ",this.zone)

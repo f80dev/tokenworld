@@ -25,7 +25,7 @@
             (click)="open_drop()"><mat-icon>download</mat-icon>Drop</button>
 
     <mat-icon  (click)="move_tokemon()"
-               *ngIf="(selected_tokemon && selected_tokemon.owner==user.idx) || start_move"
+               *ngIf="level(2) && ((selected_tokemon && selected_tokemon.owner==user.idx) || start_move)"
                title="Move"
                class="icon-button">
       run_circle
@@ -64,6 +64,7 @@
 
       <mat-icon  (click)="open_airdrop()"
                  title="Airdropr"
+                 *ngIf="level(2)"
                  class="icon-button">
         paid
       </mat-icon>

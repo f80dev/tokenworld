@@ -274,7 +274,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     let marker = L.marker(coords, {icon: giftIcon, alt:alt})
     marker.bindTooltip(label).openTooltip()
     marker.on("mouseover", (event) => {this.mouseover(event)})
-    marker.on("dblclick", (event) => {this.select_nft(event)})
+    marker.on("dblclick", (event) => {this.open_nft(event)})
+    marker.on("click", (event) => {this.select_nft(event)})
     marker.addTo(this.map!)
     return marker
   }
@@ -344,7 +345,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
 
-  async select_nft(event: LeafletMouseEvent) {
+  async select_nft(event: any) {
     this.map!.setView(event.latlng)
   }
 
@@ -528,4 +529,10 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   protected readonly level = level;
+
+  open_nft(event: LeafletMouseEvent) {
+    debugger
+    this.map!.setView(event.latlng)
+    this.open_capture()
+  }
 }

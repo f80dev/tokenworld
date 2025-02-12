@@ -17,6 +17,7 @@ import {InputComponent} from './input/input.component';
 import {ApiService} from './api.service';
 import {share_game} from './tokenworld';
 import {NgNavigatorShareService} from 'ng-navigator-share';
+import {level} from './mvx';
 
 
 @Component({
@@ -124,4 +125,6 @@ export class AppComponent implements OnInit {
   go_about() {
     this.router.navigate(["about"])
   }
+
+  protected readonly level = level;
 }

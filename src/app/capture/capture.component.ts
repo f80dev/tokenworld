@@ -100,7 +100,7 @@ export class CaptureComponent implements OnInit {
         if(func_name=="capture") {
           showMessage(this, captured_tokemon.owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
         }else{
-          showMessage(this,"You take your tokemon in your bag")
+          showMessage(this,"The tokemon return to your wallet as an NFT. You recover its HP and bag")
         }
       } catch (e){
         showMessage(this,"Technical problem, please try again")
@@ -108,7 +108,7 @@ export class CaptureComponent implements OnInit {
       wait_message(this);
       setTimeout(()=>{
         let pos=cartesianToPolar(captured_tokemon.position,environment.scale_factor,environment.translate_factor)
-        this.router.navigate(["map"],{queryParams:{lat:pos.lat,lng:pos.lng,zoom:18}})},1500)
+        this.router.navigate(["map"],{queryParams:{lat:pos.lat,lng:pos.lng,zoom:18}})},1000)
     }
 
   }

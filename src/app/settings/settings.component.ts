@@ -7,7 +7,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {get_nft, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
-import {cartesianToPolar, Tokemon} from '../tokenworld';
+import {cartesianToPolar, Game, Tokemon} from '../tokenworld';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
@@ -45,6 +45,7 @@ export class SettingsComponent implements OnInit {
   dialog=inject(MatDialog)
   api=inject(ApiService)
   sel_to_reload: any;
+  games: Game[] = [];
   max_pv_loading: number=0
   lifepoint: number=1
   message: string=""
@@ -55,6 +56,7 @@ export class SettingsComponent implements OnInit {
   async refresh(){
     if(this.user.isConnected(true)){
       this.tokemons=[]
+      this.games=await this.user.query("games",[])
       let rc:any=await this.user.query("show_all_my_nfts",[0,this.user.address])
       for(let tokemon of rc){
         let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
@@ -119,8 +121,11 @@ export class SettingsComponent implements OnInit {
 
   protected readonly environment = environment;
 
+
   async on_open_tokemon_engaged() {
     await this.user.login(this,"","",true)
     this.refresh()
   }
+
+  protected readonly Number = Number;
 }

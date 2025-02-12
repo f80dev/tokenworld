@@ -45,19 +45,23 @@
       <h4 *ngIf="pv_to_engage>0">You have {{chance_to_win}}% chance of winning</h4>
 
     </div>
-
-
       <button mat-raised-button *ngIf="item.owner==user.idx"
+              title="Add HP to this tokemon"
               (click)="refund(true)">Revitalize</button>
 
       <button mat-raised-button *ngIf="item.owner==user.idx"
+              title="Add coin to the bag"
               (click)="refund(false)">Loading</button>
 
-      <button mat-raised-button (click)="on_capture()">
+      <button mat-raised-button
+              title="Remove the tokemon and transfer the NFT, the HP and the bag to your wallet"
+              (click)="on_capture()">
         {{label}}
       </button>
 
-      <button mat-raised-button (click)="cancel()">Cancel</button>
+      <button mat-raised-button
+              title="Return to the previous screen"
+              (click)="cancel()">Cancel</button>
   </div>
 
 </div>

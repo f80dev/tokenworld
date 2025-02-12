@@ -6,7 +6,7 @@ import {$$, getParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {Game, share_game} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {get_nft, send_transaction} from '../mvx';
+import {get_nft, level, send_transaction} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
@@ -170,4 +170,6 @@ export class GamesComponent implements OnInit {
 
     wait_message(this)
   }
+
+  protected readonly level = level;
 }

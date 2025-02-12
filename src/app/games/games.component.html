@@ -34,9 +34,12 @@
         <mat-expansion-panel style="width: 200px;"
                              *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
           <mat-expansion-panel-header>Command</mat-expansion-panel-header>
-          <button mat-raised-button (click)="transfer_to_owner(game)">Transfer to owner</button><br>
+          <button mat-raised-button (click)="transfer_to_owner(game)">
+            <div class="blocbutton">Transfer to<br>owner</div>
+          </button>
+          <br>
           <button mat-raised-button (click)="close_map(game)">Close</button><br>
-          <button mat-raised-button (click)="stacking(game)">AirDrop</button>
+          <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
         </mat-expansion-panel>
       </app-game>
 

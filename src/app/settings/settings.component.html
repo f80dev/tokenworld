@@ -16,12 +16,14 @@
       <table>
         <tr>
           <th>Visual</th>
+<!--          <th>Game</th>-->
           <th>Names<br>(Tokemon/NFT)</th>
           <th>Visibility</th>
           <th>Health Point (HP)</th>
         </tr>
         <tr *ngFor="let tokemon of tokemons" style="width: 100%;">
           <td><img [src]="tokemon.content.url" style="width: 70px"></td>
+<!--          <td>{{games[Number(tokemon.game)]!.title}}</td>-->
           <td>{{tokemon.name}} / {{tokemon.content.name}}</td>
           <td>{{tokemon.visibility/environment.scale_factor}} m</td>
           <td>

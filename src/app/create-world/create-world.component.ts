@@ -6,7 +6,7 @@ import {InputComponent} from '../input/input.component';
 import {$$, getParams, showMessage} from '../../tools';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
-  add_icon,
+  add_icon, distance,
   Game,
   initializeMap,
   Point3D,
@@ -115,11 +115,18 @@ export class CreateWorldComponent implements OnInit {
    created_game: Game | null=null
   max_to_engage=100;
 
-  update_zone(){
+  update_zone(type_update="move"){
     this.zone.zoom = this.map.getZoom()
     this.zone.ne = this.map.getBounds().getNorthEast()
     this.zone.sw = this.map.getBounds().getSouthWest()
     this.zone.center=this.user.center_map
+
+    if(type_update=="zoom"){
+      this.min_distance_for_gps=Math.round(distance(this.zone.ne,this.zone.sw)/30)
+      if(this.min_distance_for_gps<50)this.min_distance_for_gps=50
+      if(this.min_distance_for_gps>5000)this.min_distance_for_gps=5000
+    }
+
     $$("Mise a jour de la zone ",this.zone)
   }
 
@@ -127,7 +134,7 @@ export class CreateWorldComponent implements OnInit {
   async ngOnInit() {
 
     let params:any=await getParams(this.routes)
-    //await this.user.login(this,"","",false,0.02,"To create a game your must have some egld")
+    await this.user.login(this,"You must login to the blockchain to create a game","",false)
 
     this.zone={
       map:"map",
@@ -147,11 +154,13 @@ export class CreateWorldComponent implements OnInit {
       if(params.hasOwnProperty("lat") && params.hasOwnProperty("lng")){
         this.zone.center=new LatLng(params.lat,params.lng)
       }else{
+
         $$("La zone n'est pas en parametre, on localise")
         try{
-          await this.user.geoloc(this.geolocService,null,1000000)
+          await this.user.geoloc(this.geolocService,null,10000000)
           this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
-        }catch(e){
+        }catch(e:any){
+          showMessage(this,e)
           this.zone.center=new LatLng(48,2)
           this.zone.zoom=6
         }
@@ -172,8 +181,8 @@ export class CreateWorldComponent implements OnInit {
       if(this.map){
         $$("Positionnement des evenements")
         this.map
-          .on("moveend", (event: L.LeafletEvent) => {this.update_zone()})
-          .on("zoomend", (event: L.LeafletEvent) => {this.update_zone()})
+          .on("moveend", (event: L.LeafletEvent) => {this.update_zone("move")})
+          .on("zoomend", (event: L.LeafletEvent) => {this.update_zone("zoom")})
           .on("click", (event: any) => {
             this.dropzone=event.latlng
             if(this.to_add!=''){this.drop_pt(this.to_add)}
@@ -276,7 +285,7 @@ export class CreateWorldComponent implements OnInit {
       }else{
         let create_game=rc.values[0]
         if(this.lifepoint>0 && create_game){
-          wait_message(this,"Intialize HP stock with "+this.lifepoint+" HP from your wallet")
+          wait_message(this,"Initialize HP stock with "+this.lifepoint+" HP from your wallet")
           $$("Transfert de lifepoint "+this.lifepoint)
           let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
           rc=await send_transaction_with_transfers(this.user,"fund_game",[create_game.id],tokens)
@@ -370,9 +379,15 @@ export class CreateWorldComponent implements OnInit {
   }
 
   protected readonly settings = settings;
+  max_gift: number=100
 
   async update_bank($event: any) {
     this.lifepoint=$event
+    if(this.lifepoint>0){
+      this.max_gift=Math.round($event/50)
+      if(this.max_gift<50)this.max_gift=50
+      this.welcome_pack=Math.min(this.welcome_pack,this.max_gift)
+    }
   }
 
   async login() {

@@ -2,8 +2,8 @@ export const environment = {
   production: false,
   forum: "https://discord.gg/BfC2E2ent",
   mail: "contact@nfluent.io",
+  telegram: "https://t.me/tokemon_world_official",
   version: require('../../package.json').version + '-dev',
-
 
   server: "http://localhost:5000",
   networks: [
@@ -32,22 +32,22 @@ export const environment = {
   style:"promptmarket.css",
 
 
-  faqs:[
-    {
-      index: "aquoicasert",
-      title: "Qu'est ce que {{appname}} ?",
-      order: 0,
-      format: "html",
-      content:"{{appname}} est une place de marché permettant à des acheteurs de faire des annonces sous forme de prompt IA et à des possesseurs de puissances de calcul de répondre à ses prompts en proposant des images"
-    },
-    {
-      index: "install_server",
-      title: "Comment générer des images depuis son ordinateur",
-      order: 0,
-      format: "html",
-      content:""
-    }
-  ],
+  // faqs:[
+  //   {
+  //     index: "aquoicasert",
+  //     title: "Qu'est ce que {{appname}} ?",
+  //     order: 0,
+  //     format: "html",
+  //     content:"{{appname}} est une place de marché permettant à des acheteurs de faire des annonces sous forme de prompt IA et à des possesseurs de puissances de calcul de répondre à ses prompts en proposant des images"
+  //   },
+  //   {
+  //     index: "install_server",
+  //     title: "Comment générer des images depuis son ordinateur",
+  //     order: 0,
+  //     format: "html",
+  //     content:""
+  //   }
+  // ],
 
   dictionnary:{
     "fr":{

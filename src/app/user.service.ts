@@ -124,10 +124,10 @@ export class UserService {
           resolve(position)
         }else{
           $$("précision insufisante ",loc.coords.accuracy)
-          reject()
+          reject("Not enought accuracy")
         }
       }catch (e){
-        reject()
+        reject("Geoloc non authorized")
       }
     })
   }

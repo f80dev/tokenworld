@@ -18,6 +18,10 @@
     <mat-icon>help</mat-icon>
   </button>
 
+  <button mat-icon-button (click)="open_telegram()" title="Open the official telegram group for {{settings.appname}}" *ngIf="environment.telegram">
+    <mat-icon>support_agent</mat-icon>
+  </button>
+
   <button mat-icon-button (click)="open_admin()" *ngIf="show_admin">
     <mat-icon>build</mat-icon>
   </button>
@@ -29,7 +33,7 @@
   <br><br><br>
 
   <div style="display: flex;align-items: center;width:100%;justify-items: center;display: inline-block;">
-    Made with <mat-icon style="display: inline-block;color: darkred;margin-bottom: -8px;">favorite</mat-icon> by <a [href]="website">{{company}}</a>
+    Made with <mat-icon style="display: inline-block;color: darkred;margin-bottom: -8px;">favorite</mat-icon> by <a [href]="environment.website">{{environment.company}}</a>
   </div>
 
   <div style="width: 80%;margin-left: 10%;position:absolute;display:block;bottom: 20px;font-variant-caps: all-petite-caps;"

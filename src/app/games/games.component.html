@@ -4,13 +4,13 @@
   <app-hourglass [message]="message">
   </app-hourglass>
 
-  <div id="menu" style="margin:1%;display:inline-flex;justify-content: space-between;max-width:600px;width: 90%;;"
-       *ngIf="games.length>0 || show_my_games">
-    <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()">
+  <div id="menu" style="margin:1%;display:inline-flex;justify-content: space-between;max-width:600px;width: 90%;"
+       *ngIf="message.length==0 && (games.length>0 || show_my_games)">
+    <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()" *ngIf="level(2)">
       <div class="mat-slide-label">Include<br>closed game</div>
     </mat-slide-toggle>
 
-    <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()">
+    <mat-slide-toggle [(ngModel)]="show_my_games" (ngModelChange)="update_only_mygame()" title="Give the access to the command of the game master">
       <div class="mat-slide-label">Show only<br>my games</div>
     </mat-slide-toggle>
 
@@ -21,7 +21,7 @@
   <br>
 
   <mat-accordion *ngIf="message.length==0">
-    <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1" (afterExpand)="load_hp_stock_from_game(game)">
+    <mat-expansion-panel *ngFor="let game of games" [expanded]="games.length==1" (afterExpand)="load_hp_stock_from_game(game)" class="game-panel">
       <mat-expansion-panel-header>
         <mat-icon *ngIf="!game.closed" (click)="select(game)"
                   title="Play to this game"
@@ -30,22 +30,16 @@
         {{game.title}}
       </mat-expansion-panel-header>
 
-      <app-game [game]="game" style="display: inline-block;width:100%;">
-        <mat-expansion-panel style="width: 200px;"
+      <app-game [game]="game" style="width:100%;">
+        <div style="width: 200px;margin-left:10px;"
                              *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
-          <mat-expansion-panel-header>Command</mat-expansion-panel-header>
-          <button mat-raised-button (click)="transfer_to_owner(game)">
-            <div class="blocbutton">Transfer to<br>owner</div>
-          </button>
-          <br>
-          <button mat-raised-button (click)="close_map(game)">Close</button><br>
+          <button mat-raised-button title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
+          <button mat-raised-button title="The game is not accessible, it must be empty (no tokemon)" (click)="close_map(game)">Close the game</button><br>
           <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
-        </mat-expansion-panel>
+        </div>
       </app-game>
     </mat-expansion-panel>
   </mat-accordion>
-
-
 
   <br><br>
   <button mat-raised-button (click)="create_game()">Create Game</button>

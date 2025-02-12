@@ -17,7 +17,7 @@ button {
   margin: 3px;
 }
 
-mat-expansion-panel {
+.game-panel {
   width:94%;
   display: inline-block;
   font-size: small;
@@ -28,9 +28,11 @@ mat-expansion-panel {
   margin-bottom: 10px;
 }
 
-mat-expansion-panel-header {
+
+.game-header-panel {
   height: 55px !important;
   display: flex;
+  align-content: flex-start;
 }
 
 

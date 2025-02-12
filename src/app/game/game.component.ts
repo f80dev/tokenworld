@@ -54,4 +54,5 @@ export class GameComponent {
     }
   }
 
+  protected readonly settings = settings;
 }

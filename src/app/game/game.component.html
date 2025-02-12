@@ -14,9 +14,14 @@
     <br>
       {{game.n_players}} players / {{game.n_tokemons}} tokemons
       <mat-icon title="See the NFTs hide in the world"
-                *ngIf="game.n_tokemons>0 && game.nfts!.length>0"
+                *ngIf="game.previews.length==0 && game.n_tokemons>0 && game.nfts!.length>0"
                 (click)="show_nfts(game)"
                 class="icon-button">visibility</mat-icon>
+
+      <mat-icon
+                *ngIf="game.previews.length>0"
+                (click)="show_nfts(game)"
+                class="icon-button">visibility_off</mat-icon>
 
 
     <div *ngIf="game && game.previews && game.previews.length>0">
@@ -24,7 +29,7 @@
            class="small-vignette">
     </div>
 
-    <div *ngIf="game!.welcome_pack>0">Welcome pack : {{game!.welcome_pack}} HP</div>
+    <div title="If it's your first game on {{settings.appname}}, you receive this HP as welcome pack" *ngIf="game!.welcome_pack>0">Welcome pack : {{game!.welcome_pack}} HP</div>
   </div>
 
   <div class="game_section">

@@ -60,12 +60,12 @@ export class FaqsComponent implements AfterContentInit {
   async ngAfterContentInit() {
     let params:any=await getParams(this.route)
 
-    if(typeof(environment.faqs)=="string"){
-      this.fill_faqs(environment.faqs)
-    }else{
-      this.network.getfaqs(params.faqs || environment.faqs).subscribe((rc:any)=>{
-        this.fill_faqs(rc.content,params)
-      })
-    }
+    // if(typeof(environment.faqs)=="string"){
+    //   this.fill_faqs(environment.faqs)
+    // }else{
+    //   this.network.getfaqs(params.faqs || environment.faqs).subscribe((rc:any)=>{
+    //     this.fill_faqs(rc.content,params)
+    //   })
+    // }
   }
 }

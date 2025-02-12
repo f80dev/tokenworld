@@ -43,7 +43,7 @@ export class AboutComponent implements OnInit {
   async ngOnInit() {
     let params:any=await getParams(this.routes)
     apply_params(this,params,settings);
-    this.exist_faqs=(params.faqs || environment.faqs || "").length>0
+    this.exist_faqs=(params.faqs || environment.hasOwnProperty('faqs') || "").length>0
     let env:any=environment
     this.show_admin=env.hasOwnProperty("admin_password")
   }
@@ -70,4 +70,8 @@ export class AboutComponent implements OnInit {
 
   protected readonly environment = environment;
   protected readonly settings = settings;
+
+  open_telegram() {
+    open(environment.telegram,"Support")
+  }
 }

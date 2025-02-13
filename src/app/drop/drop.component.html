@@ -60,9 +60,9 @@
 
     <div class="zone_input" *ngIf="sel_nft">
 
-      <app-input *ngIf="max_quantity>0" value_type="number" [min]="1" [max]="max_quantity"
-                 label="Number to drop" unity="NFT" [help]="'limit to '+max_quantity"
-                 (focusout)="update_occurence()"
+      <app-input *ngIf="max_quantity>0" value_type="slide" [min]="1" [max]="max_quantity"
+                 label="Number to drop" unity="NFT"
+                 (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"

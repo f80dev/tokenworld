@@ -14,7 +14,8 @@ app-input {
 
 .zone_input {
   width:100%;
-  display: flex;
+  max-width: 800px;
+  display: inline-flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;

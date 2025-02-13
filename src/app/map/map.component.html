@@ -20,33 +20,25 @@
     <!--    <mat-slide-toggle [(ngModel)]="user.show_visibility" (ngModelChange)="update_visibility()">Visibility</mat-slide-toggle>-->
 
     <button mat-raised-button *ngIf="!start_move"
-            style="width: 90px;"
+            style="width: 100px;"
             title="Drop some NFT as tokemon on this game zone"
-            (click)="open_drop()"><mat-icon>download</mat-icon>Drop</button>
+            (click)="open_drop()">
+      <mat-icon>download</mat-icon>Drop
+    </button>
 
-    <mat-icon  (click)="move_tokemon()"
-               *ngIf="level(2) && ((selected_tokemon && selected_tokemon.owner==user.idx) || start_move)"
-               title="Move"
-               class="icon-button">
+    <mat-icon (click)="move_tokemon()"
+              *ngIf="level(2) && ((selected_tokemon && selected_tokemon.owner==user.idx) || start_move)"
+              title="Move" class="icon-button">
       run_circle
     </mat-icon>
 
-
     <div *ngIf="!start_move && !to_attack" style="display: inline-block;">
-      <mat-icon  (click)="open_capture()"
-                 *ngIf="selected_tokemon && (selected_tokemon.owner==user.idx || selected_tokemon.pv==0)"
-                 title="Capture the tokemon"
-                 class="icon-button">
-        catching_pokemon
-      </mat-icon>
+      <button mat-raised-button (click)="open_capture()"  title="Capture the tokemon"
+              *ngIf="selected_tokemon"
+              style="width: 100px;">
+        <mat-icon>catching_pokemon</mat-icon>Catch
+      </button>
 
-
-      <mat-icon  (click)="open_capture()"
-                 *ngIf="selected_tokemon && (selected_tokemon.owner!=user.idx && selected_tokemon.pv>0)"
-                 title="Fight the tokemon"
-                 class="icon-button">
-        bolt
-      </mat-icon>
 
       <mat-icon  (click)="recenter()"
                  title="center map on the game"

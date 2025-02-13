@@ -11,7 +11,8 @@
              (valueChange)="update_network($event)"></app-input>
   <br>
 
-  <button mat-raised-button (click)="show_contract()" color="primary" *ngIf="user.expert_mode">
+  <button mat-raised-button (click)="user.show_contract()"
+          color="primary" *ngIf="user.expert_mode">
     Voir le SmartContract
   </button>
   <br><br>

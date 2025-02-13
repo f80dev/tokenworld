@@ -13,6 +13,11 @@
 
     <mat-expansion-panel (expandedChange)="on_open_tokemon_engaged()">
       <mat-expansion-panel-header>My tokemons engaged</mat-expansion-panel-header>
+      <br>
+      <button mat-raised-button (click)="user.show_contract()" color="primary" *ngIf="user.expert_mode">
+        Voir le SmartContract
+      </button>
+
       <table>
         <tr>
           <th>Visual</th>

@@ -196,6 +196,11 @@ export class UserService {
     })
   }
 
+  show_contract() {
+    let prefix=this.network.indexOf("devnet")>-1 ? "devnet-" : ""
+    open("https://"+prefix+"explorer.multiversx.com/accounts/"+this.get_sc_address(),"smartcontract")
+  }
+
 
   init_balance(api: ApiService) {
     return new Promise(async (resolve,reject)=>{

@@ -61,10 +61,7 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  show_contract() {
-    let prefix=this.user.network.indexOf("devnet")>-1 ? "devnet-" : ""
-    open("https://"+prefix+"explorer.multiversx.com/accounts/"+this.user.get_sc_address(),"smartcontract")
-  }
+
 
 
 

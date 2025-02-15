@@ -37,7 +37,6 @@ export class AboutComponent implements OnInit {
       public style:StyleManagerService,
       public user:UserService,
       public router:Router,
-      public ngShare:NgNavigatorShareService
   ) { }
 
   async ngOnInit() {

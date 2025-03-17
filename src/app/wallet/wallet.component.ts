@@ -71,8 +71,6 @@ export class WalletComponent implements OnChanges {
   }
 
 
-
-
   select(nft: any) {
     this.selectChanged.emit(nft)
   }
@@ -101,5 +99,13 @@ export class WalletComponent implements OnChanges {
     let url="https://devnet.usewarp.to/create-token"
     if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet.","")
     open(url,"ESDT Creator")
+  }
+
+
+
+  new_nft() {
+    let url=environment.nft_builder
+    if(!this.user.isDevnet())url=url.replace("devnet.","")
+    open(url,"nft_builder")
   }
 }

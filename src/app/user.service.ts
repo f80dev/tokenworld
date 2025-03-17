@@ -256,6 +256,13 @@ export class UserService {
     }
   }
 
+  get_chain_id(){
+    let rc=this.network.indexOf("devnet")>-1 ? "D" : "1"
+    $$("Utilisation de la chaine chainid="+rc)
+    return rc
+  }
+
+
 
   open_game(id:Number) : Promise<Game | null> {
     //si id=0 on retourne le premier game ouvert
@@ -304,4 +311,6 @@ export class UserService {
   isDevnet() {
     return this.network.indexOf("devnet")>-1
   }
+
+
 }

@@ -33,6 +33,7 @@ import {parseFrenchDate} from "../../tools";
     MatInputModule,
     MatOption,
     MatSlider,
+    MatList,
     FormsModule,
     MatListOption,
     MatSelectionList,

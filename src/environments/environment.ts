@@ -75,5 +75,6 @@ export const environment = {
   gaz_by_nft: 10000000n,
   max_gaz:    600000000n,
   geoloc_interval: 10000,
-  accuracy_limit: 50
+  accuracy_limit: 50,
+  nft_builder: "https://devnet.nftnow.af10.fr"
 }

@@ -26,7 +26,12 @@
   <br>
 
   <div *ngIf="show.indexOf('nft')>-1" style="margin-top: -15px;">
-    <h5>Your NFTs</h5>
+    <h5>
+      Your NFTs
+      <button mat-icon-button (click)="new_nft()" style="margin-bottom: -15px;">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </h5>
     <app-tokemon *ngFor="let nft of nfts"
                  [item]="nft"
                  [height]="height"

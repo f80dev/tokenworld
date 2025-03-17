@@ -36,6 +36,9 @@ export async function mvx_api(url:string,params:string,api:any,network="devnet")
   })
 }
 
+
+
+
 export function network_config(network="") : Promise<any> {
   let prefix=network.indexOf("devnet")>-1 ? "devnet-" : ""
   const apiNetworkProvider = new ApiNetworkProvider("https://"+prefix+"api.multiversx.com", { clientName: "multiversx-your-client-name" });
@@ -48,6 +51,10 @@ export function get_nft(identifier: string, api:any,network: string) {
   //voir https://api.multiversx.com/#/nfts/NftController_getNft
   return mvx_api("/nfts/" + identifier,"",api,network)
 }
+
+
+
+
 
 
 export function is_image(url:string) {

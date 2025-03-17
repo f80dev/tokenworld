@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {AuthentComponent} from "../authent/authent.component";
 import {NgIf} from "@angular/common";
 import {
@@ -11,7 +11,6 @@ import {
 import {$$} from "../../tools";
 import {Connexion, get_default_connexion} from "../../operation";
 import {MatButton} from "@angular/material/button";
-
 
 export interface DialogDataModal {
   title:string
@@ -79,7 +78,5 @@ export class AuthentDialogComponent {
   cancel() {
     this.dialogRef.close();
   }
-
-
 
 }

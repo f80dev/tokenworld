@@ -8,19 +8,13 @@ import {provideHttpClient} from '@angular/common/http';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
 import {GOOGLE_CLIENT_ID} from '../definitions';
-import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
-import {environment} from '../environments/environment';
+import {SocketIoModule} from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: environment.server, options: {} };
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     {provide: MAT_DIALOG_DATA, useValue: {hasBackdrop: false}},
-    importProvidersFrom(
-      SocketIoModule.forRoot(config),
-      SocialLoginModule,
-    ),
     {provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: false,
@@ -39,5 +33,6 @@ export const appConfig: ApplicationConfig = {
     provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-          })]
+          })
+  ]
 };

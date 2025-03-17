@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {$$, showError} from "../../tools";
-import {Socket} from "ngx-socket-io";
+
 import {Collection, Connexion} from "../../operation";
 import {NetworkService} from "../network.service";
 import {NFT} from "../../nft";
@@ -58,7 +58,6 @@ export class AutovalidatorComponent implements OnInit, OnDestroy, OnChanges {
 
 
   constructor(
-      public socket: Socket,
       public api: NetworkService
   ) {
   }
@@ -83,7 +82,6 @@ export class AutovalidatorComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     window.onbeforeunload = () => this.ngOnDestroy();
-    this.socket.emptyConfig.url=environment.server
   }
 
 
@@ -121,29 +119,29 @@ export class AutovalidatorComponent implements OnInit, OnDestroy, OnChanges {
         $$("Le validator est enregistré sour "+this.validator)
         this.autorized_users=result.addresses;
 
-        this.socket.on("connect",(() => {
-          this.qrcode_enabled=true;
-          $$("Le validateur est connecté");
-        }))
-        this.socket.on("disconnect",(() => {
-          this.qrcode_enabled=false;
-          $$("Le validateur est déconnecté");
-        }))
-        $$("Le validateur s'inscrit à la réception des événements "+result.id)
-        this.socket.on(result.id,(data:any) => {
-          if(data.hasOwnProperty("message")){
-            if(data.message=="stop")this.show_authent=false;
-          }
-          // $$("Réception d'un message de la part du serveur",data);
-          // let user_to_validate=data.address;
-          // if(this.autorized_users.length==0 || this.autorized_users.indexOf(user_to_validate)>-1){
-          //   $$("L'adresse reçue fait bien partie des adresses autorisés")
-          //   this.onauthent.emit({address:user_to_validate,strong:true,nftchecked:true,provider:this.provider});
-          // } else {
-          //   $$("L'adresse reçue ne fait pas partie des adresses autorisés")
-          //   this.oninvalid.emit({address:user_to_validate,strong:false,nftchecked:false});
-          // }
-        });
+        // this.socket.on("connect",(() => {
+        //   this.qrcode_enabled=true;
+        //   $$("Le validateur est connecté");
+        // }))
+        // this.socket.on("disconnect",(() => {
+        //   this.qrcode_enabled=false;
+        //   $$("Le validateur est déconnecté");
+        // }))
+        // $$("Le validateur s'inscrit à la réception des événements "+result.id)
+        // this.socket.on(result.id,(data:any) => {
+        //   if(data.hasOwnProperty("message")){
+        //     if(data.message=="stop")this.show_authent=false;
+        //   }
+        //   // $$("Réception d'un message de la part du serveur",data);
+        //   // let user_to_validate=data.address;
+        //   // if(this.autorized_users.length==0 || this.autorized_users.indexOf(user_to_validate)>-1){
+        //   //   $$("L'adresse reçue fait bien partie des adresses autorisés")
+        //   //   this.onauthent.emit({address:user_to_validate,strong:true,nftchecked:true,provider:this.provider});
+        //   // } else {
+        //   //   $$("L'adresse reçue ne fait pas partie des adresses autorisés")
+        //   //   this.oninvalid.emit({address:user_to_validate,strong:false,nftchecked:false});
+        //   // }
+        // });
         // this.nfluent_wallet_connect_qrcode=this.api.server_nfluent+"/api/qrcode/"+encodeURIComponent(result.access_code);
         if(this.title=="" && this.showNfluentWalletConnect)this.title="Pointer ce QRcode avec votre 'NFluent Wallet'";
       },(err)=>{

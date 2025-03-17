@@ -65,6 +65,7 @@
                  (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
+      <br>
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"
                  [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
                  label="Visibility" unity="meters"

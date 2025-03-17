@@ -155,7 +155,6 @@ export class AuthentComponent implements OnInit,OnChanges {
   constructor(
       public api:NetworkService,
       public _location:Location,
-      public socket:Socket,
       public dialog:MatDialog,
       public user:UserService,
       public device:DeviceService,
@@ -249,12 +248,7 @@ export class AuthentComponent implements OnInit,OnChanges {
       this.refresh();
       //Création d'un validateur nécéssaire pour le nfluent wallet connect
       let validator_name="val_"+now("rand")
-      if(this.connexion.nfluent_wallet_connect && this.socket){
-        this.socket.on(validator_name,((data:any) => {
-          this.address=data.address;
-          this.success()
-        }))
-      }
+
 
       // if(this.operation.length>0){
       //   $$("On utilise "+this.operation+" pour le paramétrage du module");
@@ -444,7 +438,6 @@ export class AuthentComponent implements OnInit,OnChanges {
               showMessage(this,'Impossible de lire le presse-papier');
             }
         );
-
   }
 
   cancel_webcam() {
@@ -503,6 +496,9 @@ export class AuthentComponent implements OnInit,OnChanges {
       this.oninvalid.emit(false);
     }
   }
+
+
+
   async open_web_wallet(service="standard"){
     //tag webwallet open_webwallet
     //https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-web-wallet-provider

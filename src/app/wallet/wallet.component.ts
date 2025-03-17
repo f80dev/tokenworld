@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {DecimalPipe, NgForOf, NgIf} from "@angular/common";
 import {ApiService} from '../api.service';
 import {TokemonComponent} from '../tokemon/tokemon.component';
@@ -23,7 +23,7 @@ import {settings} from '../../environments/settings';
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.css'
 })
-export class WalletComponent implements OnChanges {
+export class WalletComponent implements OnChanges,OnDestroy {
   api=inject(ApiService)
   user=inject(UserService)
 
@@ -44,14 +44,20 @@ export class WalletComponent implements OnChanges {
   account: any;
   @Input() selected=false;
   tokens: string[] = [];
+  hwnd: any;
+  hTimer: any;
 
+
+  ngOnDestroy(): void {
+    clearInterval(this.hTimer)
+  }
 
 
   async refresh(){
     this.nfts=[]
     if(this.show.indexOf("nft")>-1){
       for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {
-        let prop = nft.attributes.toString("utf-8")
+        let prop = nft.attributes ? nft.attributes.toString("utf-8") : ""
         let tags=prop.split(";metadata:")[0].replace("tags:" ,"")
 
         nft.visual=nft.hasOwnProperty("media") ? nft.media[0].hasOwnProperty("thumbnailUrl") ? nft.media[0].thumbnailUrl : nft.media[0].originalUrl : ""
@@ -61,6 +67,7 @@ export class WalletComponent implements OnChanges {
         nft.tags=tags
         this.nfts.push(nft)
       }
+      this.nfts.reverse()
       this.listChanged.emit(this.nfts)
     }
 
@@ -104,8 +111,15 @@ export class WalletComponent implements OnChanges {
 
 
   new_nft() {
-    let url=environment.nft_builder
+    let url=environment.nft_builder+"?action=close"
     if(!this.user.isDevnet())url=url.replace("devnet.","")
-    open(url,"nft_builder")
+    this.hwnd=open(url,"nft_builder")
+    this.hTimer=setInterval(()=>{
+      if(this.hwnd && this.hwnd.close){
+        this.refresh()
+        clearInterval(this.hTimer)
+      }
+    })
+
   }
 }

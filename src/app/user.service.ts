@@ -176,8 +176,9 @@ export class UserService {
             if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
 
             resolve(r)
-          }catch (e){
-            reject()
+          }catch(e){
+            $$("erreur ",e)
+            reject(e)
           }
         }
       }

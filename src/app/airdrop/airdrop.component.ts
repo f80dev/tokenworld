@@ -62,7 +62,7 @@ export class AirdropComponent implements AfterViewInit {
       }else{
         this.user.center_map=new LatLng(Number(params.lat),Number(params.lng))
         this.map = L.map('map')
-        initializeMap(this,this.user.game,this.user.center_map,'https://tokemon.f80.fr/assets/icons/target.png')
+        initializeMap(this,this.user.game,this.user.center_map,'./assets/icons/target.png')
         this.map.setView(this.user.center_map,13)
       }
     },100)

@@ -316,7 +316,7 @@ export class CreateWorldComponent implements OnInit {
     if(point_type=="entrance"){
       this.zone.entrance=this.dropzone
       if(!this.entrance_marker){
-        this.entrance_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/entrance.png",this.dropzone)
+        this.entrance_marker=add_icon(this.map,"./assets/icons/entrance.png",this.dropzone)
       }else{
         this.entrance_marker.setLatLng(this.dropzone)
       }
@@ -324,7 +324,7 @@ export class CreateWorldComponent implements OnInit {
     if(point_type=="exit"){
       this.zone.exit=this.dropzone
       if(!this.exit_marker){
-        this.exit_marker=add_icon(this.map,"https://tokemon.f80.fr/assets/icons/exit.png",this.dropzone)
+        this.exit_marker=add_icon(this.map,"./assets/icons/exit.png",this.dropzone)
       }else{
         this.exit_marker.setLatLng(this.dropzone)
       }

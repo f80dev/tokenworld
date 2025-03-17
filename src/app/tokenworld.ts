@@ -191,8 +191,8 @@ export async function hashMessage(message: string) {
 }
 
 
-export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://tokemon.f80.fr/assets/icons/flag_24dp_5F6368.png",
-                                      exitIcon="https://tokemon.f80.fr/assets/icons/flag.png") {
+export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="./assets/icons/flag_24dp_5F6368.png",
+                                      exitIcon="./assets/icons/flag.png") {
 
   $$("Ajout de l'entree et la sortie")
   if(zone.entrance && zone.entrance.x+zone.entrance.y+zone.entrance.z!=0){
@@ -211,9 +211,9 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="https://toke
 
 export function initializeMap(vm:any,zone:any,
                               center:LatLng=new LatLng(0,0),
-                              centerIcon='https://tokemon.f80.fr/assets/icons/person_24dp_5F6368.png',
-                              entranceIcon="https://tokemon.f80.fr/assets/icons/entrance.png",
-                              exitIcon="https://tokemon.f80.fr/assets/icons/exit.png") : L.Map {
+                              centerIcon='./assets/icons/person_24dp_5F6368.png',
+                              entranceIcon="./assets/icons/entrance.png",
+                              exitIcon="./assets/icons/exit.png") : L.Map {
 
   if(vm.map && zone){
     if(zone.url=="map" || zone.url=="")zone.zoom=2;

@@ -60,7 +60,7 @@
 
     <div class="zone_input" *ngIf="sel_nft">
 
-      <app-input *ngIf="max_quantity>0" value_type="slide" [min]="1" [max]="max_quantity"
+      <app-input *ngIf="max_quantity>1" value_type="slide" [min]="1" [max]="max_quantity"
                  label="Number to drop" unity="NFT"
                  (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
                  (valueChange)="quantity=$event" [value]="quantity"></app-input>

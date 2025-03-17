@@ -222,9 +222,9 @@ export class DropComponent implements AfterViewInit {
 
     let pos = this.user.center_map
     if(this.map){
-      initializeMap(this, this.user.game, pos, 'https://tokemon.f80.fr/assets/icons/push_pin_blue.svg')
+      initializeMap(this, this.user.game, pos, './assets/icons/push_pin_blue.svg')
       setTimeout(() => {
-        add_icon(this.map,'https://tokemon.f80.fr/assets/icons/target.png',this.user.center_map,"dropping point")
+        add_icon(this.map,'./assets/icons/target.png',this.user.center_map,"dropping point")
         this.user.visibility = this.user.game!.min_visibility
         this.map.setView(pos, this.user.zoom || 16);
       }, 50)

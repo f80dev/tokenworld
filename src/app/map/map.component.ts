@@ -120,7 +120,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     }
 
 
-    initializeMap(this,this.user.game,this.user.center_map,"https://tokemon.f80.fr/assets/icons/person.png")
+    initializeMap(this,this.user.game,this.user.center_map,"./assets/icons/person.png")
     if(this.map){
       this.map
         .on("zoom",(event:L.LeafletEvent)=>{
@@ -324,7 +324,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         $$("Liste des tokemons ",this.user.tokemons)
 
         for (let tokemon of this.user.tokemons) {
-          let icon=(tokemon.owner==this.user.idx ? "https://tokemon.f80.fr/assets/icons/push_pin_blue.svg" : 'https://tokemon.f80.fr/assets/icons/push_pin_red.svg')
+          let icon=(tokemon.owner==this.user.idx ? "./assets/icons/push_pin_blue.svg" : './assets/icons/push_pin_red.svg')
 
           if(this.user.preview){
             let nonce=tokemon.nonce.toString(16)

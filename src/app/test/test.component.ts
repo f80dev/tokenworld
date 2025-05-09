@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 import {UserService} from '../user.service';
 import {MatButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
-import {network_config} from '../mvx';
+import {network_config, query} from '../mvx';
 import {$$} from '../../tools';
 
 
@@ -32,9 +32,8 @@ export class TestComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.api._get("https://is.gd/create.php","format=simple&url=www.example.com").subscribe((res:any)=>{
-      this.url=res.url
-    })
+    let games=await query("games",[],this.user.get_sc_address(),this.user.network)
+    debugger
   }
 
 

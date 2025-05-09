@@ -1,8 +1,8 @@
 export const settings={
-  contract_addr:"erd1qqqqqqqqqqqqqpgqd4js2fdasksl2plw9ldprjpnfrhq2q4f835sarp7q6",
-  ihm_level:1,
-  appname: "TOKEMON World (Devnet)",
-  appli:"https://devnet.tokemon.f80.fr",
+  contract_addr:"erd1qqqqqqqqqqqqqpgq80guegvwm6azfr09vv9m7dxecy9umpy4835syzk6kh",
+  ihm_level:2,
+  appname: "TOKEMON World (beta)",
+  appli:"https://tokemonbeta.f80.fr",
   network: "elrond-devnet"
 }
 

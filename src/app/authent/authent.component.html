@@ -49,12 +49,10 @@
                 [width]="175" [errorCorrectionLevel]="'M'"></qrcode>
         <br>
 
-        <button mat-raised-button
-                style="margin-top: -20px;"
-                *ngIf="device.modele!='desktop' && showDirectConnect && showWalletConnect && url_xportal_direct_connect!=''"
-                (click)="open_xportal()">
-          Switch on xPortal
-        </button>
+        <app-xportal-switch [uri]="qrcode"
+                            style="margin-top: -20px;"
+                            *ngIf="showDirectConnect && showWalletConnect && qrcode!=''">
+        </app-xportal-switch>
 
       </div>
 
@@ -130,11 +128,11 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel *ngIf="showEmail || showGoogle || showAddress || showWebcam">
-      <mat-expansion-panel-header>Utiliser votre email ou adresse de wallet</mat-expansion-panel-header>
+      <mat-expansion-panel-header>Get your wallet address</mat-expansion-panel-header>
 
       <app-scanner *ngIf="enabled_webcam && showWebcam"
                    size="200px"
-                   title="Montrer le QRcode de votre wallet à cette caméra"
+                   title="Show the QRcode of your wallet"
                    (flash)="on_retreive_address($event)"
                    (cancel)="cancel_webcam()">
       </app-scanner>
@@ -143,9 +141,9 @@
 
         <!--    voir https://www.npmjs.com/package/@abacritt/angularx-social-login-->
 
-        <asl-google-signin-button *ngIf="showGoogle" style="height: 50px;"
-                                  title="Authentification simplifiée pour les utisateurs de gmail">
-        </asl-google-signin-button>
+<!--        <asl-google-signin-button *ngIf="showGoogle" style="height: 50px;"-->
+<!--                                  title="Authentification simplifiée pour les utisateurs de gmail">-->
+<!--        </asl-google-signin-button>-->
 
         <app-input
           *ngIf="connexion.email || connexion.address"

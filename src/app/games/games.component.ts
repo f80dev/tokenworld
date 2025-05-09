@@ -4,9 +4,9 @@ import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {$$, getParams, showMessage} from '../../tools';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {Game, share_game} from '../tokenworld';
+import {Game} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {get_nft, level, send_transaction} from '../mvx';
+import {level, send_transaction_with_transfers} from '../mvx';
 import {_prompt} from '../prompt/prompt.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
@@ -21,6 +21,7 @@ import {GeolocService} from '../geoloc.service';
 import {LatLng} from 'leaflet';
 import {SafePipe} from '../safe.pipe';
 import {NgNavigatorShareService} from 'ng-navigator-share';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-games',
@@ -119,9 +120,9 @@ export class GamesComponent implements OnInit {
     let args = [game.id]
     wait_message(this, "Closing")
     try {
-      let result = await send_transaction(this.user, "close_game", args)
+      let result = await send_transaction_with_transfers(this.user, "close_game", args)
     } catch (e: any) {
-
+      showMessage(this,e.message)
     }
     wait_message(this)
     this.refresh()
@@ -132,7 +133,7 @@ export class GamesComponent implements OnInit {
     await this.user.login(this, "", "", true)
     let max_amount = await _prompt(this, "Max amount per tokemon", "", "", "number", "Send", "Cancel", false)
     let args = [game.id, Number(max_amount)]
-    let result = await send_transaction(this.user, "staking", args)
+    let result = await send_transaction_with_transfers(this.user, "staking", args)
     showMessage(this, "Stacking sended")
   }
 
@@ -160,16 +161,20 @@ export class GamesComponent implements OnInit {
   async transfer_to_owner(game: Game) {
     wait_message(this,"Transfer all tokemons to owner")
     try{
-      let rc:any=await send_transaction(this.user,"restore_to_owners", [game.id,100])
+      let rc:any=await send_transaction_with_transfers(this.user,"restore_to_owners", [game.id,100],[],environment.max_gaz)
       if(rc.returnMessage=="ok"){
         showMessage(this,"Il reste quelques tokemons "+rc.values[0])
       }
-    }catch(e){
-
+    }catch(e:any){
+      showMessage(this,e.message)
     }
 
     wait_message(this)
   }
 
   protected readonly level = level;
+
+  async login() {
+    await this.user.login(this,"","",true)
+  }
 }

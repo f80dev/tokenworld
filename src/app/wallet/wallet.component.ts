@@ -65,6 +65,7 @@ export class WalletComponent implements OnChanges,OnDestroy {
         let cid=prop.split("metadata:")[1]
         if(!nft.hasOwnProperty("metadata")){nft.metadata=await this.api._service("ipfs/"+cid,"","https://ipfs.io/",false)}
         nft.tags=tags
+        nft.balance=Number(nft.balance)
         this.nfts.push(nft)
       }
       this.nfts.reverse()

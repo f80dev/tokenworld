@@ -68,6 +68,7 @@ export class AuthentDialogComponent {
   init_provider($event: {
     strong: boolean;
     address: string;
+    pem_wallet:any;
     provider: any;
     encrypted: string;
     url_direct_xportal_connect: string

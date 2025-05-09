@@ -33,8 +33,8 @@
       <app-game [game]="game" style="width:100%;">
         <div style="width: 200px;margin-left:10px;"
                              *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
-          <button mat-raised-button title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
-          <button mat-raised-button title="The game is not accessible, it must be empty (no tokemon)" (click)="close_map(game)">Close the game</button><br>
+          <button mat-raised-button *ngIf="game.n_tokemons>0" title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
+          <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)" (click)="close_map(game)">Close the game</button><br>
           <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
         </div>
       </app-game>
@@ -46,6 +46,10 @@
 
   <button mat-raised-button (click)="user.show_contract()" color="primary">
     <div class="blocbutton">Voir le<br>SmartContract</div>
+  </button>
+
+  <button *ngIf="!user.isConnected()" mat-raised-button (click)="login()" color="primary">
+    Login
   </button>
 
 </div>

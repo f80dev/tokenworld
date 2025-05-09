@@ -6,7 +6,7 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import { send_transaction_with_transfers} from '../mvx';
+import {get_nft, query, send_transaction_with_transfers} from '../mvx';
 import {MatDialog} from '@angular/material/dialog';
 import {DecimalPipe, Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
@@ -49,16 +49,20 @@ export class CaptureComponent implements OnInit {
   pv_to_engage: number=0
   target=new Point3D(0,0,0)
   bags: any[]=[];
+  nft:any
 
 
 
   async ngOnInit() {
     let params:any = await getParams(this.routes)
     this.item=params.item
+    get_nft(this.item.nft,this.api,this.user.network).subscibe((r:any)=>{
+      this.nft=r
+      this.item.visual=r.visual
+    })
     this.target=params.target
     try{
-
-      this.bags=await this.user.query("get_tokemon_bags",[this.item.id])
+      this.bags=await query("get_tokemon_bags",[this.item.id],this.user.get_sc_address(),this.user.network)
 
       await this.user.login(this,"","",true,0.01,"You must buy some egld to pay fee for fight or capture tokemon")
       this.user.init_game(Number(params.game))

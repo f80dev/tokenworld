@@ -20,7 +20,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import * as L from 'leaflet';
-import {level, send_transaction, send_transaction_with_transfers} from '../mvx';
+import {level, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
 import {LatLng, Marker} from 'leaflet';
@@ -278,7 +278,7 @@ export class CreateWorldComponent implements OnInit {
 
     try {
       wait_message(this,"Your world is under construction  ...")
-      let rc:any=await send_transaction(this.user,"add_game",this.args)
+      let rc:any=await send_transaction_with_transfers(this.user,"add_game",this.args,[])
       if(rc.returnMessage!="ok"){
         showMessage(this,rc.returnMessage)
         wait_message(this)

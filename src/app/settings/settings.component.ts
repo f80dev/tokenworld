@@ -5,7 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {WalletComponent} from '../wallet/wallet.component';
 import {NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
-import {get_nft, send_transaction_with_transfers} from '../mvx';
+import {get_nft, query, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
 import {cartesianToPolar, Game, Tokemon} from '../tokenworld';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -56,15 +56,15 @@ export class SettingsComponent implements OnInit {
   async refresh(){
     if(this.user.isConnected(true)){
       this.tokemons=[]
-      this.games=await this.user.query("games",[])
-      let rc:any=await this.user.query("show_all_my_nfts",[0,this.user.address])
+      this.games=await query("games",[],this.user.get_sc_address(),this.user.network)
+      let rc:any=await query("show_all_my_nfts",[0,this.user.address],this.user.get_sc_address(),this.user.network)
       for(let tokemon of rc){
         let identifier=tokemon.nft+"-"+(tokemon.nonce<10 ? "0"+tokemon.nonce : tokemon.nonce)
         tokemon.content=await get_nft(identifier,this.api,this.user.network)
         this.tokemons.push(tokemon)
       }
 
-      this.sc_settings=await this.user.query("map");
+      this.sc_settings=await query("map",[],this.user.get_sc_address(),this.user.network);
     }
   }
 

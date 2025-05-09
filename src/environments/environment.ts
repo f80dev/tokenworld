@@ -76,5 +76,10 @@ export const environment = {
   max_gaz:    600000000n,
   geoloc_interval: 10000,
   accuracy_limit: 50,
-  nft_builder: "https://devnet.nftnow.af10.fr"
+  nft_builder: "https://devnet.nftnow.af10.fr",
+  share_appli: "https://devnet.vault.af10.fr",
+  share_cost:0.0002,
+  wallet_connect_project_id: "9b1a9564f91cb659ffe21b73d5c4e2d8",
+  account_viewer: "https://devnet.xspotlight.com/%address%",
+  nft_viewer: "https://devnet.xoxno.com/nft/%identifier%"
 }

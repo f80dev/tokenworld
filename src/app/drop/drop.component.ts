@@ -86,7 +86,7 @@ export class DropComponent implements AfterViewInit {
         this.max_per_user = this.user.idx == Number(this.user.game!.owner) ? 100 : (this.user.game?.max_per_user || 1000)
 
         this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
-        await this.user.init_balance(this.api)
+        await this.user.init_balance(this.api,true)
         this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
 
 

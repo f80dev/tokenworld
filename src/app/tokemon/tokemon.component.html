@@ -4,7 +4,8 @@
     <div style="display: inline-flex;text-align: center;">
       <mat-icon (click)="open_nft()"
                 [title]="item.identifier || item.nft">visibility</mat-icon>
-      {{nft?.name.toUpperCase()}}
+      {{nft!.name.toUpperCase()}}
+      <span *ngIf="nft && nft.balance>1">({{nft!.balance}})</span>
     </div>
     <div style="flex-grow: 1;"></div>
     <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>

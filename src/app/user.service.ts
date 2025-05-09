@@ -20,7 +20,10 @@ export class UserService {
   signature:string=""
   provider: any
   strong: boolean=false
+
   tokens:any={}
+  nfts:any={}       //Balances des NFT et SFT
+
   location=inject(Location)
   device=inject(DeviceService)
   addr_change = new Subject<string>();
@@ -66,6 +69,7 @@ export class UserService {
   }
   preview: boolean = false;
   balance: number=0
+  native_token: any;
 
   constructor() { }
 
@@ -86,7 +90,7 @@ export class UserService {
 
   async init_idx(){
     if(this.address){
-      this.idx=Number(await this.query("get_idx_address",  [this.address]))
+      this.idx=Number(await query("get_idx_address",  [this.address],this.get_sc_address(),this.network))
     }
   }
 
@@ -95,19 +99,19 @@ export class UserService {
   }
 
 
-  logout() {
+  logout(strong=false) {
+    if(strong){
+      localStorage.removeItem("address")
+      localStorage.removeItem("pem")
+    }
     this.address=""
     this.idx=0
-    this.provider=null;
+    if(this.provider)this.provider.logout()
+    this.provider=null
+
   }
 
 
-  query(func:string,args:any[]=[]){
-    $$("Appel de la fonction "+func+" du smart contract "+this.get_sc_address()+" avec les arguments ",args)
-    let rc=query(func, args, this.get_domain(), this.get_sc_address())
-    //$$("Réponse ",rc)
-    return rc
-  }
 
 
   geoloc(geolocService:any,marker:L.Marker | null=null,accuracy_limit=10000) : Promise<LatLng> {
@@ -185,14 +189,9 @@ export class UserService {
     })
   }
 
-
-  get_domain(){
-    return this.network.indexOf("devnet")>-1 ? "https://devnet-api.multiversx.com/" : "https://api.multiversx.com/"
-  }
-
   refresh(){
     return new Promise(async (resolve)=>{
-      this.account=await toAccount(this.address,this.get_domain())
+      this.account=await toAccount(this.address,this.network)
       resolve(this.account)
     })
   }
@@ -203,30 +202,50 @@ export class UserService {
   }
 
 
-  init_balance(api: ApiService) {
+  get_domain(){
+    if(this.network.indexOf("devnet")>-1)return "https://devnet-api.multiversx.com/"
+    if(this.network.indexOf("testnet")>-1)return "https://testnet-api.multiversx.com/"
+    return "https://api.multiversx.com/"
+  }
+
+
+  init_balance(api: ApiService,add_nft=false) {
     return new Promise(async (resolve,reject)=>{
       if(!this.address){
         reject("Address not initialize")
       }else{
         await this.refresh()
-
         let tokens=await api._service("accounts/"+this.address+"/tokens","",this.get_domain())
-        let egld_prefix=this.network.indexOf("devnet")>-1 ? "x" : ""
-        tokens.push({identifier:egld_prefix+"EGLD",name:egld_prefix+"EGLD",balance:Number(this.account.balance)})
-        this.balance=Number(this.account.balance)/1e18
+        let egld_prefix=this.isTestnet() || this.isDevnet() ? "x" : ""
+        if(this.account){
+          tokens.push({
+            identifier:egld_prefix+"EGLD",
+            name:egld_prefix+"EGLD",
+            type:"FungibleESDT",
+            balance:Number(this.account!.balance)
+          })
+          this.balance=Number(this.account!.balance)/1e18
+        }
 
         for(let t of tokens){
           this.tokens[t.identifier]=t
         }
 
+        if(add_nft){
+          for(let nft of await api._service("accounts/"+this.address+"/nfts","",this.get_domain())){
+            this.nfts[nft.identifier]=Number(nft.balance)
+          }
+
+        }
+
         resolve(true)
       }
-
     })
   }
 
 
-  get_balance(s: string) : number {
+
+  get_balance(s: string,nft=false) : number {
     if(this.tokens && this.tokens[s]){
       return this.tokens[s].balance/1e18
     }else{
@@ -281,7 +300,8 @@ export class UserService {
   extract_games(opened=true,closed=true,user_filter=0,pos=new LatLng(0,0)) : Promise<Game[]> {
     let rc:Game[] = [];
     return new Promise(async (resolve) => {
-      for (let game of await this.query("games", [])) {
+      let games=await query("games", [],this.get_sc_address(),this.network)
+      for (let game of games) {
         if(game.closed && closed || !game.closed && opened) {
           if(user_filter==0 || game.owner==user_filter){
             game.score=pos.lat==0 && pos.lng==0 ? 0 : 10000/distance(pos,cartesianToPolar(center_of(game.ne,game.sw)))
@@ -289,14 +309,14 @@ export class UserService {
             let sw=cartesianToPolar(game.sw,environment.scale_factor,environment.translate_factor)
             game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
             game.min_distance_to_refresh_map=Math.max(distance(ne,sw)/10000,20)
-            game.bank=Number(await this.query("stocks", [game.id]))
+            game.bank=Number(await query("stocks", [game.id],this.get_sc_address(),this.network))
             rc.push(game)
           }
         }
       }
 
       for(let i=0;i<rc.length;i++){
-        let infos=await this.query("get_game_infos",[rc[i].id])
+        let infos=await query("get_game_infos",[rc[i].id],this.get_sc_address(),this.network)
         rc[i].n_players=infos.n_players
         rc[i].n_tokemons=infos.n_tokemons
         rc[i].nfts=[]
@@ -309,8 +329,25 @@ export class UserService {
     })
   }
 
+
   isDevnet() {
     return this.network.indexOf("devnet")>-1
+  }
+
+  isMainnet() {
+    return !this.isTestnet() && !this.isDevnet()
+  }
+
+  isTestnet() {
+    return this.network.indexOf("testnet")>-1
+  }
+
+  getAccount() {
+    try{
+      return this.provider.account
+    }catch (e:any){
+      return this.provider
+    }
   }
 
 

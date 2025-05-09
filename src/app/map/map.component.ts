@@ -32,7 +32,7 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatDialog} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ApiService} from '../api.service';
-import {get_nft, level, send_transaction} from '../mvx';
+import {get_nft, level, query, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {SwPush} from '@angular/service-worker';
 
@@ -239,7 +239,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       }
     }
 
-    let message=await this.user.query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z])
+    let message=await query("can_drop",[this.user.game!.id,drop_pos.x,drop_pos.y,drop_pos.z],this.user.get_sc_address(),this.user.network)
     if(message!='' && this.user.game!.owner!=this.user.idx){
       showMessage(this,message)
     }else{
@@ -304,12 +304,12 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         if(this.user.game.tokemon_view){
           let args = [this.user.game.id,this.user.address]
           $$("Chargement des tokemons vu par les tokemons de l'utilisateur ",args)
-          this.user.tokemons = await this.user.query("show_tokemon_by_tokemon",  args);
+          this.user.tokemons = await query("show_tokemon_by_tokemon",  args,this.user.get_sc_address(),this.user.network);
           if(this.user.tokemons.length==0)this.help_message="Drop some tokemons to see other tokemons"
         }else{
           let args = [this.user.game.id, pos.x, pos.y,pos.z]
           $$("Chargement des tokemons autour de la position de reference ",args)
-          this.user.tokemons = await this.user.query("show_nfts",  args);
+          this.user.tokemons = await query("show_nfts",  args,this.user.get_sc_address(),this.user.network);
           if(this.user.tokemons.length==0){
             this.help_message=this.user.game.geoloc_to_catch ? "Move to find some tokemons in the games" : "Move the target to find some tokemons"
           }
@@ -324,6 +324,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
         $$("Liste des tokemons ",this.user.tokemons)
 
         for (let tokemon of this.user.tokemons) {
+          tokemon.name=new TextDecoder().decode(tokemon.name)
           let icon=(tokemon.owner==this.user.idx ? "./assets/icons/push_pin_blue.svg" : './assets/icons/push_pin_red.svg')
 
           if(this.user.preview){
@@ -458,7 +459,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     this.router.navigate(["capture"],{queryParams:{p:setParams({
           item:this.selected_tokemon,
           target:target,
-          game:this.user.game!.id
+          game:this.user.game!.id,
         },"","")}})
   }
 
@@ -490,7 +491,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       let args=[this.user.game!.id,this.tokemon_to_move.id,pos.x,pos.y,pos.z,false]
       try{
         wait_message(this,"Moving ...")
-        let rc:any=await send_transaction(this.user,"move_tokemon",args)
+        let rc:any=await send_transaction_with_transfers(this.user,"move_tokemon",args)
         showMessage(this,rc.returnMessage)
         this.refresh()
         wait_message(this)
@@ -511,7 +512,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   async show_my_tokemon() {
     await this.user.login(this,"Se connecter pour voir l'ensemble des tokemons","",true)
     if(this.user.game){
-        let results:any=await send_transaction(
+        let results:any=await send_transaction_with_transfers(
         this.user,"show_all_my_nfts",[this.user.game.id])
         $$("Récupération de ",results.length)
     }

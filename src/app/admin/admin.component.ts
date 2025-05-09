@@ -10,7 +10,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {_prompt} from "../prompt/prompt.component";
 import {InputComponent} from "../input/input.component";
 import {UserService} from "../user.service";
-import {toText} from "../mvx";
+import {query, toText} from "../mvx";
 import {cartesianToPolar, polarToCartesian} from '../tokenworld';
 
 @Component({
@@ -40,7 +40,7 @@ export class AdminComponent implements OnInit {
 
   async refresh(){
     this.nfts=[]
-    for(let nft of await this.user.query("tokemons",[])){
+    for(let nft of await query("tokemons",[],this.user.get_sc_address(),this.user.network)){
       nft.coords=cartesianToPolar(nft,environment.scale_factor)
       this.nfts.push(nft)
     }

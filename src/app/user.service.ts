@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
-import {query, toAccount, usersigner_from_pem} from "./mvx";
+import {getExplorer, query, toAccount, usersigner_from_pem} from "./mvx";
 import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
@@ -197,8 +197,7 @@ export class UserService {
   }
 
   show_contract() {
-    let prefix=this.network.indexOf("devnet")>-1 ? "devnet-" : ""
-    open("https://"+prefix+"explorer.multiversx.com/accounts/"+this.get_sc_address(),"smartcontract")
+    open(getExplorer(this.get_sc_address(),settings.network,"address","explorer"))
   }
 
 
@@ -258,7 +257,7 @@ export class UserService {
   }
 
   get_default_token(): string {
-    return this.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
+    return settings.token
   }
 
 

@@ -10,13 +10,14 @@
     <table style="display:inline-block;margin-top:-10px;width:100%;max-width: 350px;">
       <tr *ngFor="let k of tokens" style="width: 100%;">
         <td style="text-align: left;font-size: small;" *ngIf="selected">
-          <mat-icon class="small-icon-button" (click)="select_esdt(user.tokens[k])">arrow_right</mat-icon>
+          <mat-icon class="small-icon-button" (click)="select_esdt(user!.tokens[k])">arrow_right</mat-icon>
         </td>
-        <td style="text-align: left;font-size: small;width:40%;" [title]="user.tokens[k].identifier" [style.font-weight]="strong_token.indexOf(user.tokens[k].identifier)>-1 ? 'bold' : 'normal'" >
+        <td style="text-align: left;font-size: small;width:40%;" [title]="user!.tokens[k].identifier" [style.font-weight]="strong_token.indexOf(user!.tokens[k].identifier)>-1 ? 'bold' : 'normal'" >
           <img src="./assets/coin.png" style="width: 20px;height:20px;margin-bottom: -5px;" *ngIf="!selected">
-          {{user.tokens[k].name}}
+          {{user!.tokens[k].name}}
         </td>
-        <td style="text-align: right;width:50%;font-size: small;">{{user.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
+
+        <td style="text-align: right;width:50%;font-size: small;">{{user!.tokens[k].balance/1e18 | number:"1.0-4"}}</td>
       </tr>
     </table>
 
@@ -27,7 +28,7 @@
 
   <div *ngIf="show.indexOf('nft')>-1" style="margin-top: -15px;">
     <div style="display: inline-flex;align-items: center;">
-      Your NFTs
+      <span [title]="user!.network">Your NFTs</span>
       <button mat-icon-button (click)="new_nft()">
         <mat-icon>add_circle</mat-icon>
       </button>
@@ -36,13 +37,14 @@
     <app-tokemon *ngFor="let nft of nfts"
                  [item]="{name:nft.name,identifier:'',nft:nft}"
                  [height]="height"
+                 [network]="user!.network"
                  [width]="width"
                  (select)="select(nft)">
     </app-tokemon>
 
     <div *ngIf="nfts.length==0">
-      You don't have any NFT. Buy or create NFT
-      <a [href]="nft_market" target="nft">here</a>
+      You don't have any NFT. Buy or
+      <strong style="cursor: pointer;" (click)="new_nft()" title="Create a new NFT with NFTNow">create NFT</strong>
     </div>
   </div>
 

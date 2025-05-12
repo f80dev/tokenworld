@@ -1,9 +1,11 @@
 export const settings={
   contract_addr:"erd1qqqqqqqqqqqqqpgq80guegvwm6azfr09vv9m7dxecy9umpy4835syzk6kh",
   ihm_level:2,
+  token:"LIFEPOINT-30c75e",
   appname: "TOKEMON World (beta)",
   appli:"https://tokemonbeta.f80.fr",
-  network: "elrond-devnet"
+  network: "elrond-devnet",
+  nft_builder:"https://devnet.nftnow.af10.fr/?address="
 }
 
 

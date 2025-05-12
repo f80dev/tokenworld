@@ -7,6 +7,7 @@ import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {MatIcon} from '@angular/material/icon';
 import {settings} from '../../environments/settings';
+import {get_nfts, getEntrypoint} from '../mvx';
 
 @Component({
   selector: 'app-wallet',
@@ -25,14 +26,13 @@ import {settings} from '../../environments/settings';
 })
 export class WalletComponent implements OnChanges,OnDestroy {
   api=inject(ApiService)
-  user=inject(UserService)
 
-  @Input() nft_market=environment.nft_market
+  @Input() nft_builder=""
   nfts: any[] = []
-  @Input() address=""
+
   @Input() show : "coin" | "nft" | "coin,nft" ="coin,nft"
   @Input() strong_token=""
-  @Input() network=settings.network || "elrond-devnet"
+  @Input() user: UserService | null=null
   @Output() selectChanged = new EventEmitter()
   @Output() onCancel = new EventEmitter()
   @Output() listChanged = new EventEmitter()
@@ -55,8 +55,8 @@ export class WalletComponent implements OnChanges,OnDestroy {
 
   async refresh(){
     this.nfts=[]
-    if(this.show.indexOf("nft")>-1){
-      for (let nft of await this.api._service("accounts/"+this.address+"/nfts","","https://devnet-api.multiversx.com/")) {
+    if(this.show.indexOf("nft")>-1 && this.user){
+      for (let nft of await get_nfts(this.user,this.api)) {
         let prop = nft.attributes ? nft.attributes.toString("utf-8") : ""
         let tags=prop.split(";metadata:")[0].replace("tags:" ,"")
 
@@ -72,7 +72,7 @@ export class WalletComponent implements OnChanges,OnDestroy {
       this.listChanged.emit(this.nfts)
     }
 
-    if(this.show.indexOf("coin")>-1){
+    if(this.show.indexOf("coin")>-1 && this.user){
       await this.user.init_balance(this.api)
       this.tokens=Object.keys(this.user.tokens)
     }
@@ -85,10 +85,7 @@ export class WalletComponent implements OnChanges,OnDestroy {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.hasOwnProperty("address")){
-      this.nft_market=this.nft_market+changes["address"].currentValue
-      this.refresh()
-    }
+    this.refresh()
   }
 
 
@@ -105,22 +102,24 @@ export class WalletComponent implements OnChanges,OnDestroy {
 
   create_coin() {
     let url="https://devnet.usewarp.to/create-token"
-    if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet.","")
-    open(url,"ESDT Creator")
+    if(this.user){
+      if(this.user.network.indexOf("devnet")==-1)url=url.replace("devnet.","")
+      if(this.user.network.indexOf("testnet")>-1)url=url.replace("devnet.","testnet.")
+      open(url,"ESDT Creator")
+    }
   }
 
 
 
   new_nft() {
-    let url=environment.nft_builder+"?action=close"
-    if(!this.user.isDevnet())url=url.replace("devnet.","")
-    this.hwnd=open(url,"nft_builder")
-    this.hTimer=setInterval(()=>{
-      if(this.hwnd && this.hwnd.close){
-        this.refresh()
-        clearInterval(this.hTimer)
-      }
-    })
-
+    if(this.user){
+      this.hwnd=open(settings.nft_builder+this.user.address+"&action=close","nft_builder")
+      this.hTimer=setInterval(()=>{
+        if(this.hwnd && this.hwnd.close){
+          this.refresh()
+          clearInterval(this.hTimer)
+        }
+      })
+    }
   }
 }

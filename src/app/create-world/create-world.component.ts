@@ -219,7 +219,7 @@ export class CreateWorldComponent implements OnInit {
       return
     }
 
-    await this.user.login(this,"Authentification required to create a new game","",true,0.01)
+    await this.user.login(this,"Authentification required to create a new game","",true,0.02)
 
     $$("Login user ",this.user)
 

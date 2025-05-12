@@ -15,10 +15,6 @@ export const environment = {
   visual: "./assets/tokemon_logo.png",
   logo: "./assets/tokemon_logo.png",
   claim: "Valoriser vos contenus en quelques clics",
-  token: {
-    "elrond-devnet":"LIFEPOINT-30c75e",
-    "elrond-mainnet":"LIFEPOINT-30c75e"
-  },
   token_market: "https://tokemon.f80.fr/faucet",
   max_file_size:50000000,
   shorter_service:"",

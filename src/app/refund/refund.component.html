@@ -11,8 +11,7 @@
 </div>
 
 <div class="mainform" *ngIf="message.length==0">
-  <app-wallet [network]="user.network"
-              [address]="user.address"
+  <app-wallet [user]="user"
               message="Select a coin to load in your tokemon"
               [selected]="true"
               show="coin"

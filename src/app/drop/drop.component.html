@@ -49,10 +49,10 @@
   </div>
 
   <div *ngIf="message==''">
-    <app-wallet [address]="user.address"
+    <app-wallet [user]="user"
                 show="nft"
+                [nft_builder]="settings.nft_builder"
                 *ngIf="!sel_nft" message="Select a NFT to create a tokemon"
-                [network]="user.network"
                 (listChanged)="update_nfts($event)"
                 (selectChanged)="on_select($event)">
     </app-wallet>

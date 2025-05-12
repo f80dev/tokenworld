@@ -16,6 +16,7 @@ import {setParams, showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-settings',
@@ -97,8 +98,7 @@ export class SettingsComponent implements OnInit {
 
   async send() {
     wait_message(this, "Reloading ...")
-    let token=this.user.network.indexOf("devnet")>-1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
-    let tokens=[TokenTransfer.fungibleFromAmount(token,this.lifepoint,18)]
+    let tokens=[TokenTransfer.fungibleFromAmount(settings.token,this.lifepoint,18)]
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {

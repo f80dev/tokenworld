@@ -175,6 +175,8 @@ export class GamesComponent implements OnInit {
   protected readonly level = level;
 
   async login() {
+    this.user.logout(true)
     await this.user.login(this,"","",true)
+    showMessage(this,"You are connected on "+this.user.network)
   }
 }

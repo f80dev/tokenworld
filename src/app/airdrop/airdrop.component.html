@@ -5,7 +5,7 @@
                 style="display: inline-block;width:600px;"
                 message="Select a coin to drop"
                 (onCancel)="quit()"
-                [address]="user.address"
+                [user]="user"
                 (selectChanged)="sel_coin=$event"></app-wallet>
 
     <br>

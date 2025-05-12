@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import { TokenTransfer} from '@multiversx/sdk-core/out';
+import {Token, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {create_transaction, get_nft, network_config, send_transaction_with_transfers} from '../mvx';
@@ -163,15 +163,22 @@ export class DropComponent implements AfterViewInit {
       $$("drop de " + this.name + " de visibilité " + this.user.visibility + " à la position ", pos)
       $$("Zone NE ", p1)
       $$("Zone SW ", p2)
-      let token = this.user.network.indexOf("devnet") > -1 ? environment.token["elrond-devnet"] : environment.token["elrond-mainnet"]
+
       wait_message(this, "Dropping your NFT to the game as a new tokemon called '"+this.name+"' with "+this.lifepoint+" HP")
 
       let tokens = []
       if (this.lifepoint > 0) {
-        tokens.push(TokenTransfer.fungibleFromAmount(token, this.lifepoint * this.quantity, 18))
+        tokens.push(new TokenTransfer({
+          token:new Token({identifier:settings.token,nonce:this.sel_nft.nonce}),
+          amount:BigInt(this.lifepoint * this.quantity)
+        }))
         $$("Transfert de " + tokens[0].amount + " " + tokens[0].token)
       }
-      tokens.push(TokenTransfer.semiFungible(this.sel_nft.identifier, this.sel_nft.nonce, this.quantity))
+      tokens.push(new TokenTransfer({
+        token:new Token({identifier:this.sel_nft.identifier, nonce:this.sel_nft.nonce}),
+        amount:BigInt(this.quantity)
+      }))
+
 
       try {
         let gas_to_drop = environment.max_gaz //environment.gaz_for_transaction + environment.gaz_by_nft * BigInt(this.quantity);
@@ -182,7 +189,7 @@ export class DropComponent implements AfterViewInit {
         }
         $$("Gas to transaction ",Number(gas_to_drop))
         $$("Dropping avec les arguments ",args)
-        let rc: any = await send_transaction_with_transfers(this.user, "drop", args, tokens, gas_to_drop)
+        let rc: any = await send_transaction_with_transfers(this.user, "drop", args, tokens, gas_to_drop,this.user.get_sc_address())
 
         $$("Resultat du drop ", rc)
         if (rc.returnMessage != "ok") {
@@ -297,4 +304,6 @@ export class DropComponent implements AfterViewInit {
     //On ne peut pas lancer loin lorsqu'on est contraint de dropper à côté
     if(this.user.game?.geoloc_to_drop && this.diffusion>10)this.diffusion=10
   }
+
+  protected readonly settings = settings;
 }

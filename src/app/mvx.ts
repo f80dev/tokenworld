@@ -1,4 +1,4 @@
-//Version official 0.992 - 09/05/2025
+//Version official 0.993 - 12/05/2025
 
 import {
   Address, BigUIntValue,
@@ -33,19 +33,21 @@ export const walletConnectDeepLink = 'https://maiar.page.link/?apn=com.elrond.ma
 
 export async function mvx_api(url:string,params:string,api:any,network="devnet"): Promise<any[]> {
   //voir
-  return new Promise((resolve, reject) => {
+  //return new Promise((resolve, reject) => {
     network=network.replace("elrond-","")
-    if(!network.endsWith("-"))network=network+"-"
-    if(url.startsWith("/"))url=url.substring(1)
-    api._get("https://"+network+"api.multiversx.com/"+url,params).subscribe({
-      next :(transactions:any)=>{
-        resolve(transactions)
-      },
-      error:(err:any)=>{
-        reject(err)
-      }
-    })
-  })
+    let ep=getEntrypoint(network)
+    //let domain=ep.networkProvider.url
+    return ep.createNetworkProvider().doGetGeneric(url+(params.length>0 ? "?"+params : ""))
+
+    // api._get(domain+"/"+url,params).subscribe({
+    //   next :(transactions:any)=>{
+    //     resolve(transactions)
+    //   },
+    //   error:(err:any)=>{
+    //     reject(err)
+    //   }
+    // })
+  //})
 }
 
 export function network_config(network="") : Promise<any> {
@@ -58,9 +60,9 @@ export function network_config(network="") : Promise<any> {
 
 
 
-export function get_nft(identifier: string, api:any,network: string) {
+export async function get_nft(identifier: string, api:any,network: string) {
   //voir https://api.multiversx.com/#/nfts/NftController_getNft
-  let rc:any= mvx_api("/nfts/" + identifier,"",api,network)
+  let rc:any=await mvx_api("nfts/" + identifier,"",api,network)
   return rc
 }
 

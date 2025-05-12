@@ -331,10 +331,9 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
             let nonce=tokemon.nonce.toString(16)
             let nft_id=tokemon.nft+"-"+(nonce.length<2 ? "0"+nonce : nonce)
 
-            get_nft(nft_id,this.api,this.user.network).then((opt:any)=>{
-              $$("Récupération du nft ",opt)
-              this.markers.push(this.add_tokemon_as_marker(opt.media[0].originalUrl,tokemon.position,tokemon.name+" ("+Number(tokemon.pv)+" LP)",tokemon,50))
-            })
+            let opt:any=await get_nft(nft_id,this.api,this.user.network)
+            $$("Récupération du nft ",opt)
+            this.markers.push(this.add_tokemon_as_marker(opt.media[0].originalUrl,tokemon.position,tokemon.name+" ("+Number(tokemon.pv)+" LP)",tokemon,50))
           }else{
             this.markers.push(this.add_tokemon_as_marker(icon,tokemon.position,tokemon.name+" ("+tokemon.pv+" LP)",tokemon,30))
           }

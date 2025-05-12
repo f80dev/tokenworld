@@ -13,6 +13,7 @@ import {ApiService} from '../api.service';
 import {MatIcon} from '@angular/material/icon';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {UserService} from '../user.service';
+import {get_nft} from '../mvx';
 
 
 export function toNFT(nft:any) : any {
@@ -43,7 +44,7 @@ export class TokemonComponent implements OnChanges,OnInit {
   @Input() height="300px"
   @Input() width="200px"
   @Output() select = new EventEmitter()
-  nft: any
+  tokemon: any
   api=inject(ApiService)
   @Input() label_pv="HP";
   size_box: string="200px"
@@ -53,12 +54,15 @@ export class TokemonComponent implements OnChanges,OnInit {
   }
 
 
-  async ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: any) {
     if(changes.hasOwnProperty("item")){
-      // let nft_id=this.item.hasOwnProperty("nft") ? this.item.nft+"-0"+this.item.nonce.toString(16) : this.item.identifier
-      // this.nft=await this.api._service("nfts/"+nft_id,"","https://devnet-api.multiversx.com/",false)
+      this.tokemon=changes.item.currentValue
+      if(typeof(this.tokemon.nft)=="string"){
+        let identifier=this.tokemon.nft+"-"+(this.tokemon.nonce<15 ? "0"+this.tokemon.nonce.toString(16) : this.tokemon.nonce.toString(16))
+        this.tokemon.nft=await get_nft(identifier,this.api,this.network)
+      }
       // this.nft.balance=await this.user.get_balance(nft_id)
-      this.nft=this.item
+
     }
   }
 
@@ -68,7 +72,7 @@ export class TokemonComponent implements OnChanges,OnInit {
   }
 
   on_select() {
-    this.select.emit({item:this.item,nft:this.nft})
+    this.select.emit({item:this.item,nft:this.tokemon})
   }
 
   open_coin(coin:any) {
@@ -78,7 +82,7 @@ export class TokemonComponent implements OnChanges,OnInit {
   }
 
   open_nft() {
-    let url="https://devnet.xspotlight.com/nfts/"+this.nft.identifier
+    let url="https://devnet.xspotlight.com/nfts/"+this.tokemon.identifier
     if(!this.user.isDevnet())url=url.replace("devnet.","")
     open(url,"Spotlight")
   }

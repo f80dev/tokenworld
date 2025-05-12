@@ -56,10 +56,6 @@ export class CaptureComponent implements OnInit {
   async ngOnInit() {
     let params:any = await getParams(this.routes)
     this.item=params.item
-    get_nft(this.item.nft,this.api,this.user.network).subscibe((r:any)=>{
-      this.nft=r
-      this.item.visual=r.visual
-    })
     this.target=params.target
     try{
       this.bags=await query("get_tokemon_bags",[this.item.id],this.user.get_sc_address(),this.user.network)

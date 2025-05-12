@@ -4,16 +4,16 @@
     <div style="display: inline-flex;text-align: center;">
       <mat-icon (click)="open_nft()"
                 [title]="item.identifier || item.nft">visibility</mat-icon>
-      {{nft!.name.toUpperCase()}}
-      <span *ngIf="nft && nft.balance>1">({{nft!.balance}})</span>
+      {{tokemon!.name.toUpperCase()}}
+      <span *ngIf="tokemon && tokemon.balance>1">({{tokemon!.balance}})</span>
     </div>
     <div style="flex-grow: 1;"></div>
     <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>
   </div>
 
 
-  <div *ngIf="nft" style="overflow: hidden;max-width:90%;max-height:70%;display: inline-block;margin:5%;">
-    <img [src]="nft.url"  style="object-fit: cover;width:100%;height: 100%;">
+  <div *ngIf="tokemon" style="overflow: hidden;max-width:90%;max-height:70%;display: inline-block;margin:5%;">
+    <img [src]="tokemon.nft.url" style="object-fit: cover;width:100%;height: 100%;">
   </div>
 
 

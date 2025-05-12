@@ -7,7 +7,6 @@ import { provideServiceWorker } from '@angular/service-worker';
 import {provideHttpClient} from '@angular/common/http';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
-import {GOOGLE_CLIENT_ID} from '../definitions';
 import {SocketIoModule} from 'ngx-socket-io';
 
 
@@ -21,7 +20,7 @@ export const appConfig: ApplicationConfig = {
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID),
+            provider: new GoogleLoginProvider("794055474370-nj8dfh004epum0h6ne1chq903dr4rofe.apps.googleusercontent.com"),
           }
         ],
       } as SocialAuthServiceConfig

@@ -26,7 +26,7 @@ export class IntroComponent implements OnInit {
       $$("Ouverture de la page intro avec les parametres ",this.params)
       this.message=this.params.message || "With "+settings.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
-      $$("Connexion sur le SC ","https://devnet-explorer.multiversx.com/accounts/"+this.user.get_sc_address())
+      $$("Connexion sur le SC ",this.user.get_sc_address())
 
       this.user.network=this.params.network || "elrond-devnet"
 

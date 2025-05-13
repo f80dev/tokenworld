@@ -28,7 +28,7 @@ export class UserService {
   device=inject(DeviceService)
   addr_change = new Subject<string>();
 
-  network:string=settings.network || "elrond-devnet"
+  network:string=settings.network
   params:any
   lang="fr"
   nonce:number=0

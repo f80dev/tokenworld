@@ -22,6 +22,7 @@ import {LatLng} from 'leaflet';
 import {SafePipe} from '../safe.pipe';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {environment} from '../../environments/environment';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-games',
@@ -84,6 +85,7 @@ export class GamesComponent implements OnInit {
     await this.refresh()
 
     let params: any = await getParams(this.routes)
+    this.user.network=settings.network
     $$("Ouverture des parties avec ", params)
     let autoconnect: boolean = (params.autoconnect == "true")
 

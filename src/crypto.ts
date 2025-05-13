@@ -1,12 +1,5 @@
 import {Bank, detect_network, isEmail, newCryptoKey} from "./tools";
 
-export function url_wallet(network:string) : string {
-    if(network.indexOf("elrond")>-1){
-        return network.indexOf("devnet")==-1 ? "https://wallet.elrond.com" : "https://devnet-wallet.elrond.com";
-    } else {
-        return "";
-    }
-}
 
 export function eval_direct_url_xportal(uri:string) : string {
     let rc="https://xportal.com/?wallet-connect="+uri; //"+this.provider.?relay-protocol%3Dirn&symKey=2a0e80dd8b982dac05eef5ce071fbe541d390fc302666d09856ae379416bfa6e"

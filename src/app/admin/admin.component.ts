@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
 
   infos: any;
   sel_model: any;
-  options=[{label:"Main network",value:"mainnet"},{label:"Test network",value:"devnet"}]
+  options=[{label:"Main network",value:"mainnet"},{label:"Beta network",value:"devnet"},{label:"Test network",value:"testnet"}]
   sel_network=this.options[1]
   nfts:any[]=[]
 

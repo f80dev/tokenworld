@@ -20,7 +20,7 @@ export class LinkComponent implements OnInit {
   @Input() content="";
   @Input() icon="";
   @Input() redirect_server="https://gate.nfluent.io";   //Voir le projet urlshortener
-  @Input() network="elrond-devnet";
+  @Input() network="";
   @Input() suffix=""
   @Input() _type="address"
   @Input() title=""

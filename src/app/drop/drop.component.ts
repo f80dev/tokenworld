@@ -78,7 +78,7 @@ export class DropComponent implements AfterViewInit {
     setTimeout(async ()=>{
       let params: any = await getParams(this.routes)
       if(this.user){
-        let coin_name=this.user.isDevnet() ? "xEgld" : "Egld"
+        let coin_name=(this.user.isDevnet() || this.user.isTestnet()) ? "xEgld" : "Egld"
         await this.user.login(this, "You must be connected to drop any NFT","",false,0.01,
           settings.appname+ "is free but you must have some "+coin_name+" to pay the transactions of this 'on-chain' game")
 

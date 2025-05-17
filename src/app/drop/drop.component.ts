@@ -168,9 +168,10 @@ export class DropComponent implements AfterViewInit {
 
       let tokens = []
       if (this.lifepoint > 0) {
+        let hp_token=settings.token
         tokens.push(new TokenTransfer({
-          token:new Token({identifier:settings.token,nonce:this.sel_nft.nonce}),
-          amount:BigInt(this.lifepoint * this.quantity)
+          token:new Token({identifier:hp_token}),
+          amount:BigInt(this.lifepoint * this.quantity*1e18)
         }))
         $$("Transfert de " + tokens[0].amount + " " + tokens[0].token)
       }

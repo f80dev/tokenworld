@@ -62,6 +62,11 @@ export class CaptureComponent implements OnInit {
 
       await this.user.login(this,"","",true,0.01,"You must buy some egld to pay fee for fight or capture tokemon")
       this.user.init_game(Number(params.game))
+      let pv=this.user.tokens[this.user.get_default_token()]
+      if(!pv || pv.balance==0){
+        showMessage(this,"You can't fight without HP token")
+        this.quit()
+      }
 
       if(this.item.owner!=this.user.idx && this.item.pv>0){
         this.label="Fight"
@@ -73,11 +78,14 @@ export class CaptureComponent implements OnInit {
       // @ts-ignore
       this.lang_pv=environment.dictionnary[this.user.lang || "en"].pv
     }catch (e){
-      this.router.navigate(["map"])
+      this.quit()
     }
 
   }
 
+  quit(){
+    this.router.navigate(["map"])
+  }
 
   async on_capture() {
     let captured_tokemon:any=null

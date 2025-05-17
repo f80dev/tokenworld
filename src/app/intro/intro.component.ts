@@ -21,20 +21,20 @@ export class IntroComponent implements OnInit {
   params: any;
 
   async ngOnInit() {
-    setTimeout(async ()=>{
-      this.params=await getParams(this.routes)
-      $$("Ouverture de la page intro avec les parametres ",this.params)
-      this.message=this.params.message || "With "+settings.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
-      $$("Connexion sur le SC ",this.user.get_sc_address())
+    this.user.network=this.params.network || "elrond-devnet"
+    this.params=await getParams(this.routes)
+    $$("Ouverture de la page intro avec les parametres ",this.params)
+    this.message=this.params.message || "With "+settings.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 
-      this.user.network=this.params.network || "elrond-devnet"
+    $$("Connexion sur le SC ",this.user.get_sc_address())
 
-      if(this.params.hasOwnProperty("signature")){
-        this.user.signature=this.params.signature
-        this.user.address=this.params.address
-      }
-    },100)
+
+
+    if(this.params.hasOwnProperty("signature")){
+      this.user.signature=this.params.signature
+      this.user.address=this.params.address
+    }
   }
 
   message: string=""

@@ -299,7 +299,9 @@ export function execute_transaction(transaction:Transaction,user:UserService,fun
 
           let rc=[]
           for(let result of transactionOnNetwork.smartContractResults){
-            rc.push(atob(result.data.toString()))
+            //let data=result.data.toString()
+            //rc.push(atob(data))
+            rc.push(result.logs.events)
           }
           resolve({values:rc,returnCode:"ok",returnMessage:"error"})
         } else {

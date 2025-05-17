@@ -5,8 +5,7 @@
     <br>
     <img *ngIf="pv_to_engage>0 && !device.isMobile()"
          src="./assets/fight2.gif"
-         style="width:60%;margin-top: 40px;">
-
+         style="width:60%;margin-top: 40px;max-width: 400px;">
     <br>
     <br>
     <button mat-raised-button
@@ -28,7 +27,7 @@
     <br>
     <br>
 
-    <div *ngIf="item.pv>0 && item.owner!=user.idx">
+    <div *ngIf="item.pv>0 && item.owner!=user.idx && user.tokens[user.get_default_token()]">
       You have {{user.tokens[user.get_default_token()].balance / 1e18 | number:"1.0-3"}} HP<br>
       <app-input
         value_type="slider" [value]="pv_to_engage"

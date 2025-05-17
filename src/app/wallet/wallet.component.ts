@@ -8,6 +8,7 @@ import {environment} from '../../environments/environment';
 import {MatIcon} from '@angular/material/icon';
 import {settings} from '../../environments/settings';
 import {get_nfts, getEntrypoint} from '../mvx';
+import {$$, isLocal} from '../../tools';
 
 @Component({
   selector: 'app-wallet',
@@ -113,11 +114,14 @@ export class WalletComponent implements OnChanges,OnDestroy {
 
   new_nft() {
     if(this.user){
-      this.hwnd=open(settings.nft_builder+this.user.address+"&action=close","nft_builder")
-      this.hTimer=setInterval(()=>{
-        if(this.hwnd && this.hwnd.close){
-          this.refresh()
+      let url=settings.nft_builder+this.user.address+"&action=close"
+      if(window.location.href.indexOf("localhost")>-1)url=url.replace(settings.nft_builder,"https://localhost:4200/?address=")
+      this.hwnd=open(url,"nft_builder")
+      window.addEventListener('message', (event) => {
+        if(event.origin.startsWith(url.substring(0,20))){
+          this.hwnd.close()
           clearInterval(this.hTimer)
+          this.refresh()
         }
       })
     }

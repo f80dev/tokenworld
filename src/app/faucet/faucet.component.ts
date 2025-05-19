@@ -27,9 +27,11 @@ export class FaucetComponent implements OnInit {
 
 
   async  ngOnInit() {
-    let params:any=await getParams(this.routes)
-    this.message=params.message
-    this.user.login(this)
+    setTimeout(async ()=>{
+      let params:any=await getParams(this.routes)
+      this.message=params.message
+      this.user.login(this)
+    },50)
   }
 
 

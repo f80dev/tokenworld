@@ -16,6 +16,7 @@ import {DeviceService} from '../device.service';
 import {ApiService} from '../api.service';
 import {cartesianToPolar, Point3D, polarToCartesian} from '../tokenworld';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {settings} from '../../environments/settings';
 
 @Component({
   selector: 'app-capture',
@@ -62,10 +63,12 @@ export class CaptureComponent implements OnInit {
 
       await this.user.login(this,"","",true,0.01,"You must buy some egld to pay fee for fight or capture tokemon")
       this.user.init_game(Number(params.game))
+
+      debugger
       let pv=this.user.tokens[this.user.get_default_token()]
       if(!pv || pv.balance==0){
         showMessage(this,"You can't fight without HP token")
-        this.quit()
+        this.quit("faucet","You must buy some HealthPoint ("+this.user.get_default_token()+") token to fight in "+settings.appname)
       }
 
       if(this.item.owner!=this.user.idx && this.item.pv>0){
@@ -83,8 +86,11 @@ export class CaptureComponent implements OnInit {
 
   }
 
-  quit(){
-    this.router.navigate(["map"])
+  quit(dest="map",message=""){
+    setTimeout(()=>{
+      this.router.navigate([dest],{queryParams:{message:message}})
+    },500)
+
   }
 
   async on_capture() {

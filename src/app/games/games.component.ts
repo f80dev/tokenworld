@@ -63,6 +63,7 @@ export class GamesComponent implements OnInit {
   message = "";
   geolocService = inject(GeolocService)
   show_nearest_zone: boolean = false;
+  show_with_welcome_pack: boolean = false;
 
 
   async refresh() {
@@ -74,9 +75,8 @@ export class GamesComponent implements OnInit {
       }catch (e:any){
         this.show_nearest_zone=false
       }
-
     }
-    this.games = await this.user.extract_games(true, this.show_closed_games, owner_filter,pos)
+    this.games = await this.user.extract_games(true, this.show_closed_games, owner_filter,this.show_with_welcome_pack,pos)
     this.games.sort((a, b) => a.score - b.score)
   }
 

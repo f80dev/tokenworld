@@ -71,7 +71,7 @@
       <!--        </table>-->
       <br>
       <mat-accordion>
-        <mat-expansion-panel class="panel">
+        <mat-expansion-panel class="panel" [expanded]="show_game_settings">
           <mat-expansion-panel-header>Game settings</mat-expansion-panel-header>
           <mat-slide-toggle [(ngModel)]="geoloc_to_drop" title="Player can drop tokemon only at real location">
             <div class="mat-slide-label">Drop tokemon<br>on GPS position</div>

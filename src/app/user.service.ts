@@ -70,6 +70,7 @@ export class UserService {
   preview: boolean = false;
   balance: number=0
   native_token: any;
+  ihm_level: number=0
 
   constructor() { }
 
@@ -296,7 +297,7 @@ export class UserService {
   }
 
 
-  extract_games(opened=true,closed=true,user_filter=0,pos=new LatLng(0,0)) : Promise<Game[]> {
+  extract_games(opened=true,closed=true,user_filter=0,welcome_pack_filter=false,pos=new LatLng(0,0)) : Promise<Game[]> {
     let rc:Game[] = [];
     return new Promise(async (resolve) => {
       let games=await query("games", [],this.get_sc_address(),this.network)
@@ -309,7 +310,8 @@ export class UserService {
             game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
             game.min_distance_to_refresh_map=Math.max(distance(ne,sw)/10000,20)
             game.bank=Number(await query("stocks", [game.id],this.get_sc_address(),this.network))
-            rc.push(game)
+
+            if(!welcome_pack_filter || game.welcome_pack>0)rc.push(game)
           }
         }
       }
@@ -350,4 +352,8 @@ export class UserService {
   }
 
 
+  get_network() {
+    if(this.isTestnet() || this.isDevnet())return "Test Network"
+    return "Main network"
+  }
 }

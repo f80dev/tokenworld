@@ -36,6 +36,7 @@ import {NgNavigatorShareService} from 'ng-navigator-share';
 import {QRCodeComponent} from 'angularx-qrcode';
 import {MatLabel} from '@angular/material/form-field';
 import {settings} from '../../environments/settings';
+import {_prompt} from '../prompt/prompt.component';
 
 @Component({
   selector: 'app-create-world',
@@ -214,15 +215,43 @@ export class CreateWorldComponent implements OnInit {
 
 
   async create_game() {
+    let alert=""
+
+    let pv=this.user.tokens[this.user.get_default_token()]
+    if(this.welcome_pack>pv){
+      showMessage(this,"You haven't not enought HP in your wallet for the welcome pack")
+      return
+    }
+
     if(this.max_to_engage<this.max_per_user){
       showMessage(this,"Maximum engagement must be inferior to maximum HP per user")
       return
     }
 
+    if(this.min_distance_for_gps>200 && (this.geoloc_to_catch || this.geoloc_to_drop)){
+      alert="very high dark GPS accuracy tolerance ("+this.min_distance_for_gps+" meters)"
+    }
+
+    if(this.welcome_pack==0 && !this.user.isMainnet() && this.max_to_engage>0){
+      alert="In test mode, you should offer life points to your participants for combat."
+    }
+
+    if(alert!=""){
+      try{
+        let r=await _prompt(this,"Are your sure ?","",alert,"yesno","Build","Check the parameters")
+        if(r=="no"){
+          this.show_game_settings=true
+          return
+        }
+      }catch (e){
+        this.show_game_settings=true
+        return
+      }
+    }
+
     await this.user.login(this,"Authentification required to create a new game","",true,0.02)
 
     $$("Login user ",this.user)
-
     $$("Creation d'une partie avec ",this.zone)
     $$("Entrance ",this.zone.entrance)
     $$("Exit ",this.zone.exit)
@@ -275,6 +304,8 @@ export class CreateWorldComponent implements OnInit {
       this.welcome_pack
     ]
     $$("Appel de la fonction avec les arguments ",this.args)
+
+
 
     try {
       wait_message(this,"Your world is under construction  ...")
@@ -380,6 +411,7 @@ export class CreateWorldComponent implements OnInit {
 
   protected readonly settings = settings;
   max_gift: number=100
+  show_game_settings=false
 
   async update_bank($event: any) {
     this.lifepoint=$event

@@ -1,5 +1,5 @@
 import {Component, inject, Input} from '@angular/core';
-import {Game, share_game} from '../tokenworld';
+import {cartesianToPolar, Game, share_game} from '../tokenworld';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {environment} from '../../environments/environment';
@@ -13,6 +13,7 @@ import {get_nft} from '../mvx';
 import {ApiService} from '../api.service';
 import {UserService} from '../user.service';
 import {settings} from '../../environments/settings';
+import {LatLng, Point} from 'leaflet';
 
 @Component({
   selector: 'app-game',
@@ -35,7 +36,12 @@ export class GameComponent {
   user=inject(UserService)
 
   see_map(game: any) {
-    open("https://www.google.com/maps/@?api=1&map_action=map&bbox="+game.bbox, "maps")
+    //TODO a corriger
+    let url="https://www.google.com/maps/search/?api=1&query=&ll={ne}&spn={dsw}"
+    let ne=cartesianToPolar(this.game!.ne)
+    let sw=cartesianToPolar(this.game!.sw)
+    url=url.replace("{ne}",(ne.lat+","+ne.lng)).replace("{dsw}",(ne.lat-sw.lat)+","+(ne.lng-sw.lng))
+    open(url, "maps")
   }
 
 

@@ -37,7 +37,11 @@
                     style="color:cyan;font-size: x-large;margin-bottom: 0;margin-right: 10px;"
                     class="clignotant">play_circle</mat-icon>
 
-          {{game.title}}
+          <span style="font-family: 'Luckiest Guy', cursive;font-weight: lighter;font-size: x-large;">{{game.title}}</span>
+
+
+          <mat-icon style="margin-left:5px;color:orangered;" *ngIf="game.welcome_pack>0">diamond_shine</mat-icon>
+
         </mat-expansion-panel-header>
 
         <app-game [game]="game" style="width:100%;">
@@ -63,5 +67,12 @@
   <button *ngIf="!user.isConnected()" mat-raised-button (click)="login()" color="primary">
     Login
   </button>
+
+  <br><br>
+
+  <div id="legende">
+    <mat-icon style="color:orangered;margin-bottom: -10px;">diamond_shine</mat-icon> you receive some HP coin when you come in the game
+  </div>
+
 
 </div>

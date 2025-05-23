@@ -1,7 +1,7 @@
 export const settings={
   contract_addr:"",
   ihm_level:1,
-  appli:"https://tokemon.f80.fr",
+  appli:"https://tokemon.af10.fr",
   appname: "TOKEMON World",
   token:"LIFEPOINT-30c75e",
   network:"elrond-mainnet",

@@ -22,8 +22,9 @@ export class IntroComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.user.network=this.params.network || "elrond-devnet"
     this.params=await getParams(this.routes)
+    this.user.network=this.params.network || "elrond-devnet"
+
     $$("Ouverture de la page intro avec les parametres ",this.params)
     this.message=this.params.message || "With "+settings.appname+" you hide NFTs in a geographic area of ​​your choice and invite your friends to find them."
 

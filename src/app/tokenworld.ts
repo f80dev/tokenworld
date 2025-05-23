@@ -235,14 +235,14 @@ export function initializeMap(vm:any,zone:any,
 
 
 export function share_game(vm:any,game: any,default_message="",
-                           share_menu=true,ask_message=true) : Promise<{shorturl:string}> {
+                           share_menu=true,ask_message=true,prod=true) : Promise<{shorturl:string}> {
   return new Promise(async (resolve) => {
     let message=default_message
     if(vm.hasOwnProperty("dialog") && ask_message)message = await _prompt(vm, "Write an introduction message for the players", default_message, "", "memo", "Share", "Cancel", false)
     let params = {autoconnect: true, game: game.id, message: message}
     $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
 
-    let short_url =await url_shorter( settings.appli + "/?" + setParams(params))
+    let short_url =prod ? await url_shorter( settings.appli + "/?" + setParams(params)) : "https://localhost:4200/?"+setParams(params)
     if(vm.hasOwnProperty("shareService") && share_menu){
       await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",

@@ -14,6 +14,7 @@ import {ApiService} from '../api.service';
 import {UserService} from '../user.service';
 import {settings} from '../../environments/settings';
 import {LatLng, Point} from 'leaflet';
+import {isLocal} from '../../tools';
 
 @Component({
   selector: 'app-game',
@@ -46,7 +47,7 @@ export class GameComponent {
 
 
   async share_map(game: Game) {
-    await share_game(this,game,"Join my game on "+settings.appname)
+    await share_game(this,game,"Join my game on "+settings.appname,true,true,!isLocal(window.location.href))
   }
 
   async show_nfts(game: Game) {

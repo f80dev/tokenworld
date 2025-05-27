@@ -308,7 +308,7 @@ export class CreateWorldComponent implements OnInit {
 
 
     try {
-      wait_message(this,"Your world is under construction  ...")
+      wait_message(this,"Your world is under construction ("+ this.user.network+") ...")
       let rc:any=await send_transaction_with_transfers(this.user,"add_game",this.args,[])
       if(rc.returnMessage!="ok"){
         showMessage(this,rc.returnMessage)

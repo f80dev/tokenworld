@@ -23,6 +23,7 @@ import {SafePipe} from '../safe.pipe';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {environment} from '../../environments/environment';
 import {settings} from '../../environments/settings';
+import {encodeCID} from 'ipfs-http-client/pin/remote/utils';
 
 @Component({
   selector: 'app-games',
@@ -94,7 +95,7 @@ export class GamesComponent implements OnInit {
       let game = await this.user.open_game(game_id)
       if (game) {
         await this.user.init_game(game)
-        this.quit()
+        if(this.user.game)this.quit("map",{game:this.user.game.id,autoconnect:true})
       } else {
         this.quit("create")
       }
@@ -102,16 +103,21 @@ export class GamesComponent implements OnInit {
   }
 
 
-  quit(redirect = "map") {
+  quit(redirect = "map",params:any={}) {
     if (this.user.game) localStorage.setItem("selected_game", String(this.user.game.id))
-    this.router.navigate([redirect])
+    this.router.navigate([redirect],{queryParams:params})
   }
 
 
   async select(game: any) {
     await this.user.init_game(game)
-    localStorage.setItem("selected_game", String(this.user.game!.id));
-    this.quit()
+    if(this.user.game){
+      localStorage.setItem("selected_game", String(this.user.game!.id));
+      this.quit("map",{game:game.id,autoconnect:true})
+    }else{
+      showMessage(this,"Game selection canceled")
+    }
+
   }
 
 
@@ -122,7 +128,7 @@ export class GamesComponent implements OnInit {
     let args = [game.id]
     wait_message(this, "Closing")
     try {
-      let result = await send_transaction_with_transfers(this.user, "close_game", args)
+      let result = await send_transaction_with_transfers(this.user, "close_game", args,[],environment.max_gaz)
     } catch (e: any) {
       showMessage(this,e.message)
     }

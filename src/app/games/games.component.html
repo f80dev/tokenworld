@@ -1,6 +1,6 @@
 <div class="mainform" style="text-align: center;">
 
-  <h3>Select a world or create one on the {{user.get_network()}}</h3>
+  <h3 *ngIf="message==''">Select a world or create one on the {{user.get_network()}}</h3>
 
 
   <app-hourglass [message]="message">
@@ -48,7 +48,8 @@
           <div style="width: 200px;margin-left:10px;"
                *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
             <button mat-raised-button *ngIf="game.n_tokemons>0" title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
-            <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)" (click)="close_map(game)">Close the game</button><br>
+            <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)"
+                    (click)="close_map(game)">Close the game</button><br>
             <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
           </div>
         </app-game>

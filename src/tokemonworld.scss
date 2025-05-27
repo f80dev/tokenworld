@@ -155,3 +155,19 @@ a:active { text-decoration: none; color: gray; }
   font-size: small;
   font-weight: lighter;
 }
+
+
+
+
+.clignotant {
+  animation: clignoter 1.3s infinite alternate;
+}
+
+@keyframes clignoter {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}

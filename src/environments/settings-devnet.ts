@@ -3,7 +3,7 @@ export const settings={
   ihm_level:2,
   token:"LIFEPOINT-30c75e",
   appname: "TOKEMON World (beta)",
-  appli:"https://tokemonbeta.f80.fr",
+  appli:"https://devnet.tokemon.af10.fr",
   network: "elrond-devnet",
   nft_builder:"https://devnet.nftnow.af10.fr/?address="
 }

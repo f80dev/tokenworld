@@ -169,16 +169,18 @@ export function distance(p1:LatLng, p2:LatLng,R=6371000): number {
 
 
 export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),
-                         title="me",size=30){
+                         title="me",size=30,classname=""){
   if(icon=='')return null
-  return L.marker(pos,{
-    icon:L.icon({
-      iconUrl: icon,
-      iconSize: [size, size], // size of the icon
-      iconAnchor: [size/2, size/2], // point of the icon which will correspond to marker's location
+  const iconHTML = '<img src="${icon}" style="width:'+size+'px; height: '+size+'px;">'
+  return L.marker(pos, {
+    icon: L.divIcon({
+      className: 'image-marker-icon', // Classe CSS optionnelle
+      html: iconHTML,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
     }),
-    alt:title
-  }).addTo(map)
+    alt: title,
+  }).addTo(map);
 }
 
 
@@ -222,7 +224,7 @@ export function initializeMap(vm:any,zone:any,
     L.tileLayer(baseMapURl, {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(vm.map).redraw()
 
     if(centerIcon.length>0){
-      vm.me_marker=add_icon(vm.map,centerIcon,center)
+      vm.me_marker=add_icon(vm.map,centerIcon,center,"",30,"clignotement")
       vm.me_marker.removeFrom(vm.map)
     }
 
@@ -235,14 +237,14 @@ export function initializeMap(vm:any,zone:any,
 
 
 export function share_game(vm:any,game: any,default_message="",
-                           share_menu=true,ask_message=true) : Promise<{shorturl:string}> {
+                           share_menu=true,ask_message=true,prod=true) : Promise<{shorturl:string}> {
   return new Promise(async (resolve) => {
     let message=default_message
     if(vm.hasOwnProperty("dialog") && ask_message)message = await _prompt(vm, "Write an introduction message for the players", default_message, "", "memo", "Share", "Cancel", false)
     let params = {autoconnect: true, game: game.id, message: message}
     $$("Demande de raccourcissement de https://localhost:4200/intro/?" + setParams(params))
 
-    let short_url =await url_shorter( settings.appli + "/?" + setParams(params))
+    let short_url =prod ? await url_shorter( settings.appli + "/?" + setParams(params)) : "https://localhost:4200/?"+setParams(params)
     if(vm.hasOwnProperty("shareService") && share_menu){
       await vm.shareService.share({
         title: "Join me in "+game.title+" gaming zone",

@@ -9,11 +9,12 @@ import {MatButton} from '@angular/material/button';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {MatDialog} from '@angular/material/dialog';
-import {get_nft} from '../mvx';
+import {get_nft, getExplorer} from '../mvx';
 import {ApiService} from '../api.service';
 import {UserService} from '../user.service';
 import {settings} from '../../environments/settings';
 import {LatLng, Point} from 'leaflet';
+import {isLocal} from '../../tools';
 
 @Component({
   selector: 'app-game',
@@ -46,7 +47,7 @@ export class GameComponent {
 
 
   async share_map(game: Game) {
-    await share_game(this,game,"Join my game on "+settings.appname)
+    await share_game(this,game,"Join my game on "+settings.appname,true,true,!isLocal(window.location.href))
   }
 
   async show_nfts(game: Game) {
@@ -61,4 +62,8 @@ export class GameComponent {
   }
 
   protected readonly settings = settings;
+
+  show_nft_explorer(url: string) {
+    open(url,"nft preview")
+  }
 }

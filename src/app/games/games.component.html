@@ -1,6 +1,6 @@
 <div class="mainform" style="text-align: center;">
 
-  <h3>Select a world or create one on the {{user.get_network()}}</h3>
+  <h3 *ngIf="message==''">Select a world or create one on the {{user.get_network()}}</h3>
 
 
   <app-hourglass [message]="message">
@@ -37,14 +37,19 @@
                     style="color:cyan;font-size: x-large;margin-bottom: 0;margin-right: 10px;"
                     class="clignotant">play_circle</mat-icon>
 
-          {{game.title}}
+          <span style="font-family: 'Luckiest Guy', cursive;font-weight: lighter;font-size: x-large;">{{game.title}}</span>
+
+
+          <mat-icon style="margin-left:5px;color:orangered;" *ngIf="game.welcome_pack>0">diamond_shine</mat-icon>
+
         </mat-expansion-panel-header>
 
         <app-game [game]="game" style="width:100%;">
           <div style="width: 200px;margin-left:10px;"
                *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
             <button mat-raised-button *ngIf="game.n_tokemons>0" title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
-            <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)" (click)="close_map(game)">Close the game</button><br>
+            <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)"
+                    (click)="close_map(game)">Close the game</button><br>
             <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
           </div>
         </app-game>
@@ -63,5 +68,12 @@
   <button *ngIf="!user.isConnected()" mat-raised-button (click)="login()" color="primary">
     Login
   </button>
+
+  <br><br>
+
+  <div id="legende">
+    <mat-icon style="color:orangered;margin-bottom: -10px;">diamond_shine</mat-icon> you receive some HP coin when you come in the game
+  </div>
+
 
 </div>

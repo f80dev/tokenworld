@@ -237,7 +237,7 @@ export class DropComponent implements AfterViewInit {
     this.sel_nft = $event
     this.name = $event.name
 
-    this.max_quantity = Math.min(50,Math.min(Number(this.sel_nft.balance), Number(this.max_per_user)))
+    this.max_quantity = Math.min(30,Math.min(Number(this.sel_nft.balance), Number(this.max_per_user)))
 
     let pos = this.user.center_map
     if(this.map){
@@ -322,4 +322,9 @@ export class DropComponent implements AfterViewInit {
   }
 
   protected readonly settings = settings;
+
+  cancel() {
+    this.sel_nft=null
+    this.router.navigate(["map"])
+  }
 }

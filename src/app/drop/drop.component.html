@@ -21,13 +21,13 @@
                label="Tokemon's name" help="Min length of 3 characters"
                (valueChange)="name=$event" [value]="name"></app-input>
 
-    <button mat-raised-button
+    <button mat-raised-button color="primary" style="font-weight:bolder;"
             (click)="drop()"
-            title="Drop here">Drop !</button>
+            title="Drop here"><mat-icon>download</mat-icon>Drop</button>
 
     <button mat-raised-button
-            (click)="sel_nft=null"
-            title="Cancel">Cancel</button>
+            (click)="cancel()"
+            title="Cancel"><mat-icon>cancel</mat-icon>Cancel</button>
 
 
   </div>

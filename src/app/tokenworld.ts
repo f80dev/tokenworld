@@ -171,7 +171,7 @@ export function distance(p1:LatLng, p2:LatLng,R=6371000): number {
 export function add_icon(map:any,icon:string,pos:LatLng=new LatLng(0,0),
                          title="me",size=30,classname=""){
   if(icon=='')return null
-  const iconHTML = '<img src="${icon}" style="width:'+size+'px; height: '+size+'px;">'
+  const iconHTML = '<img src="'+icon+'" style="width:'+size+'px; height: '+size+'px;">'
   return L.marker(pos, {
     icon: L.divIcon({
       className: 'image-marker-icon', // Classe CSS optionnelle

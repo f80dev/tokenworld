@@ -1,5 +1,5 @@
 export const settings={
-  contract_addr:"erd1qqqqqqqqqqqqqpgqlrttmc2u52f8df506dc79q5d5wxf58vc835ss44vmv",
+  contract_addr:"erd1qqqqqqqqqqqqqpgqzstuw8ctp568732vcaar5lzmeuzu6gjh835sys72ns",
   ihm_level:2,
   token:"LIFEPOINT-30c75e",
   appname: "TOKEMON World (beta)",

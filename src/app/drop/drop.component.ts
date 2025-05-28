@@ -91,7 +91,7 @@ export class DropComponent implements AfterViewInit {
 
         this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
         await this.user.init_balance(this.api,true)
-        this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.get_default_token()))
+        this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.pv_token))
 
 
         if(params.lat==0 && params.lng==0){
@@ -179,7 +179,7 @@ export class DropComponent implements AfterViewInit {
 
       let tokens = []
       if (this.lifepoint > 0) {
-        let hp_token=settings.token
+        let hp_token=this.user.pv_token
         tokens.push(new TokenTransfer({
           token:new Token({identifier:hp_token}),
           amount:BigInt(this.lifepoint * this.quantity*1e18)

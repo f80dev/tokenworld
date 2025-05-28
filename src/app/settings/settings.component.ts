@@ -74,8 +74,8 @@ export class SettingsComponent implements OnInit {
     await this.user.login(this)
     await this.user.init_balance(this.api)
     this.refresh()
-    if(this.user.tokens.hasOwnProperty(this.user.get_default_token())){
-      this.max_pv_loading=Number(this.user.tokens[this.user.get_default_token()].balance/1e18)
+    if(this.user.tokens.hasOwnProperty(this.user.pv_token)){
+      this.max_pv_loading=Number(this.user.tokens[this.user.pv_token].balance/1e18)
     }
   }
 
@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit {
 
   async send() {
     wait_message(this, "Reloading ...")
-    let tokens=[TokenTransfer.fungibleFromAmount(settings.token,this.lifepoint,18)]
+    let tokens=[TokenTransfer.fungibleFromAmount(this.user.pv_token,this.lifepoint,18)]
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {

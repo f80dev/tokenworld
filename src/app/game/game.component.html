@@ -30,7 +30,7 @@
            class="small-vignette">
     </div>
 
-    <div title="If it's your first game on {{settings.appname}}, you receive this HP ({{settings.token}}) as welcome pack"
+    <div title="If it's your first game on {{settings.appname}}, you receive this HP ({{user.pv_token}}) as welcome pack"
          *ngIf="game!.welcome_pack>0">Welcome pack : {{game!.welcome_pack}} HP
     </div>
   </div>

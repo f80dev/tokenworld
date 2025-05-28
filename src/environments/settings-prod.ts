@@ -3,20 +3,18 @@ export const settings={
   ihm_level:1,
   appli:"https://tokemon.af10.fr",
   appname: "TOKEMON World",
-  token:"LIFEPOINT-30c75e",
   network:"elrond-mainnet",
   nft_builder:"https://nftnow.af10.fr/?address="
 }
 
-
 export const abi={
   "buildInfo": {
     "rustc": {
-      "version": "1.78.0",
-      "commitHash": "9b00956e56009bab2aa15d7bff10916599e3d6d6",
-      "commitDate": "2024-04-29",
+      "version": "1.85.1",
+      "commitHash": "4eb161250e340c8f48f66e2b929ef4a5bed7c181",
+      "commitDate": "2025-03-15",
       "channel": "Stable",
-      "short": "rustc 1.78.0 (9b00956e5 2024-04-29)"
+      "short": "rustc 1.85.1 (4eb161250 2025-03-15)"
     },
     "contractCrate": {
       "name": "tokemonworld",
@@ -24,7 +22,7 @@ export const abi={
     },
     "framework": {
       "name": "multiversx-sc",
-      "version": "0.56.0"
+      "version": "0.57.1"
     }
   },
   "docs": [
@@ -110,6 +108,26 @@ export const abi={
       "outputs": [
         {
           "type": "TokenIdentifier"
+        }
+      ]
+    },
+    {
+      "name": "welcome_gift",
+      "mutability": "readonly",
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "BigUint"
+        }
+      ]
+    },
+    {
+      "name": "n_users_for_welcome_gift",
+      "mutability": "readonly",
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "BigUint"
         }
       ]
     },
@@ -289,6 +307,10 @@ export const abi={
         {
           "name": "defender_part",
           "type": "u8"
+        },
+        {
+          "name": "welcome_pack",
+          "type": "u32"
         }
       ],
       "outputs": [
@@ -304,7 +326,12 @@ export const abi={
       "payableInTokens": [
         "*"
       ],
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "welcome_gift",
+          "type": "BigUint"
+        }
+      ],
       "outputs": [
         {
           "type": "bool"
@@ -646,6 +673,25 @@ export const abi={
       "outputs": []
     },
     {
+      "name": "restore_to_owners",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "game_id",
+          "type": "u32"
+        },
+        {
+          "name": "n_tokemons",
+          "type": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "fight",
       "mutability": "mutable",
       "inputs": [
@@ -930,6 +976,10 @@ export const abi={
         {
           "name": "defender_part",
           "type": "u8"
+        },
+        {
+          "name": "welcome_pack",
+          "type": "u32"
         }
       ]
     },
@@ -1033,6 +1083,6 @@ export const abi={
         }
       ]
     }
+
   }
 }
-

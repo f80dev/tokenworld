@@ -65,10 +65,10 @@ export class CaptureComponent implements OnInit {
       this.user.init_game(Number(params.game))
 
       debugger
-      let pv=this.user.tokens[this.user.get_default_token()]
+      let pv=this.user.tokens[this.user.pv_token]
       if(!pv || pv.balance==0){
         showMessage(this,"You can't fight without HP token")
-        this.quit("faucet","You must buy some HealthPoint ("+this.user.get_default_token()+") token to fight in "+settings.appname)
+        this.quit("faucet","You must buy some HealthPoint ("+this.user.pv_token+") token to fight in "+settings.appname)
       }
 
       if(this.item.owner!=this.user.idx && this.item.pv>0){
@@ -102,7 +102,7 @@ export class CaptureComponent implements OnInit {
         let args=[this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z]
         wait_message(this, func_name=='capture' ? "Fighting ... " : "Capturing ...")
         let tokens=[]
-        if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.pv_to_engage,18))
+        if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.pv_token,this.pv_to_engage,18))
         $$("Appel de la "+func_name+" with ",args)
         let rc:any = await send_transaction_with_transfers(
           this.user,
@@ -148,7 +148,7 @@ export class CaptureComponent implements OnInit {
   }
 
   refund(revitalize:boolean) {
-    let coin_to_use=this.user.get_default_token()
+    let coin_to_use=this.user.pv_token
     let args: any=revitalize ? {token:this.item,coin:coin_to_use} : {token:this.item}
     this.router.navigate(["refund"],{queryParams:{p:setParams(args,"","")}})
   }

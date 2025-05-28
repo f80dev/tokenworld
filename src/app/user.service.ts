@@ -1,7 +1,14 @@
 import {inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
-import {getExplorer, query, toAccount, usersigner_from_pem} from "./mvx";
+import {
+  create_transaction, execute_transaction,
+  getExplorer,
+  query,
+  send_transaction_with_transfers,
+  toAccount,
+  usersigner_from_pem
+} from "./mvx";
 import {$$, showMessage} from "../tools";
 import {ApiService} from './api.service';
 import {environment} from '../environments/environment';
@@ -10,7 +17,7 @@ import {cartesianToPolar, center_of, distance, Game, polarToCartesian} from './t
 import {Location} from '@angular/common';
 import {DeviceService} from './device.service';
 import {Connexion} from '../operation';
-import {settings} from '../environments/settings';
+import {abi, settings} from '../environments/settings';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +27,7 @@ export class UserService {
   signature:string=""
   provider: any
   strong: boolean=false
+  pv_token:string=""
 
   tokens:any={}
   nfts:any={}       //Balances des NFT et SFT
@@ -73,6 +81,7 @@ export class UserService {
   ihm_level: number=0
 
   constructor() { }
+
 
   async authent($event: {
     strong: boolean;
@@ -208,6 +217,10 @@ export class UserService {
     return "https://api.multiversx.com/"
   }
 
+  async get_gift() {
+    await send_transaction_with_transfers(this,"get_gift",[],[])
+  }
+
 
   init_balance(api: ApiService,add_nft=false) {
     return new Promise(async (resolve,reject)=>{
@@ -237,6 +250,8 @@ export class UserService {
           }
 
         }
+        let hp=await query("pv_token",[],this.get_sc_address(),this.network)
+        this.pv_token=hp
 
         resolve(true)
       }
@@ -257,9 +272,6 @@ export class UserService {
     return settings.contract_addr
   }
 
-  get_default_token(): string {
-    return settings.token
-  }
 
 
 

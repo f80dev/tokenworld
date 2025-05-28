@@ -27,8 +27,8 @@
     <br>
     <br>
 
-    <div *ngIf="item.pv>0 && item.owner!=user.idx && user.tokens[user.get_default_token()]">
-      You have {{user.tokens[user.get_default_token()].balance / 1e18 | number:"1.0-3"}} HP<br>
+    <div *ngIf="item.pv>0 && item.owner!=user.idx && user.tokens[user.pv_token]">
+      You have {{user.tokens[user.pv_token].balance / 1e18 | number:"1.0-3"}} HP<br>
       <app-input
         value_type="slider" [value]="pv_to_engage"
         (valueChange)="update_value($event)"

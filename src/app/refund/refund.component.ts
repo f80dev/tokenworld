@@ -68,7 +68,7 @@ export class RefundComponent implements OnInit{
     try{
       await send_transaction_with_transfers(
         this.user,
-        this.coin.identifier==this.user.get_default_token() ? "reloading" : "add_to_bag",
+        this.coin.identifier==this.user.pv_token ? "reloading" : "add_to_bag",
         args,
         tokens)
       wait_message(this)

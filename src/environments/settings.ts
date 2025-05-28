@@ -1,7 +1,6 @@
 export const settings={
-  contract_addr:"erd1qqqqqqqqqqqqqpgqfamfkms2xs3ek6yxdj0q8rnkmda39ed6835sjcwdek",
+  contract_addr:"erd1qqqqqqqqqqqqqpgqprlqk8e6cj5w6nxytf9ehjc47f54kx7k835s9zq422",
   ihm_level:2,
-  token:"LIFEPOINT-30c75e",
   appname: "TOKEMON World (beta)",
   appli:"https://devnet.tokemon.af10.fr",
   network: "elrond-devnet",

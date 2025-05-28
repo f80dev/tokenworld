@@ -138,9 +138,11 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
     this.input_title?.nativeElement.focus()
   }
 
+
+
+
+
   async ngOnInit() {
-
-
     let params:any=await getParams(this.routes)
     await this.user.login(this,"You must login to the blockchain to create a game","",false)
 
@@ -177,7 +179,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
 
     try{
       await this.user.init_balance(this.api)
-      this.hp_balance=this.user.get_balance(this.user.get_default_token())
+      this.hp_balance=this.user.get_balance(this.user.pv_token)
     }catch(e){
       this.hp_balance=100
     }
@@ -221,10 +223,13 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
   }
 
 
+
+
+
   async create_game() {
     let alert=""
 
-    let pv=this.user.tokens[this.user.get_default_token()]
+    let pv=this.user.tokens[this.user.pv_token]
     if(this.welcome_pack>pv){
       showMessage(this,"You haven't not enought HP in your wallet for the welcome pack")
       return
@@ -325,7 +330,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
         if(this.lifepoint>0 && create_game){
           wait_message(this,"Initialize HP stock with "+this.lifepoint+" HP from your wallet")
           $$("Transfert de lifepoint "+this.lifepoint)
-          let tokens=[TokenTransfer.fungibleFromAmount(this.user.get_default_token(),this.lifepoint,18)]
+          let tokens=[TokenTransfer.fungibleFromAmount(this.user.pv_token,this.lifepoint,18)]
           rc=await send_transaction_with_transfers(this.user,"fund_game",[create_game.id],tokens)
         }
         wait_message(this)
@@ -432,6 +437,6 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
   async login() {
     await this.user.login(this,"","",true,0,"Connect to set your balance of HP")
     await this.user.init_balance(this.api)
-    this.hp_balance=this.user.get_balance(this.user.get_default_token())
+    this.hp_balance=this.user.get_balance(this.user.pv_token)
   }
 }

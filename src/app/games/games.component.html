@@ -2,12 +2,27 @@
 
   <h3 *ngIf="message==''">Select a world or create one on the {{user.get_network()}}</h3>
 
-
   <app-hourglass [message]="message">
   </app-hourglass>
 
+  <br><br>
+  <button mat-raised-button (click)="create_game()">
+    <mat-icon>add_circle</mat-icon>Create Game
+  </button>
+
+  <button mat-raised-button (click)="user.show_contract()" color="primary" *ngIf="user.ihm_level>1">
+    Smart Contract
+  </button>
+
+  <button *ngIf="!user.isConnected()" mat-raised-button (click)="login()" color="primary">
+    <mat-icon>login</mat-icon>Login
+  </button>
+
+  <br><br>
+
+
   <div id="menu" style="margin:1%;display:inline-flex;justify-content: space-between;max-width:600px;width: 90%;flex-wrap: wrap;"
-       *ngIf="message.length==0 && (games.length>0 || show_my_games)">
+       *ngIf="message.length==0 && (games.length>5 || show_my_games)">
     <mat-slide-toggle [(ngModel)]="show_closed_games" (ngModelChange)="refresh()" *ngIf="level(2)">
       <div class="mat-slide-label">Include<br>closed world</div>
     </mat-slide-toggle>
@@ -24,6 +39,8 @@
       <div class="mat-slide-label">Show only with<br>HP welcome pack</div>
     </mat-slide-toggle>
   </div>
+  <br>
+  <br>
   <br>
 
   <div style="max-width: 1200px;display: inline-block;">
@@ -60,21 +77,10 @@
   </div>
 
 
-  <br><br>
-  <button mat-raised-button (click)="create_game()">Create Game</button>
 
-  <button mat-raised-button (click)="user.show_contract()" color="primary" *ngIf="user.ihm_level>1">
-    Smart Contract
-  </button>
 
-  <button *ngIf="!user.isConnected()" mat-raised-button (click)="login()" color="primary">
-    Login
-  </button>
-
-  <br><br>
-
-  <div id="legende">
-    <mat-icon style="color:orangered;margin-bottom: -10px;">diamond_shine</mat-icon> you receive some HP coin when you come in the game
+  <div id="legende" *ngIf="games!.length>0" style="margin-top: 30px;">
+    <mat-icon style="color:orangered;margin-bottom: -10px;" >diamond_shine</mat-icon> you receive some HP coin when you come in the game
   </div>
 
 

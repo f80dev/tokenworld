@@ -72,7 +72,11 @@ export class DropComponent implements AfterViewInit {
   random_location: boolean = false;
   diffusion = 0
   max_per_user=1
+  circle:L.Circle | undefined
 
+  refresh(){
+    if(this.diffusion && this.diffusion>0)this.circle?.setRadius(this.diffusion)
+  }
 
   async ngAfterViewInit() {
     setTimeout(async ()=>{
@@ -96,6 +100,13 @@ export class DropComponent implements AfterViewInit {
           this.user.center_map = new LatLng(params.lat, params.lng)
           this.map = L.map('map')
           $$("Drop sur les coordonnées ", this.user.center_map)
+
+          this.circle=new L.Circle(this.user.center_map,{
+            radius: 0,
+            color:"none",
+            fillColor: '#2c2c2c',
+            fillOpacity:0.3
+          }).addTo(this.map)
         }
 
         if(params.hasOwnProperty("nft")){
@@ -226,7 +237,7 @@ export class DropComponent implements AfterViewInit {
     this.sel_nft = $event
     this.name = $event.name
 
-    this.max_quantity = Math.min(50,Math.min(Number(this.sel_nft.balance), Number(this.max_per_user)))
+    this.max_quantity = Math.min(30,Math.min(Number(this.sel_nft.balance), Number(this.max_per_user)))
 
     let pos = this.user.center_map
     if(this.map){
@@ -301,10 +312,19 @@ export class DropComponent implements AfterViewInit {
 
   protected readonly environment = environment;
 
-  update_distance() {
+  update_distance(event:any) {
     //On ne peut pas lancer loin lorsqu'on est contraint de dropper à côté
-    if(this.user.game?.geoloc_to_drop && this.diffusion>10)this.diffusion=10
+    if(event){
+      this.diffusion=event
+      if(this.user.game?.geoloc_to_drop && this.diffusion>10)this.diffusion=10
+      this.refresh()
+    }
   }
 
   protected readonly settings = settings;
+
+  cancel() {
+    this.sel_nft=null
+    this.router.navigate(["map"])
+  }
 }

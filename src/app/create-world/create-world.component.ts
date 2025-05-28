@@ -1,4 +1,4 @@
-import { Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {DecimalPipe, Location, NgIf} from "@angular/common";
@@ -62,7 +62,8 @@ import {_prompt} from '../prompt/prompt.component';
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
 })
-export class CreateWorldComponent implements OnInit {
+export class CreateWorldComponent implements OnInit,AfterViewInit {
+
   routes=inject(ActivatedRoute)
   clipboard=inject(Clipboard)
   toast=inject(MatSnackBar)
@@ -131,8 +132,14 @@ export class CreateWorldComponent implements OnInit {
     $$("Mise a jour de la zone ",this.zone)
   }
 
+  @ViewChild('input_title') input_title: ElementRef | undefined
+  ngAfterViewInit(): void {
+    //TODO corriger car ne fonctionne pas
+    this.input_title?.nativeElement.focus()
+  }
 
   async ngOnInit() {
+
 
     let params:any=await getParams(this.routes)
     await this.user.login(this,"You must login to the blockchain to create a game","",false)

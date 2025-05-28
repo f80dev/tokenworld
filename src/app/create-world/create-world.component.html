@@ -119,15 +119,19 @@
           <br>
 
           <button mat-raised-button *ngIf="!user.address" (click)="login()">More HP</button>
-          <app-input label="Initial Health Point (HP) stock for players"
-                     style="width:90%;max-width: 100%;" value_type="slider"
-                     [min]="0" [max]="Math.min(hp_balance,100000)" unity="HP"
-                     [value]="lifepoint" (valueChange)="update_bank($event)"></app-input>
 
-          <app-input [label]="'HP gift for new user in '+settings.appname"
-                     [min]="0" [max]="max_gift"
-                     style="width:90%;max-width: 100%;" value_type="slider" unity="HP"
-                     [value]="welcome_pack" (valueChange)="welcome_pack=$event"></app-input>
+          <div *ngIf="hp_balance>0">
+            <app-input label="Initial Health Point (HP) stock for players"
+                       style="width:90%;max-width: 100%;" value_type="slider"
+                       [min]="0" [max]="Math.min(hp_balance,100000)" unity="HP"
+                       [value]="lifepoint" (valueChange)="update_bank($event)"></app-input>
+
+            <app-input [label]="'HP gift for new user in '+settings.appname"
+                       [min]="0" [max]="max_gift"
+                       style="width:90%;max-width: 100%;" value_type="slider" unity="HP"
+                       [value]="welcome_pack" (valueChange)="welcome_pack=$event"></app-input>
+
+          </div>
 
 
 

@@ -31,6 +31,7 @@
               "src/CNAME",
               "src/index.html",
               "src/404.html",
+              "src/favicon.ico",
               "src/manifest.webmanifest"
             ],
             "styles": [

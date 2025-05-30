@@ -64,7 +64,6 @@ export class CaptureComponent implements OnInit {
       await this.user.login(this,"","",true,0.01,"You must buy some egld to pay fee for fight or capture tokemon")
       this.user.init_game(Number(params.game))
 
-      debugger
       let pv=this.user.tokens[this.user.pv_token]
       if(!pv || pv.balance==0){
         showMessage(this,"You can't fight without HP token")

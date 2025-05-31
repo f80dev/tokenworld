@@ -61,4 +61,8 @@ export class IntroComponent implements OnInit {
   available_zone() {
     this.router.navigate(["games"],{queryParams:this.params})
   }
+
+  open_about() {
+    this.router.navigate(["about"])
+  }
 }

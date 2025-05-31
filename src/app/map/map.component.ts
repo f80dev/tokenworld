@@ -412,7 +412,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
 
 
   async recenter() {
-    if(!is_in(this.user.center_map,this.user.game!)){
+    if(!this.user.game?.geoloc_to_catch && !is_in(this.user.center_map,this.user.game!)){
       let zone=this.user.game
       let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
       let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)

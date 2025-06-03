@@ -3,33 +3,17 @@
   "short_name": "TM Testnet",
   "theme_color": "#1976d2",
   "background_color": "#000000",
-  "display": "standalone",
+  "display": "fullscreen",
   "scope": "./",
   "start_url": "/index.html",
+  "lang":"en",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "assets/logo.png",
-      "sizes": "72x72",
+      "sizes": "72x72 96x96 128x128 256x256",
       "type": "image/png",
       "purpose": "maskable any"
-    },
-    {
-      "src": "assets/logo.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "assets/logo.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-  {
-        "src": "assets/logo.png",
-        "sizes": "256x256",
-        "type": "image/png",
-        "purpose": "maskable any"
-      }
+    }
   ]
 }

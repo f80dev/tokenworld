@@ -135,7 +135,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
   @ViewChild('input_title') input_title: ElementRef | undefined
   ngAfterViewInit(): void {
     //TODO corriger car ne fonctionne pas
-    this.input_title?.nativeElement.focus()
+    //this.input_title?.nativeElement.focus()
   }
 
 

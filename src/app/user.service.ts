@@ -90,12 +90,15 @@ export class UserService {
     encrypted: string;
     url_direct_xportal_connect: string
   }) {
-    this.address = $event.address
-    localStorage.setItem("address",this.address)
-    this.account=await toAccount(this.address)
-    this.provider = $event.provider
-    this.strong=$event.strong
-    this.addr_change.next(this.address)
+    if($event){
+      this.address = $event.address
+      localStorage.setItem("address",this.address)
+      this.account=await toAccount(this.address)
+      this.provider = $event.provider
+      this.strong=$event.strong
+      this.addr_change.next(this.address)
+    }
+
   }
 
   async init_idx(){

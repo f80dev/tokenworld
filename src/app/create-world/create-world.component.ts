@@ -144,7 +144,6 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
 
   async ngOnInit() {
     let params:any=await getParams(this.routes)
-    await this.user.login(this,"You must login to the blockchain to create a game","",false)
 
     this.zone={
       map:"map",
@@ -177,6 +176,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
       }
     }
 
+    await this.user.login(this,"You must login to the blockchain to create a game","",false)
     try{
       await this.user.init_balance(this.api)
       this.hp_balance=this.user.get_balance(this.user.pv_token)

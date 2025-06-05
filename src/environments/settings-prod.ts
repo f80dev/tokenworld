@@ -1,8 +1,8 @@
 export const settings={
-  contract_addr:"",
+  contract_addr:"erd1qqqqqqqqqqqqqpgqdngdqlyu4mg7h63n7rjxz0ghs8jaaxwcwhpslgsr8n",
   ihm_level:1,
   appli:"https://tokemon.af10.fr",
-  appname: "TOKEMON World",
+  appname: "TOKEMON",
   network:"elrond-mainnet",
   nft_builder:"https://nftnow.af10.fr/?address="
 }
@@ -1083,6 +1083,6 @@ export const abi={
         }
       ]
     }
-
   }
 }
+

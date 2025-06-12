@@ -1,21 +1,21 @@
 export const settings={
-  contract_addr:"erd1qqqqqqqqqqqqqpgqprlqk8e6cj5w6nxytf9ehjc47f54kx7k835s9zq422",
+  contract_addr:"erd1qqqqqqqqqqqqqpgq6v9a27zs4gf5zkrlxd3u04s7aljzn7q5835spvdqer",
   ihm_level:2,
-  appname: "TOKEMON World (beta)",
-  appli:"https://devnet.tokemon.af10.fr",
-  network: "elrond-devnet",
-  nft_builder:"https://devnet.nftnow.af10.fr/?address="
+  appname: "TOKEMON World (Testnet)",
+  appli:"https://testnet.tokemon.af10.fr",
+  network: "elrond-testnet",
+  nft_builder:"https://testnet.nftnow.af10.fr/?address="
 }
 
 
 export const abi={
   "buildInfo": {
     "rustc": {
-      "version": "1.82.0",
-      "commitHash": "f6e511eec7342f59a25f7c0534f1dbea00d01b14",
-      "commitDate": "2024-10-15",
+      "version": "1.85.1",
+      "commitHash": "4eb161250e340c8f48f66e2b929ef4a5bed7c181",
+      "commitDate": "2025-03-15",
       "channel": "Stable",
-      "short": "rustc 1.82.0 (f6e511eec 2024-10-15)"
+      "short": "rustc 1.85.1 (4eb161250 2025-03-15)"
     },
     "contractCrate": {
       "name": "tokemonworld",
@@ -23,7 +23,7 @@ export const abi={
     },
     "framework": {
       "name": "multiversx-sc",
-      "version": "0.56.0"
+      "version": "0.57.1"
     }
   },
   "docs": [
@@ -109,6 +109,26 @@ export const abi={
       "outputs": [
         {
           "type": "TokenIdentifier"
+        }
+      ]
+    },
+    {
+      "name": "welcome_gift",
+      "mutability": "readonly",
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "BigUint"
+        }
+      ]
+    },
+    {
+      "name": "n_users_for_welcome_gift",
+      "mutability": "readonly",
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "BigUint"
         }
       ]
     },
@@ -307,7 +327,12 @@ export const abi={
       "payableInTokens": [
         "*"
       ],
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "welcome_gift",
+          "type": "BigUint"
+        }
+      ],
       "outputs": [
         {
           "type": "bool"
@@ -1059,5 +1084,6 @@ export const abi={
         }
       ]
     }
+
   }
 }

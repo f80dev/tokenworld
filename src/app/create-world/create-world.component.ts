@@ -163,7 +163,6 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
       if(params.hasOwnProperty("lat") && params.hasOwnProperty("lng")){
         this.zone.center=new LatLng(params.lat,params.lng)
       }else{
-
         $$("La zone n'est pas en parametre, on localise")
         try{
           await this.user.geoloc(this.geolocService,null,10000000)
@@ -176,7 +175,6 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
       }
     }
 
-    await this.user.login(this,"You must login to the blockchain to create a game","",false)
     try{
       await this.user.init_balance(this.api)
       this.hp_balance=this.user.get_balance(this.user.pv_token)

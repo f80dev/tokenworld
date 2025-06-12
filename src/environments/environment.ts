@@ -3,7 +3,7 @@ export const environment = {
   forum: "https://discord.gg/BfC2E2ent",
   mail: "contact@nfluent.io",
   telegram: "https://t.me/tokemon_world_official",
-  version: require('../../package.json').version + '-dev',
+  version: require('../../package.json').version,
 
   server: "http://localhost:5000",
   networks: [

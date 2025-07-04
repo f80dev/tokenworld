@@ -1,4 +1,4 @@
-//Version official 0.993 - 12/05/2025
+//Version official 0.993 - 03/07/2025
 
 import {
   Address, BigUIntValue,
@@ -34,19 +34,19 @@ export const walletConnectDeepLink = 'https://maiar.page.link/?apn=com.elrond.ma
 export async function mvx_api(url:string,params:string,api:any,network="devnet"): Promise<any[]> {
   //voir
   //return new Promise((resolve, reject) => {
-    network=network.replace("elrond-","")
-    let ep=getEntrypoint(network)
-    //let domain=ep.networkProvider.url
-    return ep.createNetworkProvider().doGetGeneric(url+(params.length>0 ? "?"+params : ""))
+  network=network.replace("elrond-","")
+  let ep=getEntrypoint(network)
+  //let domain=ep.networkProvider.url
+  return ep.createNetworkProvider().doGetGeneric(url+(params.length>0 ? "?"+params : ""))
 
-    // api._get(domain+"/"+url,params).subscribe({
-    //   next :(transactions:any)=>{
-    //     resolve(transactions)
-    //   },
-    //   error:(err:any)=>{
-    //     reject(err)
-    //   }
-    // })
+  // api._get(domain+"/"+url,params).subscribe({
+  //   next :(transactions:any)=>{
+  //     resolve(transactions)
+  //   },
+  //   error:(err:any)=>{
+  //     reject(err)
+  //   }
+  // })
   //})
 }
 
@@ -299,9 +299,7 @@ export function execute_transaction(transaction:Transaction,user:UserService,fun
 
           let rc=[]
           for(let result of transactionOnNetwork.smartContractResults){
-            //let data=result.data.toString()
-            //rc.push(atob(data))
-            rc.push(result.logs.events)
+            rc.push(atob(result.data.toString()))
           }
           resolve({values:rc,returnCode:"ok",returnMessage:"error"})
         } else {
@@ -356,7 +354,6 @@ export async function get_sc_balance(addr:string,network:string)  {
 export async function set_roles_to_collection(collection_id:string, user:UserService,type_collection:string="SFT",burn=false,update=false) {
   //voir https://docs.multiversx.com/tokens/nft-tokens/
   //
-  debugger
   const entrypoint=getEntrypoint(user.network)
   let factory = entrypoint.createTokenManagementTransactionsFactory();
 
@@ -599,7 +596,7 @@ export function get_token(identifier: string, api:any,network: string) {
 }
 
 
-export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amount="",nb_user=1) : Promise<{url:string,amount:number} | null> {
+export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amount="",nb_user=1) : Promise<{url:string,amount:number,error:string} | null> {
 
   //Permet le partage d'un token
   //vm doit contenir MatDialog, user
@@ -649,21 +646,26 @@ export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amoun
         wait_message(vm)
       }
 
-      $$("Id du vault "+id)
-      url=environment.share_appli+"?p="+setParams({vault:id,hash:"hash"+id},"","")
-      if(vm.user.isTestnet())url=url.replace("devnet.","testnet.")
-      if(vm.user.isMainnet())url=url.replace("devnet.","")
+      if(id.length>0){
+        $$("Id du vault "+id)
+        url=environment.share_appli+"?p="+setParams({vault:id,hash:"hash"+id},"","")
+        if(vm.user.isTestnet())url=url.replace("devnet.","testnet.")
+        if(vm.user.isMainnet())url=url.replace("devnet.","")
 
-      $$("url de partage "+url)
-      return {url:url,amount:Number(amount)}
+        $$("url de partage "+url)
+      }
+
+      return {url:url,amount:Number(amount),error:""}
 
     }catch (e:any){
       $$("Error ",e)
+      wait_message(vm)
+      return {url:"",amount:0,error:e.message}
     }
-    wait_message(vm)
+
   }
 
-  return null
+  return {url:"",amount:0,error:""}
 }
 
 

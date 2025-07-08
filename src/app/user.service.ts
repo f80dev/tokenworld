@@ -103,7 +103,11 @@ export class UserService {
 
   async init_idx(){
     if(this.address){
-      this.idx=Number(await query("get_idx_address",  [this.address],this.get_sc_address(),this.network))
+      try{
+        this.idx=Number(await query("get_idx_address",  [this.address],this.get_sc_address(),this.network))
+      }catch (e){
+
+      }
     }
   }
 

@@ -1,8 +1,8 @@
-//Version 0.2 - 01/04/2025
-import {Component, EventEmitter, Input, OnChanges,  OnInit, Output, SimpleChanges} from '@angular/core';
+//Version 0.3 - 07/07/2025
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {NetworkService} from "../network.service";
 import { NativeAuthClient } from "@multiversx/sdk-native-auth-client";
-import {$$, isEmail,  now,  showError, showMessage} from "../../tools";
+import {$$, getParams, isEmail, now, showError, showMessage} from "../../tools";
 
 import {environment} from "../../environments/environment";
 import {Location, NgIf} from "@angular/common";
@@ -35,6 +35,7 @@ import {HourglassComponent, wait_message} from "../hourglass/hourglass.component
 import {UserService} from "../user.service";
 import {XportalSwitchComponent} from "../xportal-switch/xportal-switch.component";
 import {get_chain_id, walletConnectDeepLink} from "../mvx";
+import {ActivatedRoute} from '@angular/router';
 
 //Installation de @multiversx/sdk-wallet-connect-provider via yarn add @multiversx/sdk-wallet-connect-provider
 
@@ -183,24 +184,26 @@ export class AuthentComponent implements OnInit,OnChanges {
       this.provider.init().then(()=>{
         if(this.showWalletConnect && this.directShowQRCode)this.open_wallet_connect()
       });
-
     }
-
-
   }
 
 
 
+  routes=inject(ActivatedRoute)
+  ngOnInit() {
 
-  ngOnInit(): void {
-
-    setTimeout(()=>{        //TODO : cet item doit passer dans l'update
+    setTimeout(async ()=>{        //TODO : cet item doit passer dans l'update
       this.api.server_nfluent=this.nfluent_server;
 
-
-      // if(this.network.indexOf("polygon")>-1){
-      // }
-
+      let params:any=await getParams(this.routes)
+      if(params.signature){
+        this.address=params.address
+        this.user.signature=params.signature
+        this.strong=true
+        this.network=localStorage.getItem("network") || "elrond-devnet"
+        this.init_provider_for_web_wallet(localStorage.getItem("service") || "xAlias")
+        this.success()
+      }
 
       this.address="";
       if(this.use_cookie)this.address=localStorage.getItem("authent_address") || "";
@@ -215,7 +218,6 @@ export class AuthentComponent implements OnInit,OnChanges {
         this.showWebcam = this.connexion.webcam
         this.showAddress = this.connexion.address
         this.showEmail=this.connexion.email
-
         this.showNfluentWalletConnect = this.connexion.nfluent_wallet_connect
       }
 
@@ -229,47 +231,7 @@ export class AuthentComponent implements OnInit,OnChanges {
       this.refresh();
       //Création d'un validateur nécéssaire pour le nfluent wallet connect
       let validator_name="val_"+now("rand")
-      // if(this.connexion.nfluent_wallet_connect && this.socket){
-      //   this.socket.on(validator_name,((data:any) => {
-      //     this.address=data.address;
-      //     this.success()
-      //   }))
-      // }
 
-      // if(this.operation.length>0){
-      //   $$("On utilise "+this.operation+" pour le paramétrage du module");
-      //   this.api.get_operations(this.operation).subscribe((ope)=> {
-      //     this._operation=ope;
-      //     this.showGoogle = ope.validate?.authentification.google || false;
-      //     this.showWebcam = ope.validate?.authentification.webcam || false;
-      //     this.showAddress = ope.validate?.authentification.address || false;
-      //     this.showNfluentWalletConnect = ope.validate?.authentification.nfluent_wallet_connect || false;
-      //     this.showWalletConnect=ope.validate?.authentification.wallet_connect || false;
-      //     this.showWebWallet=this.showWalletConnect
-      //     this.showExtensionWallet=this.showWalletConnect
-      //     this.showWalletConnect=ope.validate?.authentification.wallet_connect || false;
-      //
-      //     this.showEmail = ope.validate?.authentification.email || false;
-      //     this.checknft=get_in(ope,"validate.filters.collections",get_in(ope,"validate.collections",[]))
-      //     if(this.checknft.length==0){
-      //       //Recherche de collection dans les sources
-      //       for(let src of ope.data.sources){
-      //         this.checknft=get_in(src,"collection",get_in(src,"filter.collection",[]))
-      //         if(this.checknft.length>0)break
-      //       }
-      //       if(this.checknft.length==0){
-      //         //Recherche de collection dans le lazy_mining
-      //         for(let network of get_in(ope,"lazy_mining.networks",[])){
-      //           this.checknft=get_in(network,"collection",[])
-      //           if(this.checknft.length>0)break;
-      //         }
-      //       }
-      //     }
-      //     this.network=ope.network;
-      //     this.refresh();
-      //     }
-      //   )
-      // } else this.refresh();
 
       if(this.showWalletConnect && !this.showExtensionWallet && !this.showWebWallet){
         setTimeout(()=>{this.open_wallet_connect();},500)
@@ -283,14 +245,6 @@ export class AuthentComponent implements OnInit,OnChanges {
   open_wallet() {
     if(this.network.indexOf("elrond")>-1) {
       let callback_url=settings.appli + this._location.path().split("?")[0];
-      // let url_wallet=this.network.indexOf("devnet")==-1 ? WALLET_PROVIDER_MAINNET : WALLET_PROVIDER_DEVNET;
-      // new WalletProvider(url_wallet).login({
-      //   callbackUrl:callback_url
-      // }).then((result) => {
-      //   this.address = result;
-      //   this.strong = true;
-      //   this.onauthent.emit({address:this.address,strong:true,nftchecked:false});
-      // })
     }
   }
 
@@ -484,7 +438,7 @@ export class AuthentComponent implements OnInit,OnChanges {
         this.validate(wallet.address);
 
       } else {
-        this.strong=false;
+        this.strong=false
         this.oninvalid.emit(false);
       }
     } catch (e){
@@ -495,11 +449,9 @@ export class AuthentComponent implements OnInit,OnChanges {
   }
 
 
-
-  async open_web_wallet(service="standard"){
-    //tag webwallet open_webwallet
-    //https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-web-wallet-provider
+  init_provider_for_web_wallet(service:string){
     let connexion_mode=WALLET_PROVIDER_MAINNET
+
     if(this.network.indexOf("devnet")>-1)connexion_mode=WALLET_PROVIDER_DEVNET
     if(this.network.indexOf("testnet")>-1)connexion_mode=WALLET_PROVIDER_TESTNET
     if(service=="xAlias"){
@@ -510,12 +462,24 @@ export class AuthentComponent implements OnInit,OnChanges {
 
     this.provider=new WalletProvider(connexion_mode)
     this.provider.redirectDelayMilliseconds=30000
+
+  }
+
+
+  async open_web_wallet(service="standard"){
+    //tag webwallet open_webwallet
+    //https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-signing-providers/#the-web-wallet-provider
+
+    this.init_provider_for_web_wallet(service)
     this.user.native_token=await this.createNativeAuthInitialPart()
     localStorage.setItem("nativeAuthInitialPart",this.user.native_token)
 
+    localStorage.setItem("network",this.network)
     let current_url=document.location.href
+
     const callback_url = this.callback=="" ? encodeURIComponent(current_url) : encodeURIComponent(this.callback)
     try{
+      localStorage.setItem("service",service)
       let address=await this.provider.login({callback_url,token:this.user.native_token})
 
       this.strong=address.length>0;
@@ -530,6 +494,7 @@ export class AuthentComponent implements OnInit,OnChanges {
       $$("Connexion web wallet ok "+address)
 
     } catch (e) {
+      debugger
       this.strong=false;
       this.oninvalid.emit(false)
     }

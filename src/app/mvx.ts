@@ -1,4 +1,4 @@
-//Version official 0.993 - 03/07/2025
+//Version official 0.994 - 07/07/2025
 
 import {
   Address, BigUIntValue,
@@ -58,13 +58,6 @@ export function network_config(network="") : Promise<any> {
 }
 
 
-
-
-export async function get_nft(identifier: string, api:any,network: string) {
-  //voir https://api.multiversx.com/#/nfts/NftController_getNft
-  let rc:any=await mvx_api("nfts/" + identifier,"",api,network)
-  return rc
-}
 
 
 export function is_image(url:string) {
@@ -354,6 +347,7 @@ export async function get_sc_balance(addr:string,network:string)  {
 export async function set_roles_to_collection(collection_id:string, user:UserService,type_collection:string="SFT",burn=false,update=false) {
   //voir https://docs.multiversx.com/tokens/nft-tokens/
   //
+  debugger
   const entrypoint=getEntrypoint(user.network)
   let factory = entrypoint.createTokenManagementTransactionsFactory();
 
@@ -589,14 +583,22 @@ export async function init_user_for_web_wallet(user:UserService,addr:string,sign
 
 
 
-export function get_token(identifier: string, api:any,network: string) {
+
+export async function get_nft(identifier: string, api:any,network: string) {
   //voir https://api.multiversx.com/#/nfts/NftController_getNft
-  let rc:any= mvx_api("/tokens/" + identifier,"",api,network)
+  let rc:any=await mvx_api("nfts/" + identifier,"",api,network)
   return rc
 }
 
 
-export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amount="",nb_user=1) : Promise<{url:string,amount:number,error:string} | null> {
+export async function get_token(identifier: string, api:any,network: string) {
+  //voir https://api.multiversx.com/#/nfts/NftController_getNft
+  let rc:any= await mvx_api("tokens/" + identifier,"",api,network)
+  return rc
+}
+
+
+export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amount="",nb_user=1) : Promise<{url:string,amount:number} | null> {
 
   //Permet le partage d'un token
   //vm doit contenir MatDialog, user
@@ -646,26 +648,21 @@ export async function share_token_wallet(vm:any,token: any,cost=0.0003,str_amoun
         wait_message(vm)
       }
 
-      if(id.length>0){
-        $$("Id du vault "+id)
-        url=environment.share_appli+"?p="+setParams({vault:id,hash:"hash"+id},"","")
-        if(vm.user.isTestnet())url=url.replace("devnet.","testnet.")
-        if(vm.user.isMainnet())url=url.replace("devnet.","")
+      $$("Id du vault "+id)
+      url=environment.share_appli+"?p="+setParams({vault:id,hash:"hash"+id},"","")
+      if(vm.user.isTestnet())url=url.replace("devnet.","testnet.")
+      if(vm.user.isMainnet())url=url.replace("devnet.","")
 
-        $$("url de partage "+url)
-      }
-
-      return {url:url,amount:Number(amount),error:""}
+      $$("url de partage "+url)
+      return {url:url,amount:Number(amount)}
 
     }catch (e:any){
       $$("Error ",e)
-      wait_message(vm)
-      return {url:"",amount:0,error:e.message}
     }
-
+    wait_message(vm)
   }
 
-  return {url:"",amount:0,error:""}
+  return null
 }
 
 

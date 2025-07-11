@@ -1,4 +1,4 @@
-//Version official 0.994 - 07/07/2025
+//Version official 0.995 - 10/07/2025
 
 import {
   Address, BigUIntValue,
@@ -243,7 +243,11 @@ export function create_transaction(function_name:string,args:any[],
       })
       transaction=fact.createTransactionForExecute(Address.newFromBech32(user.address),option)
       transaction.nonce=nonce
-      transaction=await user.provider.signTransaction(transaction)
+      if(user.pem_account){
+        transaction.signature=await user.provider.signTransaction(transaction)
+      }else{
+        transaction=await user.provider.signTransaction(transaction)
+      }
     }
     resolve(transaction)
 

@@ -79,6 +79,7 @@ export class UserService {
   balance: number=0
   native_token: any;
   ihm_level: number=0
+  pem_account:any
 
   constructor() { }
 

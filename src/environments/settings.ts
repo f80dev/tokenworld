@@ -1,12 +1,11 @@
 export const settings={
-  contract_addr:"erd1qqqqqqqqqqqqqpgq6v9a27zs4gf5zkrlxd3u04s7aljzn7q5835spvdqer",
+  contract_addr:"erd1qqqqqqqqqqqqqpgqprlqk8e6cj5w6nxytf9ehjc47f54kx7k835s9zq422",
   ihm_level:2,
-  appname: "TOKEMON World (Testnet)",
-  appli:"https://testnet.tokemon.af10.fr",
-  network: "elrond-testnet",
-  nft_builder:"https://testnet.nftnow.af10.fr/?address="
+  appname: "TOKEMON World (beta)",
+  appli:"https://devnet.tokemon.af10.fr",
+  network: "elrond-devnet",
+  nft_builder:"https://devnet.nftnow.af10.fr/?address="
 }
-
 
 export const abi={
   "buildInfo": {

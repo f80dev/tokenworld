@@ -32,11 +32,13 @@
 
   </div>
 
-  <br>
 
-  <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
-                    style="margin-bottom: 5px;"
-                    [(ngModel)]="random_location">Everywhere in the game aera</mat-slide-toggle>
+  <br>
+  <app-input *ngIf="max_quantity>1" value_type="slide" [min]="1" [max]="max_quantity"
+             label="Number to drop" unity="NFT"
+             (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
+             (valueChange)="quantity=$event" [value]="quantity"></app-input>
+
 
   <br>
   <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
@@ -47,6 +49,8 @@
 <!--         [style.margin-left]="-user.visibility*ech/2+'px'" >-->
 <!--    </div>-->
   </div>
+
+
 
   <div *ngIf="message==''">
     <app-wallet [user]="user"
@@ -60,10 +64,9 @@
 
     <div class="zone_input" *ngIf="sel_nft">
 
-      <app-input *ngIf="max_quantity>1" value_type="slide" [min]="1" [max]="max_quantity"
-                 label="Number to drop" unity="NFT"
-                 (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
-                 (valueChange)="quantity=$event" [value]="quantity"></app-input>
+      <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
+                        style="margin-bottom: 5px;"
+                        [(ngModel)]="random_location">Everywhere in the game aera</mat-slide-toggle>
 
       <br>
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"

@@ -410,21 +410,29 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
   }
 
 
+  center_in_the_game_zone(){
+    showMessage(this,"Center in the middle of the game zone")
+    let zone=this.user.game
+    let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
+    let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)
+
+    let center_lat=(ne.lat+sw.lat)/2
+    let center_lng=(ne.lng+sw.lng)/2
+    this.user.center_map=new L.LatLng(center_lat,center_lng)
+  }
 
   async recenter() {
-    if(!this.user.game?.geoloc_to_catch && !is_in(this.user.center_map,this.user.game!)){
-      let zone=this.user.game
-      let ne=cartesianToPolar(zone!.ne,environment.scale_factor,environment.translate_factor)
-      let sw=cartesianToPolar(zone!.sw,environment.scale_factor,environment.translate_factor)
-
-      let center_lat=(ne.lat+sw.lat)/2
-      let center_lng=(ne.lng+sw.lng)/2
-      this.user.center_map=new L.LatLng(center_lat,center_lng)
+    $$("Recentrage")
+    if(this.user.game?.geoloc_to_catch || is_in(this.user.center_map,this.user.game!)){
+      this.center_in_the_game_zone()
     }else{
+      debugger
       showMessage(this,"Center of the map on your location")
       await this.refresh_geoloc()
       if(this.user.loc.coords.latitude+this.user.loc.coords.longitude!=0){
         this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+      }else{
+        this.center_in_the_game_zone()
       }
     }
     this.map!.setView(this.user.center_map,this.user.zoom)

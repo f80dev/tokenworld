@@ -284,7 +284,7 @@ export class DropComponent implements AfterViewInit {
   update_occurence() : boolean {
     if(this.user.game){
       if(this.user.idx==this.user.game.owner)return true;
-      if(this.quantity<this.user.game.max_per_user && this.quantity<Number(this.sel_nft.balance)){
+      if(this.quantity<Number(this.user.game.max_per_user) && this.quantity<=Number(this.sel_nft.balance)){
         return true
       }else{
         showMessage(this,'Quantity is too high')

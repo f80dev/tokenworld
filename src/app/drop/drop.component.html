@@ -34,9 +34,10 @@
 
 
   <br>
-  <app-input *ngIf="max_quantity>1" value_type="slide" [min]="1" [max]="max_quantity"
+  <app-input *ngIf="max_quantity>1 && message==''" value_type="slide" [min]="1" [max]="max_quantity"
              label="Number to drop" unity="NFT"
-             (focusout)="update_occurence()" style="width:80%;max-width: 400px;"
+             (focusout)="update_occurence()"
+             style="display:inline-block;width:80%;max-width: 600px;"
              (valueChange)="quantity=$event" [value]="quantity"></app-input>
 
 
@@ -62,19 +63,25 @@
     </app-wallet>
     <br>
 
+    <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
+                      style="margin-bottom: 5px;"
+                      [(ngModel)]="random_location">Everywhere in the game aera</mat-slide-toggle>
+
+    <br>
+
     <div class="zone_input" *ngIf="sel_nft">
 
-      <mat-slide-toggle *ngIf="sel_nft && message.length==0 && (!user.game!.geoloc_to_drop || user.game!.owner==user.idx)" (toggleChange)="diffusion=0;"
-                        style="margin-bottom: 5px;"
-                        [(ngModel)]="random_location">Everywhere in the game aera</mat-slide-toggle>
 
-      <br>
+
+
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"
                  [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"
                  label="Visibility" unity="meters"
                  [help]="'From '+user.game.min_visibility/environment.scale_factor+' to '+user.game.max_visibility/environment.scale_factor"
                  (focusout)="check_visibility()"
                  (valueChange)="this.visibility=$event" [value]="visibility"></app-input>
+
+      <br>
 
       <app-input *ngIf="quantity>1 && !random_location" value_type="number"
                  label="Distance around target" unity="meters"

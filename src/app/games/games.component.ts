@@ -169,9 +169,15 @@ export class GamesComponent implements OnInit {
   async transfer_to_owner(game: Game) {
     wait_message(this,"Transfer all tokemons to owner")
     try{
-      let rc:any=await send_transaction_with_transfers(this.user,"restore_to_owners", [game.id,100],[],environment.max_gaz)
+      let rc:any=await send_transaction_with_transfers(this.user,"restore_to_owners", [game.id,200],[],environment.max_gaz)
       if(rc.returnMessage=="ok"){
-        showMessage(this,"Il reste quelques tokemons "+rc.values[0])
+        let tokemon_in_game=Number(rc.values[0])
+        if(tokemon_in_game>0){
+          showMessage(this,"He's staying "+tokemon_in_game+" tokemon in the game")
+        }else{
+          showMessage(this,"This zone is empty, you can delete them")
+        }
+
       }
     }catch(e:any){
       showMessage(this,e.message)

@@ -108,13 +108,19 @@ export class CaptureComponent implements OnInit {
           func_name,
           args,
           tokens);
-        $$("Resultat ",rc)
-        captured_tokemon=rc.values[0]
-        if(func_name=="capture") {
-          showMessage(this, captured_tokemon.owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+
+        if(rc.returnCode=="ok"){
+          $$("Resultat ",rc)
+          captured_tokemon=rc.values[0]
+          if(func_name=="capture") {
+            showMessage(this, captured_tokemon.owner == this.user.idx ? "You win the fight" : "Sorry, you loose the fight")
+          }else{
+            showMessage(this,"The tokemon return to your wallet as an NFT. You recover its HP and bag")
+          }
         }else{
-          showMessage(this,"The tokemon return to your wallet as an NFT. You recover its HP and bag")
+          showMessage(this,"Technical error, please try again")
         }
+
       } catch (e){
         showMessage(this,"Technical problem, please try again")
       }

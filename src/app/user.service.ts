@@ -330,10 +330,12 @@ export class UserService {
             game.bbox=ne.lat+","+ne.lng+","+sw.lat+","+sw.lng
             game.min_distance_to_refresh_map=Math.max(distance(ne,sw)/10000,20)
             game.bank=Number(await query("stocks", [game.id],this.get_sc_address(),this.network))
+            //game.tokemons=await query("get_all_tokemon_of_game",[game.id,0],this.get_sc_address(),this.network)
 
             if(!welcome_pack_filter || game.welcome_pack>0)rc.push(game)
           }
         }
+
       }
 
       for(let i=0;i<rc.length;i++){

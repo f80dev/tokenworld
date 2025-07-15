@@ -5,7 +5,7 @@
       <mat-icon (click)="open_nft()"
                 [title]="item.identifier || item.nft">visibility</mat-icon>
       {{tokemon!.name.toUpperCase()}}
-      <span *ngIf="tokemon && tokemon.balance>1">({{tokemon!.balance}})</span>
+      <span *ngIf="item.nft.balance>1">({{item.nft.balance}})</span>
     </div>
     <div style="flex-grow: 1;"></div>
     <div *ngIf="item.pv>0">{{item.pv}} {{label_pv}}</div>

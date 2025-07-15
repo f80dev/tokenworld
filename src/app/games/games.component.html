@@ -6,7 +6,7 @@
   </app-hourglass>
 
   <br><br>
-  <button mat-raised-button (click)="create_game()">
+  <button *ngIf="message==''" mat-raised-button (click)="create_game()">
     <mat-icon>add_circle</mat-icon>Create Game
   </button>
 
@@ -58,7 +58,7 @@
 
 
           <mat-icon style="margin-left:5px;color:orangered;"
-                    [title]="'you received '+game.welcome_pack+' HP if you enter in this game'"
+                    [title]="'you received '+game.welcome_pack+' HP if you fight a tokemon or drop one'"
                     *ngIf="game.welcome_pack>0">diamond_shine</mat-icon>
 
         </mat-expansion-panel-header>

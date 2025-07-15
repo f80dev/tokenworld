@@ -34,7 +34,7 @@
 
 
   <br>
-  <app-input *ngIf="max_quantity>1 && message==''" value_type="slide" [min]="1" [max]="max_quantity"
+  <app-input *ngIf="sel_nft && max_quantity>1 && message==''" value_type="slide" [min]="1" [max]="max_quantity"
              label="Number to drop" unity="NFT"
              (focusout)="update_occurence()"
              style="display:inline-block;width:80%;max-width: 600px;"

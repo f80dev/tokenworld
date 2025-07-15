@@ -1,4 +1,4 @@
-//Version official 0.995 - 10/07/2025
+//Version official 0.996 - 15/07/2025
 
 import {
   Address, BigUIntValue,
@@ -296,9 +296,10 @@ export function execute_transaction(transaction:Transaction,user:UserService,fun
 
           let rc=[]
           for(let result of transactionOnNetwork.smartContractResults){
-            rc.push(atob(result.data.toString()))
+            $$("data to analyse ",(result.data.toString()))
+            rc.push(result.data.toString())
           }
-          resolve({values:rc,returnCode:"ok",returnMessage:"error"})
+          resolve({values:rc,returnCode:"ok",returnMessage:"ok"})
         } else {
           reject(e.message)
         }

@@ -41,14 +41,7 @@ export class UserService {
   lang="fr"
   nonce:number=0
 
-  loc:GeolocationPosition={coords: {
-      latitude: 0, longitude: 0,
-      accuracy: 0,
-      altitude: 0,
-      altitudeAccuracy: 0,
-      heading: 0,
-      speed: 0
-    }, timestamp: 0}
+  loc:GeolocationPosition | null=null
 
   expert_mode:boolean=false
   center_map: LatLng=new LatLng(0,0)
@@ -140,8 +133,8 @@ export class UserService {
         if(loc.coords.accuracy<Number(accuracy_limit)){
           this.loc=loc
           $$("GéoLocalisation en ",this.loc)
-          $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc.coords.latitude,this.loc.coords.longitude),environment.scale_factor,environment.translate_factor))
-          let position=new LatLng(this.loc.coords.latitude,this.loc.coords.longitude)
+          $$("Convertion en cartésienne ",polarToCartesian(new LatLng(this.loc!.coords.latitude,this.loc!.coords.longitude),environment.scale_factor,environment.translate_factor))
+          let position=new LatLng(this.loc!.coords.latitude,this.loc!.coords.longitude)
           if(marker)marker.setLatLng(position)
           resolve(position)
         }else{

@@ -1,4 +1,4 @@
-//Version official 0.996 - 15/07/2025
+//Version official 0.996 - 26/07/2025
 
 import {
   Address, BigUIntValue,
@@ -212,7 +212,7 @@ export function create_transaction(function_name:string,args:any[],
                                    user:UserService,tokens_to_transfer: TokenTransfer[],
                                    contract_addr="",abi:any={},gasLimit=50000000n,cost=0) : Promise<Transaction>  {
 
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve,reject) => {
     const entrypoint = getEntrypoint(user.network)
 
     if(contract_addr=="")contract_addr=user.get_sc_address()
@@ -246,7 +246,11 @@ export function create_transaction(function_name:string,args:any[],
       if(user.pem_account){
         transaction.signature=await user.provider.signTransaction(transaction)
       }else{
-        transaction=await user.provider.signTransaction(transaction)
+        try{
+          transaction=await user.provider.signTransaction(transaction)
+        }catch(e:any){
+           reject(e)
+        }
       }
     }
     resolve(transaction)
@@ -318,16 +322,15 @@ export function send_transaction_with_transfers(user:UserService,function_name:s
 
     $$("Appel de "+function_name+" avec les arguments "+args.join(" , "))
     if(tokens_to_transfer.length>0)$$(" ... avec transfert de token")
-    let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,contract_addr,abi,gasLimit)
-
-    await user.refresh()
 
     try{
-      resolve(await execute_transaction(transaction,user,function_name))
+      let transaction = await create_transaction(function_name,args,user,tokens_to_transfer,contract_addr,abi,gasLimit)
+      await user.refresh()
+      let r=await execute_transaction(transaction,user,function_name)
+      resolve(r)
     }catch (e){
       reject(e)
     }
-
   })
 }
 

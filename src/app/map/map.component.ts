@@ -431,8 +431,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
       debugger
       showMessage(this,"Center of the map on your location")
       await this.refresh_geoloc()
-      if(this.user.loc.coords.latitude+this.user.loc.coords.longitude!=0){
-        this.user.center_map=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+      if(this.user.loc!.coords.latitude+this.user.loc!.coords.longitude!=0){
+        this.user.center_map=new LatLng(this.user.loc!.coords.latitude,this.user.loc!.coords.longitude)
       }else{
         this.center_in_the_game_zone()
       }

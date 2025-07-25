@@ -163,7 +163,7 @@ export class CreateWorldComponent implements OnInit {
         $$("La zone n'est pas en parametre, on localise")
         try{
           await this.user.geoloc(this.geolocService,null,10000000)
-          this.zone.center=new LatLng(this.user.loc.coords.latitude,this.user.loc.coords.longitude)
+          this.zone.center=new LatLng(this.user.loc!.coords.latitude,this.user.loc!.coords.longitude)
         }catch(e:any){
           showMessage(this,e)
           this.zone.center=new LatLng(48,2)
@@ -384,8 +384,14 @@ export class CreateWorldComponent implements OnInit {
 
 
   async recenter() {
-    let pos=await this.user.geoloc(this.geolocService)
-    this.map.setView(pos,this.user.zoom)
+    try{
+      let pos=await this.user.geoloc(this.geolocService,this.me_marker,150000)
+      this.map.setView(pos,this.user.zoom)
+    }catch (e:any){
+      this.user.zoom=8
+      showMessage(this,e)
+    }
+
   }
 
   enter_game(){

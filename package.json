@@ -1,6 +1,6 @@
 {
   "name": "tokemonworld",
-  "version": "0.0.204",
+  "version": "0.0.205",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl true",
@@ -34,7 +34,6 @@
     "@multiversx/sdk-wallet": "4.6.0",
     "@multiversx/sdk-wallet-connect-provider": "^6.0.2",
     "@multiversx/sdk-web-wallet-provider": "5.0.0",
-
     "@mysten/sui": "^1.28.2",
     "@octokit/rest": "^21.0.0",
     "@tusky-io/ts-sdk": "^0.29.0",

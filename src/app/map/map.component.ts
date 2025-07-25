@@ -421,6 +421,8 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     this.user.center_map=new L.LatLng(center_lat,center_lng)
   }
 
+
+
   async recenter() {
     $$("Recentrage")
     if(this.user.game?.geoloc_to_catch || is_in(this.user.center_map,this.user.game!)){

@@ -62,7 +62,7 @@ import {_prompt} from '../prompt/prompt.component';
   templateUrl: './create-world.component.html',
   styleUrl: './create-world.component.css'
 })
-export class CreateWorldComponent implements OnInit,AfterViewInit {
+export class CreateWorldComponent implements OnInit {
 
   routes=inject(ActivatedRoute)
   clipboard=inject(Clipboard)
@@ -110,6 +110,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
   min_pv: number=0
   max_pv: number=100
   hp_balance=0
+  me_marker: Marker | null=null
 
   max_per_user: number = 30;
   tokemon_vision: boolean=false;
@@ -132,12 +133,8 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
     $$("Mise a jour de la zone ",this.zone)
   }
 
-  @ViewChild('input_title') input_title: ElementRef | undefined
-  ngAfterViewInit(): void {
-    //TODO corriger car ne fonctionne pas
-    //this.input_title?.nativeElement.focus()
-  }
 
+  @ViewChild('input_title') input_title: ElementRef | undefined
 
 
 
@@ -185,7 +182,7 @@ export class CreateWorldComponent implements OnInit,AfterViewInit {
     try{
       $$("Initialisation de la carte avec ",this.zone)
       this.map = L.map('map', {keyboard: true, scrollWheelZoom: true})
-      initializeMap(this, this.zone, this.zone.center, "");
+      initializeMap(this, this.zone, this.zone.center);
       if(this.map){
         $$("Positionnement des evenements")
         this.map

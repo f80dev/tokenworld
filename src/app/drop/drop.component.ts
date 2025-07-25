@@ -78,6 +78,8 @@ export class DropComponent implements AfterViewInit {
     if(this.diffusion && this.diffusion>0)this.circle?.setRadius(this.diffusion)
   }
 
+
+
   async ngAfterViewInit() {
     setTimeout(async ()=>{
       let params: any = await getParams(this.routes)

@@ -44,11 +44,6 @@
   <br>
   <div class="map_style" [style.display]="random_location || !sel_nft || message.length>0 ? 'none' : 'inline-block'">
     <div id="map" style="position: absolute;left:0;top:0;right: 0;bottom:0;z-index: 0;"></div>
-<!--    <div class="disk" [style.width]="user.visibility*ech+'px'"-->
-<!--         [style.height]="user.visibility*ech+'px'"-->
-<!--         [style.margin-top]="-user.visibility*ech/2+'px'"-->
-<!--         [style.margin-left]="-user.visibility*ech/2+'px'" >-->
-<!--    </div>-->
   </div>
 
 
@@ -70,9 +65,6 @@
     <br>
 
     <div class="zone_input" *ngIf="sel_nft">
-
-
-
 
       <app-input value_type="number" *ngIf="user.game && user.game.user_visibility"
                  [min]="user.game!.min_visibility" [max]="user.game!.max_visibility"

@@ -52,9 +52,11 @@
 
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>GPS accuracy</mat-expansion-panel-header>
-      <button mat-raised-button (click)="run_gps()">Test</button>
+      <button mat-raised-button (click)="run_gps()">Refresh</button>
       <br>
-      {{user.accuracy | number:'1.0-0'}} meters
+      <div *ngIf="user.accuracy>0">{{user.accuracy | number:'1.0-0'}} meters</div>
+      <div *ngIf="user.accuracy==0">{{user.geoloc_error}}</div>
+
     </mat-expansion-panel>
 
   </mat-accordion>

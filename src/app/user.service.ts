@@ -18,6 +18,7 @@ import {Location} from '@angular/common';
 import {DeviceService} from './device.service';
 import {Connexion} from '../operation';
 import {abi, settings} from '../environments/settings';
+import {GeolocService} from './geoloc.service';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,7 @@ export class UserService {
   ihm_level: number=0
   pem_account:any
   accuracy=0
+  geoloc_error=""
 
   constructor() { }
 
@@ -126,7 +128,7 @@ export class UserService {
 
 
 
-  geoloc(geolocService:any,marker:L.Marker | null=null,accuracy_limit=10000) : Promise<LatLng> {
+  geoloc(geolocService:GeolocService,marker:L.Marker | null=null,accuracy_limit=10000) : Promise<LatLng> {
     return new Promise(async (resolve, reject) => {
       try{
         $$("Demande de localisation")
@@ -143,8 +145,19 @@ export class UserService {
           $$("précision insufisante ",loc.coords.accuracy)
           reject("Not enought accuracy")
         }
-      }catch (e){
-        reject("Geoloc non authorized")
+      }catch (e:any){
+        switch(e.code) {
+          case e.PERMISSION_DENIED:
+            reject("User refused geoloc");
+            break;
+          case e.POSITION_UNAVAILABLE:
+            reject("Position unavailable");
+            break;
+          case e.TIMEOUT:
+            reject("Position timeout");
+            break;
+        }
+        reject("Geoloc unavailable")
       }
     })
   }

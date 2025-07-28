@@ -51,7 +51,7 @@ export class SettingsComponent implements OnInit {
   games: Game[] = [];
   max_pv_loading: number=0
   lifepoint: number=1
-  message: string=""
+  message=""
   sc_settings: any
   tokemons: Tokemon[] = [];
 
@@ -135,7 +135,14 @@ export class SettingsComponent implements OnInit {
     this.router.navigate(["games"],{queryParams:{autoconnect:true,game:tokemon.game}})
   }
 
-  run_gps() {
-    this.user.geoloc(this.geolocservice,null,10000000)
+  async run_gps() {
+    wait_message(this,"Localisation running ...")
+    try{
+      await this.user.geoloc(this.geolocservice,null,10000000)
+    } catch (e:any){
+      this.user.accuracy=0
+      this.user.geoloc_error=e
+    }
+    wait_message(this)
   }
 }

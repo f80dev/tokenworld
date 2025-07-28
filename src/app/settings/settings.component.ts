@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {WalletComponent} from '../wallet/wallet.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
 import {get_nft, query, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
@@ -23,6 +23,7 @@ import {GeolocService} from '../geoloc.service';
   standalone: true,
   imports: [
     WalletComponent,
+    DecimalPipe,
     NgForOf,
     MatButton,
     NgIf,

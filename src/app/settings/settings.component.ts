@@ -16,7 +16,7 @@ import {setParams, showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
 import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
-import {settings} from '../../environments/settings';
+import {GeolocService} from '../geoloc.service';
 
 @Component({
   selector: 'app-settings',
@@ -45,6 +45,7 @@ export class SettingsComponent implements OnInit {
   user=inject(UserService)
   dialog=inject(MatDialog)
   api=inject(ApiService)
+  geolocservice=inject(GeolocService)
   sel_to_reload: any;
   games: Game[] = [];
   max_pv_loading: number=0
@@ -131,5 +132,9 @@ export class SettingsComponent implements OnInit {
 
   open_game(tokemon: Tokemon) {
     this.router.navigate(["games"],{queryParams:{autoconnect:true,game:tokemon.game}})
+  }
+
+  run_gps() {
+    this.user.geoloc(this.geolocservice,null,10000000)
   }
 }

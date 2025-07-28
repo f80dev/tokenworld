@@ -50,6 +50,13 @@
       </table>
     </mat-expansion-panel>
 
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>GPS accuracy</mat-expansion-panel-header>
+      <button mat-raised-button (click)="run_gps()">Test</button>
+      <br>
+      {{user.accuracy}} meters
+    </mat-expansion-panel>
+
   </mat-accordion>
 
 

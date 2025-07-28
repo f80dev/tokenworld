@@ -73,6 +73,7 @@ export class UserService {
   native_token: any;
   ihm_level: number=0
   pem_account:any
+  accuracy=0
 
   constructor() { }
 
@@ -130,6 +131,7 @@ export class UserService {
       try{
         $$("Demande de localisation")
         let loc=await geolocService.getCurrentPosition()
+        this.accuracy=loc.coords.accuracy
         if(loc.coords.accuracy<Number(accuracy_limit)){
           this.loc=loc
           $$("GéoLocalisation en ",this.loc)

@@ -59,6 +59,9 @@
 
         Visibility : {{game!.min_visibility/environment.scale_factor}} to {{game!.max_visibility/environment.scale_factor}}m<br>
         Move : {{game!.min_distance/environment.scale_factor}} to {{game!.max_distance/environment.scale_factor}}m
+
+        <br>
+        <div *ngIf="game!.geoloc_to_drop || game!.geoloc_to_catch">GPS accuracy required: {{game!.gps_tolerance}} meters</div>
       </div>
     </mat-expansion-panel>
   </div>

@@ -55,7 +55,10 @@
                     class="clignotant">play_circle</mat-icon>
 
           <span style="font-family: 'Luckiest Guy', cursive;font-weight: lighter;font-size: x-large;">{{game.title}}</span>
-
+          <mat-icon title="GPS accuracy is not enought for this game" style="margin-left: 5px;"
+                    *ngIf="(game.geoloc_to_catch || game.geoloc_to_drop) && user.accuracy>game.gps_tolerance">
+            warning
+          </mat-icon>
 
           <mat-icon style="margin-left:5px;color:orangered;"
                     [title]="'you received '+game.welcome_pack+' HP if you fight a tokemon or drop one'"

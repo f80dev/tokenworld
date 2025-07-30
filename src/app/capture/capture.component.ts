@@ -6,7 +6,7 @@ import {TokemonComponent} from '../tokemon/tokemon.component';
 import {UserService} from '../user.service';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {get_nft, query, send_transaction_with_transfers} from '../mvx';
+import {createTokenTransfer, get_nft, query, send_transaction_with_transfers} from '../mvx';
 import {MatDialog} from '@angular/material/dialog';
 import {DecimalPipe, Location, NgIf} from '@angular/common';
 import {InputComponent} from '../input/input.component';
@@ -101,7 +101,7 @@ export class CaptureComponent implements OnInit {
         let args=[this.user.game.id,Number(this.item.id),this.target.x,this.target.y,this.target.z]
         wait_message(this, func_name=='capture' ? "Fighting ... " : "Capturing ...")
         let tokens=[]
-        if(this.pv_to_engage>0)tokens.push(TokenTransfer.fungibleFromAmount(this.user.pv_token,this.pv_to_engage,18))
+        if(this.pv_to_engage>0)tokens.push(createTokenTransfer(this.user.pv_token,this.pv_to_engage)[0])
         $$("Appel de la "+func_name+" with ",args)
         let rc:any = await send_transaction_with_transfers(
           this.user,

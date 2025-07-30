@@ -7,7 +7,7 @@ import {MatButton} from '@angular/material/button';
 import {environment} from '../../environments/environment';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
-import {send_transaction_with_transfers} from '../mvx';
+import {createTokenTransfer, send_transaction_with_transfers} from '../mvx';
 import {getParams, showError, showMessage} from '../../tools';
 import {initializeMap, polarToCartesian} from '../tokenworld';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -85,7 +85,7 @@ export class AirdropComponent implements AfterViewInit {
       let tokens=[]
       let identifier=this.sel_coin.identifier
       if(identifier=="xEGLD")identifier="EGLD"
-      tokens.push(TokenTransfer.fungibleFromAmount(identifier,this.amount_to_drop,18))
+      tokens.push(createTokenTransfer(identifier,this.amount_to_drop)[0])
 
       try {
         let tx = await send_transaction_with_transfers(

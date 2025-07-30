@@ -63,8 +63,8 @@ export class GamesComponent implements OnInit {
   show_my_games = false;
   message = "";
   geolocService = inject(GeolocService)
-  show_nearest_zone: boolean = true;
-  show_with_welcome_pack: boolean = false;
+  show_nearest_zone: boolean = true
+  show_with_welcome_pack: boolean = false
 
 
   async refresh() {

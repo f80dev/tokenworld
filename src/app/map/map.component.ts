@@ -428,7 +428,6 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
     if(this.user.game?.geoloc_to_catch || is_in(this.user.center_map,this.user.game!)){
       this.center_in_the_game_zone()
     }else{
-      debugger
       showMessage(this,"Center of the map on your location")
       await this.refresh_geoloc()
       if(this.user.loc!.coords.latitude+this.user.loc!.coords.longitude!=0){

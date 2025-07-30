@@ -1,4 +1,4 @@
-//Version official 0.996 - 26/07/2025
+//Version official 0.997 - 31/07/2025
 
 import {
   Address, BigUIntValue,
@@ -133,22 +133,17 @@ export function address_from_pem(pemText:string) : string {
 
 export function toAddress(addr:string) : Address {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13/
-  return Address.fromBech32(addr)
+  return Address.newFromBech32(addr)
 }
 
 
 
-export function toAccount(addr:string,network:string="elrond-devnet") : Promise<AccountOnNetwork> {
+export function toAccount(addr:string,network:string="elrond-devnet")  {
   //voir https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-v13/#synchronizing-an-account-object
-  return new Promise(async (resolve, reject) => {
-    try{
       network=network.indexOf("devnet")>-1 ? DEVNET : (network.indexOf("testnet")>-1 ? TESTNET : MAINNET)
       if(network.endsWith("/"))network=network.substring(0,network.length-1)
-      resolve(await new ApiNetworkProvider(network).getAccount(toAddress(addr)))
-    }catch (e) {
-      reject(e)
-    }
-  })
+      let a=Address.newFromBech32(addr)
+      return(getEntrypoint(network).createNetworkProvider().getAccount(a))
 }
 
 
@@ -241,10 +236,12 @@ export function create_transaction(function_name:string,args:any[],
         config:new TransactionsFactoryConfig({chainID:chain_id}),
         abi: await create_abi(abi)
       })
-      transaction=fact.createTransactionForExecute(Address.newFromBech32(user.address),option)
+      transaction=await fact.createTransactionForExecute(Address.newFromBech32(user.address),option)
       transaction.nonce=nonce
       if(user.pem_account){
-        transaction.signature=await user.provider.signTransaction(transaction)
+        debugger
+        //TODO probleme a régler
+        //transaction.signature=await user.provider.signTransaction(transaction)
       }else{
         try{
           transaction=await user.provider.signTransaction(transaction)
@@ -335,6 +332,14 @@ export function send_transaction_with_transfers(user:UserService,function_name:s
 }
 
 
+export function createTokenTransfer(token_identifier:string,amount:number,quantity=18)  {
+  let tokens=[
+    new TokenTransfer({token:new Token({identifier:token_identifier}),amount:BigInt(amount)})
+  ]
+  return tokens
+}
+
+
 export function toText(array:Uint8Array) : string {
   return new TextDecoder('utf-8').decode(array)
 }
@@ -360,7 +365,7 @@ export async function set_roles_to_collection(collection_id:string, user:UserSer
   let factory = entrypoint.createTokenManagementTransactionsFactory();
 
   $$("Affectation des roles sur la collection "+collection_id+" de type "+type_collection)
-  let setRoleTransaction=factory.createTransactionForSettingSpecialRoleOnNonFungibleToken( Address.fromBech32(user.address),{
+  let setRoleTransaction=await factory.createTransactionForSettingSpecialRoleOnNonFungibleToken( Address.newFromBech32(user.address),{
     addRoleNFTAddURI: update,
     addRoleNFTUpdateAttributes: update,
     user: Address.newFromBech32(user.address),
@@ -371,7 +376,8 @@ export async function set_roles_to_collection(collection_id:string, user:UserSer
     addRoleESDTModifyCreator:update
   })
   if(type_collection=="SFT" || type_collection.startsWith("Semi")){
-    setRoleTransaction=factory.createTransactionForSettingSpecialRoleOnSemiFungibleToken(Address.fromBech32(user.address),{
+    //https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook/#setting-special-roles-for-fungible-tokens-using-the-controller
+    setRoleTransaction=await factory.createTransactionForSettingSpecialRoleOnSemiFungibleToken(Address.newFromBech32(user.address),{
       user: Address.newFromBech32(user.address),
       tokenIdentifier: collection_id,
       addRoleESDTTransferRole: update,
@@ -382,7 +388,7 @@ export async function set_roles_to_collection(collection_id:string, user:UserSer
   }
 
   user.refresh()
-  setRoleTransaction.nonce=await entrypoint.recallAccountNonce(Address.newFromBech32(user.address))
+  //setRoleTransaction.nonce=await entrypoint.recallAccountNonce(Address.newFromBech32(user.address))
   let transactionOnNetwork=await entrypoint.awaitCompletedTransaction(await entrypoint.sendTransaction(await signTransaction(setRoleTransaction,user)))
   let rc=new TokenManagementTransactionsOutcomeParser().parseSetSpecialRole(transactionOnNetwork)
 
@@ -412,8 +418,8 @@ export async function create_collection(name:string,user:UserService,vm:any=null
   }
 
   let transaction=collection_type=="SFT"
-    ? factory.createTransactionForIssuingSemiFungible(Address.newFromBech32(user.address),{...option})
-    : factory.createTransactionForIssuingNonFungible(Address.newFromBech32(user.address),{...option})
+    ? await factory.createTransactionForIssuingSemiFungible(Address.newFromBech32(user.address),{...option})
+    : await factory.createTransactionForIssuingNonFungible(Address.newFromBech32(user.address),{...option})
 
   transaction.nonce=await entrypoint.recallAccountNonce(Address.newFromBech32(user.address))
   let transactionOnNetwork=await entrypoint.awaitCompletedTransaction(await entrypoint.sendTransaction(await signTransaction(transaction,user)))
@@ -501,7 +507,7 @@ export async function makeNFTTransaction(identifier:string,name:string,visual:st
 
   let factory = entrypoint.createTokenManagementTransactionsFactory()
 
-  let transaction=factory.createTransactionForCreatingNFT(
+  let transaction=await factory.createTransactionForCreatingNFT(
     Address.newFromBech32(user.address),
     {
       attributes: new TextEncoder().encode(metadata),
@@ -691,7 +697,7 @@ export async function deploy(user:UserService,code:BytesValue) {
   });
   let args = [10];
 
-  const deployTransaction = factory.createTransactionForDeploy(Address.fromBech32(user.address),{
+  const deployTransaction = await factory.createTransactionForDeploy(Address.newFromBech32(user.address),{
     bytecode: code.valueOf(),
     gasLimit: 6000000n,
     arguments: args

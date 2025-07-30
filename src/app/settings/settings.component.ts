@@ -5,13 +5,13 @@ import {MatDialog} from '@angular/material/dialog';
 import {WalletComponent} from '../wallet/wallet.component';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ApiService} from '../api.service';
-import {get_nft, query, send_transaction_with_transfers} from '../mvx';
+import {createTokenTransfer, get_nft, query, send_transaction_with_transfers} from '../mvx';
 import {environment} from '../../environments/environment';
 import {cartesianToPolar, Game, Tokemon} from '../tokenworld';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {InputComponent} from '../input/input.component';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
-import {TokenTransfer} from '@multiversx/sdk-core/out';
+import {Token, TokenTransfer} from '@multiversx/sdk-core/out';
 import {setParams, showError} from '../../tools';
 import {MatIcon} from '@angular/material/icon';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from '@angular/material/expansion';
@@ -100,7 +100,8 @@ export class SettingsComponent implements OnInit {
 
   async send() {
     wait_message(this, "Reloading ...")
-    let tokens=[TokenTransfer.fungibleFromAmount(this.user.pv_token,this.lifepoint,18)]
+
+    let tokens=createTokenTransfer(this.user.pv_token,this.lifepoint)
     let args=[this.sel_to_reload.id]
     this.sel_to_reload=null
     try {

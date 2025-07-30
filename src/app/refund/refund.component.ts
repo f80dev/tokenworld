@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {UserService} from '../user.service';
 import {WalletComponent} from '../wallet/wallet.component';
-import {send_transaction_with_transfers} from '../mvx';
+import {createTokenTransfer, send_transaction_with_transfers} from '../mvx';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {InputComponent} from '../input/input.component';
 import {MatButton} from '@angular/material/button';
@@ -63,7 +63,7 @@ export class RefundComponent implements OnInit{
   async send() {
     await this.user.login(this,"","",true,0.01,"")
     let args=[this.sel_token.id]
-    let tokens:TokenTransfer[]=[TokenTransfer.fungibleFromAmount(this.coin.identifier,this.amount,18)]
+    let tokens:TokenTransfer[]=createTokenTransfer(this.coin.identifier,this.amount)
     wait_message(this,"Loading your tokemon bag with "+this.amount+" of "+this.coin.name)
     try{
       await send_transaction_with_transfers(

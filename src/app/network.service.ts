@@ -820,7 +820,7 @@ export class NetworkService extends ApiService implements OnInit {
             if (typeof (miner_or_provider) == "string") {
                 if (miner_or_provider) body.miner = miner_or_provider
             } else {
-                let t: any = Transaction.fromPlainObject(transaction)
+                let t: any = Transaction.newFromPlainObject(transaction)
                 //let t: Transaction = Transaction.fromPlainObject(tmp)
                 $$("La transaction avant la signature ", t.getSignature())
                 t = await miner_or_provider.signTransaction(t)

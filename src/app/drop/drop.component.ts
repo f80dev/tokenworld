@@ -2,7 +2,13 @@ import {AfterViewInit, Component, inject, OnChanges, OnInit, SimpleChanges} from
 import {Token, TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {create_transaction, get_nft, network_config, send_transaction_with_transfers} from '../mvx';
+import {
+  create_transaction,
+  createTokenTransfer,
+  get_nft,
+  network_config,
+  send_transaction_with_transfers
+} from '../mvx';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -273,8 +279,8 @@ export class DropComponent implements AfterViewInit {
       let pos = this.convert_pos(_row[1])
       let quantity = Number(_row[2])
       let args = [this.name, Math.round(this.user.visibility), pos.x, pos.y, pos.z]
-      let tt = TokenTransfer.semiFungible(id, this.user.nonce, quantity)
-      rc.push(await create_transaction("drop_nft", args, this.user, [tt]))
+      let tt = createTokenTransfer(id, this.user.nonce,quantity)
+      rc.push(await create_transaction("drop_nft", args, this.user, tt))
     }
   }
 

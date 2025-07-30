@@ -20,7 +20,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {TokenTransfer} from '@multiversx/sdk-core/out';
 import {UserService} from '../user.service';
 import * as L from 'leaflet';
-import {level, send_transaction_with_transfers} from '../mvx';
+import {createTokenTransfer, level, send_transaction_with_transfers} from '../mvx';
 import {HourglassComponent, wait_message} from '../hourglass/hourglass.component';
 import {GeolocService} from '../geoloc.service';
 import {LatLng, Marker} from 'leaflet';
@@ -324,7 +324,7 @@ export class CreateWorldComponent implements OnInit {
         if(this.lifepoint>0 && create_game){
           wait_message(this,"Initialize HP stock with "+this.lifepoint+" HP from your wallet")
           $$("Transfert de lifepoint "+this.lifepoint)
-          let tokens=[TokenTransfer.fungibleFromAmount(this.user.pv_token,this.lifepoint,18)]
+          let tokens=createTokenTransfer(this.user.pv_token,this.lifepoint,18)
           rc=await send_transaction_with_transfers(this.user,"fund_game",[create_game.id],tokens)
         }
         wait_message(this)

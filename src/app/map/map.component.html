@@ -68,8 +68,17 @@
       </mat-icon>
 
       <mat-icon (click)="show_help=!show_help"
-                *ngIf="help_message.length>0"
+                *ngIf="help_message.length>0 && !help_message.endsWith('!')"
+                [title]="help_message"
                 class="icon-button">help
+      </mat-icon>
+
+
+      <mat-icon (click)="show_help=!show_help"
+                [title]="help_message"
+                *ngIf="help_message.endsWith('!')"
+                style="color: red;"
+                class="icon-button">warning
       </mat-icon>
 
     </div>

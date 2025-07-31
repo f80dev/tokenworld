@@ -70,7 +70,7 @@ export const environment = {
   gaz_for_transaction:  200000000n,
   gaz_by_nft: 10000000n,
   max_gaz:    600000000n,
-  geoloc_interval: 10000,
+  geoloc_interval: 5000,
   accuracy_limit: 50,
   nft_builder: "https://devnet.nftnow.af10.fr",
   share_appli: "https://devnet.vault.af10.fr",

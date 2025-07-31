@@ -183,7 +183,7 @@ export class MapComponent implements OnChanges,OnInit,OnDestroy  {
           this.remove_markers_from_map()
           this.old_pos=new LatLng(0,0)
         }
-        this.help_message="Not enought accuracy to show tokemons around. Activate your GPS"
+        this.help_message="Not enought accuracy to show tokemons around. Activate your GPS !"
         this.message_counter=this.message_counter+1
         if(this.message_counter % 10==0)showMessage(this,this.help_message)
         $$("Précision insuffisante")

@@ -335,6 +335,7 @@ export class CreateWorldComponent implements OnInit {
     } catch (e:any) {
       showMessage(this,e)
       wait_message(this)
+      this.recenter()
     }
 
   }

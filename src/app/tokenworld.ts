@@ -217,6 +217,7 @@ export function initializeMap(vm:any,zone:any,
                               entranceIcon="./assets/icons/entrance.png",
                               exitIcon="./assets/icons/exit.png") : L.Map {
 
+
   if(vm.map && zone){
     if(zone.url=="map" || zone.url=="")zone.zoom=2;
 
@@ -225,7 +226,7 @@ export function initializeMap(vm:any,zone:any,
 
     if(centerIcon.length>0){
       vm.me_marker=add_icon(vm.map,centerIcon,center,"",30,"clignotement")
-      vm.me_marker.removeFrom(vm.map)
+      //vm.me_marker.removeFrom(vm.map)
     }
 
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)

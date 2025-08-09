@@ -23,7 +23,6 @@ import {SafePipe} from '../safe.pipe';
 import {NgNavigatorShareService} from 'ng-navigator-share';
 import {environment} from '../../environments/environment';
 import {settings} from '../../environments/settings';
-import {encodeCID} from 'ipfs-http-client/pin/remote/utils';
 
 @Component({
   selector: 'app-games',
@@ -131,6 +130,7 @@ export class GamesComponent implements OnInit {
       let result = await send_transaction_with_transfers(this.user, "close_game", args,[],environment.max_gaz)
     } catch (e: any) {
       showMessage(this,e.message)
+      this.user.logout(true)
     }
     wait_message(this)
     this.refresh()
@@ -177,7 +177,7 @@ export class GamesComponent implements OnInit {
         }else{
           showMessage(this,"This zone is empty, you can delete them")
         }
-
+        this.refresh()
       }
     }catch(e:any){
       showMessage(this,e.message)

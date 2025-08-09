@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.user.logout()
+    this.router.navigate(['games'])
   }
 
 

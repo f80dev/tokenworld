@@ -6,10 +6,17 @@
     <img src="./assets/dropping.gif" style="width: 300px;">
     <br><br><br>
     <button mat-raised-button
-            *ngIf="message!='' && device.isMobile()"
+            *ngIf="device.isMobile()"
             (click)="open_xportal()">
-      Basculer sur xPortal
+      Switch to xPortal
     </button>
+
+    <button mat-raised-button
+            (click)="cancel_transaction()">
+      Cancel
+    </button>
+
+
 
   </div>
 

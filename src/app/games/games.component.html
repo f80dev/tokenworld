@@ -69,7 +69,8 @@
         <app-game [game]="game" style="width:100%;">
           <div style="width: 200px;margin-left:10px;"
                *ngIf="user.isConnected(true) && game.owner==user.idx && !game.closed">
-            <button mat-raised-button *ngIf="game.n_tokemons>0" title="Transfer all tokemon to the owner's wallet" (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
+            <button mat-raised-button *ngIf="game.n_tokemons>0" title="Transfer all tokemon to the owner's wallet"
+                    (click)="transfer_to_owner(game)"><div class="blocbutton">Clean the<br>game</div></button><br>
             <button mat-raised-button *ngIf="game.n_tokemons==0" title="The game is not accessible, it must be empty (no tokemon)"
                     (click)="close_map(game)">Close the game</button><br>
             <button mat-raised-button *ngIf="level(2)" (click)="stacking(game)">AirDrop</button>
@@ -82,7 +83,7 @@
 
 
 
-  <div id="legende" *ngIf="games!.length>0" style="margin-top: 30px;">
+  <div id="legende" *ngIf="message=='' && games!.length>0" style="margin-top: 30px;">
     <mat-icon style="color:orangered;margin-bottom: -10px;" >diamond_shine</mat-icon> you receive some HP coin when you come in the game
   </div>
 

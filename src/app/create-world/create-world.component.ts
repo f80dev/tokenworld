@@ -337,8 +337,8 @@ export class CreateWorldComponent implements OnInit {
       wait_message(this)
       this.recenter()
     }
-
   }
+
 
 
 

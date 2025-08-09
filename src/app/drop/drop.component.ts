@@ -335,4 +335,10 @@ export class DropComponent implements AfterViewInit {
     this.sel_nft=null
     this.router.navigate(["map"])
   }
+
+  cancel_transaction() {
+    wait_message(this)
+    this.user.logout(true)
+    showMessage(this,"Transaction canceled")
+  }
 }

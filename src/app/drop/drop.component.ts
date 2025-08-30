@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   create_transaction,
   createTokenTransfer,
-  get_nft,
+  get_nft, get_nfts,
   network_config,
   send_transaction_with_transfers
 } from '../mvx';
@@ -49,12 +49,10 @@ import {settings} from '../../environments/settings';
   templateUrl: './drop.component.html',
   styleUrl: './drop.component.css'
 })
-export class DropComponent implements AfterViewInit {
+export class DropComponent implements OnInit {
 
   lifepoint: number = 0;
   name = "";
-  ech: number=1
-
 
   api = inject(ApiService)
   routes = inject(ActivatedRoute)
@@ -80,52 +78,54 @@ export class DropComponent implements AfterViewInit {
   max_per_user=1
   circle:L.Circle | undefined
 
+
+
   refresh(){
     if(this.diffusion && this.diffusion>0)this.circle?.setRadius(this.diffusion)
   }
 
 
+  async ngOnInit() {
 
-  async ngAfterViewInit() {
-    setTimeout(async ()=>{
-      let params: any = await getParams(this.routes)
-      if(this.user){
-        let coin_name=(this.user.isDevnet() || this.user.isTestnet()) ? "xEgld" : "Egld"
-        await this.user.login(this, "You must be connected to drop any NFT","",false,0.01,
-          settings.appname+ "is free but you must have some "+coin_name+" to pay the transactions of this 'on-chain' game")
+    let coin_name=(this.user.isDevnet() || this.user.isTestnet()) ? "xEgld" : "Egld"
 
-        this.user.init_game(await this.user.open_game(Number(params.game_id)))
-        this.max_per_user = this.user.idx == Number(this.user.game!.owner) ? 100 : (this.user.game?.max_per_user || 1000)
+    await this.user.login(this, "You must be connected to drop any NFT","",true,0.01,
+      settings.appname+ "is free but you must have some "+coin_name+" to pay the transactions of this 'on-chain' game")
 
-        this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
-        await this.user.init_balance(this.api,true)
-        this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.pv_token))
+    let params: any = await getParams(this.routes)
+    if(this.user){
+
+      this.user.init_game(await this.user.open_game(Number(params.game_id)))
+      this.max_per_user = this.user.idx == Number(this.user.game!.owner) ? 100 : (this.user.game?.max_per_user || 1000)
+
+      this.visibility= Math.round((Number(this.user.game!.min_visibility) + Number(this.user.game!.max_visibility)) / 2)/environment.scale_factor
+      await this.user.init_balance(this.api,true)
+      this.max_pv_loading = Math.min(this.user.game!.max_pv, this.user.get_balance(this.user.pv_token))
 
 
-        if(params.lat==0 && params.lng==0){
-          this.random_location=true;
-        }else{
-          this.user.center_map = new LatLng(params.lat, params.lng)
-          this.map = L.map('map')
-          $$("Drop sur les coordonnées ", this.user.center_map)
-
-          this.circle=new L.Circle(this.user.center_map,{
-            radius: 0,
-            color:"none",
-            fillColor: '#2c2c2c',
-            fillOpacity:0.3
-          }).addTo(this.map)
-        }
-
-        if(params.hasOwnProperty("nft")){
-          let nft=await get_nft(params.nft,this.api,this.user.network)
-          this.diffusion=0
-          this.on_select(nft)
-        }
+      if(params.lat==0 && params.lng==0){
+        this.random_location=true;
       }else{
-        this.router.navigate(["games"])
+        this.user.center_map = new LatLng(params.lat, params.lng)
+        this.map = L.map('map')
+        $$("Drop sur les coordonnées ", this.user.center_map)
+
+        this.circle=new L.Circle(this.user.center_map,{
+          radius: 0,
+          color:"none",
+          fillColor: '#2c2c2c',
+          fillOpacity:0.3
+        }).addTo(this.map)
       }
-    },50)
+
+      if(params.hasOwnProperty("nft")){
+        let nft=await get_nft(params.nft,this.api,this.user.network)
+        this.diffusion=0
+        this.on_select(nft)
+      }
+    }else{
+      this.router.navigate(["games"])
+    }
   }
 
 
@@ -141,9 +141,6 @@ export class DropComponent implements AfterViewInit {
         showMessage(this, "Bad number of tokemon")
         return
       }
-
-      await this.user.login(this, "You must be connected to drop any NFT", "", true)
-      //$$("Authentification ",this.user.provider)
 
       let pos = polarToCartesian(
         new LatLng(this.user.center_map.lat+environment.offset_lat,this.user.center_map.lng+environment.offset_lng),

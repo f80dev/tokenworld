@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {_ask_for_authent} from "./authent-dialog/authent-dialog.component";
 import {
-  create_transaction, execute_transaction,
+  create_transaction, execute_transaction, get_nfts,
   getExplorer,
   query,
   send_transaction_with_transfers,
@@ -119,6 +119,7 @@ export class UserService {
       localStorage.removeItem("pem")
     }
     this.address=""
+    this.pem_account=null
     this.idx=0
     if(this.provider)this.provider.logout()
     this.provider=null
@@ -202,6 +203,7 @@ export class UserService {
             await this.authent(r)
             await this.init_idx()
             await this.init_balance(vm.api)
+
 
             if(required_balance>0 && this.balance<required_balance)vm.router.navigate(["faucet"],{queryParams:{message:message_balance}})
 

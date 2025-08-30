@@ -55,8 +55,10 @@ export class WalletComponent implements OnChanges,OnDestroy {
 
 
   async refresh(){
+    $$("Refresh du wallet")
     this.nfts=[]
     if(this.show.indexOf("nft")>-1 && this.user){
+      $$("Récupération des nfts")
       for (let nft of await get_nfts(this.user,this.api)) {
         let prop = nft.attributes ? nft.attributes.toString("utf-8") : ""
         let tags=prop.split(";metadata:")[0].replace("tags:" ,"")

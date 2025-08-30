@@ -450,13 +450,18 @@ export async function get_collections(user:UserService,api:ApiService) {
 
 export async function get_nfts(user:UserService,api:ApiService) : Promise<any[]> {
   //Récupére l'ensemble des NFTs d'un user avec la balance
-  let prefix=(user.isDevnet() ? "devnet-" : (user.isTestnet() ? "testnet-" : ""))
-  let nfts=await api._service(
-    "accounts/"+user.address+"/nfts","",
-    "https://"+prefix+"api.multiversx.com/")
+  if(!user.address){
+    $$("!Address inconnue, impossible d'afficher les NFTS")
+    return []
+  }else{
+    let prefix=(user.isDevnet() ? "devnet-" : (user.isTestnet() ? "testnet-" : ""))
+    let nfts=await api._service(
+      "accounts/"+user.address+"/nfts","",
+      "https://"+prefix+"api.multiversx.com/")
 
-  nfts.reverse()
-  return nfts
+    nfts.reverse()
+    return nfts
+  }
 }
 
 

@@ -201,11 +201,15 @@ export function add_entrance_and_exit(vm:any,zone:any,entranceIcon="./assets/ico
     let entrance=cartesianToPolar(zone.entrance,environment.scale_factor,environment.translate_factor)
     $$("entrance ajouté en ",entrance)
     add_icon(vm.map,entranceIcon,entrance)
+  } else {
+    $$("pas d'entrée ajoutée")
   }
   if(zone.exit && zone.exit.x+zone.exit.y+zone.exit.z!=0){
     let exit=cartesianToPolar(zone.exit,environment.scale_factor,environment.translate_factor)
     add_icon(vm.map,exitIcon,exit)
     $$("exit ajouté en ",exit)
+  }else{
+    $$("pas de sortie ajoutée")
   }
 }
 
@@ -231,6 +235,8 @@ export function initializeMap(vm:any,zone:any,
 
     add_entrance_and_exit(vm,zone,entranceIcon,exitIcon)
 
+  } else {
+    $$("Pas d'initialisation de la map")
   }
   return vm.map
 }

@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
 
 
   logout() {
-    this.user.logout()
+    this.user.logout(true)
     this.router.navigate(['games'])
   }
 
@@ -60,6 +60,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.user.expert_mode=(localStorage.getItem("expert_mode") || "false")=="true"
 
+    this.logout()
     // if (typeof Worker !== 'undefined') {
     //   // Create a new
     //   const worker = new Worker(new URL('./app.worker', import.meta.url));

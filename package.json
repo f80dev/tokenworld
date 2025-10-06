@@ -36,7 +36,7 @@
     "@multiversx/sdk-wallet-connect-provider": "^6.1.2",
     "@multiversx/sdk-web-wallet-provider": "^5.1.1",
 
-    "@mysten/sui": "1.37.5",
+    "@mysten/sui": "1.39.0",
     "@octokit/rest": "^21.0.0",
     "@tusky-io/ts-sdk": "^0.29.0",
     "@types/chrome": "0.1.4",
